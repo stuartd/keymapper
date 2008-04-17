@@ -275,7 +275,8 @@ namespace KeyMapper
 
 		private void SetButtonImages()
 		{
-
+			// TODO: Refactor the caption stuff into it's own method, PUR-LEASE!
+			
 			// Set the buttons' bitmap as required. Always call SetImage as that 
 			// handles releasing the existing bitmap if any..
 
@@ -284,17 +285,20 @@ namespace KeyMapper
 			{
 				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
 			}
+			else
+				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
 
 			// To Key is trickier..
+			int scancode = 0;
+			int extended = 0;
+			ButtonEffect effect = ButtonEffect.None ;
+			string formCaption = String.Empty;
+
 
 			// 'Disabled' is a special case of 'Mapped'
 			if (_disabled)
 			{
-				SetCaption(String.Empty);
-
-				// SetImage(ToKeyPictureBox, ButtonImages.ApplyEffect((Bitmap)FromKeyPictureBox.Image.Clone(), ButtonEffect.Disabled));
-				SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(0, 0, BlankButton.Blank, ButtonEffect.Disabled));
-
+				effect = MappingsManager.IsMappingPending(_map) ? ButtonEffect.DisabledPending : ButtonEffect.Disabled;
 			}
 			else
 			{
@@ -303,47 +307,56 @@ namespace KeyMapper
 					// Not mapped. What are we doing then??
 					if (_capturingToKey)
 					{
-						SetCaption("Press what you want the key to do");
+						formCaption = "Press what you want the key to do";
+
+							scancode = _map.To.Scancode;
+							extended = _map.To.Extended ;
+
 						if (_map.To.Scancode == 0)
 						{
 							// Can't map to a disabled key - show button as disabled..
-							SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(
-								_map.To.Scancode, _map.To.Extended, BlankButton.Blank, 0, 0, 1F, ButtonEffect.Disabled));
+							effect = ButtonEffect.Disabled;
 						}
 						else
 						{
-							SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage
-								(_map.To.Scancode, _map.To.Extended, BlankButton.Blank, ButtonEffect.MappedPending));
+							effect = ButtonEffect.MappedPending;
 						}
 					}
 					else if (_capturingFromKey)
 					{
 						if (_map.IsEmpty())
 						{
-							SetCaption("Press the key you want to map");
-							SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
+							// Show a blank key.
+							formCaption = "Press the key you want to map";
+							scancode = -1;
+							extended = -1;
 						}
 					}
 					else if (_selectingFromKeyFromLists)
 					{
 						if (_map.IsEmpty())
 						{
-							SetCaption("Press the key you want to map from the lists");
+							formCaption = "Press the key you want to map from the lists";
 						}
 					}
 					else
 					{
-						SetCaption("Choose a key from a group or use capture");
+						formCaption = "Choose a key from a group or use capture";
 					}
 				}
 				else
 				{
 					// Mapped to a specific key
-					SetCaption(String.Empty);
-					SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage
-						(_map.To.Scancode, _map.To.Extended, BlankButton.Blank, ButtonEffect.Mapped));
+					scancode = _map.To.Scancode ;
+					extended = _map.To.Extended ;
+					effect = MappingsManager.IsMappingPending(_map) ? ButtonEffect.MappedPending : ButtonEffect.Mapped ;
+
 				}
 			}
+
+			
+			SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, effect));
+			SetCaption(formCaption);
 
 		}
 
