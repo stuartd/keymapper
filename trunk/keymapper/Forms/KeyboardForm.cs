@@ -881,7 +881,7 @@ namespace KeyMapper
 			if (box == null)
 				return;
 
-			EditMappingForm mf = new EditMappingForm(box.Map, false);
+			EditMappingForm mf = new EditMappingForm(box.Map, false, this.Location, this.Size);
 			mf.ShowDialog(AppController.KeyboardFormHwnd);
 		}
 
@@ -1011,7 +1011,7 @@ namespace KeyMapper
 
 		private void selectFromCaptureToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			EditMappingForm mf = new EditMappingForm(new KeyMapping(), true);
+			EditMappingForm mf = new EditMappingForm(new KeyMapping(), true, this.Location, this.Size);
 			mf.ShowDialog(AppController.KeyboardFormHwnd);
 		}
 
@@ -1131,7 +1131,7 @@ namespace KeyMapper
 
 		private void selectFromListsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			EditMappingForm mf = new EditMappingForm(new KeyMapping(), false);
+			EditMappingForm mf = new EditMappingForm(new KeyMapping(), false, this.Location, this.Size);
 			mf.ShowDialog(AppController.KeyboardFormHwnd);
 		}
 
