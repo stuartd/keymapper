@@ -233,7 +233,7 @@ namespace KeyMapper
             this.Text = "Mapping Editor";
             this.Deactivate += new System.EventHandler(this.FormDeactivate);
             this.Activated += new System.EventHandler(this.FormActivated);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditMappingFormFormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditMappingFormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.FromKeyPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ToKeyPictureBox)).EndInit();
             this.KeyListsPanel.ResumeLayout(false);

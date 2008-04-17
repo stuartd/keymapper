@@ -61,13 +61,13 @@ namespace KeyMapper
 
 		#region Form methods
 
-		public EditMappingForm(KeyMapping map, bool useCapture)
+		public EditMappingForm(KeyMapping map, bool useCapture, Point callingFormLocation, Size callingFormSize)
 		{
 			InitializeComponent();
 
-			LoadSettings();
+			LoadSettings(callingFormLocation, callingFormSize);
 
-			// There are three^W^W^W^W^W FOUR startup states for this form.
+			// There are four startup states for this form.
 
 			// 1) Choose a From key by capturing it
 			// 2) Choose a mapping for a specific From key
@@ -93,7 +93,7 @@ namespace KeyMapper
 				_disabled = (map.To.Scancode == 0);
 			}
 
-			_newMapping = ! map.IsValid();
+			_newMapping = !map.IsValid();
 
 			_map = map;
 
@@ -119,13 +119,16 @@ namespace KeyMapper
 			else
 				_keyThreshold = 1;
 
-			ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
+
 
 			// Add event handlers now values have been assigned
 			this.GroupsListbox.SelectedIndexChanged += GroupsListboxSelectedIndexChanged;
 			this.KeysByGroupListbox.SelectedIndexChanged += KeysByGroupListboxSelectedIndexChanged;
 			this.ListOptionsCombo.SelectedIndexChanged += ListOptionsComboSelectedIndexChanged;
 			KeysByGroupListbox.DoubleClick += KeysByGroupListboxDoubleClick;
+
+			// Will fire event, as desired..
+			ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
 
 			SetupForm();
 		}
@@ -137,7 +140,7 @@ namespace KeyMapper
 			userSettings.Save();
 		}
 
-		private void LoadSettings()
+		private void LoadSettings(Point callingFormLocation, Size callingFormSize)
 		{
 
 			Properties.Settings userSettings = new Properties.Settings();
@@ -147,6 +150,15 @@ namespace KeyMapper
 			if (savedLocation.IsEmpty == false)
 			{
 				this.Location = savedLocation;
+			}
+			else
+			{
+				// Go in the middle of the calling form (as this is a modal form after all)
+				// and, say, 50 pixels from the left.
+				int x = callingFormLocation.X + 50;
+				int y = ((callingFormSize.Height = this.ClientSize.Height) / 2) + callingFormLocation.Y;
+
+				this.Location = new Point(x, y);
 			}
 		}
 
@@ -201,12 +213,12 @@ namespace KeyMapper
 
 		}
 
-		private void SetCaption(string text)
+		private void SetCaption(string caption)
 		{
 			if (_newMapping)
-				this.Text = "Create a mapping: " + text;
+				this.Text = "Create a mapping" + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 			else
-				this.Text = "Edit mapping: " + text;
+				this.Text = "Edit mapping: " + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 		}
 
 		private void SetButtonStates()
@@ -216,9 +228,10 @@ namespace KeyMapper
 			// Map button (aka UnMap, aka Set (for capture))
 
 			MapButton.Enabled =
-				_capturingFromKey
+				(_capturingFromKey && ! _map.IsEmpty())
 				|| _mapped
-				|| _selectingFromKeyFromLists
+				|| (_capturingFromKey && _map.IsValid())
+				|| (_selectingFromKeyFromLists && KeysByGroupListbox.SelectedIndex >= 0)
 				|| (_capturingToKey && _map.IsValid())
 				|| (!_disabled && !_capturingToKey && KeysByGroupListbox.SelectedIndex >= 0);
 
@@ -335,7 +348,7 @@ namespace KeyMapper
 		}
 
 
-	
+
 
 		private static void SetImage(PictureBox box, Bitmap bmp)
 		{
@@ -349,7 +362,7 @@ namespace KeyMapper
 			box.Invalidate();
 		}
 
-		private void EditMappingFormFormClosing(object sender, FormClosingEventArgs e)
+		private void EditMappingFormClosing(object sender, FormClosingEventArgs e)
 		{
 			SaveSettings();
 		}
@@ -423,15 +436,14 @@ namespace KeyMapper
 
 		private void GroupsListboxSelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (_newMapping == false)
-				MapButton.Enabled = false;
-
 			UpdateGroupMembers();
+			KeysByGroupListbox.SelectedItem = 0;
+			SetupForm();
 		}
 
 		private void KeysByGroupListboxSelectedIndexChanged(object sender, EventArgs e)
 		{
-			MapButton.Enabled = true;
+			SetupForm();
 		}
 
 		private bool CreateMappingFromListboxValue()
