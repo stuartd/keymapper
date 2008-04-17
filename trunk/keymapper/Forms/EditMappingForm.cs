@@ -119,6 +119,7 @@ namespace KeyMapper
 			else
 				_keyThreshold = 1;
 
+            ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
 
 
 			// Add event handlers now values have been assigned
@@ -126,10 +127,7 @@ namespace KeyMapper
 			this.KeysByGroupListbox.SelectedIndexChanged += KeysByGroupListboxSelectedIndexChanged;
 			this.ListOptionsCombo.SelectedIndexChanged += ListOptionsComboSelectedIndexChanged;
 			KeysByGroupListbox.DoubleClick += KeysByGroupListboxDoubleClick;
-
-			// Will fire event, as desired..
-			ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
-
+			
 			SetupForm();
 		}
 
@@ -281,12 +279,13 @@ namespace KeyMapper
 			// handles releasing the existing bitmap if any..
 
 			// From key = Easy.
-			if (FromKeyPictureBox.Image == null && _map.From.Scancode > 0)
-			{
+	
+            if (FromKeyPictureBox.Image == null && _map.IsEmpty())
+                SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
+            else
 				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
-			}
-			else
-				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
+		
+				// SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
 
 			// To Key is trickier..
 			int scancode = 0;
