@@ -1003,7 +1003,6 @@ namespace KeyMapper
 		}
 
 
-
 		private void selectLayoutToolStripItemClick(object sender, EventArgs e)
 		{
 			this.ChangeKeyboard(sender.ToString());

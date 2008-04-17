@@ -204,15 +204,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="Working Docs\working.htm">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <FileType>File</FileType>
-    </PublishFile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -228,8 +219,6 @@
     </EmbeddedResource>
     <None Include="Project\app.config" />
     <None Include="Project\KeyMapper.pfx" />
-    <None Include="Working Docs\bugs.txt" />
-    <None Include="Working Docs\release notes.html" />
     <Content Include="Images\arrow.png" />
     <EmbeddedResource Include="Images\blank.png" />
     <EmbeddedResource Include="Images\doublewideblank.png" />
@@ -239,7 +228,6 @@
     <EmbeddedResource Include="Images\tallblank.png" />
     <EmbeddedResource Include="Images\triplewideblank.png" />
     <Content Include="Project\CodeAnalysisDictionary.xml" />
-    <Content Include="Working Docs\working.htm" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
