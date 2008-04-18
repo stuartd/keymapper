@@ -47,14 +47,14 @@ namespace KeyMapper
 
 		private static AppMutex _appmutex;
 
-		private static System.Windows.Forms.IWin32Window _keyboardFormHWND;
+		private static System.Windows.Forms.IWin32Window _keyboardFormHandle;
 
 		// Properties
 
-		public static System.Windows.Forms.IWin32Window KeyboardFormHwnd
+		public static System.Windows.Forms.IWin32Window KeyboardFormHandle
 		{
-			get { return _keyboardFormHWND; }
-			set { _keyboardFormHWND = value; }
+			get { return _keyboardFormHandle; }
+			set { _keyboardFormHandle = value; }
 		}
 
 		public static bool UserCannotWriteMappings
@@ -302,7 +302,7 @@ namespace KeyMapper
 
 			// If user mappings are inappropriate (win2k) default to boot.
 			if (_canHaveLocalUserMappings == false)
-				MappingsManager.SetMappingsFilter(MappingFilter.Boot);
+				MappingsManager.SetFilter(MappingFilter.Boot);
 
 			// If HLKM or HKCU Mappings have not been changed since boot/login 
 			// (ie their timestamp is earlier than the boot/login time)

@@ -10,15 +10,21 @@ namespace KeyMapper
 
 		private Key _from;
 		private Key _to;
+		private MappingType _type;
 
-		internal Key From
+		public Key From
 		{
 			get { return _from; }
 		}
 
-		internal Key To
+		public Key To
 		{
 			get { return _to; }
+		}
+
+		public MappingType Type
+		{
+			get { return _type; }
 		}
 
 		#endregion
@@ -27,8 +33,9 @@ namespace KeyMapper
 
 		public KeyMapping(Key keyFrom, Key keyTo)
 		{
-			this._from = keyFrom;
-			this._to = keyTo;
+			_from = keyFrom;
+			_to = keyTo;
+			_type = MappingType.Null;
 		}
 
 		public override string ToString()
@@ -36,24 +43,27 @@ namespace KeyMapper
 			return MappingDescription();
 		}
 
+		public void SetType(MappingType type)
+		{
+			_type = type;
+		}
+
 		public string MappingDescription()
 		{
 			// A mapping can be:
 			bool _pending ; // Current or pending
-			bool _usermapping ; // User or boot mapping
 			bool _disabled ; // Is the mapping disabled or to a key?
-
+			bool _usermapping	= (_type == MappingType.User); // User or Boot mapping? 
 			string description = String.Empty;
 
 			if (MappingsManager.IsMapped(this, MappingFilter.All) == false)
 			{
-				// Not currently mapped. Was it perchance mapped previously and cleared?
+				// This 'mapping' is not currently mapped, so it must have been mapped previously and cleared.
 				KeyMapping km = MappingsManager.GetClearedMapping(_from.Scancode, _from.Extended, MappingFilter.All);
 				if (MappingsManager.IsEmptyMapping(km) == false)
 				{
 					_disabled = MappingsManager.IsDisabledMapping(km);
-					_usermapping = MappingsManager.WasClearedMappingUserMapping(km);
-
+					
 					description = _from.Name + (_disabled ? " will be enabled" : " will be unmapped");
 					description += _usermapping ? " when you next log on" : " after a restart";
 				}
@@ -64,8 +74,11 @@ namespace KeyMapper
 				// So, mapped to something.
 				// Need to also know if it's Current or Pending
 
-				_pending = MappingsManager.IsMappingPending(this, MappingFilter.All);
-				_usermapping = MappingsManager.IsMapped(this, MappingFilter.User);
+				if (_usermapping)
+				_pending = MappingsManager.IsMappingPending(this, MappingFilter.User);
+				else
+					_pending = MappingsManager.IsMappingPending(this, MappingFilter.Boot);
+
 				_disabled = MappingsManager.IsDisabledMapping(this);
 
 				description = _from.Name + (_pending ? " will be" : " is");
@@ -90,11 +103,11 @@ namespace KeyMapper
 
 			// (Key has to able to be mapped to itself so user mappings can override boot mappings)
 			return (
-				!IsEmpty() 
-				&& _from != null 
-				&& _to != null 
-				&& _from.Scancode > 0 
-				&& _to.Scancode > -1 
+				!IsEmpty()
+				&& _from != null
+				&& _to != null
+				&& _from.Scancode > 0
+				&& _to.Scancode > -1
 				);
 		}
 
@@ -121,6 +134,11 @@ namespace KeyMapper
 
 		#endregion
 
+	}
+
+	public enum MappingType
+	{
+		Null, User, Boot
 	}
 
 }

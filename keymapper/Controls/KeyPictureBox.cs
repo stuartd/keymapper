@@ -51,7 +51,7 @@ namespace KeyMapper
 			_dragIconScale = 0.75F;
 			_dragbox = Rectangle.Empty;
 			
-			Map = MappingsManager.GetMapping(_scancode, _extended);
+			Map = MappingsManager.GetKeyMapping(_scancode, _extended);
 
 			_mapped = (Map.To.Scancode != -1) &&
 					((Map.From.Scancode != Map.To.Scancode) | (Map.From.Extended != Map.To.Extended));

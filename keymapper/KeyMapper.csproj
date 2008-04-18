@@ -77,7 +77,6 @@
     <Compile Include="Classes\AppMutex.cs" />
     <Compile Include="Classes\ButtonImages.cs" />
     <Compile Include="Classes\AppController.cs" />
-    <Compile Include="Classes\GetRegKeyTimestamp.cs" />
     <Compile Include="Classes\MappingsManager.cs" />
     <Compile Include="Classes\RegistryHelper.cs" />
     <Compile Include="Classes\Settings.cs" />
@@ -227,7 +226,7 @@
     <EmbeddedResource Include="Images\quadruplewideblank.png" />
     <EmbeddedResource Include="Images\tallblank.png" />
     <EmbeddedResource Include="Images\triplewideblank.png" />
-    <Content Include="Project\CodeAnalysisDictionary.xml" />
+    <CodeAnalysisDictionary Include="Project\CodeAnalysisDictionary.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
