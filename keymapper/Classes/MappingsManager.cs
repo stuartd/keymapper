@@ -846,8 +846,6 @@ namespace KeyMapper
 
 		#endregion
 
-
-
 		#region UndoRedoMappingStack Class
 
 		private class UndoRedoMappingStack

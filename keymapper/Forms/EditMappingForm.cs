@@ -45,9 +45,6 @@ namespace KeyMapper
 		// Current map
 		KeyMapping _map;
 
-		// Implementation of IKeyData
-		KeyDataXml _keydata = new KeyDataXml();
-
 		// For looking up the hash from the name
 		Dictionary<string, int> _currentgroupmembers;
 
@@ -107,7 +104,7 @@ namespace KeyMapper
 				SwopPanelPositions(EmptyPanel, KeyListsPanel);
 			}
 
-			PopulateKeyLists();
+
 
 			if (_selectingFromKeyFromLists)
 			{
@@ -119,15 +116,16 @@ namespace KeyMapper
 			else
 				_keyThreshold = 1;
 
-            ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
+			ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
 
+			PopulateKeyLists();
 
 			// Add event handlers now values have been assigned
 			this.GroupsListbox.SelectedIndexChanged += GroupsListboxSelectedIndexChanged;
 			this.KeysByGroupListbox.SelectedIndexChanged += KeysByGroupListboxSelectedIndexChanged;
 			this.ListOptionsCombo.SelectedIndexChanged += ListOptionsComboSelectedIndexChanged;
 			KeysByGroupListbox.DoubleClick += KeysByGroupListboxDoubleClick;
-			
+
 			SetupForm();
 		}
 
@@ -162,7 +160,7 @@ namespace KeyMapper
 
 		void PopulateKeyLists()
 		{
-			GroupsListbox.DataSource = _keydata.GetSortedGroupList(_keyThreshold);
+			GroupsListbox.DataSource = new KeyDataXml().GetSortedGroupList(_keyThreshold);
 			UpdateGroupMembers();
 		}
 
@@ -182,6 +180,7 @@ namespace KeyMapper
 			SetButtonStates();
 			SetButtonCaptions();
 			SetButtonImages();
+			SetCaption();
 		}
 
 		private void SetToolTips()
@@ -216,7 +215,7 @@ namespace KeyMapper
 			if (_newMapping)
 				this.Text = "Create a mapping" + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 			else
-				this.Text = "Edit mapping: " + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
+				this.Text = "Edit mapping" + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 		}
 
 		private void SetButtonStates()
@@ -226,7 +225,7 @@ namespace KeyMapper
 			// Map button (aka UnMap, aka Set (for capture))
 
 			MapButton.Enabled =
-				(_capturingFromKey && ! _map.IsEmpty())
+				(_capturingFromKey && !_map.IsEmpty())
 				|| _mapped
 				|| (_capturingFromKey && _map.IsValid())
 				|| (_selectingFromKeyFromLists && KeysByGroupListbox.SelectedIndex >= 0)
@@ -271,30 +270,63 @@ namespace KeyMapper
 
 		}
 
+		private void SetCaption()
+		{
+			string formCaption = String.Empty;
+
+			if (!_mapped && !_disabled)
+			{
+				if (_capturingToKey)
+				{
+					formCaption = "Press what you want the key to do";
+				}
+				else if (_capturingFromKey)
+				{
+					// if (_map.IsEmpty())
+					{
+						formCaption = "Press the key you want to map";
+					}
+				}
+				else if (_selectingFromKeyFromLists)
+				{
+					if (_map.IsEmpty())
+					{
+						formCaption = "Choose the key you want to map";
+					}
+				}
+				else
+				{
+					formCaption = "Choose a key from a group or use capture";
+				}
+			}
+			else
+			{
+				// Mapped.
+			}
+
+			SetCaption(formCaption);
+		}
+
+
 		private void SetButtonImages()
 		{
-			// TODO: Refactor the caption stuff into it's own method, PUR-LEASE!
-			
+
 			// Set the buttons' bitmap as required. Always call SetImage as that 
 			// handles releasing the existing bitmap if any..
 
 			// From key = Easy.
-	
-            if (FromKeyPictureBox.Image == null && _map.IsEmpty())
-                SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
-            else
-				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
-		
-				// SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
 
-			// To Key is trickier..
+			if (FromKeyPictureBox.Image == null && _map.IsEmpty())
+				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
+			else
+				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
+
+			// To Key depends more on state
 			int scancode = 0;
 			int extended = 0;
-			ButtonEffect effect = ButtonEffect.None ;
-			string formCaption = String.Empty;
+			ButtonEffect effect = ButtonEffect.None;
 
-
-			// 'Disabled' is a special case of 'Mapped'
+			//  'Disabled' is a special case of 'Mapped'
 			if (_disabled)
 			{
 				effect = MappingsManager.IsMappingPending(_map) ? ButtonEffect.DisabledPending : ButtonEffect.Disabled;
@@ -306,10 +338,8 @@ namespace KeyMapper
 					// Not mapped. What are we doing then??
 					if (_capturingToKey)
 					{
-						formCaption = "Press what you want the key to do";
-
-							scancode = _map.To.Scancode;
-							extended = _map.To.Extended ;
+						scancode = _map.To.Scancode;
+						extended = _map.To.Extended;
 
 						if (_map.To.Scancode == 0)
 						{
@@ -326,40 +356,24 @@ namespace KeyMapper
 						if (_map.IsEmpty())
 						{
 							// Show a blank key.
-							formCaption = "Press the key you want to map";
 							scancode = -1;
 							extended = -1;
 						}
-					}
-					else if (_selectingFromKeyFromLists)
-					{
-						if (_map.IsEmpty())
-						{
-							formCaption = "Press the key you want to map from the lists";
-						}
-					}
-					else
-					{
-						formCaption = "Choose a key from a group or use capture";
 					}
 				}
 				else
 				{
 					// Mapped to a specific key
-					scancode = _map.To.Scancode ;
-					extended = _map.To.Extended ;
-					effect = MappingsManager.IsMappingPending(_map) ? ButtonEffect.MappedPending : ButtonEffect.Mapped ;
+					scancode = _map.To.Scancode;
+					extended = _map.To.Extended;
+					effect = MappingsManager.IsMappingPending(_map) ? ButtonEffect.MappedPending : ButtonEffect.Mapped;
 
 				}
 			}
 
-			
-			SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, effect));
-			SetCaption(formCaption);
+			SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, 1.0F, effect));
 
 		}
-
-
 
 
 		private static void SetImage(PictureBox box, Bitmap bmp)
@@ -496,7 +510,7 @@ namespace KeyMapper
 
 		private void UpdateGroupMembers()
 		{
-			this._currentgroupmembers = _keydata.GetGroupMembers(GroupsListbox.Text, _keyThreshold);
+			this._currentgroupmembers = new KeyDataXml().GetGroupMembers(GroupsListbox.Text, _keyThreshold);
 
 			KeysByGroupListbox.Items.Clear();
 

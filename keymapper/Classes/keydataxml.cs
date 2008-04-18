@@ -11,7 +11,7 @@ namespace KeyMapper
 
 		/// This class handles extracting the key data from XML files
 		/// via XPath.
-
+	
 		#region Fields
 
 		System.Reflection.Assembly _currentassembly = null;

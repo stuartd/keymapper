@@ -20,7 +20,7 @@ namespace KeyMapper
 		// Implemented a subclass of CriticalHandleZeroOrMinusOneIsInvalid
 		// to make sure handle is released, but it meant giving up too much control
 		// of when the hook is deactivated.
-
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
 		private IntPtr _hookID;
 
@@ -135,12 +135,12 @@ namespace KeyMapper
 			// "If the function succeeds, the return value is nonzero.
 			// If the function fails, the return value is zero. To get extended error information, call GetLastError."
 
-			// This generates FXCop warning Method 'Program.Main():Void' called GetLastWin32Error but the immediately 
+			// This generates FXCop warning "Method called GetLastWin32Error but the immediately 
 			// preceding call to IntPtr.op_Explicit(IntPtr):Int32 is not a platform invoke statement. Move the call to 
-			// GetLastWin32Error so that it immediately follows the relevant platform invoke call.	
+			// GetLastWin32Error so that it immediately follows the relevant platform invoke call."
 
 			// Sure looks to me like that's wrong, probable because the method is in a different class, which
-			// fxcop told me to do in the first place. TODO: do tests in VS2008.
+			// fxcop told me to do in the first place. 
 
 			if (_hookID == IntPtr.Zero)
 				return;
@@ -195,7 +195,6 @@ namespace KeyMapper
 
 				}
 
-
 				// Raise the event:
 				if (this.KeyPressed != null)
 				{
@@ -220,7 +219,7 @@ namespace KeyMapper
 		{
             private NativeMethods() { }
 
-			// >Must< marshal the delegate otherwise it get's GCd.
+			// Marshal the delegate otherwise it get's GCd.
 			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
 			internal static extern IntPtr SetWindowsHookEx(int idHook, [MarshalAs(UnmanagedType.FunctionPtr)] LowLevelKeyboardProc lpfn, IntPtr hMod, int dwThreadId);
 
@@ -241,7 +240,6 @@ namespace KeyMapper
 		}
 
 		#endregion
-
 
 	}
 
@@ -317,13 +315,12 @@ namespace KeyMapper
 		public KBHookStruct Key
 		{
 			get { return _key; }
-			set { _key = value; }
 		}
 
 		// Constructor 
 		public KeyMapperKeyPressedEventArgs(KBHookStruct key)
 		{
-			this.Key = key;
+			_key = key;
 		}
 
 	}

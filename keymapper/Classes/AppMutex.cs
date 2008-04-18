@@ -96,9 +96,6 @@ namespace KeyMapper
 
 		#endregion
 
-
-
-
 		internal class NativeMethods
 		{
 
@@ -116,8 +113,6 @@ namespace KeyMapper
 			internal static extern int IsIconic(IntPtr hWnd);
 
 			internal const int SW_RESTORE = 9;
-
-
 
 		}
 

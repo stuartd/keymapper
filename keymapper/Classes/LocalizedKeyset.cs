@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace KeyMapper
 {
+
+	/// <summary>
+	///  This represents all the keyboard keys in the vurrent keyboard layout.
+	/// </summary>
 	public class LocalizedKeySet
 	{
 		#region Fields
@@ -65,7 +69,7 @@ namespace KeyMapper
 		private void GetNonLocalizableKeyNames()
 		{
 			// These have to be extracted from the keycode XML
-			// as thay aren't available otherwise. They don't change.
+			// as thay aren't available otherwise (they don't change)
 
 			KeyDataXml kd = new KeyDataXml();
 
