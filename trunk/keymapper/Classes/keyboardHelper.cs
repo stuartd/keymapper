@@ -1,34 +1,35 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using System.Collections;
 
 namespace KeyMapper
 {
-
+	/// <summary>
+	///  Static class providing Keyboard helper methods
+	/// </summary>
 	static class KeyboardHelper
 	{
 
 		#region Fields
 
-		// The don't need to be IntPtrs as they aren't system resources 
+		// The don't need to be IntPtrs as they aren't actually system resources 
 		static List<int> _systemInputLocaleIdentifiers;
+		// It's just easier to have this as in IntPtr
 		static IntPtr _currentInputLocaleIdentifier;
 		static Hashtable _installedKeyboards;
-
-		public static Hashtable InstalledKeyboards
-		{
-			get { return KeyboardHelper._installedKeyboards; }
-		}
 
 		#endregion
 
 		#region Properties
 
-
+		public static Hashtable InstalledKeyboards
+		{
+			get { return KeyboardHelper._installedKeyboards; }
+		}
 
 		private static List<int> SystemInputLocaleIdentifiers
 		{
@@ -57,6 +58,7 @@ namespace KeyMapper
 			_currentInputLocaleIdentifier = (IntPtr)NativeMethods.LoadKeyboardLayout(locale, KLF_ACTIVATE | KLF_SUBSTITUTE_OK);
 
 			// While we have it, get it's HKL and return the low word of it:
+			// (this allows the appropriate culture to be loaded)
 			int hkl = (int)NativeMethods.GetKeyboardLayout(0);
 			return hkl & 0x0000FFFF;
 		}
@@ -86,16 +88,12 @@ namespace KeyMapper
 		///  Query the current keyboard layout for unshifted and shifted key values
 		/// as these compose the "name" of the key - e.g. 1 and !, [ and {.
 		/// </summary>
-		/// <param name="scancode">The key's scancode</param>
-		/// <returns>Localized name of the key</returns>
 
 		public static string GetKeyName(int scancode, ref bool overlong)
 		{
-
-			// This is a keyboard state like the one returned by GetKeyboardState
 			byte[] KeyState = new byte[256];
 
-			// Set all the IME bits on (only works for Japanese = Korean & Chinese still don't work.)
+			// Set all the IME bits on (only works for Japanese = Korean & Chinese still don't work..?)
 			KeyState[(int)Keys.KanaMode] = 0x80;
 			KeyState[(int)Keys.HanguelMode] = 0x80;
 			KeyState[(int)Keys.JunjaMode] = 0x80;
@@ -103,35 +101,35 @@ namespace KeyMapper
 			KeyState[(int)Keys.HanjaMode] = 0x80;
 			KeyState[(int)Keys.KanjiMode] = 0x80;
 
-			uint vk = NativeMethods.MapVirtualKeyEx((uint)scancode, 1, _currentInputLocaleIdentifier);
+		
 
 			// Will put the unshifted and shifter values into this SB:
 			StringBuilder result = new StringBuilder();
 
-			int bufferLength = 100;	// 10 will be enough normally but there are some strange errors
-			// which this may help track down.
+			int bufferLength = 10;	
 
 			// Get the key itself:
 			StringBuilder sbUnshifted = new StringBuilder(bufferLength);
 
+			uint vk = NativeMethods.MapVirtualKeyEx((uint)scancode, 1, _currentInputLocaleIdentifier);
 			// 	Console.WriteLine((Keys)vk + " - " + vk.ToString() + " - " + "Scancode: " + scancode.ToString());
 
 			int rc = NativeMethods.ToUnicodeEx(vk, (uint)scancode, KeyState, sbUnshifted, sbUnshifted.Capacity, 0, _currentInputLocaleIdentifier);
 
 			if (rc > 1)
 			{
-				// this is an out parameter
+				// this is an out parameter: many unicode glyphs are more than one "character"
 				overlong = true;
 			}
-
 
 			if (rc < 0)
 			{
 				// This is a dead key - a key which only combines with the next pressed to form an accent etc.
-				// In order to stop it combining with the unshifted state, we need to flush out what's stored in the keyboard state.
+				// In order to stop it combining with the shifted state, we need to flush out what's stored in the keyboard state
+				// by calling the function again now.
 				// ref: http://blogs.msdn.com/michkap/archive/2006/03/24/559169.aspx
 
-				NativeMethods.ToUnicodeEx(
+				int dummy = NativeMethods.ToUnicodeEx(
 					(uint)Keys.Space,
 					NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, _currentInputLocaleIdentifier),
 					KeyState,
@@ -146,7 +144,7 @@ namespace KeyMapper
 
 			if (rc < sbUnshifted.Length)
 			{
-				sbUnshifted.Remove(rc, sbUnshifted.Length - rc); // zero-based...
+				sbUnshifted.Remove(rc, sbUnshifted.Length - rc); 
 			}
 
 			if (rc > 0)
@@ -172,7 +170,7 @@ namespace KeyMapper
 			if (rc < 0)
 			{
 
-				NativeMethods.ToUnicodeEx(
+				int dummy = NativeMethods.ToUnicodeEx(
 					(uint)Keys.Space,
 					NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, _currentInputLocaleIdentifier),
 					KeyState,
@@ -188,19 +186,16 @@ namespace KeyMapper
 
 			if (rc > 1)
 			{
-				// Console.WriteLine("RC greater than one: {2}, String {0} String Length: {1}", sbUnshifted, sbUnshifted.Length, rc);
 				overlong = true;
 			}
 
-
 			if (rc < sbShifted.Length)
 			{
-				// Console.WriteLine("Shifted length mismatch: rc {0}, sl {1}, string {2}", rc, sbShifted.Length, sbShifted);
 				sbShifted.Remove(rc, sbShifted.Length - rc);
 			}
 
-			// Console.WriteLine("Current culture: " + AppController.CurrentCultureInfo);
-
+			// If this shifted state the same as the unshifted.ToUpper
+			// (e.g. e and E) then don't add it.
 			if (rc > 0 & (String.Compare(sbShifted.ToString(), sbUnshifted.ToString(), true, AppController.CurrentCultureInfo) != 0))
 			{
 				// Not wanting to do this for letters and the like..
@@ -339,10 +334,10 @@ namespace KeyMapper
 
 		#region NativeMethods class for DLLImports
 
-        // Doesn't need to be static.
+		// Doesn't need to be static.
 		internal class NativeMethods
 		{
-            private NativeMethods() { }
+			private NativeMethods() { }
 
 			[DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "MapVirtualKeyExW", ExactSpelling = true)]
 			internal static extern uint MapVirtualKeyEx(

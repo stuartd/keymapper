@@ -19,10 +19,10 @@ namespace KeyMapper
 	public class PhysicalKeyboardLayout
 	{
 
-		// There are two, really - 'US' and 'European' though many Europeans use the US layout..
+		// There are two main layouts - 'US' and 'European' (though many Europeans use the US layout..)
 
 		// There is an extra one: the Punjabi keyboard has a European style enter key
-		// and a US style left shift key (and a completely blank key!)
+		// and a US style left shift key 
 
 		#region Fields and Properties
 
@@ -66,7 +66,6 @@ namespace KeyMapper
 
 		#endregion
 
-		// Factory class, so private constructor:
 		private PhysicalKeyboardLayout() { }
 
 		public static PhysicalKeyboardLayout GetPhysicalLayout(KeyboardLayoutType layout, bool isMacKeyboard)
@@ -463,49 +462,43 @@ namespace KeyMapper
 		public int Scancode
 		{
 			get { return _scancode; }
-			set { _scancode = value; }
 		}
 
 		public int Extended
 		{
 			get { return _extended; }
-			set { _extended = value; }
 		}
 
 		public BlankButton Button
 		{
 			get { return _button; }
-			set { _button = value; }
 		}
 
 		public int HorizontalStretch
 		{
 			get { return _horizontalstretch; }
-			set { _horizontalstretch = value; }
 		}
 
 		public int VerticalStretch
 		{
 			get { return _verticalstretch; }
-			set { _verticalstretch = value; }
 		}
 
 		public int RightPadding
 		{
 			get { return _rightpadding; }
-			set { _rightpadding = value; }
 		}
 
 
 		public KeyboardLayoutElement(int scancode, int extended, BlankButton button,
 			int horizontalStretch, int verticalStretch, int rightPadding)
 		{
-			Scancode = scancode;
-			Extended = extended;
-			Button = button;
-			HorizontalStretch = horizontalStretch;
-			VerticalStretch = verticalStretch;
-			RightPadding = rightPadding;
+			_scancode = scancode;
+			_extended = extended;
+			_button = button;
+			_horizontalstretch = horizontalStretch;
+			_verticalstretch = verticalStretch;
+			_rightpadding = rightPadding;
 		}
 
 	}

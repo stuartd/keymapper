@@ -156,6 +156,21 @@ namespace KeyMapper
 			EstablishSituation();
 		}
 
+		public static void CloseAppController()
+		{
+			ClearFontCache();
+
+			foreach (Bitmap bmp in _buttoncache)
+			{
+				if (bmp != null)
+					bmp.Dispose();
+			}
+			_buttoncache.Clear();
+
+			KeyboardHelper.UnloadLayout();
+
+		}
+
 		private static void StartBackgroundTasks()
 		{
 			ThreadStart job1 = new ThreadStart(KeyboardHelper.GetInstalledKeyboardList);
@@ -166,6 +181,7 @@ namespace KeyMapper
 			// Thread thread2 = new Thread(job2);
 			// thread2.Start();
 		}
+
 		private static void EstablishSituation()
 		{
 
@@ -191,7 +207,7 @@ namespace KeyMapper
 				// previously, as the reg key doesn't exist. In this case, we want to be able to 
 				// show the mappings as "existing" as they almost certainly are.
 
-				// (It's possible that this key exists but the values don't if they've been manually deleted)
+				// (It's also possible that this key exists but the values don't if they've been manually deleted)
 				savedMappingsExist = false;
 
 			}
@@ -207,12 +223,13 @@ namespace KeyMapper
 			// If user uses Fast User Switching to switch
 			// to an account which is already logged in, the HKCU mappings disappear.
 
-			// Get the info we need:
+			// So.
 
-			// Is the current user able to write to HKLM??
+			// Is the current user able to write to the Keyboard Layout key in HKLM??
 			// (This key always exists, Windows recreates it if it's deleted)
 
-			_canWriteBootMappings = RegistryHelper.CanUserWriteToKey(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
+			_canWriteBootMappings = RegistryHelper.CanUserWriteToKey
+					(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
 			// Are we using an OS later than Windows 2000 where user mappings are allowed?
 			_canHaveLocalUserMappings =
@@ -229,16 +246,17 @@ namespace KeyMapper
 			// Now, the "Volatile Environment" key in RegistryHive.CurrentUser
 			// >isn't< always unloaded on logoff. We have a fallback though..
 
-			string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToString().Replace("\\", "/");
-
-			// This fails - occasionally - with error:
-			// System.IO.FileNotFoundException occurred
-			// Message="The network path was not found. (Exception from HRESULT: 0x80070035)"
-
 			if (UserHelper.IsConnectedToDomain() == false)
 			{
 				// If we are in a domain, then LastLogin returns the last domain login time, which
 				// is NOT what we want.
+
+				string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToString().Replace("\\", "/");
+
+				// This fails - occasionally - with error:
+				// System.IO.FileNotFoundException occurred
+				// Message="The network path was not found. (Exception from HRESULT: 0x80070035)"
+				
 				try
 				{
 					object oUser = Marshal.BindToMoniker("WinNT://" + user + ",user");
@@ -248,9 +266,6 @@ namespace KeyMapper
 
 					if (adsiLogonTime > logontime)
 						logontime = adsiLogonTime;
-
-					// If we're in a domain environment, this can return any cached logintime from any domain controller
-					// so get the regkeystimestamp anyway.
 				}
 				catch (System.IO.FileNotFoundException)
 				{
@@ -258,21 +273,24 @@ namespace KeyMapper
 				}
 			}
 
-
 			// Can happen - awakening a VM from sleep - that boottime later than logontime.
 
-			// TODO: VERIFY THIS.
+			// TODO: Verify this actually happens.
 			if (boottime > logontime)
 			{
 				Console.WriteLine("Boot time: {0} Logon Time {1}", boottime, logontime);
+				System.Windows.Forms.MessageBox.Show("Boot time adjusted") ;
+
 				boottime = logontime.AddMinutes(-1);
 			}
 
 			// When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
-			DateTime HKLMWrite = RegistryHelper.GetRegistryKeyTimestamp(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
+			DateTime HKLMWrite = RegistryHelper.GetRegistryKeyTimestamp
+				(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
 			// When was HKEY_CURRENT_USER\Keyboard Layout written?
-			DateTime HKCUWrite = RegistryHelper.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, @"Keyboard Layout");
+			DateTime HKCUWrite = RegistryHelper.GetRegistryKeyTimestamp
+				(RegistryHive.CurrentUser, @"Keyboard Layout");
 
 			Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", boottime, logontime, HKLMWrite, HKCUWrite);
 
@@ -282,7 +300,7 @@ namespace KeyMapper
 			// Get the current scancode maps
 			MappingsManager.GetMappingsFromRegistry();
 
-			// If user mappings don't work, default to boot.
+			// If user mappings are inappropriate (win2k) default to boot.
 			if (_canHaveLocalUserMappings == false)
 				MappingsManager.SetMappingsFilter(MappingFilter.Boot);
 
@@ -353,24 +371,7 @@ namespace KeyMapper
 			}
 
 		}
-
-		public static void CloseAppController()
-		{
-			// Console.WriteLine("Closing App");
-
-			ClearFontCache();
-
-			foreach (Bitmap bmp in _buttoncache)
-			{
-				if (bmp != null)
-					bmp.Dispose();
-			}
-			_buttoncache.Clear();
-
-			KeyboardHelper.UnloadLayout();
-
-		}
-
+		
 		private static void SetLocale()
 		{
 			SetLocale(null);
@@ -437,14 +438,13 @@ namespace KeyMapper
 			_keyboardlayout = layout;
 		}
 
-		#endregion
-
 		public static bool CheckForExistingInstances()
 		{
 			_appmutex = new AppMutex();
 			return (!_appmutex.GetMutex());
 		}
 
+		#endregion
 
 		#region Cache methods
 
@@ -533,7 +533,6 @@ namespace KeyMapper
 
 		}
 
-
 		public static Bitmap GetBitmap(BlankButton button)
 		{
 			// Have we already extracted this bmp?
@@ -582,40 +581,38 @@ namespace KeyMapper
 			return GetHighestCommonDenominator(b, a % b);
 		}
 
-		[SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-		public static void InitiateLogOff(bool restart)
-		{
+		//[SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
+		//public static void InitiateLogOff(bool restart)
+		//{
 
-			// Windows XP or later use shutdown.exe (especially with /g for Vista to restart open apps!)
+		//    // Windows XP or later use shutdown.exe (especially with /g for Vista to restart open apps!)
 
-			if (Environment.OSVersion.Version.Major >= 5 & Environment.OSVersion.Version.Minor >= 1)
-			{
-				// Won't work on WIn2k (shouldn't be here anyway)
-				System.Diagnostics.Process shutdown = new System.Diagnostics.Process();
-				shutdown.StartInfo.FileName = "shutdown.exe";
-				// /g for Vista
+		//    if (Environment.OSVersion.Version.Major >= 5 & Environment.OSVersion.Version.Minor >= 1)
+		//    {
+		//        // Won't work on WIn2k (shouldn't be here anyway)
+		//        System.Diagnostics.Process shutdown = new System.Diagnostics.Process();
+		//        shutdown.StartInfo.FileName = "shutdown.exe";
+		//        // /g for Vista
 
-				if (restart)
-				{
-					if (Environment.OSVersion.Version.Major > 5)
-						shutdown.StartInfo.Arguments =
-							" /g /c \"Restart initiated on your behalf by KeyMapper\" /d p:2:4";
-					else
-						shutdown.StartInfo.Arguments =
-							"/r /c \"Restart initiated on your behalf by KeyMapper. Type shutdown /a in a command prompt to cancel\" /d p:2:4";
-				}
-				else
-				{
-					// Log off.
-					shutdown.StartInfo.Arguments = " /l";
-				}
-				shutdown.Start();
-				shutdown.Close();
+		//        if (restart)
+		//        {
+		//            if (Environment.OSVersion.Version.Major > 5)
+		//                shutdown.StartInfo.Arguments =
+		//                    " /g /c \"Restart initiated on your behalf by KeyMapper\" /d p:2:4";
+		//            else
+		//                shutdown.StartInfo.Arguments =
+		//                    "/r /c \"Restart initiated on your behalf by KeyMapper. Type shutdown /a in a command prompt to cancel\" /d p:2:4";
+		//        }
+		//        else
+		//        {
+		//            // Log off.
+		//            shutdown.StartInfo.Arguments = " /l";
+		//        }
+		//        shutdown.Start();
+		//        shutdown.Close();
 
-			}
-
-
-		}
+		//    }
+		//	}
 
 		#endregion
 

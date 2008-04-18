@@ -16,18 +16,21 @@ namespace KeyMapper
 
 		#endregion
 
-		#region Constructors
+		#region Button Image methods
 
+		// Basic blank button, unscaled, no effects
 		public static Bitmap GetButtonImage(int scancode, int extended)
 		{
 			return GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, 1F, ButtonEffect.None, String.Empty);
 		}
 
+		// Specific scaled button with custom caption
 		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ButtonEffect effect)
 		{
 			return GetButtonImage(-1, -1, button, 0, 0, scale, effect, caption);
 		}
 
+		// Custom ColorMatrix
 		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ColorMatrix cm)
 		{
 			Bitmap bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None);
@@ -35,39 +38,32 @@ namespace KeyMapper
 			return WriteCaption(bmp, caption, false, false, ButtonEffect.None);
 		}
 
-		public static Bitmap GetButtonImage(int scancode, int extended, BlankButton button, ButtonEffect effect)
+		// Offers full control over the bnutton scale and stretch.
+		public static Bitmap GetButtonImage
+			(int scancode, int extended, BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect)
 		{
-			return GetButtonImage(scancode, extended, button, 0, 0, 1F, effect, String.Empty);
+			return GetButtonImage
+				(scancode, extended, button, horizontalStretch, verticalStretch, scale, effect, String.Empty);
 		}
 
-		public static Bitmap GetButtonImage(int scancode, int extended, BlankButton button, float scale)
-		{
-			return GetButtonImage(scancode, extended, button, 0, 0, scale, ButtonEffect.None, String.Empty);
-		}
-
-		public static Bitmap GetButtonImage(int scancode, int extended, BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect)
-		{
-			return GetButtonImage(scancode, extended,
-			button, horizontalStretch, verticalStretch, scale, effect, String.Empty);
-		}
-
-		public static Bitmap GetButtonImage(int scancode, int extended, BlankButton button, int horizontalStretch,
+		// This (private) method does the work. 
+		private static Bitmap GetButtonImage(int scancode, int extended, BlankButton button, int horizontalStretch,
 															int verticalStretch, float scale, ButtonEffect effect, string caption)
 		{
 
 			Bitmap bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect);
 
 			if (String.IsNullOrEmpty(caption))
-					bmp = WriteCaption(bmp, scancode, extended, effect);
-				else
-					bmp = WriteCaption(bmp, caption, false, false, effect);
+				bmp = WriteCaption(bmp, scancode, extended, effect);
+			else
+				bmp = WriteCaption(bmp, caption, false, false, effect);
 
 			return bmp;
 		}
 
 		#endregion
 
-		#region Public methods
+		#region Other public methods
 
 		public static Bitmap GetImage(string buttonFileName)
 		{
@@ -92,6 +88,25 @@ namespace KeyMapper
 				newHeight += 1;
 
 			return ScaleBitmap(bmp, newWidth, newHeight);
+		}
+
+		public static Color GetFontColour(ButtonEffect effect)
+		{
+			switch (effect)
+			{
+				case ButtonEffect.NoMappingAllowed:
+					return Color.DarkRed;
+				//case ButtonEffect.Disabled:
+				//    return Color.WhiteSmoke ;
+
+				//case ButtonEffect.Mapped:
+				//    return Color.Maroon;
+				//case ButtonEffect.MappedPending:
+				//    return Color.DarkRed;
+				default:
+					return Color.Black;
+
+			}
 		}
 
 		#endregion
@@ -253,6 +268,23 @@ namespace KeyMapper
 			}
 			bmp.Dispose();
 			return newbitmap;
+
+		}
+
+		private static Bitmap Transform(Bitmap bmp, ColorMatrix cm)
+		{
+			if (bmp == null)
+				return bmp;
+
+			Bitmap copy = new Bitmap(bmp.Width, bmp.Height);
+			using (ImageAttributes ia = new ImageAttributes())
+			using (Graphics g = Graphics.FromImage(copy))
+			{
+				ia.SetColorMatrix(cm);
+				g.DrawImage(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, bmp.Width, bmp.Height, GraphicsUnit.Pixel, ia);
+				bmp.Dispose();
+			}
+			return copy;
 
 		}
 
@@ -429,14 +461,7 @@ namespace KeyMapper
 		#endregion
 
 		#region Effects
-
-		private static ColorMatrix GetEmptyMatrix()
-		{
-			ColorMatrix cm = new ColorMatrix();
-			cm.Matrix00 = cm.Matrix11 = cm.Matrix22 = cm.Matrix33 = cm.Matrix44 = 1F;
-			return cm;
-		}
-
+		
 		public static ColorMatrix GetMatrix(ButtonEffect effect)
 		{
 			ColorMatrix cm = null;
@@ -504,23 +529,11 @@ namespace KeyMapper
 
 		}
 
-		public static Color GetFontColour(ButtonEffect effect)
+		private static ColorMatrix GetEmptyMatrix()
 		{
-			switch (effect)
-			{
-
-				//case ButtonEffect.Disabled:
-				//    return Color.WhiteSmoke ;
-				//case ButtonEffect.NoMappingAllowed:
-				//    return Color.Red;
-				//case ButtonEffect.Mapped:
-				//    return Color.Maroon;
-				//case ButtonEffect.MappedPending:
-				//    return Color.DarkRed;
-				default:
-					return Color.Black;
-
-			}
+			ColorMatrix cm = new ColorMatrix();
+			cm.Matrix00 = cm.Matrix11 = cm.Matrix22 = cm.Matrix33 = cm.Matrix44 = 1F;
+			return cm;
 		}
 
 		private static Bitmap ApplyEffect(Bitmap bmp, ButtonEffect effect)
@@ -535,20 +548,6 @@ namespace KeyMapper
 			else
 				return Transform(bmp, cm);
 		}
-
-		//private static ColorMatrix Whiten()
-		//{
-
-		//    float whitefactor = 0.1F;
-		//    return new System.Drawing.Imaging.ColorMatrix(
-		//        new float[][]
-		//         {
-		//            new float[] {1, 0, 0, 0, 0},
-		//            new float[] {0, 1, 0, 0, 0},
-		//            new float[] {0, 0, 1, 0, 0},
-		//            new float[] {0, 0, 0, 1, 0},
-		//            new float[] {whitefactor, whitefactor, whitefactor, 0, 1}});
-		//}
 
 		private static ColorMatrix Darken()
 		{
@@ -626,23 +625,6 @@ namespace KeyMapper
 				new float[] {0, 0, 1, 0, 0},
 				new float[] {0.5F, 0, 0, 1, 0},
 				new float[] {-0.1F, -0.1F, -1F, 0, 1}});
-
-		}
-
-		private static Bitmap Transform(Bitmap bmp, ColorMatrix cm)
-		{
-			if (bmp == null)
-				return bmp;
-
-			Bitmap copy = new Bitmap(bmp.Width, bmp.Height);
-			using (ImageAttributes ia = new ImageAttributes())
-			using (Graphics g = Graphics.FromImage(copy))
-			{
-				ia.SetColorMatrix(cm);
-				g.DrawImage(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, bmp.Width, bmp.Height, GraphicsUnit.Pixel, ia);
-				bmp.Dispose();
-			}
-			return copy;
 
 		}
 

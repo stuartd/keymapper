@@ -14,18 +14,6 @@
 		public Settings()
 		{
 
-			// this.SettingChanging += this.SettingChangingEventHandler;
-			//
-			//  this.PropertyChanged += this.SettingsPropertyChanged;
-			//
-			// Etc
 		}
-
-		void SettingsPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			
-		}
-
-
 	}
 }
