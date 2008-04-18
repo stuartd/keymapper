@@ -120,7 +120,11 @@ namespace KeyMapper
 				if (filter == MappingFilter.ClearedUser || filter == MappingFilter.ClearedBoot)
 				{
 					if (_keylist.Contains(map.From))
-						return; // Don't add an entry for a cleared key which has been remapped.
+					{
+						// Don't add an entry for a cleared key which has been remapped.
+						break;
+					}
+						
 				}
 				else
 				{
@@ -150,6 +154,7 @@ namespace KeyMapper
 						// don't want to have to access each cell to decide whether 
 						// to show the delete button for it or not.
 						_clearedKeys.Add(index);
+
 						break;
 				}
 

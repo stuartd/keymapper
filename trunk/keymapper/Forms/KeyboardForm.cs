@@ -104,7 +104,7 @@ namespace KeyMapper
 		private void OpenSubForms()
 		{
 
-			AppController.KeyboardFormHwnd = (IWin32Window)this;
+			AppController.KeyboardFormHandle = (IWin32Window)this;
 
 			Properties.Settings userSettings = new Properties.Settings();
 
@@ -160,7 +160,7 @@ namespace KeyMapper
 				&& MappingsManager.GetMappingCount(MappingFilter.User) == 0
 				&& AppController.UserCanWriteBootMappings)
 			{
-				MappingsManager.SetMappingsFilter(MappingFilter.Boot);
+				MappingsManager.SetFilter(MappingFilter.Boot);
 			}
 
 		}
@@ -409,6 +409,7 @@ namespace KeyMapper
 			if (String.IsNullOrEmpty(toolTipText) == false)
 				FormToolTip.SetToolTip(box, toolTipText);
 
+			// left is a ref parameter.
 			left += box.Image.Width + _paddingWidth; // Width varies eg for double-width blanks
 
 		}
@@ -882,7 +883,7 @@ namespace KeyMapper
 				return;
 
 			EditMappingForm mf = new EditMappingForm(box.Map, false, this.Location, this.Size);
-			mf.ShowDialog(AppController.KeyboardFormHwnd);
+			mf.ShowDialog(AppController.KeyboardFormHandle);
 		}
 
 		private void KeyboardFormClosed(object sender, FormClosedEventArgs e)
@@ -1011,7 +1012,7 @@ namespace KeyMapper
 		private void selectFromCaptureToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			EditMappingForm mf = new EditMappingForm(new KeyMapping(), true, this.Location, this.Size);
-			mf.ShowDialog(AppController.KeyboardFormHwnd);
+			mf.ShowDialog(AppController.KeyboardFormHandle);
 		}
 
 		private void revertToSavedToolStripMenuItemClick(object sender, EventArgs e)
@@ -1035,19 +1036,19 @@ namespace KeyMapper
 
 		private void onlyShowBootMappingsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			MappingsManager.SetMappingsFilter(MappingFilter.Boot);
+			MappingsManager.SetFilter(MappingFilter.Boot);
 			Redraw();
 		}
 
 		private void onlyShowUserMappingsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			MappingsManager.SetMappingsFilter(MappingFilter.User);
+			MappingsManager.SetFilter(MappingFilter.User);
 			Redraw();
 		}
 
 		private void showAllMappingsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			MappingsManager.SetMappingsFilter(MappingFilter.All);
+			MappingsManager.SetFilter(MappingFilter.All);
 			Redraw();
 		}
 
@@ -1069,7 +1070,7 @@ namespace KeyMapper
 			if (_mapListForm.Visible)
 				_mapListForm.Hide();
 			else
-				_mapListForm.Show(AppController.KeyboardFormHwnd);
+				_mapListForm.Show(AppController.KeyboardFormHandle);
 
 			SetWindowMenuButtonStates();
 		}
@@ -1079,7 +1080,7 @@ namespace KeyMapper
 			if (subform.Visible)
 				subform.Hide();
 			else
-				subform.Show(AppController.KeyboardFormHwnd);
+				subform.Show(AppController.KeyboardFormHandle);
 
 			SetWindowMenuButtonStates();
 		}
@@ -1131,7 +1132,7 @@ namespace KeyMapper
 		private void selectFromListsToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			EditMappingForm mf = new EditMappingForm(new KeyMapping(), false, this.Location, this.Size);
-			mf.ShowDialog(AppController.KeyboardFormHwnd);
+			mf.ShowDialog(AppController.KeyboardFormHandle);
 		}
 
 

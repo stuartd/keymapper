@@ -109,7 +109,7 @@ namespace KeyMapper
 				this.Controls[i].Dispose(); // Hopefully this clears out bitmaps and events etc?
 
 			ResetFields();
-			GetButtonCount();
+			GetButtons();
 
 			// Set our orientation and size.
 
@@ -133,6 +133,8 @@ namespace KeyMapper
 			AddButtons();
 
 			_oldSize = Size;
+
+			this.Refresh();
 
 		}
 
@@ -161,7 +163,7 @@ namespace KeyMapper
 
 		}
 
-		private void GetButtonCount()
+		private void GetButtons()
 		{
 
 			// By default, only show the buttons which are in use on the keyboard form. 
@@ -308,7 +310,7 @@ namespace KeyMapper
 				ButtonEffect effect = (ButtonEffect)System.Enum.Parse(typeof(ButtonEffect), effectname);
 
 				ColourEditor ce = new ColourEditor(effect, text);
-				ce.Show(AppController.KeyboardFormHwnd);
+				ce.Show(AppController.KeyboardFormHandle);
 			}
 		}
 

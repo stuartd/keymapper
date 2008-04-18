@@ -94,29 +94,39 @@ namespace KeyMapper
 			_clearedBootMappings.Clear();
 			_allMappings.Clear();
 
+
 			foreach (KeyMapping bootmap in _bootMappings)
 			{
 				// Add everything to All Mappings
 				_allMappings.Add(bootmap);
 
-				if (_filter == MappingFilter.All || _filter == MappingFilter.Boot)
-				{
-					// If this boot mapping isn't overriden by a user mapping add it to the filtered list
-					bool overridden = false;
-					foreach (KeyMapping usermap in _userMappings)
-					{
-						if (bootmap.From == usermap.From)
-						{
-							overridden = true;
-							break;
-						}
-					}
+				bool _addToFilteredMappings = true;
 
-					if (!overridden)
-					{
-						_currentFilteredMappings.Add(bootmap);
-					}
+				switch (_filter)
+				{
+					case MappingFilter.All:
+						// If filter is All then need to check if this boot mapping is overriden by a user mapping 
+						// Because if it is, we don't add it.
+
+						foreach (KeyMapping usermap in _userMappings)
+						{
+							if (bootmap.From == usermap.From)
+							{
+								_addToFilteredMappings = false;
+								break;
+							}
+						}
+
+						break;
+
+					case MappingFilter.User:
+						_addToFilteredMappings = false;
+						break;
+
 				}
+
+				if (_addToFilteredMappings)
+					_currentFilteredMappings.Add(bootmap);
 
 			}
 
@@ -272,6 +282,11 @@ namespace KeyMapper
 			return false;
 		}
 
+		public static bool IsMapped(KeyMapping map)
+		{
+			return IsMapped(map, _filter);
+		}
+
 		public static bool IsMapped(KeyMapping map, MappingFilter filter)
 		{
 
@@ -332,7 +347,7 @@ namespace KeyMapper
 
 		}
 
-		public static KeyMapping GetMapping(int scancode, int extended)
+		public static KeyMapping GetKeyMapping(int scancode, int extended)
 		{
 			foreach (KeyMapping mapping in _currentFilteredMappings)
 			{
@@ -378,13 +393,13 @@ namespace KeyMapper
 			return _savedUserMappings.Contains(map);
 		}
 
-		public static void SetMappingsFilter(MappingFilter filter)
+		public static void SetFilter(MappingFilter filter)
 		{
-			// This is problematic as this causes a change which can't be undone 
+			// This is a bit problematic as this causes a change which can't be undone 
 			// without setting the filter back. Well, problematic unless:
 			// a) Implement event codes (or simply "Undo set filter" 
 			// but would need to know what previous filters were each time.)
-			// or b) .. clear the stacks.
+			// or b) .. just clear the stacks.
 
 			if (filter != MappingFilter.All && filter != MappingFilter.Boot && filter != MappingFilter.User)
 				throw new ArgumentException("Mappings Filter is not valid");
@@ -574,9 +589,15 @@ namespace KeyMapper
 			PushMappingsOntoUndoStack();
 
 			if (_filter == MappingFilter.Boot)
+			{
+				map.SetType(MappingType.Boot);
 				_bootMappings.Add(map);
+			}
 			else
+			{
+				map.SetType(MappingType.User);
 				_userMappings.Add(map);
+			}
 
 			RaiseMappingsChangedEvent();
 
@@ -752,7 +773,7 @@ namespace KeyMapper
 
 		}
 
-		private static Collection<KeyMapping> GetMappingsFromScancodeMap(byte[] map)
+		private static Collection<KeyMapping> GetMappingsFromScancodeMap(byte[] map, MappingType type)
 		{
 			// Transform the byte array into keymappings
 
@@ -794,9 +815,13 @@ namespace KeyMapper
 					KeyMapping mapping = new KeyMapping(fromkey, tokey);
 
 					if (mapping.IsValid())
+					{
+						mapping.SetType(type);
 						maps.Add(mapping);
+					}
 					else
 					// Just ignore it and hope it goes away.
+					// A manually added - or garbled - entry could be invalid.
 					{ }
 				}
 			}
@@ -814,17 +839,31 @@ namespace KeyMapper
 
 		}
 
-		public static void GetMappingsFromRegistry(MapLocation which)
+		public static void GetMappingsFromRegistry(MapLocation location)
 		{
 
 			Collection<KeyMapping> mappings = new Collection<KeyMapping>();
 
-			byte[] map = GetScancodeMapFromRegistry(which);
+			MappingType type = MappingType.Null;
+			switch (location)
+			{
+				case MapLocation.LocalMachineKeyboardLayout:
+				case MapLocation.KeyMapperLocalMachineKeyboardLayout:
+					type = MappingType.Boot;
+					break;
+				case MapLocation.CurrentUserKeyboardLayout:
+				case MapLocation.KeyMapperCurrentUserKeyboardLayout:
+					type = MappingType.User;
+					break;
+			}
+
+
+			byte[] map = GetScancodeMapFromRegistry(location);
 
 			if (map != null)
-				mappings = GetMappingsFromScancodeMap(map);
+				mappings = GetMappingsFromScancodeMap(map, type);
 
-			switch (which)
+			switch (location)
 			{
 				case MapLocation.LocalMachineKeyboardLayout:
 					_bootMappings = mappings;
