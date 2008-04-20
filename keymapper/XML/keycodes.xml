@@ -103,7 +103,7 @@
     <name>Left Shift</name>
     <group>Modifier Keys</group>
     <localize>false</localize>
-    <useful>0</useful>
+    <useful>1</useful>
   </keycodes>
   <keycodes>
     <sc>91</sc>
