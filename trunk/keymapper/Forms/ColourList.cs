@@ -94,7 +94,7 @@ namespace KeyMapper
 			}
 			else
 			{
-				this.MinimumSize = new Size(64, 64);
+				this.MinimumSize = new Size(96, 96);
 				this.MaximumSize = new Size(9999, 160);
 			}
 
