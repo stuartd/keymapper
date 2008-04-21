@@ -156,7 +156,7 @@ namespace KeyMapper
 
             // If there are boot mappings and no user mappings and the last view mode was boot, then
             // start in boot mode - as long as user has the rights to change them..
-            MappingFilter oldFilter = (MappingFilter)userSettings.MappingsFilter;
+            MappingFilter oldFilter = (MappingFilter)userSettings.LastMappingsFilter;
             if (oldFilter == MappingFilter.Boot
                 && MappingsManager.GetMappingCount(MappingFilter.Boot) > 0
                 && MappingsManager.GetMappingCount(MappingFilter.User) == 0
@@ -561,7 +561,7 @@ namespace KeyMapper
             userSettings.KeyboardFormColourMapFormOpen = (_colourMapForm != null && _colourMapForm.Visible);
             userSettings.KeyboardFormHasMappingListFormOpen = (_mapListForm != null && _mapListForm.Visible);
 
-            userSettings.MappingsFilter = (int)MappingsManager.Filter;
+            userSettings.LastMappingsFilter = (int)MappingsManager.Filter;
 
             userSettings.KeyMapperSettingsSaved = true;
             userSettings.Save();

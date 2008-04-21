@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 using System.Drawing.Imaging;
-using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
+using System.IO;
+using System.Xml;
+using System.Text;
 
 namespace KeyMapper
 {
@@ -26,6 +23,9 @@ namespace KeyMapper
 		ColorMatrix _currentMatrix;
 		ColorMatrix _blankMatrix;
 		ButtonEffect _effect;
+
+		bool _customFontColor = false;
+		Color _fontColour = Color.Black;
 
 		public ColourEditor(ButtonEffect effect, string caption)
 		{
@@ -107,7 +107,12 @@ namespace KeyMapper
 					new float[] {(float)Matrix30.Value, (float)Matrix31.Value, (float)Matrix32.Value, (float)Matrix33.Value, (float)Matrix34.Value},
 					new float[] {(float)Matrix40.Value, (float)Matrix41.Value, (float)Matrix42.Value, (float)Matrix43.Value, (float)Matrix44.Value}});
 
-			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, cm);
+			Bitmap bmp;
+
+			if (_customFontColor)
+				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, cm, _fontColour);
+			else
+				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, cm, _effect);
 
 			_currentMatrix = cm;
 
@@ -125,7 +130,7 @@ namespace KeyMapper
 			DrawKey();
 		}
 
-		
+
 
 		private void BlankButtonClick(object sender, EventArgs e)
 		{
@@ -148,7 +153,47 @@ namespace KeyMapper
 
 		private void SaveButtonClick(object sender, EventArgs e)
 		{
-			byte[] byteMatrix = ButtonImages.GetMatrixAsByteArray(_currentMatrix);
+			SaveCurrentButton();
+		}
+
+		private void SaveCurrentButton()
+
+
+		{
+			XmlSerializer ser = new XmlSerializer(typeof(ColorMatrix));
+
+			//float[] floatMatrix = ButtonImages.GetMatrixAsFloatArray(_currentMatrix);
+			//XmlSerializer ser = new XmlSerializer(typeof(float[]));
+
+			StringBuilder xml = new StringBuilder() ;
+			
+			using (MemoryStream memoryStream = new MemoryStream())
+			using (StringWriter writer = new StringWriter(xml))
+			{
+				ser.Serialize(writer, _currentMatrix);
+			}
+			MessageBox.Show(xml.ToString());
+
+			Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+	
+			
+
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			ColorDialog colourPicker = new ColorDialog();
+
+			// Sets the initial color select to the current text color.
+			colourPicker.Color = Color.Black;
+
+			// Update the text box color if the user clicks OK 
+			if (colourPicker.ShowDialog() == DialogResult.OK)
+			{
+				_fontColour = colourPicker.Color;
+				_customFontColor = true;
+				DrawKey();
+			}
 
 		}
 

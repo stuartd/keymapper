@@ -30,13 +30,23 @@ namespace KeyMapper
 			return GetButtonImage(-1, -1, button, 0, 0, scale, effect, caption);
 		}
 
-		// Custom ColorMatrix
-		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ColorMatrix cm)
+		// Custom ColorMatrix and font colour
+		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ColorMatrix cm, Color fontColour)
 		{
 			Bitmap bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None);
 			bmp = Transform(bmp, cm);
-			return WriteCaption(bmp, caption, false, false, ButtonEffect.None);
+			return WriteCaption(bmp, caption, false, false, fontColour);
 		}
+
+		// Custom matrix, default font colour
+		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ColorMatrix cm, ButtonEffect effect)
+		{
+			Bitmap bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None);
+			bmp = Transform(bmp, cm);
+			Color fontColour = GetFontColour(effect);
+			return WriteCaption(bmp, caption, false, false, fontColour);
+		}
+
 
 		// Offers full control over the bnutton scale and stretch.
 		public static Bitmap GetButtonImage
@@ -53,10 +63,12 @@ namespace KeyMapper
 
 			Bitmap bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect);
 
+			Color fontColour = GetFontColour(effect);
+
 			if (String.IsNullOrEmpty(caption))
-				bmp = WriteCaption(bmp, scancode, extended, effect);
+				bmp = WriteCaption(bmp, scancode, extended, fontColour);
 			else
-				bmp = WriteCaption(bmp, caption, false, false, effect);
+				bmp = WriteCaption(bmp, caption, false, false, fontColour);
 
 			return bmp;
 		}
@@ -94,6 +106,9 @@ namespace KeyMapper
 		{
 			switch (effect)
 			{
+				case ButtonEffect.Disabled:
+					return Color.MidnightBlue;
+
 				case ButtonEffect.NoMappingAllowed:
 					return Color.DarkRed;
 				//case ButtonEffect.Disabled:
@@ -292,7 +307,7 @@ namespace KeyMapper
 
 		#region Caption
 
-		private static Bitmap WriteCaption(Bitmap bmp, string caption, bool overlong, bool localizable, ButtonEffect effect)
+		private static Bitmap WriteCaption(Bitmap bmp, string caption, bool overlong, bool localizable, Color fontColour)
 		{
 
 			// Set the sizes for 2 and 3 or more letters.
@@ -309,14 +324,14 @@ namespace KeyMapper
 			switch (namelength)
 			{
 				case 1: // e.g. single letter - letters and numbers
-					bmp = DrawCaptionLine(bmp, caption, AppController.BaseFontSize, localizable, effect);
+					bmp = DrawCaptionLine(bmp, caption, AppController.BaseFontSize, localizable, fontColour);
 					break;
 
 				case 2: // Two letters - mostly F keys, which need a constant font whether they are 2 or 3 chars long
 					if (caption.Substring(0, 1) == "F" && Char.IsDigit(caption, 1))
-						bmp = DrawCaptionLine(bmp, caption, FontSizeDouble, localizable, effect);
+						bmp = DrawCaptionLine(bmp, caption, FontSizeDouble, localizable, fontColour);
 					else
-						bmp = DrawCaptionLine(bmp, caption, FontSizeMulti, localizable, effect);
+						bmp = DrawCaptionLine(bmp, caption, FontSizeMulti, localizable, fontColour);
 
 					break;
 
@@ -327,20 +342,20 @@ namespace KeyMapper
 					if (spacepos > 0) // eg "7 &" or 5 %"
 					{
 
-						bmp = DrawCaptionLine(bmp, caption.Substring(0, spacepos), FontSizeDouble, TextPosition.Bottom, localizable, effect);
+						bmp = DrawCaptionLine(bmp, caption.Substring(0, spacepos), FontSizeDouble, TextPosition.Bottom, localizable, fontColour);
 						// May not strictly be three characters so send the rest:
-						bmp = DrawCaptionLine(bmp, caption.Substring(spacepos + 1), FontSizeDouble, TextPosition.SymbolTop, localizable, effect);
+						bmp = DrawCaptionLine(bmp, caption.Substring(spacepos + 1), FontSizeDouble, TextPosition.SymbolTop, localizable, fontColour);
 					}
 					else // End, F12 etc...
 					{
 						if (caption.Substring(0, 1) == "F" && Char.IsDigit(caption, 1) && Char.IsDigit(caption, 2))
 						{
 							// F11, F12 to be the same size as F1 to F9
-							bmp = DrawCaptionLine(bmp, caption, FontSizeDouble, localizable, effect);
+							bmp = DrawCaptionLine(bmp, caption, FontSizeDouble, localizable, fontColour);
 						}
 						else
 						{ // End, Tab, Esc etc
-							bmp = DrawCaptionLine(bmp, caption, FontSizeMulti, localizable, effect);
+							bmp = DrawCaptionLine(bmp, caption, FontSizeMulti, localizable, fontColour);
 						}
 					}
 					break;
@@ -351,11 +366,11 @@ namespace KeyMapper
 					switch (words.Length)
 					{
 						case 1:
-							DrawCaptionLine(bmp, words[0], FontSizeMulti, localizable, effect);
+							DrawCaptionLine(bmp, words[0], FontSizeMulti, localizable, fontColour);
 							break;
 						case 2:
-							DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.TextTop, localizable, effect);
-							DrawCaptionLine(bmp, words[1], FontSizeMulti, TextPosition.Bottom, localizable, effect);
+							DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.TextTop, localizable, fontColour);
+							DrawCaptionLine(bmp, words[1], FontSizeMulti, TextPosition.Bottom, localizable, fontColour);
 							break;
 						default:
 							break;
@@ -367,7 +382,7 @@ namespace KeyMapper
 
 		}
 
-		private static Bitmap WriteCaption(Bitmap bmp, int scancode, int extended, ButtonEffect effect)
+		private static Bitmap WriteCaption(Bitmap bmp, int scancode, int extended, Color fontColour)
 		{
 
 			string caption = AppController.GetKeyName(scancode, extended);
@@ -392,15 +407,15 @@ namespace KeyMapper
 			if (AppController.IsLocalizableKey(hash))
 				localizable = true;
 
-			return WriteCaption(bmp, caption, overlong, localizable, effect);
+			return WriteCaption(bmp, caption, overlong, localizable, fontColour);
 		}
 
-		private static Bitmap DrawCaptionLine(Bitmap button, string caption, float fontsize, bool localizable, ButtonEffect effect)
+		private static Bitmap DrawCaptionLine(Bitmap button, string caption, float fontsize, bool localizable, Color fontColour)
 		{
-			return DrawCaptionLine(button, caption, fontsize, TextPosition.Middle, localizable, effect);
+			return DrawCaptionLine(button, caption, fontsize, TextPosition.Middle, localizable, fontColour);
 		}
 
-		private static Bitmap DrawCaptionLine(Bitmap bmp, string caption, float fontsize, TextPosition where, bool localizable, ButtonEffect effect)
+		private static Bitmap DrawCaptionLine(Bitmap bmp, string caption, float fontsize, TextPosition where, bool localizable, Color fontColour)
 		{
 
 			// Each string needs to be tested to see if it fits in the button or if it has to be bumped down.
@@ -447,7 +462,7 @@ namespace KeyMapper
 						break;
 				}
 
-				using (SolidBrush b = new SolidBrush(GetFontColour(effect)))
+				using (SolidBrush b = new SolidBrush(fontColour))
 				{
 					g.DrawString(caption, font, b, new Point(left, top));
 				}
@@ -461,7 +476,7 @@ namespace KeyMapper
 		#endregion
 
 		#region Effects
-		
+
 		public static ColorMatrix GetMatrix(ButtonEffect effect)
 		{
 			ColorMatrix cm = null;
@@ -482,7 +497,7 @@ namespace KeyMapper
 					break;
 
 				case ButtonEffect.MappedPending:
-					cm = DarkBlue();
+					cm = GreenyBlue();
 					break;
 
 				case ButtonEffect.UnmappedPending:
@@ -490,11 +505,11 @@ namespace KeyMapper
 					break;
 
 				case ButtonEffect.DisabledPending:
-					cm = GoldenDarken();
+					cm = DarkGold();
 					break;
 
 				case ButtonEffect.EnabledPending:
-					cm = DarkGold();
+					cm = GoldenDarken();
 					break;
 			}
 
@@ -502,15 +517,16 @@ namespace KeyMapper
 
 		}
 
-		public static byte[] GetMatrixAsByteArray(ColorMatrix cm)
+		public static float[] GetMatrixAsFloatArray(ColorMatrix cm)
 		{
 
-			byte[] arrBytes = new byte[25];
+			float[] arrValues = new float[25];
 
 			if (cm == null)
-				return arrBytes;
+				return arrValues;
 
 			// Ugly though it is, I can't see another way right now.
+			// Implementing ISerializable would be better, perhaps?
 
 			for (int i = 0; i < 5; i++)
 			{
@@ -521,13 +537,16 @@ namespace KeyMapper
 						+ j.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
 					object value = cm.GetType().GetProperty(name).GetValue(cm, null);
-					arrBytes[(i * 5) + j] = (byte)System.Int32.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+					Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
+					arrValues[(i * 5) + j] = (float)System.Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
 				}
 			}
 
-			return arrBytes;
+			return arrValues;
 
 		}
+
+
 
 		private static ColorMatrix GetEmptyMatrix()
 		{
@@ -572,7 +591,7 @@ namespace KeyMapper
 					new float[] {0, 1, 0, 0, 0},
 					new float[] {0, 0, 1, 0, 0},
 					new float[] {0, 0, 0, 1, 0},
-					new float[] {-0.1F, -0.1F, -0.1F, 0, 1}});
+					new float[] {-0.2F, -0.2F, -0.2F, 0, 1}});
 
 		}
 
@@ -585,17 +604,17 @@ namespace KeyMapper
 					new float[] {0, 1, 0, 0, 0},
 					new float[] {0, 0, 1, 0, 0},
 					new float[] {0, 0, 0, 1, 0},
-					new float[] {-0.2F, -0.2F, -0.3F, 0, 1}});
+					new float[] {-0.1F, -0.2F, -0.3F, 0, 1}});
 		}
 
-		private static ColorMatrix DarkBlue()
+		private static ColorMatrix GreenyBlue()
 		{
 			return new System.Drawing.Imaging.ColorMatrix(
 							new float[][]
 				{
 				new float[] {0.5F, 0, 0, 0, 0},
 				new float[] {0, 1, 0, 0, 0},
-				new float[] {0, -0.1F, 1, 0, 0},
+				new float[] {0, 0.1F, 1, 0, 0},
 				new float[] {0, 0, 0, 1, 0},
 				new float[] {0, 0, 0, 0, 1}});
 
@@ -610,7 +629,7 @@ namespace KeyMapper
 				new float[] {0, 0.9F, 0, 0, 0},
 				new float[] {0, 0, 1, 0, 0},
 				new float[] {0, 0, 0, 1, 0},
-				new float[] {-0.3F, -0.1F, 0.5F, 0, 1}});
+				new float[] {-0.5F, -0.1F, 0.5F, 0, 1}});
 
 		}
 

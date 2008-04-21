@@ -206,12 +206,12 @@ namespace KeyMapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MappingsFilter {
+        public int LastMappingsFilter {
             get {
-                return ((int)(this["MappingsFilter"]));
+                return ((int)(this["LastMappingsFilter"]));
             }
             set {
-                this["MappingsFilter"] = value;
+                this["LastMappingsFilter"] = value;
             }
         }
     }
