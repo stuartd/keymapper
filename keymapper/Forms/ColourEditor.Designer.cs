@@ -69,6 +69,7 @@ namespace KeyMapper
 			this.label10 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.BalnkButton = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
 			this.SpinnerPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.Matrix44)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.Matrix34)).BeginInit();
@@ -339,7 +340,7 @@ namespace KeyMapper
 			// 
 			// ResetButton
 			// 
-			this.ResetButton.Location = new System.Drawing.Point(272, 242);
+			this.ResetButton.Location = new System.Drawing.Point(257, 215);
 			this.ResetButton.Name = "ResetButton";
 			this.ResetButton.Size = new System.Drawing.Size(87, 23);
 			this.ResetButton.TabIndex = 28;
@@ -349,7 +350,7 @@ namespace KeyMapper
 			// 
 			// SaveButton
 			// 
-			this.SaveButton.Location = new System.Drawing.Point(272, 213);
+			this.SaveButton.Location = new System.Drawing.Point(257, 186);
 			this.SaveButton.Name = "SaveButton";
 			this.SaveButton.Size = new System.Drawing.Size(87, 23);
 			this.SaveButton.TabIndex = 29;
@@ -458,7 +459,7 @@ namespace KeyMapper
 			// 
 			// BalnkButton
 			// 
-			this.BalnkButton.Location = new System.Drawing.Point(272, 271);
+			this.BalnkButton.Location = new System.Drawing.Point(257, 244);
 			this.BalnkButton.Name = "BalnkButton";
 			this.BalnkButton.Size = new System.Drawing.Size(87, 23);
 			this.BalnkButton.TabIndex = 34;
@@ -466,11 +467,22 @@ namespace KeyMapper
 			this.BalnkButton.UseVisualStyleBackColor = true;
 			this.BalnkButton.Click += new System.EventHandler(this.BlankButtonClick);
 			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(257, 273);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(87, 23);
+			this.button1.TabIndex = 35;
+			this.button1.Text = "Text…";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
 			// ColourEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(373, 356);
+			this.ClientSize = new System.Drawing.Size(359, 348);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.BalnkButton);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label4);
@@ -570,6 +582,7 @@ namespace KeyMapper
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Button BalnkButton;
+		private System.Windows.Forms.Button button1;
 
 	}
 }
