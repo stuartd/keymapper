@@ -485,7 +485,7 @@ namespace KeyMapper
 			{
 				case ButtonEffect.NoMappingAllowed:
 				case ButtonEffect.None:
-					cm = GetEmptyMatrix();
+					cm = new ColorMatrix();
 					break;
 
 				case ButtonEffect.Mapped:
@@ -517,44 +517,7 @@ namespace KeyMapper
 
 		}
 
-		public static float[] GetMatrixAsFloatArray(ColorMatrix cm)
-		{
-
-			float[] arrValues = new float[25];
-
-			if (cm == null)
-				return arrValues;
-
-			// Ugly though it is, I can't see another way right now.
-			// Implementing ISerializable would be better, perhaps?
-
-			for (int i = 0; i < 5; i++)
-			{
-				for (int j = 0; j < 5; j++)
-				{
-					string name = "Matrix"
-						+ i.ToString(System.Globalization.CultureInfo.InvariantCulture)
-						+ j.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-					object value = cm.GetType().GetProperty(name).GetValue(cm, null);
-					Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
-					arrValues[(i * 5) + j] = (float)System.Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-				}
-			}
-
-			return arrValues;
-
-		}
-
-
-
-		private static ColorMatrix GetEmptyMatrix()
-		{
-			ColorMatrix cm = new ColorMatrix();
-			cm.Matrix00 = cm.Matrix11 = cm.Matrix22 = cm.Matrix33 = cm.Matrix44 = 1F;
-			return cm;
-		}
-
+		
 		private static Bitmap ApplyEffect(Bitmap bmp, ButtonEffect effect)
 		{
 			// TODO: Set effect color and font colour by user choice and implement all that pref stuff.
