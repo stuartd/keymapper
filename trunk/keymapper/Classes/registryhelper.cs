@@ -69,7 +69,6 @@ namespace KeyMapper
 
 	#endregion
 
-
 		#region Private methods
 
 		private static UIntPtr OpenKey(RegistryHive hive, string keyname, int requiredAccess)
@@ -108,7 +107,6 @@ namespace KeyMapper
 		}
 
 		#endregion
-
 
 		internal class NativeMethods
 		{

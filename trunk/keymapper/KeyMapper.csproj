@@ -160,12 +160,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Properties\UserColours.cs" />
-    <Compile Include="Properties\UserColours.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>UserColours.settings</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\fader.resx">
@@ -226,10 +220,6 @@
     <None Include="app.config" />
     <None Include="Project\app.config" />
     <None Include="Project\KeyMapper.pfx" />
-    <None Include="Properties\UserColours.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>UserColours.Designer.cs</LastGenOutput>
-    </None>
     <Content Include="Images\arrow.png" />
     <EmbeddedResource Include="Images\blank.png" />
     <EmbeddedResource Include="Images\doublewideblank.png" />

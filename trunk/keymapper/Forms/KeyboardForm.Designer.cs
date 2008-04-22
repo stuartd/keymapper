@@ -428,11 +428,11 @@ namespace KeyMapper
             this.StatusLabelReadOnly,
             this.StatusLabelMappingDisplayType});
             this.StatusBar.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.StatusBar.Location = new System.Drawing.Point(0, 427);
+            this.StatusBar.Location = new System.Drawing.Point(0, 425);
             this.StatusBar.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.StatusBar.Name = "StatusBar";
             this.StatusBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.StatusBar.Size = new System.Drawing.Size(924, 22);
+            this.StatusBar.Size = new System.Drawing.Size(922, 22);
             this.StatusBar.TabIndex = 11;
             this.StatusBar.Text = "statusbar";
             // 
@@ -494,7 +494,7 @@ namespace KeyMapper
             this.KeyboardListCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.KeyboardListCombo.Font = new System.Drawing.Font("Verdana", 8F);
             this.KeyboardListCombo.FormattingEnabled = true;
-            this.KeyboardListCombo.Location = new System.Drawing.Point(663, 428);
+            this.KeyboardListCombo.Location = new System.Drawing.Point(661, 426);
             this.KeyboardListCombo.Name = "KeyboardListCombo";
             this.KeyboardListCombo.Size = new System.Drawing.Size(239, 21);
             this.KeyboardListCombo.TabIndex = 12;
@@ -504,7 +504,7 @@ namespace KeyMapper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(924, 449);
+            this.ClientSize = new System.Drawing.Size(922, 447);
             this.Controls.Add(this.KeyboardListCombo);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.menu);

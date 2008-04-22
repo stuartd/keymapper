@@ -4,70 +4,121 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Configuration;
+using Microsoft.Win32;
 
 namespace KeyMapper
 {
 
-	class UserColourSettingManager
-	{
-		Dictionary<ButtonEffect, UserColourSetting> settings = new Dictionary<ButtonEffect, UserColourSetting>();
+    class UserColourSettingManager
+    {
+        Dictionary<ButtonEffect, UserColourSetting> _settings = new Dictionary<ButtonEffect, UserColourSetting>();
 
-		public UserColourSettingManager()
-		{
-			CreateSettings();
-			// LoadSettings();
-		}
+        public UserColourSettingManager()
+        {
+            SaveSetting(ButtonEffect.Disabled,
+                        ButtonImages.GetMatrix(ButtonEffect.Disabled),
+                        ButtonImages.GetFontColour(ButtonEffect.Disabled).ToArgb());
+        }
 
-		private void CreateSettings()
-		{
 
-   //            1.  Create an instance of System.Configuration.SettingsAttributeDictionary.
-   //2. Create an instance of System.Configuration.UserScopedSettingsAttribute.
-   //3. Add the System.Configuration.UserScopedSettingsAttribute object to the System.Configuration.SettingsAttributeDictionary.
-   //4. Create an instance of System.Configuration.SettingsProperty passing the System.Configuration.SettingsAttributeDictionary into the contructor as well as the property name, default value, and type.
-   //5. Add the System.Configuration.SettingsAttributeDictionary to the My.MySettings.Default.Properties collection. 
+        private void SaveSetting(ButtonEffect effect, ColorMatrix cm, int FontColour)
+        {
 
-			Properties.UserColours uc = new KeyMapper.Properties.UserColours();
-		// 	uc.Initialize(new SettingsContext()
+            string key = AppController.ApplicationRegistryKeyName;
+            string subkey = effect.ToString();
 
-			SettingsAttributeDictionary attributes = new SettingsAttributeDictionary();
-			UserScopedSettingAttribute attr = new UserScopedSettingAttribute();
-			attributes.Add(attr.TypeId, attr);
+            RegistryKey reg = Registry.CurrentUser.CreateSubKey(key + @"\UserColours\" + subkey);
 
-			LocalFileSettingsProvider provider = new LocalFileSettingsProvider();
+            if (reg == null)
+                return;
 
-			SettingsProperty prop = new SettingsProperty((new SettingsProperty
-					("foo", typeof(UserColourSetting), provider, false, new UserColourSetting(), SettingsSerializeAs.Xml, attributes, false, false)));
+            reg.SetValue("FontColour", FontColour);
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    string name = "Matrix"
+                        + i.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                        + j.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-			uc.Properties.Add(prop);
+                    object value = cm.GetType().GetProperty(name).GetValue(cm, null);
+                    // Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
+                    reg.SetValue(name, (float)System.Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
+                }
+            }
 
-			SettingsProperty prop2 = new SettingsProperty((new SettingsProperty
-					("bar", typeof(UserColourSetting), provider, false, new UserColourSetting(), SettingsSerializeAs.String, attributes, false, false)));
 
-			// Need to add to the default properties ??!?!?!?!?!?!?!?!?
-			uc.Properties.Add(prop2);
-			
-			Console.WriteLine("UC has {0} properties", uc.Properties.Count);
 
-			uc.Save();
+        }
 
-			UserColourSetting s = (UserColourSetting)uc["foo"];
+        public UserColourSetting GetSettings(ButtonEffect effect)
+        {
+            string key = AppController.ApplicationRegistryKeyName;
+            string subkey = key + @"\UserColours\" + effect.ToString();
+            UserColourSetting setting = new UserColourSetting();
 
-			Console.WriteLine(s.ToString());
+            RegistryKey reg = Registry.CurrentUser.OpenSubKey(subkey);
+            if (reg == null)
+                return setting;
 
-			foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
-			{
-			}
-		}
-	}
+            int? FontColour = (int?)reg.GetValue("FontColour");
+            if (FontColour == null)
+                FontColour = Color.Black.ToArgb();
 
-	public class UserColourSetting
-	{
-		// This is the class that will be stored in the user settings for custom colours
-	// 	ColorMatrix _matrix = new ColorMatrix();
-		int _fontColour = Color.Black.ToArgb() ;
+            setting.FontColour = (int)FontColour;
 
-		public UserColourSetting() { }
+            ColorMatrix cm = new ColorMatrix();
 
-	}
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    string name = "Matrix"
+                        + i.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                        + j.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+                    object value = reg.GetValue(name);
+                    Decimal dvalue;
+                    if (System.Decimal.TryParse(value.ToString(), out dvalue))
+                    {
+                        cm.GetType().GetProperty(name).SetValue(cm, dvalue, null);
+                    }
+                }
+            }
+
+            setting.Matrix = cm;
+
+            return setting;
+
+
+        }
+
+
+
+
+    }
+
+    public class UserColourSetting
+    {
+        // This is the class that will be stored in the user settings for custom colours
+        ColorMatrix _matrix = new ColorMatrix();
+        int _fontColour = Color.Black.ToArgb();
+
+        public int FontColour
+        {
+            get
+            { return _fontColour; }
+            set
+            { _fontColour = value; }
+        }
+
+        public ColorMatrix Matrix
+        {
+            get { return _matrix; }
+            set { _matrix = value; }
+        }
+
+        public UserColourSetting() { }
+
+    }
 }
