@@ -104,20 +104,24 @@ namespace KeyMapper
 
 		public static Color GetFontColour(ButtonEffect effect)
 		{
+			return GetFontColour(effect, false);
+		}
+
+		public static Color GetFontColour(ButtonEffect effect, bool ignoreUserSettings)
+		{
+
+			if (ignoreUserSettings == false)
+			{
+				UserColourSetting setting = UserColourSettingManager.GetColourSettings(effect);
+				if (setting != null)
+					return setting.FontColour;
+			}
+
 			switch (effect)
 			{
-				case ButtonEffect.Disabled:
-					return Color.MidnightBlue;
-
 				case ButtonEffect.NoMappingAllowed:
 					return Color.DarkRed;
-				//case ButtonEffect.Disabled:
-				//    return Color.WhiteSmoke ;
-
-				//case ButtonEffect.Mapped:
-				//    return Color.Maroon;
-				//case ButtonEffect.MappedPending:
-				//    return Color.DarkRed;
+			
 				default:
 					return Color.Black;
 
@@ -276,6 +280,13 @@ namespace KeyMapper
 
 		private static Bitmap ScaleBitmap(Bitmap bmp, int newWidth, int newHeight)
 		{
+
+			if (newWidth == 0 || newHeight == 0)
+			{
+				Console.WriteLine("Attempting to resize a bitmap to invalid dimensions");
+				return bmp;
+			}
+
 			Bitmap newbitmap = new Bitmap(newWidth, newHeight);
 			using (Graphics g = Graphics.FromImage((Image)newbitmap))
 			{
@@ -475,10 +486,22 @@ namespace KeyMapper
 
 		#endregion
 
+
 		#region Effects
 
 		public static ColorMatrix GetMatrix(ButtonEffect effect)
 		{
+			return GetMatrix(effect, false) ;
+		}
+
+		public static ColorMatrix GetMatrix(ButtonEffect effect, bool ignoreUserSettings)
+		{
+			if (ignoreUserSettings == false)
+			{
+			UserColourSetting setting = UserColourSettingManager.GetColourSettings(effect);
+			if (setting != null)
+				return setting.Matrix;
+			}
 			ColorMatrix cm = null;
 
 			switch (effect)

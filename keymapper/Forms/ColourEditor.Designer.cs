@@ -68,8 +68,9 @@ namespace KeyMapper
 			this.label9 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
-			this.BalnkButton = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
+			this.BlankKeyButton = new System.Windows.Forms.Button();
+			this.TextColourButton = new System.Windows.Forms.Button();
+			this.RandomizeButton = new System.Windows.Forms.Button();
 			this.SpinnerPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.Matrix44)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.Matrix34)).BeginInit();
@@ -346,7 +347,7 @@ namespace KeyMapper
 			this.ResetButton.TabIndex = 28;
 			this.ResetButton.Text = "Reset";
 			this.ResetButton.UseVisualStyleBackColor = true;
-			this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+			this.ResetButton.Click += new System.EventHandler(this.ResetButtonClick);
 			// 
 			// SaveButton
 			// 
@@ -457,33 +458,43 @@ namespace KeyMapper
 			this.label11.TabIndex = 33;
 			this.label11.Text = "Alpha";
 			// 
-			// BalnkButton
+			// BlankKeyButton
 			// 
-			this.BalnkButton.Location = new System.Drawing.Point(257, 244);
-			this.BalnkButton.Name = "BalnkButton";
-			this.BalnkButton.Size = new System.Drawing.Size(87, 23);
-			this.BalnkButton.TabIndex = 34;
-			this.BalnkButton.Text = "Blank";
-			this.BalnkButton.UseVisualStyleBackColor = true;
-			this.BalnkButton.Click += new System.EventHandler(this.BlankButtonClick);
+			this.BlankKeyButton.Location = new System.Drawing.Point(257, 244);
+			this.BlankKeyButton.Name = "BlankKeyButton";
+			this.BlankKeyButton.Size = new System.Drawing.Size(87, 23);
+			this.BlankKeyButton.TabIndex = 34;
+			this.BlankKeyButton.Text = "Blank";
+			this.BlankKeyButton.UseVisualStyleBackColor = true;
+			this.BlankKeyButton.Click += new System.EventHandler(this.BlankButtonClick);
 			// 
-			// button1
+			// TextColourButton
 			// 
-			this.button1.Location = new System.Drawing.Point(257, 273);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(87, 23);
-			this.button1.TabIndex = 35;
-			this.button1.Text = "Text…";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.TextColourButton.Location = new System.Drawing.Point(257, 273);
+			this.TextColourButton.Name = "TextColourButton";
+			this.TextColourButton.Size = new System.Drawing.Size(87, 23);
+			this.TextColourButton.TabIndex = 35;
+			this.TextColourButton.Text = "Text…";
+			this.TextColourButton.UseVisualStyleBackColor = true;
+			this.TextColourButton.Click += new System.EventHandler(this.TextButtonClick);
+			// 
+			// RandomizeButton
+			// 
+			this.RandomizeButton.Location = new System.Drawing.Point(257, 302);
+			this.RandomizeButton.Name = "RandomizeButton";
+			this.RandomizeButton.Size = new System.Drawing.Size(87, 23);
+			this.RandomizeButton.TabIndex = 36;
+			this.RandomizeButton.Text = "Randomize";
+			this.RandomizeButton.UseVisualStyleBackColor = true;
 			// 
 			// ColourEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(359, 348);
-			this.Controls.Add(this.button1);
-			this.Controls.Add(this.BalnkButton);
+			this.Controls.Add(this.RandomizeButton);
+			this.Controls.Add(this.TextColourButton);
+			this.Controls.Add(this.BlankKeyButton);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label10);
@@ -506,7 +517,7 @@ namespace KeyMapper
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Colour Editor";
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ColourEditor_FormClosed);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ColourEditorFormClosed);
 			this.SpinnerPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.Matrix44)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.Matrix34)).EndInit();
@@ -581,8 +592,9 @@ namespace KeyMapper
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.Button BalnkButton;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button BlankKeyButton;
+		private System.Windows.Forms.Button TextColourButton;
+		private System.Windows.Forms.Button RandomizeButton;
 
 	}
 }

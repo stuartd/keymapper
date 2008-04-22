@@ -19,9 +19,7 @@ namespace KeyMapper
 		bool _initialised;
 		string _caption;
 
-		ColorMatrix _startingMatrix;
 		ColorMatrix _currentMatrix;
-		ColorMatrix _blankMatrix;
 		ButtonEffect _effect;
 
 		bool _customFontColor = false;
@@ -33,9 +31,7 @@ namespace KeyMapper
 
 			LoadUserSettings();
 
-			_startingMatrix = ButtonImages.GetMatrix(effect);
 			_currentMatrix = ButtonImages.GetMatrix(effect);
-			_blankMatrix = ButtonImages.GetMatrix(ButtonEffect.None);
 
 			_effect = effect;
 			_caption = caption;
@@ -80,25 +76,31 @@ namespace KeyMapper
 
 		}
 
-		decimal GetValue(string name)
+		Decimal GetValue(string name)
 		{
 			// Access the appropriate property of the matrix:
 			object value = _currentMatrix.GetType().GetProperty(name).GetValue(_currentMatrix, null);
-			return Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+			Decimal dvalue;
+			if (Decimal.TryParse(value.ToString(), out dvalue))
+				return dvalue;
+			else
+				return Decimal.Zero;
+
 		}
 
 
 		void UpdownValueChanged(object sender, EventArgs e)
 		{
 			if (_drawing)
+			{
+				UpdateMatrixFromControls();
 				DrawKey();
+			}
 		}
 
-
-		private void DrawKey()
+		private void UpdateMatrixFromControls()
 		{
-
-			System.Drawing.Imaging.ColorMatrix cm = new System.Drawing.Imaging.ColorMatrix(
+			_currentMatrix = new ColorMatrix(
 				new float[][]
 				 {
 					new float[] {(float)Matrix00.Value, (float)Matrix01.Value, (float)Matrix02.Value, (float)Matrix03.Value, (float)Matrix04.Value},
@@ -107,14 +109,17 @@ namespace KeyMapper
 					new float[] {(float)Matrix30.Value, (float)Matrix31.Value, (float)Matrix32.Value, (float)Matrix33.Value, (float)Matrix34.Value},
 					new float[] {(float)Matrix40.Value, (float)Matrix41.Value, (float)Matrix42.Value, (float)Matrix43.Value, (float)Matrix44.Value}});
 
+		}
+
+		private void DrawKey()
+		{
+				
 			Bitmap bmp;
 
 			if (_customFontColor)
-				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, cm, _fontColour);
+				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, _currentMatrix, _fontColour);
 			else
-				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, cm, _effect);
-
-			_currentMatrix = cm;
+				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, _currentMatrix, _effect);
 
 			if (KeyBox.Image != null)
 				KeyBox.Image.Dispose();
@@ -123,23 +128,26 @@ namespace KeyMapper
 
 		}
 
-		private void ResetButton_Click(object sender, EventArgs e)
+		private void ResetButtonClick(object sender, EventArgs e)
 		{
-			_currentMatrix = _startingMatrix;
+			_currentMatrix = ButtonImages.GetMatrix(_effect, true);
+			_fontColour = ButtonImages.GetFontColour(_effect, true);
+			_customFontColor = true; // Until it's saved, anyway.
 			SetValues();
 			DrawKey();
 		}
-
 
 
 		private void BlankButtonClick(object sender, EventArgs e)
 		{
-			_currentMatrix = _blankMatrix;
+			_currentMatrix = new ColorMatrix();
+			_fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
+			_customFontColor = true; // It still could be different from the default for this effect
 			SetValues();
 			DrawKey();
 		}
 
-		private void ColourEditor_FormClosed(object sender, FormClosedEventArgs e)
+		private void ColourEditorFormClosed(object sender, FormClosedEventArgs e)
 		{
 			SaveUserSettings();
 		}
@@ -157,35 +165,16 @@ namespace KeyMapper
 		}
 
 		private void SaveCurrentButton()
-
-
 		{
-			XmlSerializer ser = new XmlSerializer(typeof(ColorMatrix));
-
-			//float[] floatMatrix = ButtonImages.GetMatrixAsFloatArray(_currentMatrix);
-			//XmlSerializer ser = new XmlSerializer(typeof(float[]));
-
-			StringBuilder xml = new StringBuilder() ;
-			
-			using (MemoryStream memoryStream = new MemoryStream())
-			using (StringWriter writer = new StringWriter(xml))
-			{
-				ser.Serialize(writer, _currentMatrix);
-			}
-			MessageBox.Show(xml.ToString());
-
-			Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-	
-			
-
+			UserColourSettingManager.SaveSetting(_effect, _currentMatrix, _fontColour.ToArgb());
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void TextButtonClick(object sender, EventArgs e)
 		{
 			ColorDialog colourPicker = new ColorDialog();
 
 			// Sets the initial color select to the current text color.
-			colourPicker.Color = Color.Black;
+			colourPicker.Color = _fontColour;
 
 			// Update the text box color if the user clicks OK 
 			if (colourPicker.ShowDialog() == DialogResult.OK)
