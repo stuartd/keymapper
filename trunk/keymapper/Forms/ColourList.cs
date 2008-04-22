@@ -14,14 +14,14 @@ namespace KeyMapper
 	{
 
 		#region fields
-		bool _showAllColours = false;
+
 		int _buttons;
 		float _factor;
-		int _currentbutton;
+		int _currentButton;
 		int _buttonsize;
 		int _padding = 2;
 
-		bool _vertical;
+		bool _showAllButtons ;
 
 		// Are any keys actually mapped?
 		bool _mappedkeys;
@@ -43,28 +43,19 @@ namespace KeyMapper
 		{
 			InitializeComponent();
 
+			this.MinimumSize = new Size(96, 64);
+
 			LoadSettings(callingFormLocation, callingFormSize);
+
 			Redraw();
 
-			MappingsManager.MappingsChanged += MappingsChanged;
+			MappingsManager.MappingsChanged += delegate(object sender, EventArgs e) { Redraw(); };
+			UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { Redraw(); };
+
 			this.ResizeEnd += ColourMapResizeEnd;
-			this.ResizeBegin += ColourMapResizeBegin;
-			this.Resize += ColourMapResizeBegin;
 
 		}
-
-
-		void ColourMapResizeBegin(object sender, EventArgs e)
-		{
-			this.MinimumSize = new Size(0, 0);
-			this.MaximumSize = new Size(0, 0);
-		}
-
-		void MappingsChanged(object sender, EventArgs e)
-		{
-			Redraw();
-		}
-
+		
 		void ResetFields()
 		{
 			_mappedkeys = false;
@@ -76,59 +67,42 @@ namespace KeyMapper
 			_pendingenabled = false;
 			_pendingunmapped = false;
 
-			_currentbutton = 1;
-			_factor = 0F;
-			_buttonsize = 0;
+			_currentButton = 1;
 
 		}
 
 		private void ConstrainForm()
 		{
+			// Set size. We need the button count for this.
 
-			_vertical = (this.ClientSize.Height > this.ClientSize.Width);
+			// There are up to four buttons per line (MediumWidth = 192 px) and five sets of padding:
 
-			if (_vertical)
-			{
-				this.MinimumSize = new Size(128, 64);
-				this.MaximumSize = new Size(192, 9999);
-			}
-			else
-			{
-				this.MinimumSize = new Size(96, 96);
-				this.MaximumSize = new Size(9999, 160);
-			}
+			int buttonsPerLine = _buttons / 2 ;
+
+			int totalWidth = (int)((192F * buttonsPerLine) + (_padding * (buttonsPerLine + 1))) + 10;
+			_factor = (float)(this.ClientSize.Width) / totalWidth;
+			if (_factor > 1)
+				_factor = 1;
+			_buttonsize = (int)(192 * _factor);
+
+			this.ClientSize = new Size(10 + (_buttonsize * _buttons) + (_buttons * _padding), this.ClientSize.Height);
+
+			Console.WriteLine("Factor: {0} Buttonsize: {1}", _factor, _buttonsize);
+
 
 		}
 
-
 		private void Redraw()
 		{
-			ConstrainForm();
-
-			for (int i = this.Controls.Count - 1; i >= 0; i--)
-				this.Controls[i].Dispose(); // Hopefully this clears out bitmaps and events etc?
 
 			ResetFields();
+
+			for (int i = this.Controls.Count - 1; i >= 0; i--)
+				this.Controls[i].Dispose();
+
 			GetButtons();
 
-			// Set our orientation and size.
-
-			if (_vertical)
-			{
-				_factor = (this.ClientSize.Width - 10) / 192F;
-				_buttonsize = (int)(128 * _factor);
-				this.ClientSize = new Size(this.ClientSize.Width, 10 + (_buttonsize * _buttons) + (_buttons * _padding));
-			}
-			else
-			{
-				// Bitmap size is determined by height.
-				_factor = (this.ClientSize.Height - 10) / 128F;
-
-				// Using medium wide blanks which are 192 wide.
-				_buttonsize = (int)(192 * _factor);
-
-				this.ClientSize = new Size(10 + (_buttonsize * _buttons) + (_buttons * _padding), this.ClientSize.Height);
-			}
+			ConstrainForm();
 
 			AddButtons();
 
@@ -143,34 +117,35 @@ namespace KeyMapper
 
 			AddButton("Normal", ButtonEffect.None);
 
-			if (_showAllColours || _mappedkeys)
+			if (_showAllButtons || _mappedkeys)
 				AddButton("Mapped", ButtonEffect.Mapped);
 
-			if (_showAllColours || _pendingmapped)
+			if (_showAllButtons || _pendingmapped)
 				AddButton("Pending Mapped", ButtonEffect.MappedPending);
 
-			if (_showAllColours || _pendingunmapped)
+			if (_showAllButtons || _pendingunmapped)
 				AddButton("Pending Unmapped", ButtonEffect.UnmappedPending);
 
-			if (_showAllColours || _disabledkeys)
+			if (_showAllButtons || _disabledkeys)
 				AddButton("Disabled", ButtonEffect.Disabled);
 
-			if (_showAllColours || _pendingdisabled)
+			if (_showAllButtons || _pendingdisabled)
 				AddButton("Pending Disabled", ButtonEffect.DisabledPending);
 
-			if (_showAllColours || _pendingenabled)
+			if (_showAllButtons || _pendingenabled)
 				AddButton("Pending Enabled", ButtonEffect.EnabledPending);
+
+			if (_showAllButtons)
+				AddButton("Mapping Disallowed", ButtonEffect.NoMappingAllowed);
 
 		}
 
 		private void GetButtons()
 		{
 
-			// By default, only show the buttons which are in use on the keyboard form. 
-
-			if (_showAllColours)
+			if (_showAllButtons)
 			{
-				_buttons = 7;
+				_buttons = 8;
 				return;
 			}
 
@@ -262,12 +237,10 @@ namespace KeyMapper
 					}
 				}
 			}
-
-
-
 		}
 
-		private void AddButton(string text, ButtonEffect effect)
+
+		void AddButton(string text, ButtonEffect effect)
 		{
 
 			PictureBox pb = new PictureBox();
@@ -275,30 +248,27 @@ namespace KeyMapper
 			pb.Height = pb.Image.Height;
 			pb.Width = pb.Image.Width;
 
-			// Cheesy but effective way of passing info to doubleclick
-			pb.Tag = effect.ToString() + " " + text;
-
-			if (_vertical)
+			// Placement: Padding * (buttons + 1)
+			if (_currentButton < 4)
 			{
-				pb.Left = 5;
-				pb.Top = 5 + (_buttonsize * (_currentbutton - 1)) + _currentbutton * _padding;
+				pb.Left = ((_currentButton + 1) * _padding) + (_currentButton * pb.Width);
+				pb.Top = (_padding);
 			}
 			else
 			{
-				pb.Top = 5;
-				pb.Left = ((_currentbutton - 1) * _buttonsize) + _currentbutton * _padding;
-
+				pb.Left = ((_currentButton - 3) * _padding) + ((_currentButton - 4) * pb.Width);
+				pb.Top = (_padding * 2) + pb.Height;
 			}
 
-
-			pb.DoubleClick += new EventHandler(PictureBoxDoubleClick);
 			this.Controls.Add(pb);
-			_currentbutton++;
+			_currentButton++;
+
 
 		}
 
 		void PictureBoxDoubleClick(object sender, EventArgs e)
 		{
+
 			PictureBox pb = sender as PictureBox;
 			if (pb != null)
 			{
@@ -318,6 +288,7 @@ namespace KeyMapper
 		{
 			if (Size != _oldSize)
 			{
+				ConstrainForm();
 				Redraw();
 				_oldSize = Size;
 			}
@@ -362,16 +333,12 @@ namespace KeyMapper
 			if (savedWidth != 0)
 				this.Width = savedWidth;
 
-			
 
 		}
 
-
-
-
-
 	}
 
-
 }
+
+
 

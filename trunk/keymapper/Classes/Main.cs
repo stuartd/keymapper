@@ -55,7 +55,7 @@ namespace KeyMapper
 			ArgumentException aex = e.Exception as ArgumentException;
 			if (aex != null)
 			{
-				if (aex.ParamName.ToUpperInvariant() == "CULTURE")
+				if (aex.ParamName != null && aex.ParamName.ToUpperInvariant() == "CULTURE")
 				{
 					// This is a bug in the .NET framework where some cultures won't load on Windows Server 2003
 					// and throw "Culture ID x (0xX) is not a supported culture"

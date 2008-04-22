@@ -92,6 +92,7 @@ namespace KeyMapper
             this.KeyboardListCombo.TextChanged += KeyboardListComboTextChanged;
 
             MappingsManager.MappingsChanged += OnMappingsChanged;
+			UserColourSettingManager.ColoursChanged += new EventHandler<EventArgs>(OnColoursChanged);
 
             // Sniff for Caps/Num/Scroll lock keys being pressed while app doesn't have focus
             _sniffer = new KeySniffer();
@@ -102,8 +103,7 @@ namespace KeyMapper
 
         }
 
-
-        private void OpenSubForms()
+		private void OpenSubForms()
         {
 
             AppController.KeyboardFormHandle = (IWin32Window)this;
@@ -903,6 +903,12 @@ namespace KeyMapper
         {
             this.Redraw();
         }
+
+		void OnColoursChanged(object sender, EventArgs e)
+		{
+			this.Redraw();
+		}
+
 
         private void KeyboardFormResizeEnd(object sender, EventArgs e)
         {
