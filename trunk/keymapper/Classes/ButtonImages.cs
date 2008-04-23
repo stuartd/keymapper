@@ -10,7 +10,7 @@ namespace KeyMapper
 		#region Fields
 
 		private static string _path = "KeyMapper.Images.";
-		private static float _lastScale = 1.0F; // Just in case called for the first time without scale
+		private static float _lastScale = 0F; // Just in case called for the first time without scale
 		private static BlankButton _lastButton = BlankButton.None;
 		private static Bitmap _lastImage;
 

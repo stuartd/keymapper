@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Xml;
 using System.Text;
+using System.Globalization;
 
 namespace KeyMapper
 {
@@ -22,7 +23,6 @@ namespace KeyMapper
 		ColorMatrix _currentMatrix;
 		ButtonEffect _effect;
 
-		bool _customFontColor = false;
 		Color _fontColour = Color.Black;
 
 		public ColourEditor(ButtonEffect effect, string caption)
@@ -94,6 +94,7 @@ namespace KeyMapper
 			if (_drawing)
 			{
 				UpdateMatrixFromControls();
+				SaveSettings();
 				DrawKey();
 			}
 		}
@@ -113,13 +114,8 @@ namespace KeyMapper
 
 		private void DrawKey()
 		{
-				
-			Bitmap bmp;
 
-			if (_customFontColor)
-				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, _currentMatrix, _fontColour);
-			else
-				bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 1F, _caption, _currentMatrix, _effect);
+			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _effect);
 
 			if (KeyBox.Image != null)
 				KeyBox.Image.Dispose();
@@ -132,8 +128,9 @@ namespace KeyMapper
 		{
 			_currentMatrix = ButtonImages.GetMatrix(_effect, true);
 			_fontColour = ButtonImages.GetFontColour(_effect, true);
-			_customFontColor = true; // Until it's saved, anyway.
+
 			SetValues();
+			SaveSettings();
 			DrawKey();
 		}
 
@@ -142,8 +139,9 @@ namespace KeyMapper
 		{
 			_currentMatrix = new ColorMatrix();
 			_fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
-			_customFontColor = true; // It still could be different from the default for this effect
+
 			SetValues();
+			SaveSettings();
 			DrawKey();
 		}
 
@@ -159,12 +157,7 @@ namespace KeyMapper
 			userSettings.Save();
 		}
 
-		private void SaveButtonClick(object sender, EventArgs e)
-		{
-			SaveCurrentButton();
-		}
-
-		private void SaveCurrentButton()
+		private void SaveSettings()
 		{
 			UserColourSettingManager.SaveSetting(_effect, _currentMatrix, _fontColour.ToArgb());
 		}
@@ -180,20 +173,44 @@ namespace KeyMapper
 			if (colourPicker.ShowDialog() == DialogResult.OK)
 			{
 				_fontColour = colourPicker.Color;
-				_customFontColor = true;
+				SaveSettings();
 				DrawKey();
+
 			}
 
 		}
 
 
+		private void RandomizeButtonClick(object sender, EventArgs e)
+		{
+			_currentMatrix = new ColorMatrix();
+			SetValues();
+			_drawing = false;
+
+			int numberOfChanges = 3;
+
+			Random r = new Random();
+
+			for (int i = 1; i < numberOfChanges; i++)
+			{
+				int x = r.Next(0, 4);
+				int y = r.Next(0, 2);
+
+				string name = "Matrix" + x.ToString(CultureInfo.InvariantCulture) + y.ToString(CultureInfo.InvariantCulture);
+
+				(this.SpinnerPanel.Controls[name] as NumericUpDown).Value = (r.Next(-10, 11) / 10M);
+			
+			}
+
+			_fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
+	
+			_drawing = true;
+			UpdateMatrixFromControls();
+			SaveSettings();
+			DrawKey();
 
 
-
-
-
-
-
+		}
 
 
 

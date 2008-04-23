@@ -85,18 +85,6 @@ namespace KeyMapper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int ColourListFormHeight {
-            get {
-                return ((int)(this["ColourListFormHeight"]));
-            }
-            set {
-                this["ColourListFormHeight"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool KeyboardFormColourMapFormOpen {
             get {
@@ -176,18 +164,6 @@ namespace KeyMapper.Properties {
             }
             set {
                 this["MappingListWidth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int ColourMapFormWidth {
-            get {
-                return ((int)(this["ColourMapFormWidth"]));
-            }
-            set {
-                this["ColourMapFormWidth"] = value;
             }
         }
         

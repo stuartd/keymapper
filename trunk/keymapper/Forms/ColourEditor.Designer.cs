@@ -56,7 +56,6 @@ namespace KeyMapper
 			this.Matrix00 = new System.Windows.Forms.NumericUpDown();
 			this.KeyBox = new System.Windows.Forms.PictureBox();
 			this.ResetButton = new System.Windows.Forms.Button();
-			this.SaveButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -71,6 +70,8 @@ namespace KeyMapper
 			this.BlankKeyButton = new System.Windows.Forms.Button();
 			this.TextColourButton = new System.Windows.Forms.Button();
 			this.RandomizeButton = new System.Windows.Forms.Button();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label13 = new System.Windows.Forms.Label();
 			this.SpinnerPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.Matrix44)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.Matrix34)).BeginInit();
@@ -128,89 +129,109 @@ namespace KeyMapper
 			this.SpinnerPanel.Controls.Add(this.Matrix01);
 			this.SpinnerPanel.Controls.Add(this.Matrix00);
 			this.SpinnerPanel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.SpinnerPanel.Location = new System.Drawing.Point(45, 29);
+			this.SpinnerPanel.Location = new System.Drawing.Point(79, 29);
 			this.SpinnerPanel.Name = "SpinnerPanel";
-			this.SpinnerPanel.Size = new System.Drawing.Size(314, 151);
+			this.SpinnerPanel.Size = new System.Drawing.Size(473, 151);
 			this.SpinnerPanel.TabIndex = 26;
 			// 
 			// Matrix44
 			// 
-			this.Matrix44.Location = new System.Drawing.Point(247, 117);
+			this.Matrix44.Location = new System.Drawing.Point(406, 119);
 			this.Matrix44.Name = "Matrix44";
+			this.Matrix44.ReadOnly = true;
 			this.Matrix44.Size = new System.Drawing.Size(52, 21);
 			this.Matrix44.TabIndex = 50;
+			this.Matrix44.TabStop = false;
 			// 
 			// Matrix34
 			// 
 			this.Matrix34.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix34.Location = new System.Drawing.Point(247, 90);
+			this.Matrix34.Location = new System.Drawing.Point(406, 92);
 			this.Matrix34.Name = "Matrix34";
+			this.Matrix34.ReadOnly = true;
 			this.Matrix34.Size = new System.Drawing.Size(52, 21);
 			this.Matrix34.TabIndex = 49;
+			this.Matrix34.TabStop = false;
 			// 
 			// Matrix24
 			// 
 			this.Matrix24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix24.Location = new System.Drawing.Point(247, 63);
+			this.Matrix24.Location = new System.Drawing.Point(406, 65);
 			this.Matrix24.Name = "Matrix24";
+			this.Matrix24.ReadOnly = true;
 			this.Matrix24.Size = new System.Drawing.Size(52, 21);
 			this.Matrix24.TabIndex = 48;
+			this.Matrix24.TabStop = false;
 			// 
 			// Matrix14
 			// 
 			this.Matrix14.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix14.Location = new System.Drawing.Point(247, 36);
+			this.Matrix14.Location = new System.Drawing.Point(406, 38);
 			this.Matrix14.Name = "Matrix14";
+			this.Matrix14.ReadOnly = true;
 			this.Matrix14.Size = new System.Drawing.Size(52, 21);
 			this.Matrix14.TabIndex = 47;
+			this.Matrix14.TabStop = false;
 			// 
 			// Matrix04
 			// 
 			this.Matrix04.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix04.Location = new System.Drawing.Point(247, 9);
+			this.Matrix04.Location = new System.Drawing.Point(406, 11);
 			this.Matrix04.Name = "Matrix04";
+			this.Matrix04.ReadOnly = true;
 			this.Matrix04.Size = new System.Drawing.Size(52, 21);
 			this.Matrix04.TabIndex = 46;
+			this.Matrix04.TabStop = false;
 			// 
 			// Matrix43
 			// 
 			this.Matrix43.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix43.Location = new System.Drawing.Point(188, 117);
+			this.Matrix43.Location = new System.Drawing.Point(347, 119);
 			this.Matrix43.Name = "Matrix43";
+			this.Matrix43.ReadOnly = true;
 			this.Matrix43.Size = new System.Drawing.Size(52, 21);
 			this.Matrix43.TabIndex = 45;
+			this.Matrix43.TabStop = false;
 			// 
 			// Matrix33
 			// 
 			this.Matrix33.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix33.Location = new System.Drawing.Point(188, 90);
+			this.Matrix33.Location = new System.Drawing.Point(347, 92);
 			this.Matrix33.Name = "Matrix33";
+			this.Matrix33.ReadOnly = true;
 			this.Matrix33.Size = new System.Drawing.Size(52, 21);
 			this.Matrix33.TabIndex = 44;
+			this.Matrix33.TabStop = false;
 			// 
 			// Matrix23
 			// 
 			this.Matrix23.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix23.Location = new System.Drawing.Point(188, 63);
+			this.Matrix23.Location = new System.Drawing.Point(347, 65);
 			this.Matrix23.Name = "Matrix23";
+			this.Matrix23.ReadOnly = true;
 			this.Matrix23.Size = new System.Drawing.Size(52, 21);
 			this.Matrix23.TabIndex = 43;
+			this.Matrix23.TabStop = false;
 			// 
 			// Matrix13
 			// 
 			this.Matrix13.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix13.Location = new System.Drawing.Point(188, 36);
+			this.Matrix13.Location = new System.Drawing.Point(347, 38);
 			this.Matrix13.Name = "Matrix13";
+			this.Matrix13.ReadOnly = true;
 			this.Matrix13.Size = new System.Drawing.Size(52, 21);
 			this.Matrix13.TabIndex = 42;
+			this.Matrix13.TabStop = false;
 			// 
 			// Matrix03
 			// 
 			this.Matrix03.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Matrix03.Location = new System.Drawing.Point(188, 9);
+			this.Matrix03.Location = new System.Drawing.Point(347, 11);
 			this.Matrix03.Name = "Matrix03";
+			this.Matrix03.ReadOnly = true;
 			this.Matrix03.Size = new System.Drawing.Size(52, 21);
 			this.Matrix03.TabIndex = 41;
+			this.Matrix03.TabStop = false;
 			// 
 			// Matrix42
 			// 
@@ -333,36 +354,26 @@ namespace KeyMapper
 			// 
 			// KeyBox
 			// 
-			this.KeyBox.Location = new System.Drawing.Point(45, 186);
+			this.KeyBox.Location = new System.Drawing.Point(12, 183);
 			this.KeyBox.Name = "KeyBox";
-			this.KeyBox.Size = new System.Drawing.Size(191, 130);
+			this.KeyBox.Size = new System.Drawing.Size(144, 96);
 			this.KeyBox.TabIndex = 27;
 			this.KeyBox.TabStop = false;
 			// 
 			// ResetButton
 			// 
-			this.ResetButton.Location = new System.Drawing.Point(257, 215);
+			this.ResetButton.Location = new System.Drawing.Point(182, 179);
 			this.ResetButton.Name = "ResetButton";
-			this.ResetButton.Size = new System.Drawing.Size(87, 23);
+			this.ResetButton.Size = new System.Drawing.Size(77, 23);
 			this.ResetButton.TabIndex = 28;
 			this.ResetButton.Text = "Reset";
 			this.ResetButton.UseVisualStyleBackColor = true;
 			this.ResetButton.Click += new System.EventHandler(this.ResetButtonClick);
 			// 
-			// SaveButton
-			// 
-			this.SaveButton.Location = new System.Drawing.Point(257, 186);
-			this.SaveButton.Name = "SaveButton";
-			this.SaveButton.Size = new System.Drawing.Size(87, 23);
-			this.SaveButton.TabIndex = 29;
-			this.SaveButton.Text = "Save";
-			this.SaveButton.UseVisualStyleBackColor = true;
-			this.SaveButton.Click += new System.EventHandler(this.SaveButtonClick);
-			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(52, 13);
+			this.label1.Location = new System.Drawing.Point(86, 13);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(29, 13);
 			this.label1.TabIndex = 30;
@@ -371,7 +382,7 @@ namespace KeyMapper
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(112, 13);
+			this.label2.Location = new System.Drawing.Point(146, 13);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(42, 13);
 			this.label2.TabIndex = 31;
@@ -380,7 +391,7 @@ namespace KeyMapper
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(171, 13);
+			this.label3.Location = new System.Drawing.Point(205, 13);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(32, 13);
 			this.label3.TabIndex = 32;
@@ -389,7 +400,7 @@ namespace KeyMapper
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(231, 13);
+			this.label4.Location = new System.Drawing.Point(409, 13);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(39, 13);
 			this.label4.TabIndex = 33;
@@ -398,7 +409,7 @@ namespace KeyMapper
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(14, 40);
+			this.label5.Location = new System.Drawing.Point(44, 40);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(29, 13);
 			this.label5.TabIndex = 30;
@@ -407,7 +418,7 @@ namespace KeyMapper
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(1, 67);
+			this.label6.Location = new System.Drawing.Point(31, 67);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(42, 13);
 			this.label6.TabIndex = 31;
@@ -425,7 +436,7 @@ namespace KeyMapper
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(10, 94);
+			this.label8.Location = new System.Drawing.Point(41, 94);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(32, 13);
 			this.label8.TabIndex = 32;
@@ -452,7 +463,7 @@ namespace KeyMapper
 			// label11
 			// 
 			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(3, 121);
+			this.label11.Location = new System.Drawing.Point(34, 121);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(39, 13);
 			this.label11.TabIndex = 33;
@@ -460,9 +471,9 @@ namespace KeyMapper
 			// 
 			// BlankKeyButton
 			// 
-			this.BlankKeyButton.Location = new System.Drawing.Point(257, 244);
+			this.BlankKeyButton.Location = new System.Drawing.Point(182, 205);
 			this.BlankKeyButton.Name = "BlankKeyButton";
-			this.BlankKeyButton.Size = new System.Drawing.Size(87, 23);
+			this.BlankKeyButton.Size = new System.Drawing.Size(77, 23);
 			this.BlankKeyButton.TabIndex = 34;
 			this.BlankKeyButton.Text = "Blank";
 			this.BlankKeyButton.UseVisualStyleBackColor = true;
@@ -470,9 +481,9 @@ namespace KeyMapper
 			// 
 			// TextColourButton
 			// 
-			this.TextColourButton.Location = new System.Drawing.Point(257, 273);
+			this.TextColourButton.Location = new System.Drawing.Point(182, 232);
 			this.TextColourButton.Name = "TextColourButton";
-			this.TextColourButton.Size = new System.Drawing.Size(87, 23);
+			this.TextColourButton.Size = new System.Drawing.Size(77, 23);
 			this.TextColourButton.TabIndex = 35;
 			this.TextColourButton.Text = "Text…";
 			this.TextColourButton.UseVisualStyleBackColor = true;
@@ -480,18 +491,39 @@ namespace KeyMapper
 			// 
 			// RandomizeButton
 			// 
-			this.RandomizeButton.Location = new System.Drawing.Point(257, 302);
+			this.RandomizeButton.Location = new System.Drawing.Point(182, 260);
 			this.RandomizeButton.Name = "RandomizeButton";
-			this.RandomizeButton.Size = new System.Drawing.Size(87, 23);
+			this.RandomizeButton.Size = new System.Drawing.Size(77, 23);
 			this.RandomizeButton.TabIndex = 36;
-			this.RandomizeButton.Text = "Randomize";
+			this.RandomizeButton.Text = "Random";
 			this.RandomizeButton.UseVisualStyleBackColor = true;
+			this.RandomizeButton.Click += new System.EventHandler(this.RandomizeButtonClick);
+			// 
+			// label12
+			// 
+			this.label12.AutoSize = true;
+			this.label12.Location = new System.Drawing.Point(467, 13);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(70, 13);
+			this.label12.TabIndex = 37;
+			this.label12.Text = "Translation";
+			// 
+			// label13
+			// 
+			this.label13.AutoSize = true;
+			this.label13.Location = new System.Drawing.Point(3, 148);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(70, 13);
+			this.label13.TabIndex = 38;
+			this.label13.Text = "Translation";
 			// 
 			// ColourEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(359, 348);
+			this.ClientSize = new System.Drawing.Size(268, 286);
+			this.Controls.Add(this.label13);
+			this.Controls.Add(this.label12);
 			this.Controls.Add(this.RandomizeButton);
 			this.Controls.Add(this.TextColourButton);
 			this.Controls.Add(this.BlankKeyButton);
@@ -506,10 +538,10 @@ namespace KeyMapper
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.SaveButton);
 			this.Controls.Add(this.ResetButton);
 			this.Controls.Add(this.SpinnerPanel);
 			this.Controls.Add(this.KeyBox);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ColourEditor";
@@ -580,7 +612,6 @@ namespace KeyMapper
 		private System.Windows.Forms.NumericUpDown Matrix00;
 		private System.Windows.Forms.PictureBox KeyBox;
 		private System.Windows.Forms.Button ResetButton;
-		private System.Windows.Forms.Button SaveButton;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
@@ -595,6 +626,8 @@ namespace KeyMapper
 		private System.Windows.Forms.Button BlankKeyButton;
 		private System.Windows.Forms.Button TextColourButton;
 		private System.Windows.Forms.Button RandomizeButton;
+		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.Label label13;
 
 	}
 }
