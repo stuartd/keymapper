@@ -17,9 +17,6 @@
     <Setting Name="ColourListFormLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
-    <Setting Name="ColourListFormHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="KeyboardFormColourMapFormOpen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -39,9 +36,6 @@
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
     <Setting Name="MappingListWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="ColourMapFormWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ColourEditorLocation" Type="System.Drawing.Point" Scope="User">
