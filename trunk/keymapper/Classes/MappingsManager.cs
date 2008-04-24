@@ -568,7 +568,7 @@ namespace KeyMapper
 			int extended = map.From.Extended;
 
 			// If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
-			// they know that it's goodbye CTRL-ALT-DEL
+			// that it ould be goodbye to CTRL-ALT-DEL
 
 			if ((scancode == 29 && extended == 0) || (scancode == 56 && extended == 0) || (scancode == 83 && extended == 224))
 			{

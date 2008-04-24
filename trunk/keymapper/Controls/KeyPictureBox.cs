@@ -34,7 +34,6 @@ namespace KeyMapper
 		public KeyMapping Map
 		{
 			get { return _map; }
-			set { _map = value; }
 		}
 
 
@@ -51,10 +50,9 @@ namespace KeyMapper
 			_dragIconScale = 0.75F;
 			_dragbox = Rectangle.Empty;
 			
-			Map = MappingsManager.GetKeyMapping(_scancode, _extended);
+			_map = MappingsManager.GetKeyMapping(_scancode, _extended);
 
-			_mapped = (Map.To.Scancode != -1) &&
-					((Map.From.Scancode != Map.To.Scancode) | (Map.From.Extended != Map.To.Extended));
+			_mapped = (Map.To.Scancode != -1);
 
 			this.AllowDrop = true;
 
@@ -329,13 +327,6 @@ namespace KeyMapper
 			{
 				KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
 
-				// As Key is a struct, can just compare values 
-				if (dragged_map.From == this._map.From)
-				{
-					// Console.WriteLine("Key can't map to itself");
-					return;
-				}
-
 				if (MappingsManager.AddMapping(new KeyMapping(this.Map.From, dragged_map.From)) == false)
 				{
 					// Mapping failed. Need to revert our appearance..
@@ -365,7 +356,7 @@ namespace KeyMapper
 				return;
 			}
 
-			if (dragged_map.From.Scancode == _map.From.Scancode && dragged_map.From.Extended == _map.From.Extended)
+			if (dragged_map.From == _map.From)
 				return; // No need to redraw self
 
 			// Console.WriteLine("Dragover: " + _scancode)

@@ -64,7 +64,7 @@ namespace KeyMapper
 
 		}
 
-		private static void RaiseColoursChangedEvent()
+		public static void RaiseColoursChangedEvent()
 		{
 
 			if (ColoursChanged != null)
@@ -94,8 +94,7 @@ namespace KeyMapper
 			// Need to be defensively minded as user could change, 
 			// delete, or change type of registry settings. 
 
-			string key = AppController.ApplicationRegistryKeyName;
-			string subkey = key + @"\UserColours\" + effect.ToString();
+			string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\" + effect.ToString();
 			
 
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey(subkey);

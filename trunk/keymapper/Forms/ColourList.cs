@@ -7,9 +7,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace KeyMapper
 {
+
+
 	public partial class ColourList : KMBaseForm
 	{
 
@@ -23,6 +26,8 @@ namespace KeyMapper
 		int _buttonsPerLine;
 		int _numberOfLines;
 		float _buttonScaleFactor;
+
+		Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
 
 		bool _showAllButtons;
 
@@ -38,24 +43,78 @@ namespace KeyMapper
 		bool _pendingenabled;
 		bool _pendingunmapped;
 
-		Size _oldSize;
+		ContextMenu _contextMenu;
 
 		#endregion
 
-		public ColourList(Point callingFormLocation, Size callingFormSize)
+		public ColourList()
 		{
 			InitializeComponent();
-
-			this.MinimumSize = new Size(96, 64);
-
-			LoadSettings(callingFormLocation, callingFormSize);
+			CreateContextMenu();
 
 			Redraw();
 
 			MappingsManager.MappingsChanged += delegate(object sender, EventArgs e) { Redraw(); };
-			UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { Redraw(); };
+			UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { Redraw(false); };
 
 		}
+
+		private void CreateContextMenu()
+		{
+			_contextMenu = new ContextMenu();
+			int newItemIndex;
+
+			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show All Buttons", ShowAllButtons));
+			if (_showAllButtons)
+				_contextMenu.MenuItems[newItemIndex].Checked = true;
+
+			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show Current Buttons Only", ShowCurrentButtons));
+			if (_showAllButtons == false)
+				_contextMenu.MenuItems[newItemIndex].Checked = true;
+
+			_contextMenu.MenuItems.Add(new MenuItem("Reset All Colours", ResetAllColours));
+			this.ContextMenu = _contextMenu;
+
+		}
+
+		private void ResetAllColours(object sender, EventArgs e)
+		{
+			// Two ways of doing this:
+			// 1) Go through all effects, get default values, and save 
+			// (Like Reset button in Editor form.)
+
+			// Or, 2) - delete the UserColours registry subkey!
+
+			string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\";
+			RegistryKey k = Registry.CurrentUser.OpenSubKey(subkey, true) ;
+			if (k != null)
+			{
+				k.Close() ;
+				Registry.CurrentUser.DeleteSubKeyTree(subkey);
+			}
+
+
+			UserColourSettingManager.RaiseColoursChangedEvent();
+
+		}
+
+
+		private void ShowAllButtons(object sender, EventArgs e)
+		{
+			_showAllButtons = true;
+			CreateContextMenu();
+			Redraw();
+		}
+
+		private void ShowCurrentButtons(object sender, EventArgs e)
+		{
+			_showAllButtons = false;
+			CreateContextMenu();
+			Redraw();
+		}
+
+
+
 
 		void ResetFields()
 		{
@@ -71,11 +130,6 @@ namespace KeyMapper
 
 		private void ConstrainForm()
 		{
-			// Set size. We need the button count for this.
-
-			// Perhaps we should take some account of the form resize?
-
-			// There are up to four buttons per line (MediumWidth = 192 px) and buttons + 1 sets of padding:
 
 			// One button, two buttons, three buttons - show in one line
 			// Four buttons: Show in tow rows of two
@@ -117,27 +171,30 @@ namespace KeyMapper
 			// Height: Number of lines * buttonehight + (number of lines +1 * padding)
 			int height = (_numberOfLines * _buttonHeight) + ((_numberOfLines + 1) * _padding);
 
-
 			this.ClientSize = new Size(width, height);
-
 
 		}
 
 		private void Redraw()
 		{
+			Redraw(true);
+		}
 
-			ResetFields();
+		private void Redraw(bool reloadMappings)
+		{
+
+			if (reloadMappings)
+			{
+				ResetFields();
+				GetButtons();
+			}
 
 			for (int i = this.Controls.Count - 1; i >= 0; i--)
 				this.Controls[i].Dispose();
 
-			GetButtons();
-
 			ConstrainForm();
 
 			AddButtons();
-
-			_oldSize = Size;
 
 			this.Refresh();
 
@@ -296,7 +353,7 @@ namespace KeyMapper
 				line = 2;
 			}
 
-			pb.Left = ((position - 1) * _buttonWidth) + (position * _padding); 
+			pb.Left = ((position - 1) * _buttonWidth) + (position * _padding);
 			pb.Top = ((line - 1) * _buttonHeight) + (line * _padding);
 
 			pb.Tag = effect.ToString() + " " + text;
@@ -309,22 +366,70 @@ namespace KeyMapper
 
 		}
 
+		private void ShowEditorForm(string message)
+		{
+			string effectname = message.Substring(0, message.IndexOf(" ", StringComparison.Ordinal));
+			string text = message.Substring(message.IndexOf(" ", StringComparison.Ordinal) + 1);
+			ButtonEffect effect = (ButtonEffect)System.Enum.Parse(typeof(ButtonEffect), effectname);
+
+			ColourEditor form;
+
+			if (_editorForms.ContainsKey(effect))
+			{
+				if (_editorForms.TryGetValue(effect, out form))
+				{
+					form.BringToFront();
+					return;
+				}
+			}
+
+			form = new ColourEditor(effect, text);
+
+			// Now, where to put it..
+			Point p = Point.Empty;
+
+			// If there are no forms open, use the last closed position.
+			if (_editorForms.Count == 0)
+			{
+				Properties.Settings userSettings = new Properties.Settings();
+				p = userSettings.ColourEditorLocation;
+			}
+			else
+			{
+				foreach (ColourEditor openform in _editorForms.Values)
+				{
+					if (openform != null)
+						if (openform.Location.X > p.X && openform.Location.Y > p.Y)
+							p = openform.Location;
+				}
+				p = new Point(p.X + 50, p.Y + 50);
+
+			}
+
+			form.Location = p;
+
+			_editorForms.Add(effect, form);
+			form.FormClosed += this.EditorFormClosed;
+			form.Show(AppController.KeyboardFormHandle);
+
+		}
+
+		void EditorFormClosed(object sender, FormClosedEventArgs e)
+		{
+			ColourEditor form = sender as ColourEditor;
+			if (form != null)
+			{
+				if (_editorForms.ContainsKey(form.Effect))
+					_editorForms.Remove(form.Effect);
+			}
+
+		}
+
 		void PictureBoxDoubleClick(object sender, EventArgs e)
 		{
-
 			PictureBox pb = sender as PictureBox;
-			if (pb != null)
-			{
-				string message = pb.Tag.ToString();
-
-				string effectname = message.Substring(0, message.IndexOf(" ", StringComparison.Ordinal));
-				string text = message.Substring(message.IndexOf(" ", StringComparison.Ordinal) + 1);
-
-				ButtonEffect effect = (ButtonEffect)System.Enum.Parse(typeof(ButtonEffect), effectname);
-
-				ColourEditor ce = new ColourEditor(effect, text);
-				ce.Show(AppController.KeyboardFormHandle);
-			}
+			if (pb != null && pb.Tag != null)
+				ShowEditorForm(pb.Tag.ToString());
 		}
 
 		private void ColourMapFormClosing(object sender, FormClosingEventArgs e)
@@ -344,21 +449,6 @@ namespace KeyMapper
 			userSettings.Save();
 		}
 
-		private void LoadSettings(Point callingFormLocation, Size callingFormSize)
-		{
-
-			Properties.Settings userSettings = new Properties.Settings();
-
-			Point savedLocation = userSettings.ColourListFormLocation;
-
-			if (savedLocation.IsEmpty)
-				this.Location = new Point(callingFormLocation.X, callingFormLocation.Y + callingFormSize.Height + 1);
-			else
-				this.Location = savedLocation;
-
-			
-
-		}
 
 	}
 

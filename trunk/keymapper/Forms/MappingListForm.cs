@@ -15,33 +15,20 @@ namespace KeyMapper
 		private List<int> _clearedKeys = new List<int>();
 		private List<Key> _keylist = new List<Key>();
 
-		public MappingListForm(Point callingFormLocation, Size callingFormSize)
+		public MappingListForm()
 		{
 			InitializeComponent();
-			LoadUserSettings(callingFormLocation, callingFormSize);
 			Populate();
 			MappingsManager.MappingsChanged += HandleMappingsChanged;
 		}
 
-		private void LoadUserSettings(Point callingFormLocation, Size callingFormSize)
+		public void LoadUserSettings()
 		{
 
 			Properties.Settings userSettings = new Properties.Settings();
 
-			Point savedLocation = userSettings.MappingListFormLocation;
 			int savedHeight = userSettings.MappingListFormHeight;
 			int savedWidth = userSettings.MappingListWidth;
-
-			// Position ourselves under the calling form.
-
-			if (savedLocation.IsEmpty)
-			{
-				this.Location = new Point(callingFormLocation.X + callingFormSize.Width - this.Width, callingFormLocation.Y + callingFormSize.Height + 1);
-			}
-			else
-			{
-				this.Location = savedLocation;
-			}
 
 			if (savedHeight > 0)
 				this.Height = savedHeight;
