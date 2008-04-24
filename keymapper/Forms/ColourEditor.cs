@@ -186,11 +186,11 @@ namespace KeyMapper
 			SetValues();
 			_drawing = false;
 
-			int numberOfChanges = 3;
+			int numberOfChanges = 5;
 
 			Random r = new Random();
 
-			for (int i = 1; i < numberOfChanges; i++)
+			for (int i = 0; i < numberOfChanges; i++)
 			{
 				int x = r.Next(0, 4);
 				int y = r.Next(0, 2);

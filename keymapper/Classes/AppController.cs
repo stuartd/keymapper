@@ -244,34 +244,42 @@ namespace KeyMapper
 			DateTime logontime = RegistryHelper.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
 
 			// Now, the "Volatile Environment" key in RegistryHive.CurrentUser
-			// >isn't< always unloaded on logoff. We have a fallback though..
+			// >isn't< always unloaded on logoff. I though there was a fallback though..
+            //  querying the user's ADSI LastLogin property. Unfortunately 
+            // this gets the last time logged in >including when unlocking Windows<
+            // so...
 
-			if (UserHelper.IsConnectedToDomain() == false)
-			{
-				// If we are in a domain, then LastLogin returns the last domain login time, which
-				// is NOT what we want.
+            // TODO: verify that applies to XP as well.
+            // if so, lose UserHelper class.
 
-				string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToString().Replace("\\", "/");
+            // (This will speed up startup as well as ADSI takes an appreciable time to load)
 
-				// This fails - occasionally - with error:
-				// System.IO.FileNotFoundException occurred
-				// Message="The network path was not found. (Exception from HRESULT: 0x80070035)"
+            //if (UserHelper.IsConnectedToDomain() == false)
+            //{
+            //    // If we are in a domain, then LastLogin returns the last domain login time, which
+            //    // is NOT what we want.
+
+            //    string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToString().Replace("\\", "/");
+
+            //    // This fails - occasionally - with error:
+            //    // System.IO.FileNotFoundException occurred
+            //    // Message="The network path was not found. (Exception from HRESULT: 0x80070035)"
 				
-				try
-				{
-					object oUser = Marshal.BindToMoniker("WinNT://" + user + ",user");
-					DateTime adsiLogonTime = (DateTime)oUser.GetType().InvokeMember
-						("Get", System.Reflection.BindingFlags.InvokeMethod, null, oUser, new string[] { "LastLogin" }, CultureInfo.InvariantCulture);
-					Marshal.ReleaseComObject(oUser);
+            //    try
+            //    {
+            //        object oUser = Marshal.BindToMoniker("WinNT://" + user + ",user");
+            //        DateTime adsiLogonTime = (DateTime)oUser.GetType().InvokeMember
+            //            ("Get", System.Reflection.BindingFlags.InvokeMethod, null, oUser, new string[] { "LastLogin" }, CultureInfo.InvariantCulture);
+            //        Marshal.ReleaseComObject(oUser);
 
-					if (adsiLogonTime > logontime)
-						logontime = adsiLogonTime;
-				}
-				catch (System.IO.FileNotFoundException)
-				{
+            //        if (adsiLogonTime > logontime)
+            //            logontime = adsiLogonTime;
+            //    }
+            //    catch (System.IO.FileNotFoundException)
+            //    {
 					
-				}
-			}
+            //    }
+            //}
 
 			// Can happen - awakening a VM from sleep - that boottime later than logontime.
 
