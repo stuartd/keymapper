@@ -23,35 +23,34 @@ namespace KeyMapper
 		ColorMatrix _currentMatrix;
 		ButtonEffect _effect;
 
+		public ButtonEffect Effect
+		{
+			get { return _effect; }
+			set { _effect = value; }
+		}
+
 		Color _fontColour = Color.Black;
 
 		public ColourEditor(ButtonEffect effect, string caption)
 		{
 			InitializeComponent();
 
-			LoadUserSettings();
-
 			_currentMatrix = ButtonImages.GetMatrix(effect);
 
 			_effect = effect;
 			_caption = caption;
 
+			this.Text = "Editing the " + caption + " button";
+
 			SetValues();
 			DrawKey();
-		}
-
-		private void LoadUserSettings()
-		{
-			Properties.Settings userSettings = new Properties.Settings();
-			Point savedPosition = userSettings.ColourEditorLocation;
-			this.Location = savedPosition;
 		}
 
 		void SetValues()
 		{
 			_drawing = false;
 
-			foreach (Control con in SpinnerPanel.Controls)
+			foreach (Control con in Controls)
 			{
 				NumericUpDown updown = (con as NumericUpDown);
 				if (updown != null)
@@ -198,7 +197,7 @@ namespace KeyMapper
 
 				string name = "Matrix" + x.ToString(CultureInfo.InvariantCulture) + y.ToString(CultureInfo.InvariantCulture);
 
-				(this.SpinnerPanel.Controls[name] as NumericUpDown).Value = (r.Next(-10, 11) / 10M);
+				(this.Controls[name] as NumericUpDown).Value = (r.Next(-10, 11) / 10M);
 			
 			}
 

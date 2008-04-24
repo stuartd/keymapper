@@ -543,9 +543,6 @@ namespace KeyMapper
 		
 		private static Bitmap ApplyEffect(Bitmap bmp, ButtonEffect effect)
 		{
-			// TODO: Set effect color and font colour by user choice and implement all that pref stuff.
-			// That's going to mean looking up a pref in the App to see whether the color has been overridden
-
 			ColorMatrix cm = GetMatrix(effect);
 
 			if (cm == null)
@@ -577,7 +574,7 @@ namespace KeyMapper
 					new float[] {0, 1, 0, 0, 0},
 					new float[] {0, 0, 1, 0, 0},
 					new float[] {0, 0, 0, 1, 0},
-					new float[] {-0.2F, -0.2F, -0.2F, 0, 1}});
+					new float[] {-0.2F, -0.2F, -0.3F, 0, 1}});
 
 		}
 

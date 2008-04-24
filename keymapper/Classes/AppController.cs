@@ -279,7 +279,7 @@ namespace KeyMapper
 			if (boottime > logontime)
 			{
 				Console.WriteLine("Boot time: {0} Logon Time {1}", boottime, logontime);
-				System.Windows.Forms.MessageBox.Show("Boot time adjusted") ;
+				System.Windows.Forms.MessageBox.Show("Boot time greater than logintime: boottime " + boottime.ToString() + " logintime: " + logontime.ToString()) ;
 
 				boottime = logontime.AddMinutes(-1);
 			}
