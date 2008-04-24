@@ -1,0 +1,7 @@
+﻿The image used as the base for the keyboard keys is based on the blank icon
+in the keyboard icon set released by Alan Who?
+http://alanwho.com/ 
+
+The image is licensed under the Creative Commons 2.5 license, viewable at
+http://creativecommons.org/licenses/by/2.5/deed.en_GB
+
