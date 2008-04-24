@@ -20,7 +20,7 @@ namespace KeyMapper
 
             DateTime dt;
             if (ts != 0)
-                dt = new DateTime(ts, DateTimeKind.Utc);
+                dt = DateTime.FromFileTimeUtc(ts);
             else
                 dt = DateTime.MinValue;
 

@@ -283,14 +283,14 @@ namespace KeyMapper
 
 			// Can happen - awakening a VM from sleep - that boottime later than logontime.
 
-			// TODO: Verify this actually happens.
-			if (boottime > logontime)
-			{
-				Console.WriteLine("Boot time: {0} Logon Time {1}", boottime, logontime);
-				System.Windows.Forms.MessageBox.Show("Boot time greater than logintime: boottime " + boottime.ToString() + " logintime: " + logontime.ToString()) ;
-
-				boottime = logontime.AddMinutes(-1);
-			}
+            			// Sometimes, as well, logontime returns the wrong time. I think this is because when 
+            // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
+            // time zone. Sometimes, on some computers
+            if (boottime > logontime)
+            {
+                Console.WriteLine("Boot time: {0} Logon Time {1}", boottime, logontime);
+                boottime = logontime.AddSeconds(-1);
+            }
 
 			// When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
 			DateTime HKLMWrite = RegistryHelper.GetRegistryKeyTimestamp
