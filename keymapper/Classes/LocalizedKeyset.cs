@@ -96,7 +96,6 @@ namespace KeyMapper
 				bool overlong = false;
 				string name = KeyboardHelper.GetKeyName(scancode, ref overlong);
 
-				// Console.WriteLine(name);
 				_nonLocalizableKeyNames.Add(hash, name);
 				if (overlong)
 				{

@@ -53,7 +53,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -84,7 +84,6 @@
     <Compile Include="Classes\RegistryHelper.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\UserColours.cs" />
-    <Compile Include="Classes\UserHelper.cs" />
     <Compile Include="Controls\fader.cs">
       <SubType>Component</SubType>
     </Compile>

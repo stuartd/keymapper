@@ -17,19 +17,44 @@ namespace KeyMapper
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		static void Main(string[] args)
 		{
 
+			// Redirect console first of all..
+			
+#if DEBUG
+#else
+			Console.Write("Redirecting console output");
+			AppController.RedirectConsoleOutput();
+#endif
+			
 			// Look for a running copy and activate it if it exists
+			// (Writing to log if it does)
 			if (AppController.CheckForExistingInstances() == true)
+			{
+				Console.WriteLine("Switching to existing instance");
+				AppController.CloseConsoleOutput();
 				return;
+			}
+
+			// Now, look at the arguments passed:
+
+			// First up - look for the flag which orders us to reset the user config..
+
+			foreach (string arg in args)
+			{
+				if (arg == "-reset")
+					AppController.CreateNewUserConfigFile();
+			}
+
+AppController.CreateNewUserConfigFile();
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-			Application.ThreadException += ApplicationThreadException;
-			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+	 		Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+		 	Application.ThreadException += ApplicationThreadException;
+		 	AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
 
 			AppController.StartAppController();
 
@@ -39,15 +64,17 @@ namespace KeyMapper
 			Application.ThreadException -= ApplicationThreadException; // Release static event or else..
 			AppDomain.CurrentDomain.UnhandledException -= UnhandledExceptionHandler;
 
-
 		}
 
 		static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
 		{
-			MessageBox.Show("There's been a murrrrrrrder (1)");
+			MessageBox.Show("There's been a terrible error!");
+
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
-				System.Diagnostics.EventLog.WriteEntry("KeyMapper", ex.Message, System.Diagnostics.EventLogEntryType.Error);
+			{
+				Console.WriteLine("Unhandled exception: {0}", ex);
+			}
 		}
 
 		static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)

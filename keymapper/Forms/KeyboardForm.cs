@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Collections;
+using System.Configuration;
 
 namespace KeyMapper
 {
@@ -121,6 +122,8 @@ namespace KeyMapper
 
 			Properties.Settings userSettings = new Properties.Settings();
 
+			Console.WriteLine("Attempting to load user settings");
+
 			bool firstrun = !userSettings.KeyMapperSettingsSaved;
 
 			Point savedPosition = userSettings.KeyboardFormLocation;
@@ -162,6 +165,8 @@ namespace KeyMapper
 			{
 				MappingsManager.SetFilter(MappingFilter.Boot);
 			}
+
+			Console.WriteLine("User settings successfully loaded");
 
 		}
 
@@ -228,11 +233,6 @@ namespace KeyMapper
 				// navleft = (int)Math.Round(((14.8F * (KeySize + PaddingWidth)) + PaddingWidth * 2), 0);
 				navleft = (int)Math.Round(this.ClientSize.Width - (((_keySize + _paddingWidth) * 3.2)), 0);
 			}
-
-			// Console.WriteLine("Form width: {0} MainKeyWdth: {4} KeySize: {1} NumPadLeft: {2} NavWidth: {3}", this.ClientSize.Width,	
-			// KeySize, numpadleft, navwidth, mainkeywidth);
-
-			// Console.WriteLine("Width: {2}, KeySize: {0} PaddingWidth: {1}", KeySize, PaddingWidth, this.ClientSize.Width);
 
 			KeyboardLayoutType desiredlayout = AppController.KeyboardLayout;
 
@@ -922,8 +922,6 @@ namespace KeyMapper
 
 		private void ReceiveKeyPress(object sender, KeyMapperKeyPressedEventArgs e)
 		{
-			// Console.WriteLine(e.Key.VirtualKeyCode);
-
 			if (e != null)
 			{
 				KBHookStruct key = e.Key;
@@ -1007,7 +1005,6 @@ namespace KeyMapper
 		{
 			SimulateToggleKeyKeypress(KeyboardHelper.ToggleKey.ScrollLock);
 		}
-
 
 		private void selectLayoutToolStripItemClick(object sender, EventArgs e)
 		{
