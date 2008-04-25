@@ -273,6 +273,8 @@ namespace KeyMapper
 			get { return (LLKHF_EXTENDED & _flags) == 1 ? 224 : 0; }
 		}
 
+		// They *are* flags.
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags")]
 		public int KeyFlags
 		{
 			get { return _flags; }

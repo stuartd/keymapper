@@ -13,7 +13,7 @@ namespace KeyMapper
 	{
 
 		public static event EventHandler<EventArgs> ColoursChanged;
-		static bool _loaded = false;
+		static bool _loaded ;
 
 		static Dictionary<ButtonEffect, UserColourSetting> _settings = new Dictionary<ButtonEffect, UserColourSetting>();
 
