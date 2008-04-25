@@ -122,8 +122,6 @@ namespace KeyMapper
 
 			Properties.Settings userSettings = new Properties.Settings();
 
-			Console.WriteLine("Attempting to load user settings");
-
 			bool firstrun = !userSettings.KeyMapperSettingsSaved;
 
 			Point savedPosition = userSettings.KeyboardFormLocation;
@@ -165,9 +163,6 @@ namespace KeyMapper
 			{
 				MappingsManager.SetFilter(MappingFilter.Boot);
 			}
-
-			Console.WriteLine("User settings successfully loaded");
-
 		}
 
 		void CalculateDimensions()
