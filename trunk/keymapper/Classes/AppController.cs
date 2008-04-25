@@ -390,6 +390,8 @@ namespace KeyMapper
 
             catch (ConfigurationErrorsException ex)
             {
+                Console.WriteLine("Catch One");
+
                 DeleteInvalidUserFileFromException(ex);
             }
 
@@ -403,6 +405,8 @@ namespace KeyMapper
 
             catch (ConfigurationErrorsException ex)
             {
+                Console.WriteLine("Catch Two");
+
                 DeleteInvalidUserFileFromException(ex);
             }
 
