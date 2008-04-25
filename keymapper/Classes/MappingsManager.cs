@@ -56,6 +56,32 @@ namespace KeyMapper
 			get { return _redostack.Count; }
 		}
 
+		public static Collection<KeyMapping> ClearedMappings
+		{
+			get
+			{
+				switch (_filter)
+				{
+					case MappingFilter.All:
+						Collection<KeyMapping> temp = CopyMappings(_clearedBootMappings);
+						foreach (KeyMapping km in _clearedUserMappings)
+						{
+							temp.Add(km);
+						}
+						return temp;
+
+					case MappingFilter.Boot:
+						return _clearedBootMappings;
+
+					case MappingFilter.User:
+						return _clearedUserMappings;
+
+					default:
+						return new Collection<KeyMapping>();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Private stack methods
@@ -170,32 +196,6 @@ namespace KeyMapper
 		#endregion
 
 		#region Public methods
-
-		public static Collection<KeyMapping> GetClearedMappings()
-		{
-			switch (_filter)
-			{
-				case MappingFilter.All:
-					Collection<KeyMapping> temp = CopyMappings(_clearedBootMappings);
-					foreach (KeyMapping km in _clearedUserMappings)
-					{
-						temp.Add(km);
-					}
-					return temp;
-
-				case MappingFilter.Boot:
-					return _clearedBootMappings;
-
-				case MappingFilter.User:
-					return _clearedUserMappings;
-
-				default:
-					return new Collection<KeyMapping>();
-			}
-
-
-
-		}
 
 
 		public static Collection<KeyMapping> GetMappings(MappingFilter filter)

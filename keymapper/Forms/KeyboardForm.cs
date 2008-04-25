@@ -59,8 +59,6 @@ namespace KeyMapper
 		ColourList _colourMapForm = null;
 		MappingListForm _mapListForm = null;
 
-		public delegate void FormArranger(Form subform);
-
 		public ToolTip FormToolTip
 		{
 			get { return _tooltip; }

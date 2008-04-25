@@ -216,6 +216,8 @@ namespace KeyMapper
 			{
 				kmregkey.Close();
 				// Really should have access to this key as it's in the user hive. But it isn't a requirement, as such.
+				// TODO: Test what happens when user has a) read only access and b) no access
+				// As later we try to save to this key anyway..
 			}
 
 			// Mappings in HKCU override mappings in HKLM
@@ -247,50 +249,23 @@ namespace KeyMapper
 			// >isn't< always unloaded on logoff. I though there was a fallback though..
             //  querying the user's ADSI LastLogin property. Unfortunately 
             // this gets the last time logged in >including when unlocking Windows<
-            // so...
+            // so this is as good as it gets.
 
-            // TODO: verify that applies to XP as well.
-            // if so, lose UserHelper class.
-
-            // (This will speed up startup as well as ADSI takes an appreciable time to load)
-
-            //if (UserHelper.IsConnectedToDomain() == false)
-            //{
-            //    // If we are in a domain, then LastLogin returns the last domain login time, which
-            //    // is NOT what we want.
-
-            //    string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToString().Replace("\\", "/");
-
-            //    // This fails - occasionally - with error:
-            //    // System.IO.FileNotFoundException occurred
-            //    // Message="The network path was not found. (Exception from HRESULT: 0x80070035)"
-				
-            //    try
-            //    {
-            //        object oUser = Marshal.BindToMoniker("WinNT://" + user + ",user");
-            //        DateTime adsiLogonTime = (DateTime)oUser.GetType().InvokeMember
-            //            ("Get", System.Reflection.BindingFlags.InvokeMethod, null, oUser, new string[] { "LastLogin" }, CultureInfo.InvariantCulture);
-            //        Marshal.ReleaseComObject(oUser);
-
-            //        if (adsiLogonTime > logontime)
-            //            logontime = adsiLogonTime;
-            //    }
-            //    catch (System.IO.FileNotFoundException)
-            //    {
-					
-            //    }
-            //}
-
-			// Can happen - awakening a VM from sleep - that boottime later than logontime.
-
-            			// Sometimes, as well, logontime returns the wrong time. I think this is because when 
+   			// Sometimes, as well, logontime returns the wrong time. I think this is because when 
             // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
-            // time zone. Sometimes, on some computers
+            // time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
+
+			// It can also happen I think - when awakening a VM from sleep - that is boottime later than logontime.
+
             if (boottime > logontime)
             {
                 Console.WriteLine("Boot time: {0} Logon Time {1}", boottime, logontime);
                 boottime = logontime.AddSeconds(-1);
             }
+
+			// Just in case the timestamp bug ever works in reverse:
+			if (logontime > DateTime.Now)
+				logontime = DateTime.Now;
 
 			// When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
 			DateTime HKLMWrite = RegistryHelper.GetRegistryKeyTimestamp
@@ -301,9 +276,6 @@ namespace KeyMapper
 				(RegistryHive.CurrentUser, @"Keyboard Layout");
 
 			Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", boottime, logontime, HKLMWrite, HKCUWrite);
-
-			// 	 System.Windows.Forms.MessageBox.Show("Booted:" + boottime.ToString() + (char)13 + "Logged On: " + logontime.ToString()
-			// 	 + (char)13 + "HKLM Write " + HKLMWrite.ToString() + (char)13 + "HKCU Write " + HKCUWrite.ToString());
 
 			// Get the current scancode maps
 			MappingsManager.GetMappingsFromRegistry();
@@ -401,7 +373,7 @@ namespace KeyMapper
 
 			if (String.IsNullOrEmpty(locale))
 			{
-				// At Startup we need to load the current locale.
+				// At startup we need to load the current locale.
 				locale = currentkeyboardlocale;
 			}
 
@@ -427,6 +399,7 @@ namespace KeyMapper
 				catch (Exception ex)
 				
 				{
+					// TODO: Remove before production.
 					System.Windows.Forms.MessageBox.Show(ex.ToString());
 				}
 
@@ -503,7 +476,7 @@ namespace KeyMapper
 			using (Bitmap bmp = ButtonImages.ResizeBitmap(AppController.GetBitmap(BlankButton.Blank), scale, false))
 			using (Graphics g = Graphics.FromImage(bmp))
 			{
-				// Helps MeasureString. Can also pass StringFormat.GenericTypographic ??
+				// Helps MeasureString. Can also pass StringFormat.GenericTypographic apparently ??
 
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 				int CharacterWidth = (int)g.MeasureString("@", font).Width;
@@ -514,14 +487,13 @@ namespace KeyMapper
 
 			_basefontsize = basefontsize;
 
-			// Console.WriteLine("Base: {0} Double: {1} Multii: {2}", FontSizeSingle, FontSizeDouble, FontSizeMulti);
+			// Console.WriteLine("Base: {0} Double: {1} Multi: {2}", FontSizeSingle, FontSizeDouble, FontSizeMulti);
 
 		}
 
 		public static string GetKeyName(int scancode, int extended)
 		{
 			// Look up the values in our current layout.
-
 			if (scancode == 0 && extended == 0)
 				return "Disabled";
 
@@ -544,8 +516,6 @@ namespace KeyMapper
 		public static Bitmap GetBitmap(BlankButton button)
 		{
 			// Have we already extracted this bmp?
-			// (Always return a clone, as it's going to be drawn on each time.)
-
 			// Buttons are stored as lower case.
 			string buttonname = button.ToString().ToLowerInvariant();
 
@@ -553,7 +523,9 @@ namespace KeyMapper
 			{
 				if (loadedbutton != null)
 				{
-					if (String.Compare(loadedbutton.Tag.ToString().ToLowerInvariant(), buttonname, true, CultureInfo.InvariantCulture) == 0)
+					// if (StringComparison.OrdinalIgnoreCase
+
+					if (String.Compare(loadedbutton.Tag.ToString().ToLowerInvariant(), buttonname, StringComparison.OrdinalIgnoreCase) == 0)
 					{
 						return (Bitmap)loadedbutton.Clone();
 					}

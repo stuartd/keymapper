@@ -22,7 +22,7 @@ namespace KeyMapper
 			get { return _to; }
 		}
 
-		public MappingType Type
+		public MappingType MapType
 		{
 			get { return _type; }
 		}

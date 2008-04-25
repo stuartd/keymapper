@@ -89,6 +89,7 @@ namespace KeyMapper
 		/// as these compose the "name" of the key - e.g. 1 and !, [ and {.
 		/// </summary>
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "KeyMapper.KeyboardHelper+NativeMethods.ToUnicodeEx(System.UInt32,System.UInt32,System.Byte[],System.Text.StringBuilder,System.Int32,System.UInt32,System.IntPtr)")]
 		public static string GetKeyName(int scancode, ref bool overlong)
 		{
 			byte[] KeyState = new byte[256];
@@ -230,12 +231,12 @@ namespace KeyMapper
 			NativeMethods.keybd_event((byte)keycode, 0x45, (uint)(KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP), UIntPtr.Zero);
 		}
 
-		public static void PressKey(int scancode)
-		{
-			uint vk = NativeMethods.MapVirtualKeyEx((uint)scancode, 3, _currentInputLocaleIdentifier);
-			NativeMethods.keybd_event((byte)vk, 0x45, (uint)(0), UIntPtr.Zero);
-			NativeMethods.keybd_event((byte)vk, 0x45, (uint)(KEYEVENTF_KEYUP), UIntPtr.Zero);
-		}
+		//public static void PressKey(int scancode)
+		//{
+		//    uint vk = NativeMethods.MapVirtualKeyEx((uint)scancode, 3, _currentInputLocaleIdentifier);
+		//    NativeMethods.keybd_event((byte)vk, 0x45, (uint)(0), UIntPtr.Zero);
+		//    NativeMethods.keybd_event((byte)vk, 0x45, (uint)(KEYEVENTF_KEYUP), UIntPtr.Zero);
+		//}
 
 		public static string GetCurrentKeyboardLocale()
 		{

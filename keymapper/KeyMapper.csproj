@@ -222,6 +222,7 @@
     <None Include="app.config" />
     <None Include="Project\app.config" />
     <None Include="Project\KeyMapper.pfx" />
+    <Content Include="attribution.txt" />
     <Content Include="Images\arrow.png" />
     <EmbeddedResource Include="Images\blank.png" />
     <EmbeddedResource Include="Images\doublewideblank.png" />

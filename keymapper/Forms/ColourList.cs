@@ -93,7 +93,6 @@ namespace KeyMapper
 				Registry.CurrentUser.DeleteSubKeyTree(subkey);
 			}
 
-
 			UserColourSettingManager.RaiseColoursChangedEvent();
 
 		}
@@ -112,8 +111,6 @@ namespace KeyMapper
 			CreateContextMenu();
 			Redraw();
 		}
-
-
 
 
 		void ResetFields()
@@ -292,7 +289,7 @@ namespace KeyMapper
 
 			// Now look at the cleared keys.
 
-			Collection<KeyMapping> maps = MappingsManager.GetClearedMappings();
+			Collection<KeyMapping> maps = MappingsManager.ClearedMappings;
 
 			foreach (KeyMapping map in maps)
 			{
