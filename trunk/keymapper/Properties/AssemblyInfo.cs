@@ -9,7 +9,7 @@ using System.Resources;
 [assembly: AssemblyTitle("KeyMapper")]
 [assembly: AssemblyDescription("Remaps keyboard keys")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Rose Hill Solutions")]
 [assembly: AssemblyProduct("KeyMapper")]
 [assembly: AssemblyCopyright("Copyright © Stuart Dunkeld 2007-2008")]
 [assembly: AssemblyTrademark("")]

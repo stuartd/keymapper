@@ -7,6 +7,9 @@ using System.Runtime.InteropServices;
 using System.Globalization;
 using System.Security.Permissions;
 using System.Threading;
+using System.IO ;
+using System.IO.IsolatedStorage;
+using System.Configuration;
 
 
 namespace KeyMapper
@@ -48,6 +51,10 @@ namespace KeyMapper
 		private static AppMutex _appmutex;
 
 		private static System.Windows.Forms.IWin32Window _keyboardFormHandle;
+
+		private static bool _isConsoleRedirected;
+		private static StreamWriter _consoleWriterStream;
+		private static string _consoleOutputFilename = "keymapper.log";
 
 		// Properties
 
@@ -93,6 +100,40 @@ namespace KeyMapper
 		public static CultureInfo CurrentCultureInfo
 		{
 			get { return _currentCultureInfo; }
+		}
+
+		#endregion
+
+		#region Controller methods
+
+		public static void StartAppController()
+		{
+			StartBackgroundTasks();
+			SetLocale();
+			EstablishSituation();
+		}
+
+		public static void CloseAppController()
+		{
+			ClearFontCache();
+
+			foreach (Bitmap bmp in _buttoncache)
+			{
+				if (bmp != null)
+					bmp.Dispose();
+			}
+			_buttoncache.Clear();
+
+			KeyboardHelper.UnloadLayout();
+			CloseConsoleOutput();
+
+		}
+
+		private static void StartBackgroundTasks()
+		{
+			ThreadStart job1 = new ThreadStart(KeyboardHelper.GetInstalledKeyboardList);
+			Thread thread1 = new Thread(job1);
+			thread1.Start();
 		}
 
 		public static string GetKeyFontName(bool localizable)
@@ -145,42 +186,40 @@ namespace KeyMapper
 			}
 		}
 
-		#endregion
-
-		#region Controller methods
-
-		public static void StartAppController()
+		public static void RedirectConsoleOutput()
 		{
-			StartBackgroundTasks();
-			SetLocale();
-			EstablishSituation();
-		}
-
-		public static void CloseAppController()
-		{
-			ClearFontCache();
-
-			foreach (Bitmap bmp in _buttoncache)
+		
+			try
 			{
-				if (bmp != null)
-					bmp.Dispose();
+				string path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KeyMapper" ;
+				if (Directory.Exists(path) == false)
+					Directory.CreateDirectory(path);
+
+				_consoleWriterStream = new StreamWriter(path + @"\" + _consoleOutputFilename, true,	 System.Text.Encoding.UTF8);
+						
 			}
-			_buttoncache.Clear();
+			catch (IOException exc)
+			{
+				// Tree falling in the woods...
+				Console.WriteLine(exc.Message + "Can't create log file.");
+				return;
+			}
 
-			KeyboardHelper.UnloadLayout();
+			_isConsoleRedirected = true;
 
+			// Direct standard output to the log file.
+			Console.SetOut(_consoleWriterStream);
 		}
 
-		private static void StartBackgroundTasks()
+		public static void CloseConsoleOutput()
 		{
-			ThreadStart job1 = new ThreadStart(KeyboardHelper.GetInstalledKeyboardList);
-			Thread thread1 = new Thread(job1);
-			thread1.Start();
+			if (_isConsoleRedirected)
+			{
+				_consoleWriterStream.Close();
 
-			// ThreadStart job2 = new ThreadStart(AppController.ChangeLocale);
-			// Thread thread2 = new Thread(job2);
-			// thread2.Start();
+			}
 		}
+
 
 		private static void EstablishSituation()
 		{
@@ -259,13 +298,16 @@ namespace KeyMapper
 
             if (boottime > logontime)
             {
-                Console.WriteLine("Boot time: {0} Logon Time {1}", boottime, logontime);
+                Console.WriteLine("Boot time greater than logontime: Boot Time {0} Logon Time {1}", boottime, logontime);
                 boottime = logontime.AddSeconds(-1);
             }
 
 			// Just in case the timestamp bug ever works in reverse:
 			if (logontime > DateTime.Now)
+			{
+				Console.WriteLine("Logontime greater than Now: Logon Time {0}, Now: {1}", logontime, DateTime.Now);
 				logontime = DateTime.Now;
+			}
 
 			// When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
 			DateTime HKLMWrite = RegistryHelper.GetRegistryKeyTimestamp
@@ -310,6 +352,43 @@ namespace KeyMapper
 
 
 		}
+
+		public static void CreateNewUserConfigFile()
+		{
+			try
+			{
+				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+				System.Windows.Forms.MessageBox.Show(config.FilePath);
+			}
+
+
+			catch (System.Configuration.ConfigurationErrorsException ex)
+			{
+				string fileName = "";
+				if (!string.IsNullOrEmpty(ex.Filename))
+				{
+					fileName = ex.Filename;
+				}
+				else
+				{
+					System.Configuration.ConfigurationErrorsException innerException =
+					ex.InnerException as System.Configuration.ConfigurationErrorsException;
+					if (innerException != null && ! string.IsNullOrEmpty(innerException.Filename))
+					{
+						fileName = innerException.Filename;
+					}
+				}
+				if (System.IO.File.Exists(fileName))
+				{
+					System.IO.File.Delete(fileName);
+				}
+				
+			}
+		}
+
+
+
+
 
 		public static bool IsLaptop()
 		{
@@ -387,10 +466,11 @@ namespace KeyMapper
 				// This can error with some cultures, problems with framework, unhandled thread exception occurs.
 				try
 				{
+					if (_currentCultureInfo != null)
+						Console.WriteLine("Setting culture to: LCID: {0}", _currentCultureInfo.LCID);
+
 					int culture = KeyboardHelper.SetLocale(locale);
 					_currentCultureInfo = new CultureInfo(culture);
-
-					// Console.WriteLine("LCID: {0}", _currentCultureInfo.LCID);
 
 					_currentlayout = new LocalizedKeySet();
 					_currentlocale = locale;
@@ -436,10 +516,9 @@ namespace KeyMapper
 
 			if (_fontcache.Contains(hash))
 			{
-				// Console.WriteLine("Returning font {0} {1}", name, size);
 				return (Font)_fontcache[hash];
 			}
-			// 	Console.WriteLine("Creating font {0} {1}", name, size);
+
 			Font font = new Font(GetKeyFontName(localizable), size);
 			_fontcache.Add(hash, font);
 			return font;

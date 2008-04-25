@@ -89,7 +89,6 @@ namespace KeyMapper
 		/// as these compose the "name" of the key - e.g. 1 and !, [ and {.
 		/// </summary>
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "KeyMapper.KeyboardHelper+NativeMethods.ToUnicodeEx(System.UInt32,System.UInt32,System.Byte[],System.Text.StringBuilder,System.Int32,System.UInt32,System.IntPtr)")]
 		public static string GetKeyName(int scancode, ref bool overlong)
 		{
 			byte[] KeyState = new byte[256];
@@ -101,8 +100,7 @@ namespace KeyMapper
 			KeyState[(int)Keys.FinalMode] = 0x80;
 			KeyState[(int)Keys.HanjaMode] = 0x80;
 			KeyState[(int)Keys.KanjiMode] = 0x80;
-
-		
+	
 
 			// Will put the unshifted and shifter values into this SB:
 			StringBuilder result = new StringBuilder();

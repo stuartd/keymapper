@@ -120,10 +120,6 @@ namespace KeyMapper
 					int errorCode = Marshal.GetLastWin32Error();
 					throw new System.ComponentModel.Win32Exception(errorCode);
 				}
-				else
-				{
-					// Console.WriteLine("Successfully hooked: {0}", _hookID);
-				}
 			}
 		}
 
@@ -152,7 +148,7 @@ namespace KeyMapper
 			{
 				if (error != 1404) // 1404 is 'Invalid hook handle.'
 				{
-					// Well, this is bad. An unhooked keyboard hook could paralyse the system.
+					// Well, this is bad. A key-suppressing keyboard hook that fails to unhook could paralyse the system.
 					// Throwing a hissy fit isn't going to achieve anything though.
 					Console.WriteLine("UnhookWindowsEx failed with error code {0}", error);
 				}
@@ -176,7 +172,7 @@ namespace KeyMapper
 				if (keypress.Scancode == 541)
 				{
 					// Right Alt, at least on my Dell SK-8115 keyboard
-					// Console.WriteLine("Fixing Dell's keyboard bug");
+					// Console.WriteLine("Fixing Dell's Right Alt keyboard bug");
 
 					keypress.Scancode = 56;
 					keypress.KeyFlags = 1;

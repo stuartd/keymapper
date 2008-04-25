@@ -157,7 +157,7 @@ namespace KeyMapper
 					break;
 			}
 
-			_buttonScaleFactor = 0.5F;
+			_buttonScaleFactor = 0.6F;
 
 			_buttonWidth = (int)(192 * _buttonScaleFactor);
 			_buttonHeight = (int)(128 * _buttonScaleFactor);
@@ -193,8 +193,7 @@ namespace KeyMapper
 
 			AddButtons();
 
-			this.Refresh();
-
+			this.Invalidate();
 		}
 
 		private void AddButtons()
