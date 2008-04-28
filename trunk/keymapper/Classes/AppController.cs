@@ -50,19 +50,11 @@ namespace KeyMapper
 
         private static AppMutex _appmutex;
 
-        private static System.Windows.Forms.IWin32Window _keyboardFormHandle;
-
         private static bool _isConsoleRedirected;
         private static StreamWriter _consoleWriterStream;
         private static string _consoleOutputFilename = "keymapper.log";
 
         // Properties
-
-        public static System.Windows.Forms.IWin32Window KeyboardFormHandle
-        {
-            get { return _keyboardFormHandle; }
-            set { _keyboardFormHandle = value; }
-        }
 
         public static bool UserCannotWriteMappings
         {
@@ -659,7 +651,7 @@ namespace KeyMapper
 
         #region Miscellaneous
 
-        internal static int GetHighestCommonDenominator(int a, int b)
+        public static int GetHighestCommonDenominator(int a, int b)
         {
             // Euclidean algorithm
             if (b == 0) return a;

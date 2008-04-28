@@ -27,8 +27,6 @@ namespace KeyMapper
 		int _numberOfLines;
 		float _buttonScaleFactor;
 
-		Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
-
 		bool _showAllButtons;
 
 		// Are any keys actually mapped?
@@ -362,79 +360,16 @@ namespace KeyMapper
 
 		}
 
-		private void ShowEditorForm(string message)
-		{
-			string effectname = message.Substring(0, message.IndexOf(" ", StringComparison.Ordinal));
-			string text = message.Substring(message.IndexOf(" ", StringComparison.Ordinal) + 1);
-			ButtonEffect effect = (ButtonEffect)System.Enum.Parse(typeof(ButtonEffect), effectname);
-
-			ColourEditor form;
-
-			if (_editorForms.ContainsKey(effect))
-			{
-				if (_editorForms.TryGetValue(effect, out form))
-				{
-					form.BringToFront();
-					return;
-				}
-			}
-
-			form = new ColourEditor(effect, text);
-
-			// Now, where to put it..
-			Point p = Point.Empty;
-
-			// If there are no forms open, use the last closed position.
-			if (_editorForms.Count == 0)
-			{
-				Properties.Settings userSettings = new Properties.Settings();
-				p = userSettings.ColourEditorLocation;
-			}
-			else
-			{
-				foreach (ColourEditor openform in _editorForms.Values)
-				{
-					if (openform != null)
-						if (openform.Location.X > p.X && openform.Location.Y > p.Y)
-							p = openform.Location;
-				}
-				p = new Point(p.X + 50, p.Y + 50);
-
-			}
-
-			form.Location = p;
-
-			_editorForms.Add(effect, form);
-			form.FormClosed += this.EditorFormClosed;
-			form.Show(AppController.KeyboardFormHandle);
-
-		}
-
-		void EditorFormClosed(object sender, FormClosedEventArgs e)
-		{
-			ColourEditor form = sender as ColourEditor;
-			if (form != null)
-			{
-				if (_editorForms.ContainsKey(form.Effect))
-					_editorForms.Remove(form.Effect);
-			}
-
-		}
-
+		
 		void PictureBoxDoubleClick(object sender, EventArgs e)
 		{
 			PictureBox pb = sender as PictureBox;
 			if (pb != null && pb.Tag != null)
-				ShowEditorForm(pb.Tag.ToString());
+				FormsManager.ShowColourEditorForm(pb.Tag.ToString());
 		}
 
 		private void ColourMapFormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (e.CloseReason == CloseReason.UserClosing)
-			{
-				e.Cancel = true;
-				this.Hide();
-			}
 			SaveSettings();
 		}
 

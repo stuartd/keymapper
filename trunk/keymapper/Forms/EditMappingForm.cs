@@ -58,11 +58,9 @@ namespace KeyMapper
 
 		#region Form methods
 
-		public EditMappingForm(KeyMapping map, bool useCapture, Point callingFormLocation, Size callingFormSize)
+		public EditMappingForm(KeyMapping map, bool useCapture)
 		{
 			InitializeComponent();
-
-			LoadSettings(callingFormLocation, callingFormSize);
 
 			// There are four startup states for this form.
 
@@ -104,8 +102,6 @@ namespace KeyMapper
 				SwopPanelPositions(EmptyPanel, KeyListsPanel);
 			}
 
-
-
 			if (_selectingFromKeyFromLists)
 			{
 				// Need to move the lists to the left where the box while remembering where it was
@@ -134,28 +130,6 @@ namespace KeyMapper
 			Properties.Settings userSettings = new Properties.Settings();
 			userSettings.EditMappingFormLocation = this.Location;
 			userSettings.Save();
-		}
-
-		private void LoadSettings(Point callingFormLocation, Size callingFormSize)
-		{
-
-			Properties.Settings userSettings = new Properties.Settings();
-
-			Point savedLocation = userSettings.EditMappingFormLocation;
-
-			if (savedLocation.IsEmpty == false)
-			{
-				this.Location = savedLocation;
-			}
-			else
-			{
-				// Go in the middle of the calling form (as this is a modal form after all)
-				// and, say, 50 pixels from the left.
-				int x = callingFormLocation.X + 50;
-				int y = ((callingFormSize.Height = this.ClientSize.Height) / 2) + callingFormLocation.Y;
-
-				this.Location = new Point(x, y);
-			}
 		}
 
 		void PopulateKeyLists()
