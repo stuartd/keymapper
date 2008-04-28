@@ -109,18 +109,6 @@ namespace KeyMapper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MappingListFormHeight {
-            get {
-                return ((int)(this["MappingListFormHeight"]));
-            }
-            set {
-                this["MappingListFormHeight"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool KeyboardFormHasMacKeyboard {
             get {
@@ -188,6 +176,42 @@ namespace KeyMapper.Properties {
             }
             set {
                 this["LastMappingsFilter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowHelpFormAtAtStartup {
+            get {
+                return ((bool)(this["ShowHelpFormAtAtStartup"]));
+            }
+            set {
+                this["ShowHelpFormAtAtStartup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point HelpFormLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["HelpFormLocation"]));
+            }
+            set {
+                this["HelpFormLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HelpFormOpen {
+            get {
+                return ((bool)(this["HelpFormOpen"]));
+            }
+            set {
+                this["HelpFormOpen"] = value;
             }
         }
     }

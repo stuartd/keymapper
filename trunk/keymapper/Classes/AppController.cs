@@ -100,7 +100,9 @@ namespace KeyMapper
 
         public static void StartAppController()
         {
-            StartBackgroundTasks();
+			// All the pieces matter.. need to have everything complete 
+			// before keyboard form is shown, so no background tasks.
+			KeyboardHelper.GetInstalledKeyboardList();
             SetLocale();
             EstablishSituation();
         }
@@ -119,13 +121,6 @@ namespace KeyMapper
             KeyboardHelper.UnloadLayout();
             CloseConsoleOutput();
 
-        }
-
-        private static void StartBackgroundTasks()
-        {
-            ThreadStart job1 = new ThreadStart(KeyboardHelper.GetInstalledKeyboardList);
-            Thread thread1 = new Thread(job1);
-            thread1.Start();
         }
 
         public static string GetKeyFontName(bool localizable)
@@ -286,7 +281,8 @@ namespace KeyMapper
             // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
             // time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
 
-            // It can also happen I think - when awakening a VM from sleep - that is boottime later than logontime.
+            // It can also happen - e.g. when restoring a Parallels VM - 
+			// that the boottime is later than logontime.
 
             if (boottime > logontime)
             {
@@ -309,7 +305,7 @@ namespace KeyMapper
             DateTime HKCUWrite = RegistryHelper.GetRegistryKeyTimestamp
                 (RegistryHive.CurrentUser, @"Keyboard Layout");
 
-            Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", boottime, logontime, HKLMWrite, HKCUWrite);
+          //  Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", boottime, logontime, HKLMWrite, HKCUWrite);
 
             // Get the current scancode maps
             MappingsManager.GetMappingsFromRegistry();
@@ -629,7 +625,7 @@ namespace KeyMapper
                 }
             }
 
-            Bitmap bmp = ButtonImages.GetImage(buttonname);
+            Bitmap bmp = ButtonImages.GetImage(buttonname, "png");
 
             bmp.Tag = buttonname.ToString();
             _buttoncache.Add(bmp);

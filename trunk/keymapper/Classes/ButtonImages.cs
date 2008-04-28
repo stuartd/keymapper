@@ -77,9 +77,9 @@ namespace KeyMapper
 
 		#region Other public methods
 
-		public static Bitmap GetImage(string buttonFileName)
+		public static Bitmap GetImage(string buttonFileName, string extension)
 		{
-			string filepath = _path + buttonFileName.ToLowerInvariant() + ".png";
+			string filepath = _path + buttonFileName.ToLowerInvariant() + "." + extension;
 			return ExtractImage(filepath);
 		}
 

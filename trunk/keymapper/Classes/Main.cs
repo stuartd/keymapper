@@ -5,9 +5,6 @@ using System.Security.Permissions;
 [assembly: CLSCompliant(true)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true, UnmanagedCode = true)]
 
-// TODO: Figure out what needs to be done so exception doesn't occur calling registry access 
-// [assembly: PermissionSet(SecurityAction.RequestOptional, Name = "Nothing")]
-
 namespace KeyMapper
 {
     class main

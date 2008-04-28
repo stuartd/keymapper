@@ -236,7 +236,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Images\blank.png" />
     <EmbeddedResource Include="Images\doublewideblank.png" />
-    <Content Include="Images\keymapper.ico" />
+    <EmbeddedResource Include="Images\keymapper.ico" />
     <Content Include="license.txt" />
     <EmbeddedResource Include="Images\mediumwideblank.png" />
     <EmbeddedResource Include="Images\quadruplewideblank.png" />

@@ -14,6 +14,7 @@ namespace KeyMapper
 
 		private List<int> _clearedKeys = new List<int>();
 		private List<Key> _keylist = new List<Key>();
+		private int _minimumWidth = 300;
 
 		public MappingListForm()
 		{
@@ -27,13 +28,9 @@ namespace KeyMapper
 
 			Properties.Settings userSettings = new Properties.Settings();
 
-			int savedHeight = userSettings.MappingListFormHeight;
 			int savedWidth = userSettings.MappingListFormWidth;
 
-			if (savedHeight > 0)
-				this.Height = savedHeight;
-
-			if (savedWidth > 0)
+			if (savedWidth > _minimumWidth)
 				this.Width = savedWidth;
 		}
 
@@ -46,7 +43,6 @@ namespace KeyMapper
 		{
 			Properties.Settings userSettings = new Properties.Settings();
 			userSettings.MappingListFormLocation = this.Location;
-			userSettings.MappingListFormHeight = this.Height;
 			userSettings.MappingListFormWidth = this.Width;
 			userSettings.Save();
 		}
@@ -63,7 +59,18 @@ namespace KeyMapper
 			_clearedKeys.Clear();
 			_keylist.Clear();
 
-			AddRowsToGrid();
+			// Sometimes, get "Can't add rows where there are no columns" error.
+			
+			try
+			{
+				AddRowsToGrid();
+			}
+			catch (InvalidOperationException e)
+			{
+				grdMappings.ColumnCount = 1;
+				MessageBox.Show("It's that bug again");
+				AddRowsToGrid();
+			}
 
 			// Resize according to number of mappings
 			int height = grdMappings.ColumnHeadersHeight;
@@ -71,7 +78,11 @@ namespace KeyMapper
 			foreach (DataGridViewRow row in grdMappings.Rows)
 				height += row.Height + row.DividerHeight;
 
+			this.MinimumSize = new Size(0, 0);
+			this.MaximumSize = new Size(0, 0);
 			this.SetClientSizeCore(this.ClientSize.Width, height);
+			this.MinimumSize = new Size(_minimumWidth, this.Size.Height);
+		// 	this.MaximumSize = new Size(0, this.Size.Height);
 
 			// ResizeControls();
 		}

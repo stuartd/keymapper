@@ -71,14 +71,15 @@ namespace KeyMapper
 		{
 
 			InitializeComponent();
+			FormsManager.RegisterMainForm(this);
 
 			LoadUserSettings();
 
 			ResizeToAspect();
 
 			// This needs to be done after the location and size of this form are fully determined.
-			FormsManager.RegisterMainForm(this);
-			FormsManager.OpenSubForms();
+
+			FormsManager.OpenChildForms();
 
 			_lastSize = Size;
 
@@ -111,15 +112,13 @@ namespace KeyMapper
 			int savedWidth = userSettings.KeyboardFormWidth;
 
 			if (firstrun || savedPosition.IsEmpty)
-				this.Location = new Point(
-					(int)(SystemInformation.PrimaryMonitorSize.Width * 0.025F),
-					(int)(SystemInformation.PrimaryMonitorSize.Height * 0.025F));
+				FormsManager.PositionMainForm() ;
 			else
 				this.Location = savedPosition;
 
 			if (firstrun || savedWidth < this.MinimumSize.Width)
 			{
-				this.Width = (int)(SystemInformation.PrimaryMonitorSize.Width * 0.95F);
+				FormsManager.SizeMainForm();
 			}
 			else
 			{
@@ -869,6 +868,11 @@ namespace KeyMapper
 				_sniffer = null;
 			}
 			KeyboardHelper.UnloadLayout();
+		}
+
+		private void KeyboardFormClosing(object sender, FormClosingEventArgs e)
+		{
+			// Save settings before we close, so references to subforms are still live.
 			SaveUserSettings();
 		}
 
@@ -883,16 +887,14 @@ namespace KeyMapper
 		}
 
 
-		private void KeyboardFormResizeEnd(object sender, EventArgs e)
+		public void KeyboardFormResizeEnd(object sender, EventArgs e)
 		{
-			if (Size != _lastSize) // Not justa move
+			if (Size != _lastSize) // Not just a move (which fires this too)
 			{
 				_lastSize = Size;
 				ResizeToAspect();
 				Redraw();
 			}
-
-
 		}
 
 		private void ReceiveKeyPress(object sender, KeyMapperKeyPressedEventArgs e)
@@ -1052,7 +1054,8 @@ namespace KeyMapper
 			_keysOnly = false;
 			_hasNumberPad = !AppController.IsLaptop();
 			// Not going to reset this. If user has set it, a shame to lose it. TODO: think about it.
-			// _isMacKeyboard = false; // TODO: Does it have Apple in it's name, perchance?
+			// _isMacKeyboard = false; // TODO: Does it have Apple in it's name, perchance? Not that that works for Parallels etc.
+			// as they have a custom keyboard driver and load the standard keyboard (eg United Kingdom)
 
 			// Revert to default layout and locale (restores Enter key etc)
 			this.ChangeKeyboard(KeyboardHelper.GetKeyboardName());
@@ -1075,10 +1078,17 @@ namespace KeyMapper
 
 		private void arrangeWindowsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			FormsManager.ArrangeAllForms();
+			FormsManager.ResetAllForms();
 		}
 
 		#endregion
+
+		private void showHelpToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FormsManager.ShowHelpForm();
+		}
+
+
 	}
 
 }

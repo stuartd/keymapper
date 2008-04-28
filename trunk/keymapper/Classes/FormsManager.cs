@@ -13,6 +13,7 @@ namespace KeyMapper
 		static ColourList _colourMapForm = null;
 		static MappingListForm _mapListForm = null;
 		static Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
+		static HelpForm _helpForm = null;
 
 
 		public static void RegisterMainForm(KeyboardForm form)
@@ -20,12 +21,14 @@ namespace KeyMapper
 			_mainForm = form;
 		}
 
-		public static void SubFormClosed(object sender, FormClosedEventArgs e)
+		public static void ChildFormClosed(object sender, FormClosedEventArgs e)
 		{
 			if (sender is ColourList)
 				_colourMapForm = null;
 			else if (sender is MappingListForm)
 				_mapListForm = null;
+			else if (sender is HelpForm)
+				_helpForm = null;
 			else if (sender is ColourEditor)
 			{
 				if (_editorForms.ContainsKey(((ColourEditor)sender).Effect))
@@ -41,22 +44,22 @@ namespace KeyMapper
 			string text = message.Substring(message.IndexOf(" ", StringComparison.Ordinal) + 1);
 			ButtonEffect effect = (ButtonEffect)System.Enum.Parse(typeof(ButtonEffect), effectname);
 
-			ColourEditor form;
+			ColourEditor newForm;
 
 			if (_editorForms.ContainsKey(effect))
 			{
-				if (_editorForms.TryGetValue(effect, out form))
+				if (_editorForms.TryGetValue(effect, out newForm))
 				{
-					form.BringToFront();
+					newForm.BringToFront();
 					return;
 				}
 			}
 
-			form = new ColourEditor(effect, text);
+			newForm = new ColourEditor(effect, text);
 
 			// Now, where to put it..
 			Point p = Point.Empty;
-
+			
 			// If there are no forms open, use the last closed position.
 			if (_editorForms.Count == 0)
 			{
@@ -69,29 +72,40 @@ namespace KeyMapper
 				foreach (ColourEditor openform in _editorForms.Values)
 				{
 					if (openform != null)
-						if (openform.Location.X > p.X && openform.Location.Y > p.Y)
-							p = openform.Location;
+						p = openform.Location;
 				}
-				p = new Point(p.X + 50, p.Y + 50);
+				p = new Point(p.X + 20, p.Y + 20);
+
+				if (WillFormFitOnScreen(p, newForm.Size) == false)
+					MessageBox.Show("Doesn't fit.");
 
 			}
 
-			form.Location = p;
+			newForm.Location = p;
 
-			_editorForms.Add(effect, form);
-			form.FormClosed += SubFormClosed;
-			form.Show((IWin32Window)_mainForm);
+			_editorForms.Add(effect, newForm);
+			newForm.FormClosed += ChildFormClosed;
+			newForm.Show((IWin32Window)_mainForm);
 
 		}
 
-		public static void ArrangeAllForms()
+		public static void ResetAllForms()
 		{
 
+			PositionMainForm();
+			SizeMainForm();
+			_mainForm.KeyboardFormResizeEnd(null, null);
+
+
+
 			if (_mapListForm != null)
-				PostionSubform(_mapListForm, SubformPosition.BottomRight);
+				PositionChildForm(_mapListForm, ChildFormPosition.BottomRight);
+
+			if (_helpForm != null)
+				PositionChildForm(_helpForm, ChildFormPosition.BottomLeft);
 
 			if (_colourMapForm != null)
-				PostionSubform(_colourMapForm, SubformPosition.BottomLeft);
+				PositionColourMapForm();
 
 		}
 
@@ -106,7 +120,7 @@ namespace KeyMapper
 			return (_mapListForm != null);
 		}
 
-		public static void OpenSubForms()
+		public static void OpenChildForms()
 		{
 
 			Properties.Settings userSettings = new Properties.Settings();
@@ -116,6 +130,26 @@ namespace KeyMapper
 
 			if (userSettings.KeyboardFormHasMappingListFormOpen)
 				ToggleMappingListForm();
+
+			if (userSettings.ShowHelpFormAtAtStartup)
+				ShowHelpForm();
+		}
+
+		public static void ShowHelpForm()
+		{
+			if (_helpForm == null)
+			{
+				_helpForm = new HelpForm();
+				Properties.Settings userSettings = new Properties.Settings();
+				Point formlocation = userSettings.HelpFormLocation;
+
+				if (formlocation.IsEmpty)
+					PositionChildForm(_helpForm, ChildFormPosition.BottomLeft);
+				else
+					_helpForm.Location = formlocation;
+
+				_helpForm.Show((IWin32Window)_mainForm);
+			}
 		}
 
 		public static void ShowEditMappingForm(KeyMapping km, bool useCapture)
@@ -126,17 +160,47 @@ namespace KeyMapper
 
 			Point savedLocation = userSettings.EditMappingFormLocation;
 
+
 			if (savedLocation.IsEmpty == false)
-			{
 				mf.Location = savedLocation;
-			}
 			else
-			{
-				PostionSubform(mf, SubformPosition.MiddleLeft);
-			}
+				PositionChildForm(mf, ChildFormPosition.MiddleLeft);
 
 			mf.ShowDialog((IWin32Window)_mainForm);
+
 		}
+
+		private static bool WillFormsOverlap(Point form1Location, Size form1Size, Point form2Location, Size form2Size)
+		{
+			return !(form1Location.X > form2Location.X + form2Size.Width
+			  || form1Location.X + form1Size.Width < form2Location.X
+			  || form1Location.Y > form2Location.Y + form2Size.Height
+			  || form1Location.Y + form1Size.Height < form2Location.Y);
+		}
+
+		private static bool WillFormFitOnScreen(Point location, Size size)
+		{
+
+			if (SystemInformation.MonitorCount == 1)
+			{
+				if (location.X < 0 || location.X + size.Width > SystemInformation.PrimaryMonitorSize.Width)
+					return false;
+			}
+
+			// Not going to check left and right for multiple monitors as it is too problematic
+			// (if the secondary monitor is to the left of the primary, negative postioning numbers
+			// are the norm)
+
+			// Check it doesn't fall off the bottom, though.
+
+			if (location.Y + size.Height > SystemInformation.PrimaryMonitorSize.Height)
+				return false;
+	
+
+			return true;
+
+		}
+
 
 
 		public static void ToggleMappingListForm()
@@ -152,15 +216,15 @@ namespace KeyMapper
 
 				// Load settings before positioning so we know how wide form is
 				_mapListForm.LoadUserSettings();
-				
+
 				if (formLocation.IsEmpty)
 				{
-					PostionSubform(_mapListForm, SubformPosition.BottomRight);
+					PositionChildForm(_mapListForm, ChildFormPosition.BottomRight);
 				}
 				else
 					_mapListForm.Location = formLocation;
 
-				_mapListForm.FormClosed += SubFormClosed;
+				_mapListForm.FormClosed += ChildFormClosed;
 
 				_mapListForm.Show((IWin32Window)_mainForm);
 			}
@@ -173,8 +237,11 @@ namespace KeyMapper
 
 		public static void ToggleColourMapForm()
 		{
-			if (_colourMapForm == null)
+			if (_colourMapForm != null)
 			{
+				_colourMapForm.Close();
+				return ;
+			}
 
 				_colourMapForm = new ColourList();
 
@@ -183,53 +250,111 @@ namespace KeyMapper
 				Point formLocation = userSettings.ColourListFormLocation;
 
 				if (formLocation.IsEmpty)
-					PostionSubform(_colourMapForm, SubformPosition.BottomLeft);
+				{
+					PositionColourMapForm();
+				}
 				else
+				{
 					_colourMapForm.Location = formLocation;
+				}
 
-
-				_colourMapForm.FormClosed += SubFormClosed;
+				_colourMapForm.FormClosed += ChildFormClosed;
 				_colourMapForm.Show((IWin32Window)_mainForm);
+	
+
+		}
+
+		private static void PositionColourMapForm()
+		{
+			// If help form isn't open, just open on bottom left.
+			if (_helpForm == null)
+			{
+				PositionChildForm(_colourMapForm, ChildFormPosition.BottomLeft);
 			}
 			else
 			{
-				_colourMapForm.Close();
+				// If help form is open and hasn't been moved from default position, 
+				// position colour list form relative to it.
+				if (_helpForm.Location == Properties.Settings.Default.HelpFormLocation)
+					PositionChildForm(_helpForm, _colourMapForm, ChildFormPosition.BottomLeft);
+				else
+				{
+					// Help form has been moved. If we put colour map form in the default location, will it overlap with helpform?
+					if (WillFormsOverlap(_helpForm.Location, _helpForm.Size,
+						GetNewLocation(_mainForm, _colourMapForm, ChildFormPosition.BottomLeft), _colourMapForm.Size))
+					{
+						PositionChildForm(_helpForm, _colourMapForm, ChildFormPosition.BottomLeft);
+					}
+					else
+					{
+						PositionChildForm(_colourMapForm, ChildFormPosition.BottomLeft);
+					}
+
+				}
 			}
+
+
 
 		}
 
-		public static void PostionSubform(Form subform, SubformPosition position)
+		public static void SizeMainForm()
 		{
+			_mainForm.Width = (int)(SystemInformation.PrimaryMonitorSize.Width * 0.95F);
+		}
+
+		public static void PositionMainForm()
+		{
+			_mainForm.Location = new Point(
+					(int)(SystemInformation.PrimaryMonitorSize.Width * 0.025F),
+					(int)(SystemInformation.PrimaryMonitorSize.Height * 0.025F));
+		}
+
+		public static void PositionChildForm(Form child, ChildFormPosition position)
+		{
+			PositionChildForm(_mainForm, child, position);
+		}
+
+		public static void PositionChildForm(Form parent, Form child, ChildFormPosition position)
+		{
+			child.Location = GetNewLocation(parent, child, position);
+
+		}
+
+		private static Point GetNewLocation(Form parent, Form child, ChildFormPosition position)
+		{
+			Point newLocation = Point.Empty;
+
 			switch (position)
 			{
-				case SubformPosition.BottomLeft:
-					subform.Location = new Point(_mainForm.Location.X, _mainForm.Location.Y + _mainForm.Height + 1);
+				case ChildFormPosition.BottomLeft:
+					newLocation = new Point(parent.Location.X, parent.Location.Y + parent.Height + 1);
 					break;
-				case SubformPosition.BottomCentre:
+				case ChildFormPosition.BottomCentre:
 					break;
-				case SubformPosition.BottomRight:
-					subform.Location = new Point(
-					_mainForm.Location.X + _mainForm.Width - subform.Width,
-					_mainForm.Location.Y + _mainForm.Height + 1);
+				case ChildFormPosition.BottomRight:
+					newLocation = new Point(
+					parent.Location.X + parent.Width - child.Width,
+					parent.Location.Y + parent.Height + 1);
 					break;
-				case SubformPosition.MiddleLeft:
-					subform.Location = new Point(
-						_mainForm.Location.X + 50,
-						((_mainForm.ClientSize.Height - subform.ClientSize.Height) / 2) + _mainForm.Location.Y);
+				case ChildFormPosition.MiddleLeft:
+					newLocation = new Point(
+						parent.Location.X + 50,
+						((parent.ClientSize.Height - child.ClientSize.Height) / 2) + parent.Location.Y);
 					break;
-
 				default:
 					break;
+
+
 			}
 
+			return newLocation;
 
 		}
-
 
 
 	}
 
-	public enum SubformPosition
+	public enum ChildFormPosition
 	{
 		BottomLeft, BottomCentre, BottomRight, MiddleLeft
 	}
