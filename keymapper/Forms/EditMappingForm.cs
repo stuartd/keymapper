@@ -656,7 +656,7 @@ namespace KeyMapper
 				else
 				{
 					SetMapToBlankMapping(e.Key.Scancode, e.Key.Extended);
-					SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
+					// SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
 				}
 			}
 			else

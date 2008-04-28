@@ -9,10 +9,6 @@ namespace KeyMapper
 		// These are used in keyboards.xml as the layout IDs
 		// US = 0, European = 1, Punjabi = 2
 
-		// TODO: Add another element to the Mac keyboards so they can be distinguished.
-		// what with Parallels, Boot Camp, VMWare it's tricky to know when you are running a Mac except
-		// to ask the keyboard..
-
 		US = 0, European = 1, Punjabi = 2
 	}
 
