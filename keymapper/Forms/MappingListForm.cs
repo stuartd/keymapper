@@ -28,7 +28,7 @@ namespace KeyMapper
 			Properties.Settings userSettings = new Properties.Settings();
 
 			int savedHeight = userSettings.MappingListFormHeight;
-			int savedWidth = userSettings.MappingListWidth;
+			int savedWidth = userSettings.MappingListFormWidth;
 
 			if (savedHeight > 0)
 				this.Height = savedHeight;
@@ -39,11 +39,6 @@ namespace KeyMapper
 
 		private void MappingListFormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (e.CloseReason == CloseReason.UserClosing)
-			{
-				e.Cancel = true;
-				this.Hide();
-			}
 			SaveUserSettings();
 		}
 
@@ -52,10 +47,9 @@ namespace KeyMapper
 			Properties.Settings userSettings = new Properties.Settings();
 			userSettings.MappingListFormLocation = this.Location;
 			userSettings.MappingListFormHeight = this.Height;
+			userSettings.MappingListFormWidth = this.Width;
 			userSettings.Save();
 		}
-
-
 
 		void HandleMappingsChanged(object sender, EventArgs e)
 		{

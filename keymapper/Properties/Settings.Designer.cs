@@ -158,12 +158,12 @@ namespace KeyMapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MappingListWidth {
+        public int MappingListFormWidth {
             get {
-                return ((int)(this["MappingListWidth"]));
+                return ((int)(this["MappingListFormWidth"]));
             }
             set {
-                this["MappingListWidth"] = value;
+                this["MappingListFormWidth"] = value;
             }
         }
         
