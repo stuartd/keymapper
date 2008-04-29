@@ -158,7 +158,7 @@ namespace KeyMapper
 					break;
 			}
 
-			_buttonScaleFactor = 0.5F;
+			_buttonScaleFactor = 0.75F;
 
 			_buttonWidth = (int)(192 * _buttonScaleFactor);
 			_buttonHeight = (int)(128 * _buttonScaleFactor);
