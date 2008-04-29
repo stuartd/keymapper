@@ -65,7 +65,7 @@ namespace KeyMapper
 			{
 				AddRowsToGrid();
 			}
-			catch (InvalidOperationException e)
+			catch (InvalidOperationException)
 			{
 				grdMappings.ColumnCount = 1;
 				MessageBox.Show("It's that bug again");
