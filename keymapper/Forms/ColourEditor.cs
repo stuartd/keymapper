@@ -40,10 +40,16 @@ namespace KeyMapper
 
             this.Text = "Editing the " + caption + " button";
 
-            UpdateMatrix(ButtonImages.GetMatrix(effect));
-            DrawKey();
+            UpdateMatrix(ButtonImages.GetMatrix(_effect));
+            DrawKey(); 
 
-            UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { DrawKey(); };
+            UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { OnColoursChanged(); };
+        }
+
+        private void OnColoursChanged()
+        {
+              UpdateMatrix(ButtonImages.GetMatrix(_effect));
+            DrawKey(); 
         }
 
         private void UpdateMatrix(ColorMatrix cm)
@@ -194,6 +200,8 @@ namespace KeyMapper
 
                 string name = "Matrix" + x.ToString(CultureInfo.InvariantCulture) + y.ToString(CultureInfo.InvariantCulture);
                 float val = (r.Next(-10, 11) / 10F);
+
+                Console.WriteLine("Field {0} Value {1}", name, val);
 
                 // Update control...
                 // (this.Controls[name] as NumericUpDown).Value = val;
