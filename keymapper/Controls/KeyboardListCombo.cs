@@ -19,30 +19,25 @@ namespace KeyMapper
 			this.DrawItem += ComboItemSeparator.DrawComboItem;
 		}
 
-		[SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-		protected override void WndProc(ref Message m)
-		{
+        [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
+        protected override void WndProc(ref Message m)
+        {
 
-			if (m.HWnd != this.Handle)
-			{
-				return;
-			}
-
-           		if (m.Msg == 0x020A) // WM_MOUSEWHEEL  
-			{
-
-                if (MouseIsOutsideControl())
-                {
-                    Console.WriteLine("Message: {0}, LParam: {1}, WParam: {2}, TS {3}", m.Msg, m.LParam, m.WParam, m.ToString());
-
-
-                    return;
-                }
+            if (m.HWnd != this.Handle)
+            {
+                return;
             }
 
-			base.WndProc(ref m);
+            if (m.Msg == 0x020A) // WM_MOUSEWHEEL  
+            {
 
-		}
+                if (MouseIsOutsideControl())
+                    return;
+
+                base.WndProc(ref m);
+
+            }
+        }
 
 		private bool MouseIsOutsideControl()
 		{
