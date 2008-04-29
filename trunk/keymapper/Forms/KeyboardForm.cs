@@ -90,7 +90,7 @@ namespace KeyMapper
 			this.KeyboardListCombo.TextChanged += KeyboardListComboTextChanged;
 
 			MappingsManager.MappingsChanged += OnMappingsChanged;
-			UserColourSettingManager.ColoursChanged += new EventHandler<EventArgs>(OnColoursChanged);
+			UserColourSettingManager.ColoursChanged += OnColoursChanged;
 
 			// Sniff for Caps/Num/Scroll lock keys being pressed while app doesn't have focus
 			_sniffer = new KeySniffer();
@@ -106,7 +106,7 @@ namespace KeyMapper
 
 			Properties.Settings userSettings = new Properties.Settings();
 
-			bool firstrun = !userSettings.KeyMapperSettingsSaved;
+			bool firstrun = ! userSettings.UserHasSavedSettings;
 
 			Point savedPosition = userSettings.KeyboardFormLocation;
 			int savedWidth = userSettings.KeyboardFormWidth;
@@ -538,7 +538,7 @@ namespace KeyMapper
 
 			userSettings.LastMappingsFilter = (int)MappingsManager.Filter;
 
-			userSettings.KeyMapperSettingsSaved = true;
+			userSettings.UserHasSavedSettings = true;
 			userSettings.Save();
 
 		}
@@ -751,10 +751,11 @@ namespace KeyMapper
 
 		#region Menu Buttons
 
-		// Called by FormsManager
-		public void RegenerateWindowMenu()
+		// Called by FormsManager when a form closes.
+		public void RegenerateMenuExternal()
 		{
 			SetWindowMenuButtonStates();
+			SetHelpMenuButtonStates();
 		}
 
 		void SetToggleMenuButtonStates()
@@ -840,6 +841,15 @@ namespace KeyMapper
 			SetWindowMenuButtonStates();
 			SetEditMenuButtonStates();
 			SetKeyboardLayoutMenuButtonStates();
+			SetHelpMenuButtonStates();
+		}
+
+		private void SetHelpMenuButtonStates()
+		{
+			if (FormsManager.IsHelpFormOpen())
+				showHelpToolStripMenuItem.Text = "Hide &Help";
+			else
+				showHelpToolStripMenuItem.Text = "Show &Help";
 		}
 
 		#endregion
@@ -943,42 +953,42 @@ namespace KeyMapper
 
 		#region Main Menu click methods
 
-		private void exitToolStripMenuItemClick(object sender, EventArgs e)
+		private void exitMenuItemClick(object sender, EventArgs e)
 		{
 			Application.Exit();
 		}
 
-		private void undoToolStripMenuItemClick(object sender, EventArgs e)
+		private void undoMenuItemClick(object sender, EventArgs e)
 		{
 			MappingsManager.UndoMappingChange();
 		}
 
-		private void redoToolStripMenuItemClick(object sender, EventArgs e)
+		private void redoMenuItemClick(object sender, EventArgs e)
 		{
 			MappingsManager.RedoMappingChange();
 		}
 
-		private void changeOrientationToolStripMenuItemClick(object sender, EventArgs e)
+		private void changeOrientationMenuItemClick(object sender, EventArgs e)
 		{
 			ChangeKeyOrientation();
 		}
 
-		private void capsLockToolStripMenuItemClick(object sender, EventArgs e)
+		private void capsLockMenuItemClick(object sender, EventArgs e)
 		{
 			SimulateToggleKeyKeypress(KeyboardHelper.ToggleKey.CapsLock);
 		}
 
-		private void toggleNumberPadToolStripMenuItemClick(object sender, EventArgs e)
+		private void toggleNumberPadMenuItemClick(object sender, EventArgs e)
 		{
 			ToggleNumberpad();
 		}
 
-		private void numLockToolStripMenuItemClick(object sender, EventArgs e)
+		private void numLockMenuItemClick(object sender, EventArgs e)
 		{
 			SimulateToggleKeyKeypress(KeyboardHelper.ToggleKey.NumLock);
 		}
 
-		private void scrollLockToolStripMenuItemClick(object sender, EventArgs e)
+		private void scrollLockMenuItemClick(object sender, EventArgs e)
 		{
 			SimulateToggleKeyKeypress(KeyboardHelper.ToggleKey.ScrollLock);
 		}
@@ -988,68 +998,68 @@ namespace KeyMapper
 			this.ChangeKeyboard(sender.ToString());
 		}
 
-		private void selectFromCaptureToolStripMenuItemClick(object sender, EventArgs e)
+		private void selectFromCaptureMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ShowEditMappingForm(new KeyMapping(), true);
 		}
 
-		private void revertToSavedToolStripMenuItemClick(object sender, EventArgs e)
+		private void revertToSavedMenuItemClick(object sender, EventArgs e)
 		{
 			MappingsManager.RevertToStartupMappings();
 			OnMappingsChanged(null, null);
 		}
 
-		private void clearAllToolStripMenuItemClick(object sender, EventArgs e)
+		private void clearAllMenuItemClick(object sender, EventArgs e)
 		{
 			MappingsManager.ClearMappings();
 			OnMappingsChanged(null, null);
 		}
 
-		private void showMainKeysOnlyToolStripMenuItemClick(object sender, EventArgs e)
+		private void showMainKeysOnlyMenuItemClick(object sender, EventArgs e)
 		{
 			_keysOnly = !_keysOnly;
 			ResizeToAspect();
 			Redraw();
 		}
 
-		private void onlyShowBootMappingsToolStripMenuItemClick(object sender, EventArgs e)
+		private void onlyShowBootMappingsMenuItemClick(object sender, EventArgs e)
 		{
 			MappingsManager.SetFilter(MappingFilter.Boot);
 			Redraw();
 		}
 
-		private void onlyShowUserMappingsToolStripMenuItemClick(object sender, EventArgs e)
+		private void onlyShowUserMappingsMenuItemClick(object sender, EventArgs e)
 		{
 			MappingsManager.SetFilter(MappingFilter.User);
 			Redraw();
 		}
 
-		private void showAllMappingsToolStripMenuItemClick(object sender, EventArgs e)
+		private void showAllMappingsMenuItemClick(object sender, EventArgs e)
 		{
 			MappingsManager.SetFilter(MappingFilter.All);
 			Redraw();
 		}
 
-		private void viewListToolStripMenuItemClick(object sender, EventArgs e)
+		private void viewListMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ToggleMappingListForm();
 			SetWindowMenuButtonStates();
 		}
 
-		private void showColourMapFormToolStripMenuItemClick(object sender, EventArgs e)
+		private void showColourMapFormMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ToggleColourMapForm();
 			SetWindowMenuButtonStates();
 		}
 
 
-		private void useMacKeyboardToolStripMenuItemClick(object sender, EventArgs e)
+		private void useMacKeyboardMenuItemClick(object sender, EventArgs e)
 		{
 			_isMacKeyboard = !_isMacKeyboard;
 			Redraw();
 		}
 
-		private void revertToDefaultKeyboardLayoutToolStripMenuItemClick(object sender, EventArgs e)
+		private void revertToDefaultKeyboardLayoutMenuItemClick(object sender, EventArgs e)
 		{
 			_keysOnly = false;
 			_hasNumberPad = !AppController.IsLaptop();
@@ -1065,30 +1075,34 @@ namespace KeyMapper
 			this.Redraw();
 		}
 
-		private void exportAsRegistryFileToolStripMenuItemClick(object sender, EventArgs e)
+		private void exportAsRegistryFileMenuItemClick(object sender, EventArgs e)
 		{
 			// Going to cheat by simply exporting the registry keys..
 			// (As they get saved on each mapping change, they will always be up to date
 		}
 
-		private void selectFromListsToolStripMenuItemClick(object sender, EventArgs e)
+		private void selectFromListsMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ShowEditMappingForm(new KeyMapping(), false);
 		}
 
-		private void arrangeWindowsToolStripMenuItem_Click(object sender, EventArgs e)
+		private void arrangeWindowsMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ResetAllForms();
 		}
 
-		#endregion
-
-		private void showHelpToolStripMenuItem_Click(object sender, EventArgs e)
+		private void showHelpMenuItemClick(object sender, EventArgs e)
 		{
-			FormsManager.ShowHelpForm();
+			FormsManager.ToggleHelpForm();
+			SetHelpMenuButtonStates();
 		}
 
+		private void aboutKeyMapperMenuItemClick(object sender, EventArgs e)
+		{
+			FormsManager.ShowAboutForm();
+		}
 
+		#endregion
 	}
 
 }

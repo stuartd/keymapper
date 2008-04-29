@@ -50,12 +50,12 @@ namespace KeyMapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool KeyMapperSettingsSaved {
+        public bool UserHasSavedSettings {
             get {
-                return ((bool)(this["KeyMapperSettingsSaved"]));
+                return ((bool)(this["UserHasSavedSettings"]));
             }
             set {
-                this["KeyMapperSettingsSaved"] = value;
+                this["UserHasSavedSettings"] = value;
             }
         }
         

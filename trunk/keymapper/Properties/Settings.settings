@@ -8,7 +8,7 @@
     <Setting Name="KeyboardFormHasNumberPad" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="KeyMapperSettingsSaved" Type="System.Boolean" Scope="User">
+    <Setting Name="UserHasSavedSettings" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="KeyboardFormWidth" Type="System.Int32" Scope="User">

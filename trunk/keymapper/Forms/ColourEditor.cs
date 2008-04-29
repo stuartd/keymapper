@@ -42,11 +42,13 @@ namespace KeyMapper
 
 			this.Text = "Editing the " + caption + " button";
 
-			SetValues();
+			SetUpdownValuesFromMatrix();
 			DrawKey();
+
+			// UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { ResetKey(false); };
 		}
 
-		void SetValues()
+		void SetUpdownValuesFromMatrix()
 		{
 			_drawing = false;
 
@@ -114,7 +116,7 @@ namespace KeyMapper
 		private void DrawKey()
 		{
 
-			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _effect);
+			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _fontColour);
 
 			if (KeyBox.Image != null)
 				KeyBox.Image.Dispose();
@@ -123,14 +125,21 @@ namespace KeyMapper
 
 		}
 
-		private void ResetButtonClick(object sender, EventArgs e)
+		private void ResetKey(bool save)
 		{
 			_currentMatrix = ButtonImages.GetMatrix(_effect, true);
 			_fontColour = ButtonImages.GetFontColour(_effect, true);
 
-			SetValues();
-			SaveSettings();
+			SetUpdownValuesFromMatrix();
+			if (save)
+				SaveSettings();
+
 			DrawKey();
+		}
+
+		private void ResetButtonClick(object sender, EventArgs e)
+		{
+			ResetKey(true);
 		}
 
 
@@ -139,7 +148,7 @@ namespace KeyMapper
 			_currentMatrix = new ColorMatrix();
 			_fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
 
-			SetValues();
+			SetUpdownValuesFromMatrix();
 			SaveSettings();
 			DrawKey();
 		}
@@ -183,7 +192,7 @@ namespace KeyMapper
 		private void RandomizeButtonClick(object sender, EventArgs e)
 		{
 			_currentMatrix = new ColorMatrix();
-			SetValues();
+			SetUpdownValuesFromMatrix();
 			_drawing = false;
 
 			int numberOfChanges = 5;
@@ -202,9 +211,10 @@ namespace KeyMapper
 			}
 
 			_fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
-	
 			_drawing = true;
+
 			UpdateMatrixFromControls();
+
 			SaveSettings();
 			DrawKey();
 
