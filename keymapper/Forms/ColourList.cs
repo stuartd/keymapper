@@ -43,6 +43,9 @@ namespace KeyMapper
 
 		ContextMenu _contextMenu;
 
+		ToolTip _toolTip = new ToolTip();
+		string _toolTipText = "Double-click a button to edit the colour: right click for more options";
+		
 		#endregion
 
 		public ColourList()
@@ -155,7 +158,7 @@ namespace KeyMapper
 					break;
 			}
 
-			_buttonScaleFactor = 0.6F;
+			_buttonScaleFactor = 0.5F;
 
 			_buttonWidth = (int)(192 * _buttonScaleFactor);
 			_buttonHeight = (int)(128 * _buttonScaleFactor);
@@ -177,6 +180,8 @@ namespace KeyMapper
 
 		private void Redraw(bool reloadMappings)
 		{
+			_toolTip.RemoveAll();
+			_toolTip.SetToolTip(this, _toolTipText);
 
 			if (reloadMappings)
 			{
@@ -187,11 +192,13 @@ namespace KeyMapper
 			for (int i = this.Controls.Count - 1; i >= 0; i--)
 				this.Controls[i].Dispose();
 
+			this.SuspendLayout();
+			this.Refresh();
+			this.ResumeLayout();
+
 			ConstrainForm();
 
 			AddButtons();
-
-			this.Invalidate();
 		}
 
 		private void AddButtons()
@@ -355,6 +362,8 @@ namespace KeyMapper
 			pb.DoubleClick += PictureBoxDoubleClick;
 
 			this.Controls.Add(pb);
+			_toolTip.SetToolTip(pb, _toolTipText);
+
 			_currentButton++;
 
 

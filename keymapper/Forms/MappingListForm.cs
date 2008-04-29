@@ -55,11 +55,18 @@ namespace KeyMapper
 		private void Populate()
 		{
 
-			grdMappings.Rows.Clear();
+		
+			// Using grdMappings.Rows.Clear() I sometimes get 
+			// "Can't add rows where there are no columns" error.
+			// resulting in an InvalidOperationException.
+
+			for (int i = grdMappings.Rows.Count - 1; i >= 0 ; i--)
+			{
+				grdMappings.Rows.Remove(grdMappings.Rows[i]) ;
+			}
+			
 			_clearedKeys.Clear();
 			_keylist.Clear();
-
-			// Sometimes, get "Can't add rows where there are no columns" error.
 			
 			try
 			{
@@ -67,9 +74,7 @@ namespace KeyMapper
 			}
 			catch (InvalidOperationException)
 			{
-				grdMappings.ColumnCount = 1;
-				MessageBox.Show("It's that bug again");
-				AddRowsToGrid();
+				MessageBox.Show("Still getting that bug.");
 			}
 
 			// Resize according to number of mappings

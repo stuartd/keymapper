@@ -38,17 +38,8 @@ namespace KeyMapper
 			return WriteCaption(bmp, caption, false, false, fontColour);
 		}
 
-		// Custom matrix, default font colour
-		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ColorMatrix cm, ButtonEffect effect)
-		{
-			Bitmap bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None);
-			bmp = Transform(bmp, cm);
-			Color fontColour = GetFontColour(effect);
-			return WriteCaption(bmp, caption, false, false, fontColour);
-		}
 
-
-		// Offers full control over the bnutton scale and stretch.
+		// Offers full control over the button scale and stretch.
 		public static Bitmap GetButtonImage
 			(int scancode, int extended, BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect)
 		{

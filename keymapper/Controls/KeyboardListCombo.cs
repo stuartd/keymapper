@@ -30,13 +30,13 @@ namespace KeyMapper
 
             if (m.Msg == 0x020A) // WM_MOUSEWHEEL  
             {
-
                 if (MouseIsOutsideControl())
-                    return;
-
-                base.WndProc(ref m);
-
+                   return;
+        
             }
+			
+			base.WndProc(ref m);
+
         }
 
 		private bool MouseIsOutsideControl()

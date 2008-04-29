@@ -84,7 +84,7 @@ namespace KeyMapper
 			this.grdMappings.ReadOnly = true;
 			this.grdMappings.RowHeadersVisible = false;
 			this.grdMappings.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.grdMappings.Size = new System.Drawing.Size(336, 156);
+			this.grdMappings.Size = new System.Drawing.Size(499, 156);
 			this.grdMappings.TabIndex = 4;
 			this.grdMappings.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.grdMappingsCellPainting);
 			this.grdMappings.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdMappingsCellContentClick);
@@ -133,7 +133,7 @@ namespace KeyMapper
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(336, 156);
+			this.ClientSize = new System.Drawing.Size(499, 156);
 			this.Controls.Add(this.grdMappings);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;

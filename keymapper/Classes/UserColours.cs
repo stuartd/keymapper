@@ -95,10 +95,9 @@ namespace KeyMapper
 			// delete, or change type of registry settings. 
 
 			string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\" + effect.ToString();
-			
-
+		
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey(subkey);
-			if (reg == null) // No settings have beed defined for this effect
+			if (reg == null) // No settings have been defined for this effect
 				return null;
 			
 			UserColourSetting setting = new UserColourSetting();
