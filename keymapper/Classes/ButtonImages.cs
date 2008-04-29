@@ -612,7 +612,7 @@ namespace KeyMapper
 				new float[] {0, 0.9F, 0, 0, 0},
 				new float[] {0, 0, 1, 0, 0},
 				new float[] {0, 0, 0, 1, 0},
-				new float[] {-0.5F, -0.1F, 0.5F, 0, 1}});
+				new float[] {-0.6F, -0.2F, 0.5F, 0, 1}});
 
 		}
 
