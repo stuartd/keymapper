@@ -10,100 +10,103 @@ using System.Globalization;
 
 namespace KeyMapper
 {
-	public partial class ColourEditor : KMBaseForm
-	{
-		decimal _lowbound = -1M;
-		decimal _highbound = 1M;
-		decimal _step = 0.1M;
+    public partial class ColourEditor : KMBaseForm
+    {
+        decimal _lowbound = -1M;
+        decimal _highbound = 1M;
+        decimal _step = 0.1M;
 
-		bool _drawing;
-		bool _initialised;
-		string _caption;
+        bool _drawing;
+        bool _initialised;
+        string _caption;
 
-		ColorMatrix _currentMatrix;
-		ButtonEffect _effect;
+        ColorMatrix _currentMatrix;
+        ButtonEffect _effect;
 
-		public ButtonEffect Effect
-		{
-			get { return _effect; }
-			set { _effect = value; }
-		}
+        public ButtonEffect Effect
+        {
+            get { return _effect; }
+            set { _effect = value; }
+        }
 
-		Color _fontColour = Color.Black;
+        Color _fontColour = Color.Black;
 
-		public ColourEditor(ButtonEffect effect, string caption)
-		{
-			InitializeComponent();
+        public ColourEditor(ButtonEffect effect, string caption)
+        {
+            InitializeComponent();
 
-			_currentMatrix = ButtonImages.GetMatrix(effect);
+            _effect = effect;
+            _caption = caption;
 
-			_effect = effect;
-			_caption = caption;
+            this.Text = "Editing the " + caption + " button";
 
-			this.Text = "Editing the " + caption + " button";
+            UpdateMatrix(ButtonImages.GetMatrix(effect));
+            DrawKey();
 
-			SetUpdownValuesFromMatrix();
-			DrawKey();
+            UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { DrawKey(); };
+        }
 
-			// UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { ResetKey(false); };
-		}
+        private void UpdateMatrix(ColorMatrix cm)
+        {
+            _currentMatrix = cm;
+            SetUpdownValuesFromMatrix();
+        }
 
-		void SetUpdownValuesFromMatrix()
-		{
-			_drawing = false;
+        void SetUpdownValuesFromMatrix()
+        {
+            _drawing = false;
 
-			foreach (Control con in Controls)
-			{
-				NumericUpDown updown = (con as NumericUpDown);
-				if (updown != null)
-				{
-					if (!_initialised)
-					{
-						updown.DecimalPlaces = 1;
-						updown.Minimum = _lowbound;
-						updown.Maximum = _highbound;
-						updown.Increment = _step;
-					}
+            foreach (Control con in Controls)
+            {
+                NumericUpDown updown = (con as NumericUpDown);
+                if (updown != null)
+                {
+                    if (!_initialised)
+                    {
+                        updown.DecimalPlaces = 1;
+                        updown.Minimum = _lowbound;
+                        updown.Maximum = _highbound;
+                        updown.Increment = _step;
+                    }
 
-					updown.ValueChanged -= UpdownValueChanged;
-					updown.Value = GetValue(updown.Name);
-					updown.ValueChanged += new EventHandler(UpdownValueChanged);
-				}
+                    updown.ValueChanged -= UpdownValueChanged;
+                    updown.Value = GetValue(updown.Name);
+                    updown.ValueChanged += UpdownValueChanged;
+                }
 
-			}
+            }
 
-			_drawing = true;
-			_initialised = true;
+            _drawing = true;
+            _initialised = true;
 
-		}
+        }
 
-		Decimal GetValue(string name)
-		{
-			// Access the appropriate property of the matrix:
-			object value = _currentMatrix.GetType().GetProperty(name).GetValue(_currentMatrix, null);
-			Decimal dvalue;
-			if (Decimal.TryParse(value.ToString(), out dvalue))
-				return dvalue;
-			else
-				return Decimal.Zero;
+        Decimal GetValue(string name)
+        {
+            // Access the appropriate property of the matrix:
+            object value = _currentMatrix.GetType().GetProperty(name).GetValue(_currentMatrix, null);
+            Decimal dvalue;
+            if (Decimal.TryParse(value.ToString(), out dvalue))
+                return dvalue;
+            else
+                return Decimal.Zero;
 
-		}
+        }
 
 
-		void UpdownValueChanged(object sender, EventArgs e)
-		{
-			if (_drawing)
-			{
-				UpdateMatrixFromControls();
-				SaveSettings();
-				DrawKey();
-			}
-		}
+        void UpdownValueChanged(object sender, EventArgs e)
+        {
+            if (_drawing)
+            {
+                UpdateMatrixFromControls();
+                SaveSettings();
+            }
+        }
 
-		private void UpdateMatrixFromControls()
-		{
-			_currentMatrix = new ColorMatrix(
-				new float[][]
+        private void UpdateMatrixFromControls()
+        {
+            _currentMatrix = new ColorMatrix(
+                new float[][]
 				 {
 					new float[] {(float)Matrix00.Value, (float)Matrix01.Value, (float)Matrix02.Value, (float)Matrix03.Value, (float)Matrix04.Value},
 					new float[] {(float)Matrix10.Value, (float)Matrix11.Value, (float)Matrix12.Value, (float)Matrix13.Value, (float)Matrix14.Value},
@@ -111,118 +114,100 @@ namespace KeyMapper
 					new float[] {(float)Matrix30.Value, (float)Matrix31.Value, (float)Matrix32.Value, (float)Matrix33.Value, (float)Matrix34.Value},
 					new float[] {(float)Matrix40.Value, (float)Matrix41.Value, (float)Matrix42.Value, (float)Matrix43.Value, (float)Matrix44.Value}});
 
-		}
+        }
 
-		private void DrawKey()
-		{
+        private void DrawKey()
+        {
 
-			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _fontColour);
+            Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _fontColour);
 
-			if (KeyBox.Image != null)
-				KeyBox.Image.Dispose();
+            if (KeyBox.Image != null)
+                KeyBox.Image.Dispose();
 
-			KeyBox.Image = bmp;
+            KeyBox.Image = bmp;
 
-		}
+        }
 
-		private void ResetKey(bool save)
-		{
-			_currentMatrix = ButtonImages.GetMatrix(_effect, true);
-			_fontColour = ButtonImages.GetFontColour(_effect, true);
+        private void ResetButtonClick(object sender, EventArgs e)
+        {
+            // Passing true to ignore user colours and fonts.
+            UpdateMatrix(ButtonImages.GetMatrix(_effect, true));
+            _fontColour = ButtonImages.GetFontColour(_effect, true);
 
-			SetUpdownValuesFromMatrix();
-			if (save)
-				SaveSettings();
-
-			DrawKey();
-		}
-
-		private void ResetButtonClick(object sender, EventArgs e)
-		{
-			ResetKey(true);
-		}
+            SaveSettings();
+        }
 
 
-		private void BlankButtonClick(object sender, EventArgs e)
-		{
-			_currentMatrix = new ColorMatrix();
-			_fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
+        private void BlankButtonClick(object sender, EventArgs e)
+        {
+            UpdateMatrix(new ColorMatrix());
+            _fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
 
-			SetUpdownValuesFromMatrix();
-			SaveSettings();
-			DrawKey();
-		}
+            SaveSettings();
+        }
 
-		private void ColourEditorFormClosed(object sender, FormClosedEventArgs e)
-		{
-			SaveUserSettings();
-		}
+        private void ColourEditorFormClosed(object sender, FormClosedEventArgs e)
+        {
+            SaveUserSettings();
+        }
 
-		private void SaveUserSettings()
-		{
-			Properties.Settings userSettings = new Properties.Settings();
-			userSettings.ColourEditorLocation = this.Location;
-			userSettings.Save();
-		}
+        private void SaveUserSettings()
+        {
+            Properties.Settings userSettings = new Properties.Settings();
+            userSettings.ColourEditorLocation = this.Location;
+            userSettings.Save();
+        }
 
-		private void SaveSettings()
-		{
-			UserColourSettingManager.SaveSetting(_effect, _currentMatrix, _fontColour.ToArgb());
-		}
+        private void SaveSettings()
+        {
+            UserColourSettingManager.SaveSetting(_effect, _currentMatrix, _fontColour.ToArgb());
+        }
 
-		private void TextButtonClick(object sender, EventArgs e)
-		{
-			ColorDialog colourPicker = new ColorDialog();
+        private void TextButtonClick(object sender, EventArgs e)
+        {
+            ColorDialog colourPicker = new ColorDialog();
 
-			// Sets the initial color select to the current text color.
-			colourPicker.Color = _fontColour;
+            // Sets the initial color select to the current text color.
+            colourPicker.Color = _fontColour;
 
-			// Update the text box color if the user clicks OK 
-			if (colourPicker.ShowDialog() == DialogResult.OK)
-			{
-				_fontColour = colourPicker.Color;
-				SaveSettings();
-				DrawKey();
+            if (colourPicker.ShowDialog() == DialogResult.OK)
+            {
+                _fontColour = colourPicker.Color;
+                SaveSettings();
 
-			}
-
-		}
+            }
+        }
 
 
-		private void RandomizeButtonClick(object sender, EventArgs e)
-		{
-			_currentMatrix = new ColorMatrix();
-			SetUpdownValuesFromMatrix();
-			_drawing = false;
+        private void RandomizeButtonClick(object sender, EventArgs e)
+        {
+            ColorMatrix cm = new ColorMatrix();
 
-			int numberOfChanges = 5;
+            int numberOfChanges = 10;
 
-			Random r = new Random();
+            Random r = new Random();
 
-			for (int i = 0; i < numberOfChanges; i++)
-			{
-				int x = r.Next(0, 4);
-				int y = r.Next(0, 2);
+            for (int i = 0; i < numberOfChanges; i++)
+            {
+                int x = r.Next(0, 4);
+                int y = r.Next(0, 2);
 
-				string name = "Matrix" + x.ToString(CultureInfo.InvariantCulture) + y.ToString(CultureInfo.InvariantCulture);
+                string name = "Matrix" + x.ToString(CultureInfo.InvariantCulture) + y.ToString(CultureInfo.InvariantCulture);
+                float val = (r.Next(-10, 11) / 10F);
 
-				(this.Controls[name] as NumericUpDown).Value = (r.Next(-10, 11) / 10M);
-			
-			}
+                // Update control...
+                // (this.Controls[name] as NumericUpDown).Value = val;
 
-			_fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
-			_drawing = true;
+                // Or update field.
+                cm.GetType().GetProperty(name).SetValue(cm, val, null);
+            }
 
-			UpdateMatrixFromControls();
+            _fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
+            UpdateMatrix(cm);
 
-			SaveSettings();
-			DrawKey();
+            SaveSettings();
 
-
-		}
-
-
-
-	}
+        }
+    }
 
 }
