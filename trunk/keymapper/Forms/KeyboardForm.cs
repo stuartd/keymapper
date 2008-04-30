@@ -9,24 +9,13 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using System.Configuration;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
+
 
 	public partial class KeyboardForm : KMBaseForm
 	{
 
-		#region Internal class for pinvoke declarations
-
-		internal class NativeMethods
-		{
-			private NativeMethods() { }
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode)]
-			internal extern static void LockWindowUpdate(IntPtr hWnd);
-
-		}
-
-		#endregion
 
 		#region Fields and properties
 
@@ -106,15 +95,23 @@ namespace KeyMapper
 
 			Properties.Settings userSettings = new Properties.Settings();
 
-			bool firstrun = ! userSettings.UserHasSavedSettings;
+			bool firstrun = !userSettings.UserHasSavedSettings;
 
 			Point savedPosition = userSettings.KeyboardFormLocation;
 			int savedWidth = userSettings.KeyboardFormWidth;
 
+
 			if (firstrun || savedPosition.IsEmpty)
-				FormsManager.PositionMainForm() ;
+				FormsManager.PositionMainForm();
 			else
 				this.Location = savedPosition;
+
+			// Form hasn't been sized yet, but can test to make sure the saved position is at least on the screen.
+			if (FormsManager.SavedLocationIsOnScreen(savedPosition) == false)
+			{
+				FormsManager.PositionMainForm();
+				FormsManager.SizeMainForm();
+			}
 
 			if (firstrun || savedWidth < this.MinimumSize.Width)
 			{
@@ -897,7 +894,7 @@ namespace KeyMapper
 		}
 
 
-		public void KeyboardFormResizeEnd(object sender, EventArgs e)
+		private void KeyboardFormResizeEnd(object sender, EventArgs e)
 		{
 			if (Size != _lastSize) // Not just a move (which fires this too)
 			{
@@ -1088,7 +1085,7 @@ namespace KeyMapper
 
 		private void arrangeWindowsMenuItemClick(object sender, EventArgs e)
 		{
-			FormsManager.ResetAllForms();
+			FormsManager.ArrangeAllOpenForms();
 		}
 
 		private void showHelpMenuItemClick(object sender, EventArgs e)
@@ -1103,6 +1100,25 @@ namespace KeyMapper
 		}
 
 		#endregion
+
+		#region Tests
+
+		//private void stressTestToolStripMenuItem_Click(object sender, EventArgs e)
+		//{
+
+		//    Random r = new Random();
+		//    for (int i = 1; i < 1000; i++)
+		//    {
+		//        int val = r.Next(KeyboardListCombo.Items.Count);
+		//        KeyboardListCombo.SelectedIndex = val;
+		//        Application.DoEvents();
+
+		//    }
+
+		//}
+
+		#endregion
+
 	}
 
 }

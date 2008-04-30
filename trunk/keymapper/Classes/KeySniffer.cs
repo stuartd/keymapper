@@ -3,12 +3,13 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
+	
+	public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
 	class KeySniffer : IDisposable
 	{
-
 		#region Fields, properties, constants
 
 		private const int WH_KEYBOARD_LL = 13;
@@ -28,7 +29,7 @@ namespace KeyMapper
 		private bool disposed = false;
 
 		public event EventHandler<KeyMapperKeyPressedEventArgs> KeyPressed;
-		internal delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+		
 
 		#endregion
 
@@ -205,34 +206,6 @@ namespace KeyMapper
 				}
 			}
 			return NativeMethods.CallNextHookEx(_hookID, nCode, wParam, lParam);
-		}
-
-		#endregion
-
-		#region Internal class for DLLImports
-
-		internal class NativeMethods
-		{
-            private NativeMethods() { }
-
-			// Marshal the delegate otherwise it get's GCd.
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern IntPtr SetWindowsHookEx(int idHook, [MarshalAs(UnmanagedType.FunctionPtr)] LowLevelKeyboardProc lpfn, IntPtr hMod, int dwThreadId);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			[return: MarshalAs(UnmanagedType.SysInt)]
-			internal static extern IntPtr UnhookWindowsHookEx(IntPtr hhk);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
-					IntPtr wParam, IntPtr lParam);
-
-			[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern IntPtr GetModuleHandle(string lpModuleName);
-
-			//[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			//internal static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
-
 		}
 
 		#endregion

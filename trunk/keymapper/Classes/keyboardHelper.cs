@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	/// <summary>
 	///  Static class providing Keyboard helper methods
@@ -55,7 +55,8 @@ namespace KeyMapper
 		public static int SetLocale(string locale)
 		{
 			UnloadLayout();
-			_currentInputLocaleIdentifier = (IntPtr)NativeMethods.LoadKeyboardLayout(locale, KLF_ACTIVATE | KLF_SUBSTITUTE_OK);
+			_currentInputLocaleIdentifier = (IntPtr)NativeMethods.LoadKeyboardLayout(
+				locale, NativeMethods.KLF_ACTIVATE | NativeMethods.KLF_SUBSTITUTE_OK);
 
 			// While we have it, get it's HKL and return the low word of it:
 			// (this allows the appropriate culture to be loaded)
@@ -225,8 +226,10 @@ namespace KeyMapper
 		public static void PressKey(ToggleKey keycode)
 		{
 			// All the ToggleKeys are extended. Press once for down, once for up.
-			NativeMethods.keybd_event((byte)keycode, 0x45, (uint)(KEYEVENTF_EXTENDEDKEY | 0), UIntPtr.Zero);
-			NativeMethods.keybd_event((byte)keycode, 0x45, (uint)(KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP), UIntPtr.Zero);
+			NativeMethods.keybd_event((byte)keycode, 0x45, 
+				(uint)	(NativeMethods.KEYEVENTF_EXTENDEDKEY | 0), UIntPtr.Zero);
+			NativeMethods.keybd_event((byte)keycode, 0x45, 
+				(uint)(NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP), UIntPtr.Zero);
 		}
 
 		//public static void PressKey(int scancode)
@@ -238,7 +241,7 @@ namespace KeyMapper
 
 		public static string GetCurrentKeyboardLocale()
 		{
-			System.Text.StringBuilder buffer = new System.Text.StringBuilder(new string(' ', KL_NAMELENGTH));
+			System.Text.StringBuilder buffer = new System.Text.StringBuilder(new string(' ', NativeMethods.KL_NAMELENGTH));
 			int result;
 			// GetKeyboardLayoutName puts the current locale into the passed buffer
 			result = NativeMethods.GetKeyboardLayoutName(buffer);
@@ -329,70 +332,6 @@ namespace KeyMapper
 
 			return keyboardname;
 		}
-
-
-		#region NativeMethods class for DLLImports
-
-		// Doesn't need to be static.
-		internal class NativeMethods
-		{
-			private NativeMethods() { }
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "MapVirtualKeyExW", ExactSpelling = true)]
-			internal static extern uint MapVirtualKeyEx(
-				uint uCode,
-				uint uMapType,
-				IntPtr dwhkl);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern IntPtr GetKeyboardLayout(int idThread);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-			internal static extern int GetKeyboardLayoutList(int nBuff, [Out, MarshalAs(UnmanagedType.LPArray)] int[] lpList);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "LoadKeyboardLayoutW", ExactSpelling = true)]
-			internal static extern IntPtr LoadKeyboardLayout(string pwszKLID, uint Flags);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			[return: MarshalAs(UnmanagedType.Bool)]
-			internal static extern bool UnloadKeyboardLayout(IntPtr hkl);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, ThrowOnUnmappableChar = true)]
-			internal static extern int ToUnicodeEx(
-				uint wVirtKey,
-				uint wScanCode,
-				byte[] lpKeyState,
-				StringBuilder pwszBuff,
-				int cchBuff,
-				uint wFlags,
-				IntPtr hkl);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern int GetKeyboardLayoutName([Out] StringBuilder pwszKLID);
-
-			[DllImport("shlwapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern uint SHLoadIndirectString(string pszSource, StringBuilder pszOutBuf, uint cchOutBuf, IntPtr ppvReserved);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-			internal static extern short GetKeyState(int nKey);
-
-		}
-
-		#endregion
-
-		#region Constants
-
-		private const int KEYEVENTF_EXTENDEDKEY = 0x1;
-		private const int KEYEVENTF_KEYUP = 0x2;
-		private const int KL_NAMELENGTH = 9;
-		private const int KLF_ACTIVATE = 0x00000001;
-		private const uint KLF_NOTELLSHELL = 0x00000080;
-		private const uint KLF_SUBSTITUTE_OK = 0x00000002;
-
-		#endregion
 
 
 	}

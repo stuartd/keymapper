@@ -6,13 +6,13 @@ using System.Drawing.Imaging;
 using System.Configuration;
 using Microsoft.Win32;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 	static class UserColourSettingManager
 	{
 
-		public static event EventHandler<EventArgs> ColoursChanged;
+		public static event EventHandler<EventArgs> ColoursChanged ;
 		static bool _loaded ;
 
 		static Dictionary<ButtonEffect, UserColourSetting> _settings = new Dictionary<ButtonEffect, UserColourSetting>();
@@ -27,7 +27,7 @@ namespace KeyMapper
 			_settings.Clear();
 			foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
 			{
-				UserColourSetting setting = GetColourSettingsFromRegistry(effect);
+				UserColourSetting setting = GetColourSettingFromRegistry(effect);
 				if (setting != null)
 					_settings.Add(effect, setting);
 			}
@@ -88,7 +88,7 @@ namespace KeyMapper
 		}
 
 
-		private static UserColourSetting GetColourSettingsFromRegistry(ButtonEffect effect)
+		private static UserColourSetting GetColourSettingFromRegistry(ButtonEffect effect)
 		{
 
 			// Need to be defensively minded as user could change, 

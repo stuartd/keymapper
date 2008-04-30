@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	public partial class MappingListForm : KMBaseForm
 	{
@@ -18,6 +18,8 @@ namespace KeyMapper
 
 		public MappingListForm()
 		{
+			//TODO: Look into changing the column header colours as they are much too dark on XP without themes or w2k
+
 			InitializeComponent();
 			Populate();
 			MappingsManager.MappingsChanged += HandleMappingsChanged;
@@ -74,7 +76,7 @@ namespace KeyMapper
 			}
 			catch (InvalidOperationException)
 			{
-				MessageBox.Show("Still getting that bug.");
+				Console.WriteLine("Unexpected return of the AddRowsToGrid bug!");
 			}
 
 			// Resize according to number of mappings

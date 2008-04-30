@@ -1,4 +1,4 @@
-﻿namespace KeyMapper.Properties
+﻿namespace RoseHillSolutions.KeyMapper.Properties
 {
 	
 	// This class allows you to handle specific events on the settings class:

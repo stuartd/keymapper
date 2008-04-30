@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
     public partial class AboutForm : KMBaseForm
     {

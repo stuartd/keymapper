@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	public interface IKeyData
 	{

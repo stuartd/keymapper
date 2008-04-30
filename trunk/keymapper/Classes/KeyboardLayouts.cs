@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 	public enum KeyboardLayoutType

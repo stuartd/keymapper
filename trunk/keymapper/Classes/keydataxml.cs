@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.XPath;
 using System.Globalization;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 	class KeyDataXml : IKeyData
