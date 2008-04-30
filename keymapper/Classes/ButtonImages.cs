@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 	public static class ButtonImages
@@ -33,7 +33,7 @@ namespace KeyMapper
 		// Custom ColorMatrix and font colour
 		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ColorMatrix cm, Color fontColour)
 		{
-			Bitmap bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None);
+			Bitmap bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None, false);
 			bmp = Transform(bmp, cm);
 			return WriteCaption(bmp, caption, false, false, fontColour);
 		}
@@ -52,7 +52,7 @@ namespace KeyMapper
 															int verticalStretch, float scale, ButtonEffect effect, string caption)
 		{
 
-			Bitmap bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect);
+			Bitmap bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect, true);
 
 			Color fontColour = GetFontColour(effect);
 
@@ -165,7 +165,7 @@ namespace KeyMapper
 
 		}
 
-		private static Bitmap GetBitmap(BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect)
+		private static Bitmap GetBitmap(BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect, bool transform)
 		{
 			if (scale != _lastScale)
 				AppController.SetFontSizes(scale);
@@ -209,7 +209,8 @@ namespace KeyMapper
 			// Now all decisions have been made..
 			_lastScale = scale;
 
-			bmp = ApplyEffect(bmp, effect);
+			if (transform)
+				bmp = ApplyEffect(bmp, effect);
 
 			return bmp;
 

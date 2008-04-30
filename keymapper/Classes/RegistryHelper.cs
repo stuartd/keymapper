@@ -2,7 +2,7 @@ using System;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 	#region Public methods
@@ -110,39 +110,7 @@ namespace KeyMapper
 
 		#endregion
 
-		internal class NativeMethods
-		{
-			// Doesn't need to be static
-			private NativeMethods() { }
-
-			[DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
-			public static extern int RegOpenKeyEx
-				(UIntPtr hKey,
-				string lpSubKey,
-				uint ulOptions,
-				int samDesired,
-				out UIntPtr phkResult);
-
-			[DllImport("advapi32.dll")]
-			public extern static uint RegQueryInfoKey
-				(UIntPtr hkey,
-				IntPtr lpClass,
-				IntPtr lpcbClass,
-				IntPtr lpReserved,
-				IntPtr lpcSubKeys,
-				IntPtr lpcbMaxSubKeyLen,
-				IntPtr lpcbMaxClassLen,
-				IntPtr lpcValues,
-				IntPtr lpcbMaxValueNameLen,
-				IntPtr lpcbMaxValueLen,
-				IntPtr lpcbSecurityDescriptor,
-				out Int64 lpftLastWriteTime);
-
-			[DllImport("Advapi32.dll")]
-			public static extern uint RegCloseKey(UIntPtr hKey);
 		}
-
-	}
 
 	//class GRKT_Test
 	//{

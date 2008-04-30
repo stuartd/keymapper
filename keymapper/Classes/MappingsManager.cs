@@ -4,7 +4,7 @@ using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	public static class MappingsManager
 	{
@@ -455,8 +455,6 @@ namespace KeyMapper
 				default:
 					return;
 			}
-
-			// System.Windows.Forms.MessageBox.Show("Saving " + maps.Count.ToString() + " mappings");
 
 			RegistryHive hive = 0;
 			string keyname = "", valuename = "";

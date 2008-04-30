@@ -1,4 +1,4 @@
-﻿namespace KeyMapper
+﻿namespace RoseHillSolutions.KeyMapper
 {
 	partial class HelpForm
 	{
@@ -75,7 +75,7 @@
 			this.chkShowHelpAtStartup.Checked = true;
 			this.chkShowHelpAtStartup.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.chkShowHelpAtStartup.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.chkShowHelpAtStartup.Location = new System.Drawing.Point(22, 3);
+			this.chkShowHelpAtStartup.Location = new System.Drawing.Point(18, 3);
 			this.chkShowHelpAtStartup.Name = "chkShowHelpAtStartup";
 			this.chkShowHelpAtStartup.Size = new System.Drawing.Size(167, 20);
 			this.chkShowHelpAtStartup.TabIndex = 3;
@@ -86,7 +86,7 @@
 			// 
 			this.label4.AutoSize = true;
 			this.label4.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label4.Location = new System.Drawing.Point(17, 111);
+			this.label4.Location = new System.Drawing.Point(15, 111);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(446, 32);
 			this.label4.TabIndex = 4;
@@ -97,7 +97,7 @@
 			// 
 			this.label5.AutoSize = true;
 			this.label5.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label5.Location = new System.Drawing.Point(17, 161);
+			this.label5.Location = new System.Drawing.Point(15, 161);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(453, 32);
 			this.label5.TabIndex = 1;
@@ -108,7 +108,7 @@
 			// 
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panel1.Controls.Add(this.chkShowHelpAtStartup);
-			this.panel1.Location = new System.Drawing.Point(0, 206);
+			this.panel1.Location = new System.Drawing.Point(-1, 206);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(500, 26);
 			this.panel1.TabIndex = 5;

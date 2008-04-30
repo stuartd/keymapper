@@ -82,6 +82,7 @@
     <Compile Include="Classes\AppController.cs" />
     <Compile Include="Classes\FormsManager.cs" />
     <Compile Include="Classes\MappingsManager.cs" />
+    <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\RegistryHelper.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\UserColours.cs" />

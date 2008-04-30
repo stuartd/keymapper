@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	public partial class HelpForm : KMBaseForm
 	{
@@ -55,14 +55,5 @@ namespace KeyMapper
 
 	}
 
-	internal class NativeMethods
-	{
-
-		[DllImportAttribute("user32.dll")]
-		public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-
-		[DllImportAttribute("user32.dll")]
-		public static extern bool ReleaseCapture();
-	}
 
 }

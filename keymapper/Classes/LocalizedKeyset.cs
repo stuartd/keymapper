@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 	/// <summary>

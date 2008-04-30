@@ -1,6 +1,6 @@
 using System;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 	public struct KeyMapping

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	class KeyPictureBox : PictureBox
 	{
@@ -323,9 +323,9 @@ namespace KeyMapper
 		void KeyPictureBoxDragDrop(object sender, DragEventArgs e)
 		{
 
-			if (e.Data.GetDataPresent("KeyMapper.KeyMapping"))
+			if (e.Data.GetDataPresent("RoseHillSolutions.KeyMapper.KeyMapping"))
 			{
-				KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
+				KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("RoseHillSolutions.KeyMapper.KeyMapping");
 
 				if (MappingsManager.AddMapping(new KeyMapping(this.Map.From, dragged_map.From)) == false)
 				{
@@ -338,7 +338,7 @@ namespace KeyMapper
 		void KeyPictureBoxDragOver(object sender, DragEventArgs e)
 		{
 
-			if (e.Data.GetDataPresent("KeyMapper.KeyMapping") == false)
+			if (e.Data.GetDataPresent("RoseHillSolutions.KeyMapper.KeyMapping") == false)
 			{
 				e.Effect = DragDropEffects.None;
 				return;
@@ -347,7 +347,7 @@ namespace KeyMapper
 			if (_isPauseButton)
 				return;
 
-			KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
+			KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("RoseHillSolutions.KeyMapper.KeyMapping");
 
 			if (dragged_map.To.Scancode >= 0)
 			{
@@ -392,15 +392,6 @@ namespace KeyMapper
 			}
 			this.Image = null;
 
-		}
-
-		private class NativeMethods
-		{
-			private NativeMethods() { }
-
-			[DllImport("user32.dll", SetLastError = true)]
-			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool DestroyIcon(IntPtr hIcon);
 		}
 
 	}

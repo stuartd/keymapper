@@ -4,16 +4,16 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	static class FormsManager
 	{
 
 		static KeyboardForm _mainForm;
-		static ColourList _colourMapForm = null;
-		static MappingListForm _mapListForm = null;
+		static ColourList _colourMapForm ;
+		static MappingListForm _mapListForm ;
 		static Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
-		static HelpForm _helpForm = null;
+		static HelpForm _helpForm ;
 
 		public static void RegisterMainForm(KeyboardForm form)
 		{
@@ -30,8 +30,9 @@ namespace KeyMapper
 				_helpForm = null;
 			else if (sender is ColourEditor)
 			{
-				if (_editorForms.ContainsKey(((ColourEditor)sender).Effect))
-					_editorForms.Remove(((ColourEditor)sender).Effect);
+				ColourEditor ce = sender as ColourEditor;
+				if (_editorForms.ContainsKey(ce.Effect))
+					_editorForms.Remove(ce.Effect);
 			}
 			_mainForm.RegenerateMenuExternal();
 
@@ -56,7 +57,7 @@ namespace KeyMapper
 
 			newForm = new ColourEditor(effect, text);
 
-			PositionColourEditorForm(newForm, 0);
+			PositionColourEditorForm(newForm);
 
 			_editorForms.Add(effect, newForm);
 			newForm.FormClosed += ChildFormClosed;
@@ -64,25 +65,25 @@ namespace KeyMapper
 
 		}
 
-		private static void PositionColourEditorForm(ColourEditor ce, int index)
+		private static Point GetColourEditorFormStartingPosition(ColourEditor ce)
+		{
+			if (_colourMapForm != null) // Start from top right of colour map
+				return GetNewLocation(_colourMapForm, ce, ChildFormPosition.TopRight);
+			else // Start from bottom left of main form.
+				return GetNewLocation(_mainForm, ChildFormPosition.BottomLeft);  // Risque as isn't a child, but will work.
+
+		}
+
+		private static void PositionColourEditorForm(ColourEditor ce)
 		{
 
 			// Now, where to put it..
-			Point formLocation = Point.Empty;
-
-			if (index != 0) // Forms are being reset.
-			{
-				if (_colourMapForm != null) // Start from top right of colour map
-					formLocation = GetNewLocation(_colourMapForm, ce, ChildFormPosition.TopRight);
-				else // Start from bottom left of main form.
-					formLocation = GetNewLocation(_mainForm, ChildFormPosition.BottomLeft);  // Risque as isn't a child, but will work.
-			}
+			Point formLocation = GetColourEditorFormStartingPosition(ce);
 
 			// If there are no other forms use the last closed position (if there is one)
 			// (current form must be new and hasn't been added to collection yet)
 			if (_editorForms.Count == 0)
 			{
-				System.Diagnostics.Debug.Assert(index == 0);
 
 				Properties.Settings userSettings = new Properties.Settings();
 				Point savedLocation = userSettings.ColourEditorLocation;
@@ -99,32 +100,25 @@ namespace KeyMapper
 			else
 			{
 				Point p;
-				if (index == 0)
+
+				// There are 1-many forms open. They could be all over the screen:
+				// pick the bottommost rightmost one and cascade off it
+				// (Using top left means having to find the topleftmost form
+				// that isn't cascaded, 
+
+				p = new Point(-5000, -5000);
+
+				foreach (ColourEditor openform in _editorForms.Values)
 				{
-					// There are 1-many forms open. They could be all over the screen:
-					// pick the bottommost rightmost one and cascade off it
-					// (Using top left means having to find the topleftmost form
-					// that isn't cascaded, 
+					if (openform == null || openform == ce)
+						continue;
 
-					p = new Point(-5000, -5000) ;
-
-					foreach (ColourEditor openform in _editorForms.Values)
-					{
-						if (openform == null || openform == ce)
-							continue;
-
-						if (openform.Location.X > p.X && openform.Location.Y > p.Y)
-							p = openform.Location;
-					}
-
-					formLocation = new Point(p.X + SystemInformation.CaptionHeight, p.Y + SystemInformation.CaptionHeight);
-
+					if (openform.Location.X > p.X && openform.Location.Y > p.Y)
+						p = openform.Location;
 				}
-				else
-				{
-					int offset = SystemInformation.CaptionHeight * (index - 1);
-					formLocation = new Point(formLocation.X + offset, formLocation.Y + offset);
-				}
+
+				formLocation = new Point(p.X + 15, p.Y + SystemInformation.CaptionHeight + 5);
+
 
 			}
 
@@ -132,7 +126,7 @@ namespace KeyMapper
 
 		}
 
-		public static void ResetAllForms()
+		public static void ArrangeAllOpenForms()
 		{
 
 			// PositionMainForm();
@@ -148,16 +142,46 @@ namespace KeyMapper
 			if (_colourMapForm != null)
 				PositionColourMapForm();
 
+			CascadeColourEditorForms();
+		}
+
+		private static void CascadeColourEditorForms()
+		{
 			int i = 0;
+
+			Point startingPosition = Point.Empty;
+
 			foreach (ColourEditor ce in _editorForms.Values)
 			{
 				if (ce != null)
 				{
+					if (startingPosition.IsEmpty)
+						startingPosition = GetColourEditorFormStartingPosition(ce);
 					i++;
-					PositionColourEditorForm(ce, i);
+					int offset = SystemInformation.CaptionHeight * (i - 1);
+					ce.Location = new Point(startingPosition.X + offset, startingPosition.Y + offset);
+					ce.BringToFront(); // This means bringing each to the front, so they display in correct order.
+				}
+			}
+
+
+		}
+
+		public static void CloseAllEditorForms()
+		{
+			foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
+			{
+				if (_editorForms.ContainsKey(effect))
+				{
+					ColourEditor ce = _editorForms[effect];
+					if (ce != null)
+					{
+						ce.Close();
+					}
 				}
 			}
 		}
+
 
 		public static bool IsColourMapFormOpen()
 		{
@@ -215,12 +239,13 @@ namespace KeyMapper
 				// there will be enough space at a low resolution.
 				// 3) Dump it bottom-centre and accept the fact it probably overlays the other forms.
 				// 4) A combination of 2) and 3)
+				// 4a) Put it next to the colour map form, accept it may overlap the mapping list form.
 
-
-				// TODO: Do.
-
+				PositionChildForm(_colourMapForm, _helpForm, ChildFormPosition.TopRight);
+				return;		
 
 			}
+		
 
 			// First run - put help form in front of keyboard so users notice it.
 			PositionChildForm(_helpForm, ChildFormPosition.MiddleLeft);
@@ -341,19 +366,35 @@ namespace KeyMapper
 			_colourMapForm.FormClosed += ChildFormClosed;
 			_colourMapForm.Show((IWin32Window)_mainForm);
 
-
 		}
 
 		public static void SizeMainForm()
 		{
-			_mainForm.Width = (int)(SystemInformation.PrimaryMonitorSize.Width * 0.95F);
+			_mainForm.Width = (int)(SystemInformation.WorkingArea.Width * 0.95F);
 		}
 
 		public static void PositionMainForm()
 		{
 			_mainForm.Location = new Point(
-					(int)(SystemInformation.PrimaryMonitorSize.Width * 0.025F),
-					(int)(SystemInformation.PrimaryMonitorSize.Height * 0.025F));
+					(int)(SystemInformation.WorkingArea.Width * 0.025F),
+					(int)(SystemInformation.WorkingArea.Height * 0.025F));
+		}
+
+		public static bool SavedLocationIsOnScreen(Point savedLocation)
+
+		{
+			// Does this point fit within the screen resolution of the screen it's in?
+
+			// TODO: Work out how this will work. Bear in mind form hasn't been resized yet.
+
+			//Rectangle r = Screen.GetWorkingArea(savedLocation) ;
+
+			//if (savedLocation.X < (r.Width) || savedLocation.Y < (r.Height))
+			//{
+			//    return false;
+			//}
+			return true ;
+
 		}
 
 		private static void PositionChildForm(Form child, ChildFormPosition position)

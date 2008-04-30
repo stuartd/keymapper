@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	class AppMutex : IDisposable
 	{
@@ -95,28 +95,6 @@ namespace KeyMapper
 		}
 
 		#endregion
-
-		internal class NativeMethods
-		{
-
-            private NativeMethods() { }
-
-			[DllImport("user32.dll")]
-			[return: MarshalAs(UnmanagedType.Bool)]
-			internal static extern bool SetForegroundWindow(IntPtr hWnd);
-
-			[DllImport("user32.dll")]
-			[return: MarshalAs(UnmanagedType.Bool)]
-			internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-			[DllImport("user32.dll")]
-			internal static extern int IsIconic(IntPtr hWnd);
-
-			internal const int SW_RESTORE = 9;
-
-		}
-
-
 
 	}
 }

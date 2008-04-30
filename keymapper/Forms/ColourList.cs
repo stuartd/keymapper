@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 
 
@@ -74,9 +74,20 @@ namespace KeyMapper
 				_contextMenu.MenuItems[newItemIndex].Checked = true;
 
 			_contextMenu.MenuItems.Add(new MenuItem("Reset All Colours", ResetAllColours));
+
+			_contextMenu.MenuItems.Add(new MenuItem("Close All Editor Forms", CloseAllEditorForms));
+
 			this.ContextMenu = _contextMenu;
 
+
 		}
+
+		private void CloseAllEditorForms(object sender, EventArgs e)
+		{
+			FormsManager.CloseAllEditorForms();
+		}
+
+
 
 		private void ResetAllColours(object sender, EventArgs e)
 		{
@@ -158,7 +169,20 @@ namespace KeyMapper
 					break;
 			}
 
-			_buttonScaleFactor = 0.75F;
+			// Scale the button size down depending on screen resolution width..
+			// Form hasn't been positioned yet, so look at primary monitor resolution.
+
+			int screenWidth = SystemInformation.PrimaryMonitorSize.Width;
+
+			if (screenWidth < 801)
+				_buttonScaleFactor = 0.35F;
+			else if (screenWidth < 1025)
+				_buttonScaleFactor = 0.4F;
+			else if (screenWidth < 1281)
+				_buttonScaleFactor = 0.5F;
+			else
+				_buttonScaleFactor = 0.5F;
+
 
 			_buttonWidth = (int)(192 * _buttonScaleFactor);
 			_buttonHeight = (int)(128 * _buttonScaleFactor);
@@ -180,6 +204,8 @@ namespace KeyMapper
 
 		private void Redraw(bool reloadMappings)
 		{
+
+			NativeMethods.LockWindowUpdate(this.Handle);
 			_toolTip.RemoveAll();
 			_toolTip.SetToolTip(this, _toolTipText);
 
@@ -192,13 +218,12 @@ namespace KeyMapper
 			for (int i = this.Controls.Count - 1; i >= 0; i--)
 				this.Controls[i].Dispose();
 
-			this.SuspendLayout();
 			this.Refresh();
-			this.ResumeLayout();
 
 			ConstrainForm();
 
 			AddButtons();
+			NativeMethods.LockWindowUpdate(IntPtr.Zero);
 		}
 
 		private void AddButtons()
@@ -391,6 +416,8 @@ namespace KeyMapper
 
 
 	}
+
+
 
 }
 

@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Security.Permissions;
 
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	public class KeyboardListCombo : ComboBox
 	{

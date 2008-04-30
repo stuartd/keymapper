@@ -1,4 +1,4 @@
-namespace KeyMapper
+namespace RoseHillSolutions.KeyMapper
 {
 	partial class KeyboardForm
 	{
@@ -68,16 +68,16 @@ namespace KeyMapper
 			this.windowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mappingListFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.colourMapFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.resetWindowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.arrangeWindowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.aboutKeyMapperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.StatusBar = new System.Windows.Forms.StatusStrip();
 			this.StatusLabelMappings = new System.Windows.Forms.ToolStripStatusLabel();
 			this.StatusLabelRestartLogoff = new System.Windows.Forms.ToolStripStatusLabel();
 			this.StatusLabelReadOnly = new System.Windows.Forms.ToolStripStatusLabel();
 			this.StatusLabelMappingDisplayType = new System.Windows.Forms.ToolStripStatusLabel();
 			this.KeyboardListCombo = new KeyMapper.KeyboardListCombo();
-			this.aboutKeyMapperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu.SuspendLayout();
 			this.StatusBar.SuspendLayout();
 			this.SuspendLayout();
@@ -125,7 +125,7 @@ namespace KeyMapper
 			this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
 			this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitMenuItemClick);
 			// 
@@ -394,7 +394,7 @@ namespace KeyMapper
 			this.windowsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mappingListFormToolStripMenuItem,
             this.colourMapFormToolStripMenuItem,
-            this.resetWindowsToolStripMenuItem});
+            this.arrangeWindowsToolStripMenuItem});
 			this.windowsToolStripMenuItem.Name = "windowsToolStripMenuItem";
 			this.windowsToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
 			this.windowsToolStripMenuItem.Text = "&Windows";
@@ -417,14 +417,14 @@ namespace KeyMapper
 			this.colourMapFormToolStripMenuItem.Text = "&Colour Map";
 			this.colourMapFormToolStripMenuItem.Click += new System.EventHandler(this.showColourMapFormMenuItemClick);
 			// 
-			// resetWindowsToolStripMenuItem
+			// arrangeWindowsToolStripMenuItem
 			// 
-			this.resetWindowsToolStripMenuItem.Name = "resetWindowsToolStripMenuItem";
-			this.resetWindowsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+			this.arrangeWindowsToolStripMenuItem.Name = "arrangeWindowsToolStripMenuItem";
+			this.arrangeWindowsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.W)));
-			this.resetWindowsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-			this.resetWindowsToolStripMenuItem.Text = "&Reset";
-			this.resetWindowsToolStripMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClick);
+			this.arrangeWindowsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+			this.arrangeWindowsToolStripMenuItem.Text = "&Arrange All";
+			this.arrangeWindowsToolStripMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClick);
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -443,6 +443,15 @@ namespace KeyMapper
 			this.showHelpToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
 			this.showHelpToolStripMenuItem.Text = "&Show Help";
 			this.showHelpToolStripMenuItem.Click += new System.EventHandler(this.showHelpMenuItemClick);
+			// 
+			// aboutKeyMapperToolStripMenuItem
+			// 
+			this.aboutKeyMapperToolStripMenuItem.Name = "aboutKeyMapperToolStripMenuItem";
+			this.aboutKeyMapperToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.A)));
+			this.aboutKeyMapperToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+			this.aboutKeyMapperToolStripMenuItem.Text = "About KeyMapper";
+			this.aboutKeyMapperToolStripMenuItem.Click += new System.EventHandler(this.aboutKeyMapperMenuItemClick);
 			// 
 			// StatusBar
 			// 
@@ -525,15 +534,6 @@ namespace KeyMapper
 			this.KeyboardListCombo.TabIndex = 12;
 			this.KeyboardListCombo.TabStop = false;
 			// 
-			// aboutKeyMapperToolStripMenuItem
-			// 
-			this.aboutKeyMapperToolStripMenuItem.Name = "aboutKeyMapperToolStripMenuItem";
-			this.aboutKeyMapperToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.A)));
-			this.aboutKeyMapperToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
-			this.aboutKeyMapperToolStripMenuItem.Text = "About KeyMapper";
-			this.aboutKeyMapperToolStripMenuItem.Click += new System.EventHandler(this.aboutKeyMapperMenuItemClick);
-			// 
 			// KeyboardForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -607,7 +607,7 @@ namespace KeyMapper
 		private System.Windows.Forms.ToolStripMenuItem selectFromListsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private KeyboardListCombo KeyboardListCombo;
-        private System.Windows.Forms.ToolStripMenuItem resetWindowsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arrangeWindowsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showHelpToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem aboutKeyMapperToolStripMenuItem;
 
