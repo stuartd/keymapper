@@ -5,7 +5,7 @@ using System.Security.Permissions;
 [assembly: CLSCompliant(true)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true, UnmanagedCode = true)]
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	class main
 	{
@@ -24,7 +24,7 @@ namespace RoseHillSolutions.KeyMapper
 			Console.Write("Redirecting console output");
 			AppController.RedirectConsoleOutput();
 #endif
-
+			
 			// Look for a running copy and activate it if it exists
 			// (Writing to log if it does)
 			if (AppController.CheckForExistingInstances() == true)
@@ -34,19 +34,13 @@ namespace RoseHillSolutions.KeyMapper
 				return;
 			}
 
-			// Now, look at the arguments passed:
+			// TODO - arguments.
 
-			// First up - look for the flag which orders us to reset the user config..
-
-			foreach (string arg in args)
-			{
-				if (arg == "-reset")
-					AppController.ValidateUserConfigFile();
-			}
 
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+	
 
 			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 			Application.ThreadException += ApplicationThreadException;
@@ -59,7 +53,7 @@ namespace RoseHillSolutions.KeyMapper
 			Application.Run(new KeyboardForm());
 
 			AppController.CloseAppController();
-			Application.ThreadException -= ApplicationThreadException; // Release static event or else..
+			Application.ThreadException -= ApplicationThreadException; // Release static event or else leak.
 			AppDomain.CurrentDomain.UnhandledException -= UnhandledExceptionHandler;
 
 		}

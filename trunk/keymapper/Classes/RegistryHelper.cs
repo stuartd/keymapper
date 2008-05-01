@@ -2,7 +2,7 @@ using System;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 
 	#region Public methods

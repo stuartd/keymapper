@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	/// <summary>
 	///  Static class providing Keyboard helper methods

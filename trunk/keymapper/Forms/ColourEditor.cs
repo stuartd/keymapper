@@ -8,7 +8,7 @@ using System.Xml;
 using System.Text;
 using System.Globalization;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	public partial class ColourEditor : KMBaseForm
 	{

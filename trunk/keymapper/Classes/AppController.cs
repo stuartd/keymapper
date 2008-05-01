@@ -8,7 +8,7 @@ using System.IO;
 using System.Configuration;
 
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 
 	public static class AppController
@@ -47,6 +47,13 @@ namespace RoseHillSolutions.KeyMapper
 		private static bool _isConsoleRedirected;
 		private static StreamWriter _consoleWriterStream;
 		private static string _consoleOutputFilename = "keymapper.log";
+
+		private static bool _userCannotWriteToApplicationRegistryKey;
+
+		public static bool UserCannotWriteToApplicationRegistryKey
+		{
+			get { return AppController._userCannotWriteToApplicationRegistryKey; }
+		}
 
 		// Properties
 
@@ -213,15 +220,32 @@ namespace RoseHillSolutions.KeyMapper
 			// what mappings were in effect the first time the program was run after reboot/logoff.
 
 			// To do that we need a registry key of our very own, so first up:
+			RegistryKey kmregkey = null;
+			try
+			{
+				kmregkey = Registry.CurrentUser.OpenSubKey(_appKeyName, true);
+			}
+			catch (System.Security.SecurityException e)
+			{
+				Console.WriteLine("Cannot access KeyMapper registry key: {0}", e);
+				_userCannotWriteToApplicationRegistryKey = true;
+			}
 
-			RegistryKey kmregkey = Registry.CurrentUser.OpenSubKey(_appKeyName, true);
 			bool savedMappingsExist = true;
 
-			if (kmregkey == null)
+			if (kmregkey == null && _userCannotWriteToApplicationRegistryKey == false)
 			{
 				// Key does not exist, or no permissions to write:
 				// Create it. Or at least try..
-				kmregkey = Registry.CurrentUser.CreateSubKey(_appKeyName);
+				try
+				{
+					kmregkey = Registry.CurrentUser.CreateSubKey(_appKeyName);
+				}
+				catch (System.Security.SecurityException e)
+				{
+					Console.WriteLine("Cannot create KeyMapper registry key: {0}", e);
+					_userCannotWriteToApplicationRegistryKey = true;
+				}
 
 				// At this point, we know that we have no saved record of what the mappings were
 				// previously, as the reg key doesn't exist. In this case, we want to be able to 
@@ -236,16 +260,12 @@ namespace RoseHillSolutions.KeyMapper
 			{
 				kmregkey.Close();
 				// Really should have access to this key as it's in the user hive. But it isn't a requirement, as such.
-				// TODO: Test what happens when user has a) read only access and b) no access
-				// As later we try to save to this key anyway..
 			}
 
 			// Mappings in HKCU override mappings in HKLM
 
 			// If user uses Fast User Switching to switch
 			// to an account which is already logged in, the HKCU mappings disappear.
-
-			// So.
 
 			// Is the current user able to write to the Keyboard Layout key in HKLM??
 			// (This key always exists, Windows recreates it if it's deleted)

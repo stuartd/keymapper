@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Diagnostics;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	public partial class EditMappingForm : KMBaseForm
 	{

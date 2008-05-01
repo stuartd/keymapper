@@ -1,4 +1,4 @@
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	public struct Key
 	{

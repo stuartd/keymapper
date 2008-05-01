@@ -1,4 +1,4 @@
-﻿namespace RoseHillSolutions.KeyMapper
+﻿namespace KeyMapper
 {
     partial class AboutForm
     {
@@ -30,7 +30,6 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
 			this.lblAppTitle = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
@@ -45,15 +44,6 @@
 			this.lblAppTitle.Size = new System.Drawing.Size(155, 31);
 			this.lblAppTitle.TabIndex = 0;
 			this.lblAppTitle.Text = "KeyMapper";
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Verdana", 12.25F);
-			this.label1.Location = new System.Drawing.Point(12, 53);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(0, 20);
-			this.label1.TabIndex = 1;
 			// 
 			// label2
 			// 
@@ -95,9 +85,8 @@
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.lblAppTitle);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -111,8 +100,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblAppTitle;
-        private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label lblAppTitle;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;

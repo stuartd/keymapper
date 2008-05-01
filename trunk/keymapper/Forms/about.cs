@@ -5,14 +5,16 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
-    public partial class AboutForm : KMBaseForm
-    {
-        public AboutForm()
-        {
-            InitializeComponent();
-        }
-    }
+	public partial class AboutForm : KMBaseForm
+	{
+		public AboutForm()
+		{
+			InitializeComponent();
+		}
+
+	}
 }
