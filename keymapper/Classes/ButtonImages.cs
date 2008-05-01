@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 
 	public static class ButtonImages
@@ -123,7 +123,7 @@ namespace RoseHillSolutions.KeyMapper
 
 		#region Private methods
 
-		private static Bitmap StretchBitmap(Bitmap bmp, int horizontalStretch, int verticalStretch)
+		public static Bitmap StretchBitmap(Bitmap bmp, int horizontalStretch, int verticalStretch)
 		{
 
 			Bitmap newbitmap = null;
@@ -498,7 +498,7 @@ namespace RoseHillSolutions.KeyMapper
 
 			switch (effect)
 			{
-				case ButtonEffect.NoMappingAllowed:
+					
 				case ButtonEffect.None:
 					cm = new ColorMatrix();
 					break;
@@ -508,7 +508,7 @@ namespace RoseHillSolutions.KeyMapper
 					break;
 
 				case ButtonEffect.Disabled:
-					cm = Darken();
+					cm = Darken(-0.3F);
 					break;
 
 				case ButtonEffect.MappedPending:
@@ -525,6 +525,10 @@ namespace RoseHillSolutions.KeyMapper
 
 				case ButtonEffect.EnabledPending:
 					cm = GoldenDarken();
+					break;
+
+				case ButtonEffect.NoMappingAllowed:
+					cm = Darken(-0.1F);
 					break;
 			}
 
@@ -543,9 +547,8 @@ namespace RoseHillSolutions.KeyMapper
 				return Transform(bmp, cm);
 		}
 
-		private static ColorMatrix Darken()
+		private static ColorMatrix Darken(float darkFactor)
 		{
-			float darkFactor = -0.3F;
 			return new System.Drawing.Imaging.ColorMatrix(
 				new float[][]
 				 {

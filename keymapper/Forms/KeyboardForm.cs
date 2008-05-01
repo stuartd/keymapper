@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using System.Configuration;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 
 

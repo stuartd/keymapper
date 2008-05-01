@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RoseHillSolutions.KeyMapper.Properties {
+namespace KeyMapper.Properties {
     using System;
     
     

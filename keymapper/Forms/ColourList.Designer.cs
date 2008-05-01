@@ -1,6 +1,6 @@
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
-	partial class ColourList
+	partial class ColourMap
 	{
 		/// <summary>
 		/// Required designer variable.

@@ -9,11 +9,11 @@ using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 
 
-	public partial class ColourList : KMBaseForm
+	public partial class ColourMap : KMBaseForm
 	{
 
 		#region fields
@@ -44,19 +44,30 @@ namespace RoseHillSolutions.KeyMapper
 		ContextMenu _contextMenu;
 
 		ToolTip _toolTip = new ToolTip();
-		string _toolTipText = "Double-click a button to edit the colour: right click for more options";
 		
+		string _toolTipText ;
+
 		#endregion
 
-		public ColourList()
+		public ColourMap()
 		{
-			InitializeComponent();
-			CreateContextMenu();
+			if (AppController.UserCannotWriteToApplicationRegistryKey)
+				_toolTipText = "Right-click to change which buttons are shown";
+			else
+				_toolTipText = "Double-click a button to edit the colour: right click for more options";
 
+			InitializeComponent();
+
+			Properties.Settings userSettings = new Properties.Settings();
+			_showAllButtons = userSettings.ColourMapShowAllButtons;
+
+			CreateContextMenu();
 			Redraw();
 
 			MappingsManager.MappingsChanged += delegate(object sender, EventArgs e) { Redraw(); };
 			UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { Redraw(false); };
+
+
 
 		}
 
@@ -69,13 +80,15 @@ namespace RoseHillSolutions.KeyMapper
 			if (_showAllButtons)
 				_contextMenu.MenuItems[newItemIndex].Checked = true;
 
-			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show Current Buttons Only", ShowCurrentButtons));
+			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show Currently Active Buttons Only", ShowCurrentButtons));
 			if (_showAllButtons == false)
 				_contextMenu.MenuItems[newItemIndex].Checked = true;
 
-			_contextMenu.MenuItems.Add(new MenuItem("Reset All Colours", ResetAllColours));
-
-			_contextMenu.MenuItems.Add(new MenuItem("Close All Editor Forms", CloseAllEditorForms));
+			if (AppController.UserCannotWriteToApplicationRegistryKey == false)
+			{
+				_contextMenu.MenuItems.Add(new MenuItem("Reset All Colours", ResetAllColours));
+				_contextMenu.MenuItems.Add(new MenuItem("Close All Editor Forms", CloseAllEditorForms));
+			}
 
 			this.ContextMenu = _contextMenu;
 
@@ -98,10 +111,10 @@ namespace RoseHillSolutions.KeyMapper
 			// Or, 2) - delete the UserColours registry subkey!
 
 			string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\";
-			RegistryKey k = Registry.CurrentUser.OpenSubKey(subkey, true) ;
+			RegistryKey k = Registry.CurrentUser.OpenSubKey(subkey, true);
 			if (k != null)
 			{
-				k.Close() ;
+				k.Close();
 				Registry.CurrentUser.DeleteSubKeyTree(subkey);
 			}
 
@@ -183,7 +196,6 @@ namespace RoseHillSolutions.KeyMapper
 			else
 				_buttonScaleFactor = 0.5F;
 
-
 			_buttonWidth = (int)(192 * _buttonScaleFactor);
 			_buttonHeight = (int)(128 * _buttonScaleFactor);
 
@@ -205,7 +217,6 @@ namespace RoseHillSolutions.KeyMapper
 		private void Redraw(bool reloadMappings)
 		{
 
-			NativeMethods.LockWindowUpdate(this.Handle);
 			_toolTip.RemoveAll();
 			_toolTip.SetToolTip(this, _toolTipText);
 
@@ -218,12 +229,12 @@ namespace RoseHillSolutions.KeyMapper
 			for (int i = this.Controls.Count - 1; i >= 0; i--)
 				this.Controls[i].Dispose();
 
-			this.Refresh();
-
 			ConstrainForm();
 
 			AddButtons();
-			NativeMethods.LockWindowUpdate(IntPtr.Zero);
+
+			this.Refresh();
+	
 		}
 
 		private void AddButtons()
@@ -360,6 +371,7 @@ namespace RoseHillSolutions.KeyMapper
 		{
 
 			PictureBox pb = new PictureBox();
+			
 			pb.Image = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, _buttonScaleFactor, text, effect);
 			pb.Height = pb.Image.Height;
 			pb.Width = pb.Image.Width;
@@ -384,7 +396,8 @@ namespace RoseHillSolutions.KeyMapper
 
 			pb.Tag = effect.ToString() + " " + text;
 
-			pb.DoubleClick += PictureBoxDoubleClick;
+			if (AppController.UserCannotWriteToApplicationRegistryKey == false)
+				pb.DoubleClick += PictureBoxDoubleClick;
 
 			this.Controls.Add(pb);
 			_toolTip.SetToolTip(pb, _toolTipText);
@@ -394,7 +407,7 @@ namespace RoseHillSolutions.KeyMapper
 
 		}
 
-		
+
 		void PictureBoxDoubleClick(object sender, EventArgs e)
 		{
 			PictureBox pb = sender as PictureBox;
@@ -411,6 +424,7 @@ namespace RoseHillSolutions.KeyMapper
 		{
 			Properties.Settings userSettings = new Properties.Settings();
 			userSettings.ColourListFormLocation = this.Location;
+			userSettings.ColourMapShowAllButtons = _showAllButtons;
 			userSettings.Save();
 		}
 

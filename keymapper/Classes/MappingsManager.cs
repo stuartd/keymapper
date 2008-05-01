@@ -4,7 +4,7 @@ using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	public static class MappingsManager
 	{

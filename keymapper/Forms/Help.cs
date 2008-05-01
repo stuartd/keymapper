@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	public partial class HelpForm : KMBaseForm
 	{

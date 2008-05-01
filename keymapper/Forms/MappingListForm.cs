@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	public partial class MappingListForm : KMBaseForm
 	{

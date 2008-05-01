@@ -4,13 +4,13 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 	static class FormsManager
 	{
 
 		static KeyboardForm _mainForm;
-		static ColourList _colourMapForm ;
+		static ColourMap _colourMapForm ;
 		static MappingListForm _mapListForm ;
 		static Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
 		static HelpForm _helpForm ;
@@ -22,7 +22,7 @@ namespace RoseHillSolutions.KeyMapper
 
 		public static void ChildFormClosed(object sender, FormClosedEventArgs e)
 		{
-			if (sender is ColourList)
+			if (sender is ColourMap)
 				_colourMapForm = null;
 			else if (sender is MappingListForm)
 				_mapListForm = null;
@@ -117,7 +117,7 @@ namespace RoseHillSolutions.KeyMapper
 						p = openform.Location;
 				}
 
-				formLocation = new Point(p.X + 15, p.Y + SystemInformation.CaptionHeight + 5);
+				formLocation = new Point(p.X + 10, p.Y + SystemInformation.CaptionHeight + 5);
 
 
 			}
@@ -348,7 +348,7 @@ namespace RoseHillSolutions.KeyMapper
 				return;
 			}
 
-			_colourMapForm = new ColourList();
+			_colourMapForm = new ColourMap();
 
 			Properties.Settings userSettings = new Properties.Settings();
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RoseHillSolutions.KeyMapper.Properties {
+namespace KeyMapper.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -212,6 +212,18 @@ namespace RoseHillSolutions.KeyMapper.Properties {
             }
             set {
                 this["HelpFormOpen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ColourMapShowAllButtons {
+            get {
+                return ((bool)(this["ColourMapShowAllButtons"]));
+            }
+            set {
+                this["ColourMapShowAllButtons"] = value;
             }
         }
     }

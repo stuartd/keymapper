@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.Configuration;
 using Microsoft.Win32;
 
-namespace RoseHillSolutions.KeyMapper
+namespace KeyMapper
 {
 
 	static class UserColourSettingManager
