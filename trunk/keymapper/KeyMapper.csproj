@@ -112,11 +112,11 @@
     <Compile Include="Forms\ColourEditor.Designer.cs">
       <DependentUpon>ColourEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ColourList.cs">
+    <Compile Include="Forms\ColourMap.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ColourList.Designer.cs">
-      <DependentUpon>ColourList.cs</DependentUpon>
+    <Compile Include="Forms\ColourMap.Designer.cs">
+      <DependentUpon>ColourMap.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Help.cs">
       <SubType>Form</SubType>
@@ -232,15 +232,14 @@
       <DependentUpon>ColourEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ColourList.resx">
-      <DependentUpon>ColourList.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Project\app.config" />
     <None Include="Project\KeyMapper.pfx" />
     <Content Include="attribution.txt" />
     <Content Include="Images\arrow.png" />
+    <EmbeddedResource Include="Forms\ColourMap.resx">
+      <DependentUpon>ColourMap.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Help.resx">
       <DependentUpon>Help.cs</DependentUpon>
       <SubType>Designer</SubType>
