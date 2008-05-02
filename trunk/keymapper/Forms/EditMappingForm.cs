@@ -668,10 +668,6 @@ namespace KeyMapper
 
 				// So, mapping to a mapped key is de facto allowed.
 
-				// However, we *can* tell if a disabled key has been pressed as it returns 0 and 0
-				// so should that be allowed? If users want to capture a disabled key, fair enough, but I think 
-				// the image should reflect it. TODO.
-
 				_map = new KeyMapping(_map.From, new Key(e.Key.Scancode, e.Key.Extended));
 			}
 
