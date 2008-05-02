@@ -48,6 +48,13 @@ namespace KeyMapper
 
 			AppController.ValidateUserConfigFile();
 
+            Properties.Settings userSettings = new Properties.Settings();
+            if (userSettings.UpgradeRequired)
+            {
+                userSettings.Upgrade();
+                userSettings.UpgradeRequired = false;
+            } 
+
 			AppController.StartAppController();
 
 			Application.Run(new KeyboardForm());
