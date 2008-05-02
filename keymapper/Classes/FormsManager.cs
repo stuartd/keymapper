@@ -383,11 +383,21 @@ namespace KeyMapper
 		public static bool SavedLocationIsOnScreen(Point savedLocation)
 
 		{
+
 			// Does this point fit within the screen resolution of the screen it's in?
 
-			// TODO: Work out how this will work. Bear in mind form hasn't been resized yet.
+			// If there's one monitor - easy. If the screen intersects with the saved location..
+			if (SystemInformation.MonitorCount == 1)
+				return Rectangle.Intersect(SystemInformation.WorkingArea, new Rectangle(savedLocation, new Size(1, 1))).IsEmpty;
 
-			//Rectangle r = Screen.GetWorkingArea(savedLocation) ;
+			// +1 Monitors. Bear in mind form hasn't been resized yet, so all we can tell is that part 
+			// of the form is visible.
+			
+			// Rectangle currentScreen = Screen.GetWorkingArea(savedLocation) ;
+
+			// "In multiple display environments where no display contains the specified point, the display closest to the point is returned."
+
+			// TODO: Needs some thought and time.
 
 			//if (savedLocation.X < (r.Width) || savedLocation.Y < (r.Height))
 			//{

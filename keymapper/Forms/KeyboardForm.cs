@@ -332,9 +332,10 @@ namespace KeyMapper
 									break;
 							}
 
-							int stretch = (int)(keywidth - (buttonwidth * _buttonScale));
+							// TODO: Could just apply to the lft as padding instead of stretching? That might solve
+							// the intermittent ugly border on the enter key.
 
-							// TODO: Hey, how about applying the stretch to the left instead of actually stretching? Or Half each??
+							int stretch = (int)(keywidth - (buttonwidth * _buttonScale));
 
 							DrawKey(key.Scancode, key.Extended, ref left, top, key.Button,
 								stretch, key.VerticalStretch * _paddingWidth);
@@ -1060,9 +1061,8 @@ namespace KeyMapper
 		{
 			_keysOnly = false;
 			_hasNumberPad = !AppController.IsLaptop();
-			// Not going to reset this. If user has set it, a shame to lose it. TODO: think about it.
-			// _isMacKeyboard = false; // TODO: Does it have Apple in it's name, perchance? Not that that works for Parallels etc.
-			// as they have a custom keyboard driver and load the standard keyboard (eg United Kingdom)
+			// Not going to reset this. 
+			// _isMacKeyboard = false;
 
 			// Revert to default layout and locale (restores Enter key etc)
 			this.ChangeKeyboard(KeyboardHelper.GetKeyboardName());
