@@ -19,6 +19,7 @@ namespace KeyMapper
 		string _keyboardfilename = "keyboards.xml";
 		XPathNavigator _navigator;
 		string _commonlyUsedKeysGroupName = "Commonly Used";
+        string _allKeysGroupName = "All Keys";
 
 		#endregion
 
@@ -107,8 +108,9 @@ namespace KeyMapper
 
 			switch (threshold)
 			{
-				case -1:
-					// Get all the group names
+                case -1: 
+					// Get all the group names: add an extra one at the top with all the keys in.
+                    groups.Add(_allKeysGroupName);
 					expression = "/KeycodeData/keycodes/group[not(.=preceding::*/group)] ";
 					iterator = (XPathNodeIterator)_navigator.Select(expression);
 
@@ -175,7 +177,9 @@ namespace KeyMapper
 			// Enumerate group.
 			string queryExpression;
 
-			if (groupname == _commonlyUsedKeysGroupName)
+            if (groupname == _allKeysGroupName)
+                queryExpression = @"/KeycodeData/keycodes" ;
+			else if (groupname == _commonlyUsedKeysGroupName)
 				queryExpression = @"/KeycodeData/keycodes[useful>='2'" + "]";
 			else
 				queryExpression = @"/KeycodeData/keycodes[group='" + groupname + "' and useful>='" + threshold.ToString(System.Globalization.CultureInfo.InvariantCulture.NumberFormat) + "']";
@@ -190,21 +194,16 @@ namespace KeyMapper
 
 			Dictionary<string, int> dir = new Dictionary<string, int>(iterator.Count);
 
-			foreach (XPathNavigator node in iterator)
-			{
-				scancode = Int32.Parse(GetElementValue("sc", node), CultureInfo.InvariantCulture.NumberFormat);
-				extended = Int32.Parse(GetElementValue("ex", node), CultureInfo.InvariantCulture.NumberFormat);
-				string name = AppController.GetKeyName(scancode, extended);
-				if (dir.ContainsKey(name))
-				{
-					if (dir[name] != scancode)
-						Console.WriteLine("Name dupe: {0} Existing name: {1} Existing Scancode : {2} Scancode: {3}", name, null, dir[name], scancode);
-				}
-				else
-				{
-					dir.Add(name, AppController.GetHashFromKeyData(scancode, extended));
-				}
-			}
+            foreach (XPathNavigator node in iterator)
+            {
+                scancode = Int32.Parse(GetElementValue("sc", node), CultureInfo.InvariantCulture.NumberFormat);
+                extended = Int32.Parse(GetElementValue("ex", node), CultureInfo.InvariantCulture.NumberFormat);
+                string name = AppController.GetKeyName(scancode, extended);
+                if (dir.ContainsKey(name)) // ArgumentException results when trying to add duplicate key..
+                    Console.WriteLine("Duplicate name error: Name {0} Existing Scancode : {1} Scancode: {2}", name, dir[name], scancode);
+                else
+                    dir.Add(name, AppController.GetHashFromKeyData(scancode, extended));
+            }
 
 			return dir;
 		}
