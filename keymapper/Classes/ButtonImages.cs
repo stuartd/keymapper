@@ -313,7 +313,7 @@ namespace KeyMapper
 		private static Bitmap WriteCaption(Bitmap bmp, string caption, bool overlong, bool localizable, Color fontColour)
 		{
 
-			// Set the sizes for 2 and 3 or more letters.
+   			// Set the sizes for 2 and 3 or more letters.
 			float FontSizeDouble = (AppController.BaseFontSize * 0.75F);
 			float FontSizeMulti = (AppController.BaseFontSize * 0.575F);
 
@@ -364,8 +364,14 @@ namespace KeyMapper
 					break;
 
 				default:
+                    if (caption.IndexOf(")") > 0)
+                    {
+                        System.Windows.Forms.MessageBox.Show("yup");
+                    }
 					// More than 3 letters long
 					string[] words = caption.Split(' ');
+                    // If the last word is a word in brackets, remove it
+                    // E.G. Enter (Numberpad) will just be written on the key as Enter.
 					switch (words.Length)
 					{
 						case 1:
@@ -373,7 +379,8 @@ namespace KeyMapper
 							break;
 						case 2:
 							DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.TextTop, localizable, fontColour);
-							DrawCaptionLine(bmp, words[1], FontSizeMulti, TextPosition.Bottom, localizable, fontColour);
+                            if ((words[1].Trim().Substring(0) == "(" && words[1].Trim().Substring(words[1].Length - 1) == ")") == false)
+							    DrawCaptionLine(bmp, words[1], FontSizeMulti, TextPosition.Bottom, localizable, fontColour);
 							break;
 						default:
 							break;
