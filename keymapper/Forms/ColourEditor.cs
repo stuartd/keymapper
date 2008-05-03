@@ -195,14 +195,14 @@ namespace KeyMapper
 		{
 			ColorMatrix cm = new ColorMatrix();
 
-			int numberOfChanges = 10;
+			int numberOfChanges = 5;
 
 			Random r = new Random();
 
 			for (int i = 0; i < numberOfChanges; i++)
 			{
-				int x = r.Next(0, 4);
-				int y = r.Next(0, 2);
+				int x = r.Next(0, 5);
+				int y = r.Next(0, 3);
 
 				string name = "Matrix" + x.ToString(CultureInfo.InvariantCulture) + y.ToString(CultureInfo.InvariantCulture);
 				float val = (r.Next(-10, 11) / 10F);
