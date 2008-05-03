@@ -72,7 +72,7 @@ namespace KeyMapper
             // MapButton
             // 
             this.MapButton.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MapButton.Location = new System.Drawing.Point(395, 30);
+            this.MapButton.Location = new System.Drawing.Point(402, 30);
             this.MapButton.Name = "MapButton";
             this.MapButton.Size = new System.Drawing.Size(73, 34);
             this.MapButton.TabIndex = 4;
@@ -83,8 +83,8 @@ namespace KeyMapper
             // KeyListsPanel
             // 
             this.KeyListsPanel.ColumnCount = 2;
-            this.KeyListsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.19455F));
-            this.KeyListsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.80545F));
+            this.KeyListsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.54717F));
+            this.KeyListsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.45283F));
             this.KeyListsPanel.Controls.Add(this.KeysByGroupListbox, 1, 1);
             this.KeyListsPanel.Controls.Add(this.label2, 1, 0);
             this.KeyListsPanel.Controls.Add(this.label3, 0, 0);
@@ -96,7 +96,7 @@ namespace KeyMapper
             this.KeyListsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.KeyListsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
             this.KeyListsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.KeyListsPanel.Size = new System.Drawing.Size(257, 174);
+            this.KeyListsPanel.Size = new System.Drawing.Size(265, 174);
             this.KeyListsPanel.TabIndex = 12;
             // 
             // KeysByGroupListbox
@@ -105,16 +105,16 @@ namespace KeyMapper
             this.KeysByGroupListbox.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.KeysByGroupListbox.FormattingEnabled = true;
             this.KeysByGroupListbox.ItemHeight = 15;
-            this.KeysByGroupListbox.Location = new System.Drawing.Point(132, 20);
+            this.KeysByGroupListbox.Location = new System.Drawing.Point(128, 20);
             this.KeysByGroupListbox.Name = "KeysByGroupListbox";
-            this.KeysByGroupListbox.Size = new System.Drawing.Size(122, 124);
+            this.KeysByGroupListbox.Size = new System.Drawing.Size(134, 124);
             this.KeysByGroupListbox.TabIndex = 13;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Verdana", 10F);
-            this.label2.Location = new System.Drawing.Point(132, 0);
+            this.label2.Location = new System.Drawing.Point(128, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 17);
             this.label2.TabIndex = 13;
@@ -138,7 +138,7 @@ namespace KeyMapper
             this.GroupsListbox.ItemHeight = 15;
             this.GroupsListbox.Location = new System.Drawing.Point(3, 20);
             this.GroupsListbox.Name = "GroupsListbox";
-            this.GroupsListbox.Size = new System.Drawing.Size(123, 124);
+            this.GroupsListbox.Size = new System.Drawing.Size(119, 124);
             this.GroupsListbox.TabIndex = 13;
             // 
             // ListOptionsCombo
@@ -176,7 +176,7 @@ namespace KeyMapper
             // CaptureAndCancelButton
             // 
             this.CaptureAndCancelButton.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CaptureAndCancelButton.Location = new System.Drawing.Point(395, 120);
+            this.CaptureAndCancelButton.Location = new System.Drawing.Point(402, 120);
             this.CaptureAndCancelButton.Name = "CaptureAndCancelButton";
             this.CaptureAndCancelButton.Size = new System.Drawing.Size(73, 34);
             this.CaptureAndCancelButton.TabIndex = 14;
@@ -187,7 +187,7 @@ namespace KeyMapper
             // DisableButton
             // 
             this.DisableButton.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DisableButton.Location = new System.Drawing.Point(395, 75);
+            this.DisableButton.Location = new System.Drawing.Point(402, 75);
             this.DisableButton.Name = "DisableButton";
             this.DisableButton.Size = new System.Drawing.Size(73, 34);
             this.DisableButton.TabIndex = 16;
@@ -213,7 +213,7 @@ namespace KeyMapper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(471, 187);
+            this.ClientSize = new System.Drawing.Size(476, 187);
             this.Controls.Add(this.EmptyPanel);
             this.Controls.Add(this.DisableButton);
             this.Controls.Add(this.PanelFader);

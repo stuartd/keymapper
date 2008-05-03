@@ -580,7 +580,7 @@
   <keycodes>
     <sc>17</sc>
     <ex>224</ex>
-    <name>Messenger (Alternate)</name>
+    <name>Messenger (2)</name>
     <group>Programs</group>
     <localize>false</localize>
     <useful>-1</useful>
@@ -1140,7 +1140,7 @@
   <keycodes>
     <sc>5</sc>
     <ex>224</ex>
-    <name>Messenger</name>
+    <name>Messenger (1)</name>
     <group>Programs</group>
     <localize>false</localize>
     <useful>-1</useful>
