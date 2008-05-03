@@ -15,12 +15,23 @@ namespace KeyMapper
 		static Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
 		static HelpForm _helpForm ;
 
+        public static IWin32Window MainFormHandle // For dialog boxes
+        {
+            get
+            {
+                if (_mainForm != null)
+                    return (IWin32Window)_mainForm;
+                else
+                    return null;
+                }
+        }
+
 		public static void RegisterMainForm(KeyboardForm form)
 		{
 			_mainForm = form;
 		}
 
-		public static void ChildFormClosed(object sender, FormClosedEventArgs e)
+ 		public static void ChildFormClosed(object sender, FormClosedEventArgs e)
 		{
 			if (sender is ColourMap)
 				_colourMapForm = null;
