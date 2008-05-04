@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Configuration;
+using System.IO;
 
 namespace KeyMapper
 {
@@ -1090,19 +1091,52 @@ namespace KeyMapper
                 fd.AddExtension = true ;
                 fd.DefaultExt = "reg";
                 fd.Filter = "Registry files (*.reg)|*.reg";
-                fd.InitialDirectory = Environment.SpecialFolder.Desktop.ToString();
+                fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
                 fd.OverwritePrompt = true;
                 fd.AutoUpgradeEnabled = true;
-                fd.FileName = "Mappings";
+                fd.FileName = "Key Mappings";
                 DialogResult dr = fd.ShowDialog();
                 if (dr != DialogResult.OK)
                     return;
 
-                string filename = fd.FileName;
+                StreamWriter sw = new StreamWriter(fd.FileName, false, Encoding.UTF8);
+                sw.WriteLine("Windows Registry Editor Version 5.00");
+                sw.WriteLine();
 
-                MessageBox.Show(filename);
+                if (MappingsManager.GetMappingCount(MappingFilter.Boot) > 0)
+                {
+                    sw.WriteLine(@"[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
+                    sw.Write("\"Scancode Map\"=hex:");
+                    byte[] bytemappings = MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.Boot));
+                    for (int i = 0; i < bytemappings.GetLength(0); i++)
+                    {
+                        sw.Write(bytemappings[i].ToString("X"));
+                        if (i < bytemappings.GetLength(0) - 1)
+                            sw.Write(",");
+                    }
 
+                    sw.WriteLine();
+                 }
 
+                if (MappingsManager.GetMappingCount(MappingFilter.User) > 0)
+                {
+                    if (MappingsManager.GetMappingCount(MappingFilter.Boot) > 0)
+                        sw.WriteLine();
+                    sw.WriteLine(@"[HKEY_CURRENT_USER\Keyboard Layout]");
+                    sw.Write("\"Scancode Map\"=hex:");
+                    byte[] bytemappings = MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.User));
+                    for (int i = 0; i < bytemappings.GetLength(0); i++)
+                    {
+                        sw.Write(bytemappings[i].ToString("X"));
+                        if (i < bytemappings.GetLength(0) - 1)
+                            sw.Write(",");
+                    }
+
+                    sw.WriteLine();
+                
+                }
+                sw.Close();
 
             }
 
