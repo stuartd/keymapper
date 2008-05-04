@@ -1092,7 +1092,7 @@
   <keycodes>
     <sc>34</sc>
     <ex>224</ex>
-    <name>Play/Pause</name>
+    <name>Play Pause</name>
     <group>Media Keys</group>
     <localize>false</localize>
     <useful>2</useful>
