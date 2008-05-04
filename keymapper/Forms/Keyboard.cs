@@ -150,12 +150,12 @@ namespace KeyMapper
             float keywidth;
             if (_keysOnly)
             {
-                keywidth = 15.5F;
+                keywidth = 15.7F;
             }
             else
             {
                 // These two numbers correspond more-or less to the number of keys wide 
-                // a keyboard is, with or without number pad, plus a bit exrta for the padding between keys.
+                // a keyboard is, with or without number pad, plus a bit extra for the padding between keys.
                 keywidth = _hasNumberPad ? 23.75F : 20F;
             }
 
@@ -231,7 +231,7 @@ namespace KeyMapper
                     DrawRow(kl.UtilityKeys, numpadleft + (int)Math.Round(_keySize, 0) + _paddingWidth, top);
                 }
 
-                // To get a spacer row between the F keys: add an extra Double PaddingWidth
+                // To get a spacer row between the F keys: add double padding
                 top += (int)Math.Round(_keySize + (_paddingWidth * 2), 0);
 
             }
@@ -399,7 +399,7 @@ namespace KeyMapper
 
             float factor;
             if (_keysOnly)
-                factor = 35F;
+                factor = 34.5F;
             else
                 factor = _hasNumberPad ? 43F : 36F;
 
@@ -1088,7 +1088,7 @@ namespace KeyMapper
             if (MappingsManager.GetMappingCount(MappingFilter.Boot) > 0 || MappingsManager.GetMappingCount(MappingFilter.User) > 0)
             {
                 SaveFileDialog fd = new SaveFileDialog();
-                fd.AddExtension = true ;
+                fd.AddExtension = true;
                 fd.DefaultExt = "reg";
                 fd.Filter = "Registry files (*.reg)|*.reg";
                 fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
@@ -1100,7 +1100,7 @@ namespace KeyMapper
                 if (dr != DialogResult.OK)
                     return;
 
-                StreamWriter sw = new StreamWriter(fd.FileName, false, Encoding.UTF8);
+                StreamWriter sw = new StreamWriter(fd.FileName, false, Encoding.Unicode);
                 sw.WriteLine("Windows Registry Editor Version 5.00");
                 sw.WriteLine();
 
@@ -1108,16 +1108,9 @@ namespace KeyMapper
                 {
                     sw.WriteLine(@"[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
                     sw.Write("\"Scancode Map\"=hex:");
-                    byte[] bytemappings = MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.Boot));
-                    for (int i = 0; i < bytemappings.GetLength(0); i++)
-                    {
-                        sw.Write(bytemappings[i].ToString("X"));
-                        if (i < bytemappings.GetLength(0) - 1)
-                            sw.Write(",");
-                    }
-
+                    WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.Boot)));
                     sw.WriteLine();
-                 }
+                }
 
                 if (MappingsManager.GetMappingCount(MappingFilter.User) > 0)
                 {
@@ -1125,32 +1118,23 @@ namespace KeyMapper
                         sw.WriteLine();
                     sw.WriteLine(@"[HKEY_CURRENT_USER\Keyboard Layout]");
                     sw.Write("\"Scancode Map\"=hex:");
-                    byte[] bytemappings = MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.User));
-                    for (int i = 0; i < bytemappings.GetLength(0); i++)
-                    {
-                        sw.Write(bytemappings[i].ToString("X"));
-                        if (i < bytemappings.GetLength(0) - 1)
-                            sw.Write(",");
-                    }
+                    WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.User)));
 
                     sw.WriteLine();
-                
+
                 }
                 sw.Close();
 
             }
+        }
 
-
-            if (MappingsManager.GetMappingCount(MappingFilter.Boot) > 0)
+        private void WriteMappingsToStream(StreamWriter sw, byte[] bytemappings)
+        {
+            for (int i = 0; i < bytemappings.GetLength(0); i++)
             {
-
-
-            }
-
-            if (MappingsManager.GetMappingCount(MappingFilter.User) > 0)
-            {
-
-
+                sw.Write(bytemappings[i].ToString("X").PadLeft(2, (char)48));
+                if (i < bytemappings.GetLength(0) - 1)
+                    sw.Write(",");
             }
 
 

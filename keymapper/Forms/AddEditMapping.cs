@@ -112,7 +112,7 @@ namespace KeyMapper
 			else
 				_keyThreshold = 1;
 
-			ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
+            SetListOptionsComboIndex();
 
 			PopulateKeyLists();
 
@@ -124,6 +124,11 @@ namespace KeyMapper
 
 			SetupForm();
 		}
+
+        private void SetListOptionsComboIndex()
+        {
+            ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
+        }
 
 		private void SaveSettings()
 		{
@@ -551,6 +556,8 @@ namespace KeyMapper
 
 					SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
 					_selectingFromKeyFromLists = false;
+                    _keyThreshold = 1;
+                    SetListOptionsComboIndex();
 					SetupForm();
 					return;
 
