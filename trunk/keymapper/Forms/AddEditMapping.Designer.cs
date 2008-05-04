@@ -158,15 +158,15 @@ namespace KeyMapper
             // 
             this.MappingPanel.Controls.Add(this.pictureBox1);
             this.MappingPanel.Controls.Add(this.ToKeyPictureBox);
-            this.MappingPanel.Location = new System.Drawing.Point(616, 38);
+            this.MappingPanel.Location = new System.Drawing.Point(562, 32);
             this.MappingPanel.Name = "MappingPanel";
-            this.MappingPanel.Size = new System.Drawing.Size(227, 174);
+            this.MappingPanel.Size = new System.Drawing.Size(265, 174);
             this.MappingPanel.TabIndex = 13;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(14, 61);
+            this.pictureBox1.Location = new System.Drawing.Point(18, 61);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(53, 50);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -197,9 +197,9 @@ namespace KeyMapper
             // 
             // EmptyPanel
             // 
-            this.EmptyPanel.Location = new System.Drawing.Point(616, 218);
+            this.EmptyPanel.Location = new System.Drawing.Point(562, 212);
             this.EmptyPanel.Name = "EmptyPanel";
-            this.EmptyPanel.Size = new System.Drawing.Size(227, 174);
+            this.EmptyPanel.Size = new System.Drawing.Size(265, 174);
             this.EmptyPanel.TabIndex = 19;
             // 
             // PanelFader
@@ -213,7 +213,7 @@ namespace KeyMapper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 187);
+            this.ClientSize = new System.Drawing.Size(479, 186);
             this.Controls.Add(this.EmptyPanel);
             this.Controls.Add(this.DisableButton);
             this.Controls.Add(this.PanelFader);
