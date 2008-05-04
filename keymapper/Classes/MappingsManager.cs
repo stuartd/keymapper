@@ -495,53 +495,60 @@ namespace KeyMapper
 				return;
 			}
 
-			int count = maps.Count;
-
-			if (count == 0)
+            if (maps.Count == 0)
 			{
 				// Remove the key.
 				registry.DeleteValue(valuename, false);
 			}
 			else
 			{
-				// Turn mappings into a byte[] 
-
-				int size = (16 + (count * 4));
-
-				// Check they are all zero.
-
-				byte[] bytemappings = new byte[size];
-
-				// Allow for the null mapping at the end
-				bytemappings[8] = (byte)(count + 1);
-
-				int start = 12;
-
-				for (int i = 0; i < count; i++)
-				{
-					// Make sure we don't extend beyond array bounds
-					if (size > (start + (i * 4) + 3))
-					{
-						KeyMapping map = maps[i];
-
-						// First pair is the action - what the mapped key does.
-
-						int word2 = map.To.Extended;
-
-						bytemappings[start + (i * 4)] = (byte)map.To.Scancode; ;
-						bytemappings[start + (i * 4) + 1] = (byte)map.To.Extended;
-
-						// Second pair is the physical key which performs the new action
-						bytemappings[start + (i * 4) + 2] = (byte)map.From.Scancode;
-						bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
-					}
-					else
-						break;
-				}
-
-				registry.SetValue(valuename, bytemappings);
+				registry.SetValue(valuename, GetMappingsAsByteArray(maps));
 			}
 		}
+
+        public static byte[] GetMappingsAsByteArray(Collection<KeyMapping> maps) 
+        {
+
+            // Turn mappings into a byte[] 
+            int count = maps.Count;
+            int size = (16 + (count * 4));
+
+            // Check they are all zero.
+
+            byte[] bytemappings = new byte[size];
+
+            // Allow for the null mapping at the end
+            bytemappings[8] = (byte)(count + 1);
+
+            int start = 12;
+
+            for (int i = 0; i < count; i++)
+            {
+                // Make sure we don't extend beyond array bounds
+                if (size > (start + (i * 4) + 3))
+                {
+                    KeyMapping map = maps[i];
+
+                    // First pair is the action - what the mapped key does.
+
+                    int word2 = map.To.Extended;
+
+                    bytemappings[start + (i * 4)] = (byte)map.To.Scancode; ;
+                    bytemappings[start + (i * 4) + 1] = (byte)map.To.Extended;
+
+                    // Second pair is the physical key which performs the new action
+                    bytemappings[start + (i * 4) + 2] = (byte)map.From.Scancode;
+                    bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
+                }
+                else
+                    break;
+            }
+
+            return bytemappings;
+
+
+
+        }
 
 		#endregion
 
