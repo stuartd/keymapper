@@ -34,7 +34,8 @@ namespace KeyMapper
 				return;
 			}
 
-			// TODO - arguments.
+			// TODO - arguments: -r to reset main form position 
+			// (or is it easier to delete user config file?)
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
