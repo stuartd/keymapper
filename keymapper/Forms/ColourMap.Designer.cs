@@ -30,7 +30,7 @@ namespace KeyMapper
 		{
 			this.SuspendLayout();
 			// 
-			// ColourList
+			// ColourMap
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -39,7 +39,7 @@ namespace KeyMapper
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "ColourList";
+			this.Name = "ColourMap";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
