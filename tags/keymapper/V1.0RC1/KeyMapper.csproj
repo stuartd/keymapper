@@ -1,0 +1,273 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E0C87C26-3239-4F49-964E-91341A5F6BA0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KeyMapper</RootNamespace>
+    <AssemblyName>KeyMapper</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+    <SignAssembly>true</SignAssembly>
+    <ManifestCertificateThumbprint>C82F5AD128815950084E4EA1756D4C5D7F63D089</ManifestCertificateThumbprint>
+    <ManifestKeyFile>KeyMapper.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <TargetZone>Internet</TargetZone>
+    <SignManifests>true</SignManifests>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <AssemblyOriginatorKeyFile>Project\KeyMapper.pfx</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>Images\keymapper.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>ftp://justkeepswimming.net/httpdocs/KeyMapper/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>false</MapFileExtensions>
+    <InstallUrl>http://justkeepswimming.net/KeyMapper/</InstallUrl>
+    <TargetCulture>en-GB</TargetCulture>
+    <ProductName>Key Mapper</ProductName>
+    <PublisherName>Rose Hill Solutions</PublisherName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>install.html</WebPage>
+    <ApplicationRevision>100</ApplicationRevision>
+    <ApplicationVersion>1.0.0.100</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\AppMutex.cs" />
+    <Compile Include="Classes\ButtonImages.cs" />
+    <Compile Include="Classes\AppController.cs" />
+    <Compile Include="Classes\FormsManager.cs" />
+    <Compile Include="Classes\MappingsManager.cs" />
+    <Compile Include="Classes\NativeMethods.cs" />
+    <Compile Include="Classes\RegistryHelper.cs" />
+    <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Classes\UserColours.cs" />
+    <Compile Include="Controls\fader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Classes\Key.cs" />
+    <Compile Include="Classes\KeyboardLayouts.cs" />
+    <Compile Include="Classes\KeyDataXml.cs" />
+    <Compile Include="Classes\SeparatorComboDecorator.cs" />
+    <Compile Include="Controls\KeyboardListCombo.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\KeyPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Classes\KeySniffer.cs" />
+    <Compile Include="Classes\LocalizedKeyset.cs" />
+    <Compile Include="Forms\about.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\about.Designer.cs">
+      <DependentUpon>about.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AddEditMapping.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddEditMapping.Designer.cs">
+      <DependentUpon>AddEditMapping.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ColourEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColourEditor.Designer.cs">
+      <DependentUpon>ColourEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ColourMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColourMap.Designer.cs">
+      <DependentUpon>ColourMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Help.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Help.Designer.cs">
+      <DependentUpon>Help.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Keyboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Keyboard.Designer.cs">
+      <DependentUpon>Keyboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\KMBaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Classes\keyboardHelper.cs" />
+    <Compile Include="Classes\KeyMapping.cs" />
+    <Compile Include="Classes\Main.cs" />
+    <Compile Include="Forms\MappingList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MappingList.Designer.cs">
+      <DependentUpon>MappingList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IKeyData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <BaseApplicationManifest Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\fader.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>fader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\KeyPictureBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>KeyPictureBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XML\keycodes.xml" />
+    <EmbeddedResource Include="XML\keyboards.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\about.resx">
+      <DependentUpon>about.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddEditMapping.resx">
+      <DependentUpon>AddEditMapping.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ColourEditor.resx">
+      <DependentUpon>ColourEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Project\app.config" />
+    <None Include="Project\KeyMapper.pfx" />
+    <EmbeddedResource Include="Forms\Keyboard.resx">
+      <DependentUpon>Keyboard.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MappingList.resx">
+      <DependentUpon>MappingList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\arrow.png" />
+    <EmbeddedResource Include="Forms\ColourMap.resx">
+      <DependentUpon>ColourMap.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Help.resx">
+      <DependentUpon>Help.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\blank.png" />
+    <EmbeddedResource Include="Images\doublewideblank.png" />
+    <EmbeddedResource Include="Images\keymapper.ico" />
+    <None Include="license.txt" />
+    <EmbeddedResource Include="Images\mediumwideblank.png" />
+    <EmbeddedResource Include="Images\quadruplewideblank.png" />
+    <EmbeddedResource Include="Images\tallblank.png" />
+    <EmbeddedResource Include="Images\triplewideblank.png" />
+    <CodeAnalysisDictionary Include="Project\CodeAnalysisDictionary.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
