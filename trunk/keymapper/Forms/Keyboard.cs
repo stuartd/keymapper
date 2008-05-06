@@ -107,13 +107,6 @@ namespace KeyMapper
 			else
 				this.Location = savedPosition;
 
-			// Form hasn't been sized yet, but can test to make sure the saved position is at least on the screen.
-			if (FormsManager.SavedLocationIsOnScreen(savedPosition) == false)
-			{
-				FormsManager.PositionMainForm();
-				FormsManager.SizeMainForm();
-			}
-
 			if (firstrun || savedWidth < this.MinimumSize.Width)
 			{
 				FormsManager.SizeMainForm();
