@@ -36,8 +36,6 @@ namespace KeyMapper
 
 			// TODO - arguments.
 
-
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 	
