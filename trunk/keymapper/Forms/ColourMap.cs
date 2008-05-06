@@ -44,8 +44,8 @@ namespace KeyMapper
 		ContextMenu _contextMenu;
 
 		ToolTip _toolTip = new ToolTip();
-		
-		string _toolTipText ;
+
+		string _toolTipText;
 
 		#endregion
 
@@ -66,8 +66,6 @@ namespace KeyMapper
 
 			MappingsManager.MappingsChanged += delegate(object sender, EventArgs e) { Redraw(); };
 			UserColourSettingManager.ColoursChanged += delegate(object sender, EventArgs e) { Redraw(false); };
-
-
 
 		}
 
@@ -202,7 +200,7 @@ namespace KeyMapper
 			// Now work out how big the form should be.
 			// Width: Number of buttons per line * buttonsize + (buttons + 1 * padding)
 			int width = (_buttonsPerLine * _buttonWidth) + ((_buttonsPerLine + 1) * _padding);
-			// Height: Number of lines * buttonehight + (number of lines +1 * padding)
+			// Height: Number of lines * buttonhight + (number of lines +1 * padding)
 			int height = (_numberOfLines * _buttonHeight) + ((_numberOfLines + 1) * _padding);
 
 			this.ClientSize = new Size(width, height);
@@ -216,6 +214,7 @@ namespace KeyMapper
 
 		private void Redraw(bool reloadMappings)
 		{
+			this.SuspendLayout();
 
 			_toolTip.RemoveAll();
 			_toolTip.SetToolTip(this, _toolTipText);
@@ -229,12 +228,28 @@ namespace KeyMapper
 			for (int i = this.Controls.Count - 1; i >= 0; i--)
 				this.Controls[i].Dispose();
 
+			// In order to fix a problem where the form is resized to smaller then the enforced minimum
+			// size where the bits of the form which aren then still visible aren't repainted, if the button count is one then
+			// constrain twice - once with a count of two then a refresh to clear the background, and then with the count reset to one.
+
+			if (_buttonCount == 1)
+			{
+				_buttonCount = 2;
+				ConstrainForm();
+				this.Refresh();
+				_buttonCount = 1;
+			}
+
 			ConstrainForm();
 
 			AddButtons();
 
-			this.Refresh();
-	
+			if (_buttonCount > 1)
+				this.Text = "KeyMapper Colour Map";
+			else
+				this.Text = "Colour Map";
+
+			this.ResumeLayout();
 		}
 
 		private void AddButtons()
@@ -371,28 +386,41 @@ namespace KeyMapper
 		{
 
 			PictureBox pb = new PictureBox();
-			
+
 			pb.Image = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, _buttonScaleFactor, text, effect);
 			pb.Height = pb.Image.Height;
 			pb.Width = pb.Image.Width;
 
-			int position;
-			int line;
+			// If there is only one button, contain it in the centre of the form (the minimum size for a form
+			// is bigger than a button until button scale gets to 0.6 or so which is too big for small resolutions)
 
-			// First, see which line the button is in and what position in the line it occupies.
-			if (_numberOfLines == 1 || _currentButton <= _buttonsPerLine)
+			if (_buttonCount == 1)
 			{
-				position = _currentButton;
-				line = 1;
+				// Forms have a minimum size of 123. Applying a slight kludge factor too.
+				pb.Left = (((123 - SystemInformation.BorderSize.Width - _buttonWidth) / 2) - 5);
+				pb.Top = _padding;
 			}
 			else
 			{
-				position = _currentButton - _buttonsPerLine;
-				line = 2;
-			}
+				int position;
+				int line;
 
-			pb.Left = ((position - 1) * _buttonWidth) + (position * _padding);
-			pb.Top = ((line - 1) * _buttonHeight) + (line * _padding);
+				// First, see which line the button is in and what position in the line it occupies.
+				if (_numberOfLines == 1 || _currentButton <= _buttonsPerLine)
+				{
+					position = _currentButton;
+					line = 1;
+				}
+				else
+				{
+					position = _currentButton - _buttonsPerLine;
+					line = 2;
+				}
+
+				pb.Left = ((position - 1) * _buttonWidth) + (position * _padding);
+				pb.Top = ((line - 1) * _buttonHeight) + (line * _padding);
+
+			}
 
 			pb.Tag = effect.ToString() + " " + text;
 
@@ -428,10 +456,7 @@ namespace KeyMapper
 			userSettings.Save();
 		}
 
-
 	}
-
-
 
 }
 

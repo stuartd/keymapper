@@ -58,8 +58,8 @@ namespace KeyMapper
 		{
 
 		
-			// Using grdMappings.Rows.Clear() I sometimes get 
-			// "Can't add rows where there are no columns" error.
+			// Using grdMappings.Rows.Clear() sometimes results in 
+			// "Can't add rows where there are no columns" error,
 			// resulting in an InvalidOperationException.
 
 			for (int i = grdMappings.Rows.Count - 1; i >= 0 ; i--)
@@ -77,6 +77,7 @@ namespace KeyMapper
 			catch (InvalidOperationException)
 			{
 				Console.WriteLine("Unexpected return of the AddRowsToGrid bug!");
+				return;
 			}
 
 			// Resize according to number of mappings
@@ -89,9 +90,7 @@ namespace KeyMapper
 			this.MaximumSize = new Size(0, 0);
 			this.SetClientSizeCore(this.ClientSize.Width, height);
 			this.MinimumSize = new Size(_minimumWidth, this.Size.Height);
-		// 	this.MaximumSize = new Size(0, this.Size.Height);
 
-			// ResizeControls();
 		}
 
 		private void AddRowsToGrid()
@@ -184,7 +183,6 @@ namespace KeyMapper
 
 				if (currentRow.Tag != null)
 				{
-					// Is this a user or a boot mapping?
 					MappingFilter filter;
 					if (currentRow.Cells[1].Value.ToString() == "User")
 						filter = MappingFilter.User;

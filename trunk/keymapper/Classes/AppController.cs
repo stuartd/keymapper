@@ -128,7 +128,7 @@ namespace KeyMapper
 		{
 
 			if (localizable == false)
-				return _defaultKeyFont; // Don't want the static keys to change.
+				return _defaultKeyFont; // Don't want the static keys to change font.
 
 			// Default font for keys is Lucida Sans Unicode as it's on every version of Windows
 			// (Could look for Arial Unicode MS (which is installed by Office) I suppose as it has lots more in
@@ -188,15 +188,17 @@ namespace KeyMapper
 			}
 			catch (IOException exc)
 			{
-				// Tree falling in the woods...
 				Console.WriteLine(exc.Message + "Can't create log file.");
 				return;
 			}
+	
 
 			_isConsoleRedirected = true;
 
 			// Direct standard output to the log file.
 			Console.SetOut(_consoleWriterStream);
+			
+			Console.WriteLine("Logging started {0}", DateTime.Now);
 		}
 
 		public static void CloseConsoleOutput()
@@ -386,20 +388,18 @@ namespace KeyMapper
 		{
 			try
 			{
-				// If the file is invalid
+				// If file is corrupt this will trigger an excption
 				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
 			}
 
 			catch (ConfigurationErrorsException ex)
 			{
-				Console.WriteLine("Catch One");
-
 				DeleteInvalidUserFileFromException(ex);
 			}
 
 			try
 			{
-				// Access a property to find any other error types
+				// Access a property to find any other error types - invalid XML etc.
 				Properties.Settings u = new KeyMapper.Properties.Settings();
 				Point p = u.ColourEditorLocation;
 			}
@@ -407,55 +407,7 @@ namespace KeyMapper
 
 			catch (ConfigurationErrorsException ex)
 			{
-				Console.WriteLine("Catch Two");
-
 				DeleteInvalidUserFileFromException(ex);
-			}
-
-		}
-
-
-
-
-
-
-		public static bool IsLaptop()
-		{
-			// Going to be good enough for w2k + - no need for impersonation.
-			// Just in case WMI is hosed, and this isn't a critical piece of info, wrap/try
-
-			int chassisType = 0;
-
-			try
-			{
-				System.Management.ManagementScope wmi = new System.Management.ManagementScope();
-				System.Management.SelectQuery query = new System.Management.SelectQuery(@"select ChassisTypes from Win32_SystemEnclosure");
-				System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmi, query);
-				System.Management.ManagementObjectCollection coll = searcher.Get();
-				foreach (System.Management.ManagementObject m in coll)
-				{
-					short[] chtype = m.Properties["ChassisTypes"].Value as short[];
-					chassisType = chtype[0];
-				}
-			}
-
-			catch (InvalidOperationException)
-			{
-				// No need to do anything.
-			}
-
-			//  Look for  Portable, Laptop, Notebook, Handheld, Sub-Notebook
-			if (chassisType == 8 ||
-				chassisType == 9 ||
-				chassisType == 10 ||
-				chassisType == 11 ||
-				chassisType == 14)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
 			}
 
 		}
