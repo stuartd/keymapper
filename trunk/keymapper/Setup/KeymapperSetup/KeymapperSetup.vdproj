@@ -141,6 +141,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0CC173BDABC948DEA5EFC03336CBFCDC"
+                    {
+                    "Name" = "8:Rose Hill Solutions"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_0F1F305A815C4BE5830AC687FC979492"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_D231E4DE18084D95857F08C3F7DE6DB9"
@@ -171,7 +182,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Key Mapper"
         "ProductCode" = "8:{D59D9809-0F47-41B0-9CCE-9B669A15ED90}"
-        "PackageCode" = "8:{A07E3515-157B-4A42-BA7E-D12399DDD0E2}"
+        "PackageCode" = "8:{D7CDB62B-BA40-451E-8DA9-73E02179F4AE}"
         "UpgradeCode" = "8:{98019F0C-733F-4F1D-85D6-4BEFDA03185B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -274,6 +285,20 @@
             "Folder" = "8:_D231E4DE18084D95857F08C3F7DE6DB9"
             "WorkingFolder" = "8:_0E76BA841266469BB187AC2679A6BDE4"
             "Icon" = "8:_F45B08709F0941F786A0948A6E66B124"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F9FD5A3284EB4FB6B04C297A61F73A85"
+            {
+            "Name" = "8:KeyMapper"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_8102988B895A4EC0B7FAA0D2EB8B546F"
+            "Folder" = "8:_0CC173BDABC948DEA5EFC03336CBFCDC"
+            "WorkingFolder" = "8:_0E76BA841266469BB187AC2679A6BDE4"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
