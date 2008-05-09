@@ -1,0 +1,20 @@
+﻿body 
+{
+	font-family: Verdana, Helvetica, Arial, Sans-Serif ;
+	font-size: 88% ;
+}
+.ScenarioList
+{
+	list-style-type: disc;
+}
+
+.ScenarioList li
+{
+	margin-bottom: .2em ;
+}
+
+#sublist li
+{
+	list-style-type: none ;
+	margin-bottom: .5em ;
+}
