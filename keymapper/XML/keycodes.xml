@@ -1221,7 +1221,7 @@
     <sc>69</sc>
     <ex>224</ex>
     <name>Pause Break</name>
-    <group>Extra Keys</group>
+    <group>Unmappable Keys</group>
     <localize>false</localize>
     <useful>-1</useful>
   </keycodes>
