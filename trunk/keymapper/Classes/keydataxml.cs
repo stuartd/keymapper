@@ -178,7 +178,7 @@ namespace KeyMapper
 			string queryExpression;
 
             if (groupname == _allKeysGroupName)
-                queryExpression = @"/KeycodeData/keycodes" ;
+                queryExpression = @"/KeycodeData/keycodes[group!='Unmappable Keys']" ;
 			else if (groupname == _commonlyUsedKeysGroupName)
 				queryExpression = @"/KeycodeData/keycodes[useful>='2'" + "]";
 			else

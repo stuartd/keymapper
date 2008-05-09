@@ -186,6 +186,8 @@ namespace KeyMapper
 			else
 				_tooltip.SetToolTip(DisableButton, "Disable this key");
 
+			_tooltip.SetToolTip(KeysByGroupListbox, "Keys are collected into groups");
+
 
 		}
 
