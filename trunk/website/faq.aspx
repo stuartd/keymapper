@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
         <h3>
-            Why should I use Key Mapper</h3>
+            Why should I use Key Mapper?</h3>
         <p>
             Here's a list of possible reasons why people would use Key Mapper.</p>
         <div>
@@ -40,17 +40,24 @@
         </div>
     </form>
     <h3>
-        How do I remap keys?</h3>
+        How do I remap and disable keys?</h3>
     <p>
         If you want to map a key to another and they&#39;re both on the keyboard, you can
         drag and drop the action key onto the target key. For example, to remap Caps Lock
-        to act lke Left Shift, drag and drop the Left Shift key onto the Caps Lock key.</p>
+        to act like Left Shift, drag and drop the Left Shift key onto the Caps Lock key.
+       </p>
+     
+     <p>To disable a key on the virtual keyboard, drag and drop it </p>
+        If you want to remap a key to a key or action that isn&#39;t on the virtual keyboard, double-click the
+        key to bring up the Add Mapping screen. From here, you can choose what you want the key to do from the lists presented.
+    <p>The key lists are divided into three groups:</p>
+    <ul>
+    <li>Useful Keys - these are keys which are commonly used in mappings.</li>
+    <li>All Working Keys - these are all the keys which have worked in mappings in testing</li>
+    <li>All Keys - these are all the keys which are available. Some of these require special keyboard drivers to work, and some cannot be used as mappings because of the way Windows processes keys.</li>
+    </ul>
     <p>
-        If you want to remap a key to one that isn&#39;t on the keyboard, double-click the
-        key to bring up the Add Mapping screen. From here, you can
-    </p>
-    <p>
-        If you want to remap a key that isn&#39;t on the virtual keyboard, you can either
+        If you want to remap or disable a key that itself isn&#39;t on the virtual keyboard, you can either
         select it from a list of keys or use Key Capture.</p>
     <ul id="sublist">
         <li>To select from the lists, choose Create New Mapping from the Mappings menu, and
@@ -58,11 +65,58 @@
             keys&#39; as the first group. Find the key you want to map, then click Set.</li>
         <li>To use Key Capture, choose Create New Mapping from the Mappings menu, and then the
             Use Key Capture option. You&#39;ll see a blank key: press the key you want to map.
-            If it doesn&#39;t show up, it may be an extended key which your keyboard handles
+            If it isn&#39;t shown, it may be an extended key which your keyboard handles
             itself - some keyboards have extended keys which the keyboard driver processes and
             which aren&#39;t received by Windows: these keys can&#39;t be remapped or disabled.
             (A common annoyance is a Sleep or Shut Down key inconveniently placed near a commonly
             used key.)</li>
     </ul>
+    <p>Once you've selected the key, you again choose from the list of actions, use Key Capture to grab a key that's on your keyboard, or click Disable to disable the key.</p>
+    <h3>How do I unmap or enable keys?</h3>
+    <p>If the mapped or disabled key is shown on the virtual keyboard, simply drag it 
+        off the keyboard to restore or enable it.</p>
+    <p>If the key isn&#39;t on the virtual keyboard, you can delete the mapping from the 
+        Mapping List screen. Click on Mapping List in the keyboard&#39;s Windows Menu to 
+        start the form: it shows all the current and pending mappings, and allows you to 
+        delete the current mappings.</p>
+
+    <p>
+        You can also clear all your mappings by choosing Clear All Mappings from the 
+        Mappings menu.</p>
+    <h3>
+        How do I undo my changes?</h3>
+    <p>
+        The virtual keyboard supports Undo and Redo from the Edit menu: you can also 
+        restore your mappings to their current effective state by choosing Revert To 
+        Saved Mappings from the Mappings menu (this restores the mappings shown to those 
+        which are currently in effect, discarding any new mappings and restoring any 
+        cleared mappings)</p>
+    <h3>
+        How do I create mappings which apply to all users?</h3>
+    <p>
+        By default, mapped and disabled keys only apply to the current user (except in 
+        Windows 2000, which only allows mappings which apply to all users). To set 
+        mappings which apply to all users and which take effect before a user has logged 
+        in (i.e. at the Windows Login screen) click Show and then Boot Mappings from the 
+        Mappings menu. You can have both boot mappings and user mappings: if the same 
+        key is mapped in each, then user mappings override boot mappings. If you use 
+        Fast User Switching, then you will need to use Boot Mappings as user mappings 
+        are discarded when using Fast User Switching to switch to an account that&#39;s 
+        already logged on.</p>
+    <h3>
+        How do I change the key colours?</h3>
+    <p>
+        Show the Colour Map form from the keyborad&#39;s Windows menu. You can double-click 
+        on a button to invoke the Colour Editor, which lets you tweak individual colour 
+        components and set the font colour. Alternatively, click the Random key until 
+        you find a colour you like! The Colour Map form has a right-click menu which 
+        allows you to show all the possible buttons instead of just the ones in use, to 
+        close all editor forms, and to reset all the colours back to their defaults.</p>
+    <h3>
+        How do I get back a Window which is off the screen?</h3>
+    <p>
+        You can reset the positions of the child windows by choosing Arrange All in the 
+        Windows menu.</p>
+
 </body>
 </html>
