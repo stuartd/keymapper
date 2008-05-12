@@ -103,6 +103,10 @@
         Fast User Switching, then you will need to use Boot Mappings as user mappings 
         are discarded when using Fast User Switching to switch to an account that&#39;s 
         already logged on.</p>
+    <p>
+        Using Boot Mappings requires you to be an Administrator on your PC. It&#39;s also 
+        problematic on Windows Vista, as UAC prevents access from
+    </p>
     <h3>
         How do I change the key colours?</h3>
     <p>
@@ -113,10 +117,27 @@
         allows you to show all the possible buttons instead of just the ones in use, to 
         close all editor forms, and to reset all the colours back to their defaults.</p>
     <h3>
-        How do I get back a Window which is off the screen?</h3>
+        How do I get back a window which is off the screen?</h3>
     <p>
         You can reset the positions of the child windows by choosing Arrange All in the 
         Windows menu.</p>
+    <h3>
+        What does the Toggle Key menu do?</h3>
+    <p>
+        The Toggle Key menu allows you to turn Num, Caps and Scroll lock on and off: 
+        this can be useful if you have disabled one of those keys but a rogue 
+        application then switches the value.
+    </p>
+    <h3>
+        Why is my keyboard wrong?</h3>
+    <p>
+        If your Enter key is shown in the wrong orientation (i.e. horizontal when it 
+        should be vertical) you can switch it using the virtual keyboard&#39;s Keyboard 
+        menu. This is also where you can say you have a Mac keyboard (where the Alt and 
+        Windows (Command) keys are reversed), switch the Number Pad off if you have a 
+        laptop, or switch to Typewriter Keys Only view for the best view when browsing 
+        through the different keyboards installed on your PC.
+    </p>
 
 </body>
 </html>
