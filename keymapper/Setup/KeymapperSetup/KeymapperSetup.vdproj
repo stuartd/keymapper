@@ -15,7 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_8102988B895A4EC0B7FAA0D2EB8B546F"
+        "MsmKey" = "8:_1724A8316ED746C49766B0798C1DCC9E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_43B0E5E117DB4F6E9F63A99A9EC953AB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -28,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8102988B895A4EC0B7FAA0D2EB8B546F"
+        "OwnerKey" = "8:_43B0E5E117DB4F6E9F63A99A9EC953AB"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -136,6 +142,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1724A8316ED746C49766B0798C1DCC9E"
+            {
+            "SourcePath" = "8:..\\..\\license.txt"
+            "TargetName" = "8:license.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_0E76BA841266469BB187AC2679A6BDE4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:FALSE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:2"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F45B08709F0941F786A0948A6E66B124"
             {
             "SourcePath" = "8:..\\..\\Images\\keymapper.ico"
@@ -164,7 +190,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_0E76BA841266469BB187AC2679A6BDE4"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -172,6 +198,50 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_56DD1BED5B304C30B1E10448DBC0DC2A"
+            {
+            "Name" = "8:#1915"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:AppDataFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0CD295B226F5446587F1B634A746B260"
+                    {
+                    "Name" = "8:Microsoft"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_BE31441C5FA14A358C7C532C157C863F"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F15506FC79444EB7906DAB156470C6CD"
+                            {
+                            "Name" = "8:Internet Explorer"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_4F405C3EDE3A4E9B869C121E0B3B9DBD"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_69057CD0095C4EC5B8CE797A7FC3F7B1"
+                                    {
+                                    "Name" = "8:Quick Launch"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_C8679CC0B67F4068AF37B9E39AA2D5B9"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_8CDFDD78CE0F40369AA5518E563C677D"
@@ -183,13 +253,13 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0CC173BDABC948DEA5EFC03336CBFCDC"
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_534D1FC636E64E01944387489E155682"
                     {
-                    "Name" = "8:Rose Hill Solutions"
+                    "Name" = "8:Key Mapper"
                     "AlwaysCreate" = "11:FALSE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
-                    "Property" = "8:_0F1F305A815C4BE5830AC687FC979492"
+                    "Property" = "8:_576D768E18CA4700A2D84D4C4BE7FE01"
                         "Folders"
                         {
                         }
@@ -200,7 +270,7 @@
             {
             "Name" = "8:#1916"
             "AlwaysCreate" = "11:FALSE"
-            "Condition" = "8:"
+            "Condition" = "8:[DESKTOPSHORTCUT]"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
                 "Folders"
@@ -224,7 +294,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Key Mapper"
         "ProductCode" = "8:{D59D9809-0F47-41B0-9CCE-9B669A15ED90}"
-        "PackageCode" = "8:{1F3518A0-1A53-42FD-9403-9605864F9949}"
+        "PackageCode" = "8:{6B463BFC-C4C6-4F86-B35A-07D84549197C}"
         "UpgradeCode" = "8:{98019F0C-733F-4F1D-85D6-4BEFDA03185B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -315,32 +385,32 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2DE62D5F5AC44F4DAAA7B7DAF02CF998"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4A931BEB608845288F926C04AD41CB9D"
             {
             "Name" = "8:Key Mapper"
-            "Arguments" = "8:"
-            "Description" = "8:Remap and disable keyboard keys"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_8102988B895A4EC0B7FAA0D2EB8B546F"
-            "Folder" = "8:_D231E4DE18084D95857F08C3F7DE6DB9"
-            "WorkingFolder" = "8:_0E76BA841266469BB187AC2679A6BDE4"
-            "Icon" = "8:_F45B08709F0941F786A0948A6E66B124"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F9FD5A3284EB4FB6B04C297A61F73A85"
-            {
-            "Name" = "8:KeyMapper"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_8102988B895A4EC0B7FAA0D2EB8B546F"
-            "Folder" = "8:_0CC173BDABC948DEA5EFC03336CBFCDC"
+            "Target" = "8:_43B0E5E117DB4F6E9F63A99A9EC953AB"
+            "Folder" = "8:_534D1FC636E64E01944387489E155682"
             "WorkingFolder" = "8:_0E76BA841266469BB187AC2679A6BDE4"
-            "Icon" = "8:"
+            "Icon" = "8:_F45B08709F0941F786A0948A6E66B124"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_BC84F8D890894842BECF2602AAF31243"
+            {
+            "Name" = "8:Key Mapper"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_43B0E5E117DB4F6E9F63A99A9EC953AB"
+            "Folder" = "8:_D231E4DE18084D95857F08C3F7DE6DB9"
+            "WorkingFolder" = "8:_0E76BA841266469BB187AC2679A6BDE4"
+            "Icon" = "8:_F45B08709F0941F786A0948A6E66B124"
             "Feature" = "8:"
             }
         }
@@ -482,8 +552,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1202"
+                            "Setting" = "3:2"
+                            "Value" = "8:Copyright (c) 2007-2008, Stuart Dunkeld. All rights reserved."
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -646,8 +716,8 @@
                             "Type" = "3:15"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1258"
+                            "Setting" = "3:2"
+                            "Value" = "8:"
                             "DefaultValue" = "8:#1258"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -742,9 +812,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8102988B895A4EC0B7FAA0D2EB8B546F"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_43B0E5E117DB4F6E9F63A99A9EC953AB"
             {
-            "SourcePath" = "8:..\\..\\obj\\Debug\\KeyMapper.exe"
+            "SourcePath" = "8:..\\..\\obj\\Release\\KeyMapper.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0E76BA841266469BB187AC2679A6BDE4"

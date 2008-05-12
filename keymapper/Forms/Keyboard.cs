@@ -1040,6 +1040,11 @@ namespace KeyMapper
 		private void arrangeWindowsMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ArrangeAllOpenForms();
+			// Also, delete the saved position for the Add/Edit mapping form so it's in it's default location
+			// next time it's shown.
+			Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+			userSettings.EditMappingFormLocation = Point.Empty;
+			userSettings.Save();
 		}
 
 		private void showHelpMenuItemClick(object sender, EventArgs e)
