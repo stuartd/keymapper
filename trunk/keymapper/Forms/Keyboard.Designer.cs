@@ -277,8 +277,8 @@ namespace KeyMapper
 			this.changeOrientationToolStripMenuItem.Name = "changeOrientationToolStripMenuItem";
 			this.changeOrientationToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.E)));
-			this.changeOrientationToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
-			this.changeOrientationToolStripMenuItem.Text = "&Switch Enter key orientation";
+			this.changeOrientationToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+			this.changeOrientationToolStripMenuItem.Text = "&Switch Enter Key Orientation";
 			this.changeOrientationToolStripMenuItem.Click += new System.EventHandler(this.changeOrientationMenuItemClick);
 			// 
 			// toggleNumberPadToolStripMenuItem
@@ -286,7 +286,7 @@ namespace KeyMapper
 			this.toggleNumberPadToolStripMenuItem.Name = "toggleNumberPadToolStripMenuItem";
 			this.toggleNumberPadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.U)));
-			this.toggleNumberPadToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
+			this.toggleNumberPadToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
 			this.toggleNumberPadToolStripMenuItem.Text = "&Number Pad";
 			this.toggleNumberPadToolStripMenuItem.Click += new System.EventHandler(this.toggleNumberPadMenuItemClick);
 			// 
@@ -295,7 +295,7 @@ namespace KeyMapper
 			this.showMainKeysOnlyToolStripMenuItem.Name = "showMainKeysOnlyToolStripMenuItem";
 			this.showMainKeysOnlyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.K)));
-			this.showMainKeysOnlyToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
+			this.showMainKeysOnlyToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
 			this.showMainKeysOnlyToolStripMenuItem.Text = "Typewriter &Keys Only";
 			this.showMainKeysOnlyToolStripMenuItem.Click += new System.EventHandler(this.showMainKeysOnlyMenuItemClick);
 			// 
@@ -304,7 +304,7 @@ namespace KeyMapper
 			this.useMacKeyboardToolStripMenuItem.Name = "useMacKeyboardToolStripMenuItem";
 			this.useMacKeyboardToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.M)));
-			this.useMacKeyboardToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
+			this.useMacKeyboardToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
 			this.useMacKeyboardToolStripMenuItem.Text = "&Mac Keyboard";
 			this.useMacKeyboardToolStripMenuItem.Click += new System.EventHandler(this.useMacKeyboardMenuItemClick);
 			// 
@@ -313,14 +313,14 @@ namespace KeyMapper
 			this.revertToDefaultToolStripMenuItem.Name = "revertToDefaultToolStripMenuItem";
 			this.revertToDefaultToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.D)));
-			this.revertToDefaultToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
+			this.revertToDefaultToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
 			this.revertToDefaultToolStripMenuItem.Text = "&Reset To Default";
 			this.revertToDefaultToolStripMenuItem.Click += new System.EventHandler(this.revertToDefaultKeyboardLayoutMenuItemClick);
 			// 
 			// selectLayoutToolStripMenuItem
 			// 
 			this.selectLayoutToolStripMenuItem.Name = "selectLayoutToolStripMenuItem";
-			this.selectLayoutToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
+			this.selectLayoutToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
 			this.selectLayoutToolStripMenuItem.Text = "Select &Language";
 			// 
 			// toggleToolStripMenuItem

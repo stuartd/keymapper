@@ -171,10 +171,19 @@ namespace KeyMapper
 					i++;
 					int offset = SystemInformation.CaptionHeight * (i - 1);
 					ce.Location = new Point(startingPosition.X + offset, startingPosition.Y + offset);
-					ce.BringToFront(); // This means bringing each to the front, so they display in correct order.
+					ce.BringToFront(); 
+					// This means bringing all to the front in turn, so they display in correct order.
+					// (or, at least, with the latest one on top)
 				}
 			}
 
+			if (i == 0)
+			{
+				// There were no open forms: reset the default position instead.
+				Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+				userSettings.ColourEditorLocation = Point.Empty;
+				userSettings.Save();
+			}
 
 		}
 
