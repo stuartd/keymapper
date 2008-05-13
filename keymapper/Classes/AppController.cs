@@ -29,7 +29,7 @@ namespace KeyMapper
 		private static CultureInfo _currentCultureInfo;
 		private static LocalizedKeySet _currentLayout;
 		private static KeyboardLayoutType _keyboardLayout;
-
+		
 		// Base font size for drawing text on keys
 		private static float _baseFontSize;
 
@@ -50,19 +50,18 @@ namespace KeyMapper
 
 		private static bool _userCannotWriteToApplicationRegistryKey;
 
-		public static bool UserCannotWriteToApplicationRegistryKey
-		{
-			get { return AppController._userCannotWriteToApplicationRegistryKey; }
-		}
-
+	
 		// Properties
+
+	public static bool UserCannotWriteToApplicationRegistryKey
+		{
+			get { return _userCannotWriteToApplicationRegistryKey; }
+		}
 
 		public static bool UserCannotWriteMappings
 		{
 			get
-			{
-				return (MappingsManager.Filter == MappingFilter.Boot && !_canWriteBootMappings);
-			}
+			{ return (MappingsManager.Filter == MappingFilter.Boot && !_canWriteBootMappings); }
 		}
 
 		public static bool UserCanWriteBootMappings
@@ -191,13 +190,13 @@ namespace KeyMapper
 				Console.WriteLine(exc.Message + "Can't create log file.");
 				return;
 			}
-	
+
 
 			_isConsoleRedirected = true;
 
 			// Direct standard output to the log file.
 			Console.SetOut(_consoleWriterStream);
-			
+
 			Console.WriteLine("Logging started {0}", DateTime.Now);
 		}
 
@@ -384,17 +383,19 @@ namespace KeyMapper
 
 		}
 
+
 		public static void ValidateUserConfigFile()
 		{
 			try
 			{
-				// If file is corrupt this will trigger an excption
+				// If file is corrupt this will trigger an exception
 				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
 			}
 
 			catch (ConfigurationErrorsException ex)
 			{
 				DeleteInvalidUserFileFromException(ex);
+				return;
 			}
 
 			try
@@ -447,8 +448,8 @@ namespace KeyMapper
 				// This can error with some cultures, problems with framework, unhandled thread exception occurs.
 				try
 				{
-					if (_currentCultureInfo != null)
-						Console.WriteLine("Setting culture to: LCID: {0}", _currentCultureInfo.LCID);
+					// if (_currentCultureInfo != null)
+						// Console.WriteLine("Setting culture to: LCID: {0}", _currentCultureInfo.LCID);
 
 					int culture = KeyboardHelper.SetLocale(locale);
 					_currentCultureInfo = new CultureInfo(culture);

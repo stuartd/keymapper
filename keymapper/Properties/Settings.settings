@@ -17,7 +17,7 @@
     <Setting Name="ColourListFormLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
-    <Setting Name="KeyboardFormColourMapFormOpen" Type="System.Boolean" Scope="User">
+    <Setting Name="ColourMapFormOpen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MappingListFormLocation" Type="System.Drawing.Point" Scope="User">
@@ -26,7 +26,7 @@
     <Setting Name="KeyboardFormHasMacKeyboard" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="KeyboardFormHasMappingListFormOpen" Type="System.Boolean" Scope="User">
+    <Setting Name="MappingListFormOpen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="EditMappingFormLocation" Type="System.Drawing.Point" Scope="User">
@@ -55,6 +55,9 @@
     </Setting>
     <Setting Name="UpgradeRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="KeyboardLayout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

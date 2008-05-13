@@ -223,10 +223,10 @@ namespace KeyMapper
 
 			Properties.Settings userSettings = new Properties.Settings();
 
-			if (userSettings.KeyboardFormColourMapFormOpen)
+			if (userSettings.ColourMapFormOpen)
 				ToggleColourMapForm();
 
-			if (userSettings.KeyboardFormHasMappingListFormOpen)
+			if (userSettings.MappingListFormOpen)
 				ToggleMappingListForm();
 
 			if (userSettings.ShowHelpFormAtAtStartup)

@@ -86,12 +86,12 @@ namespace KeyMapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool KeyboardFormColourMapFormOpen {
+        public bool ColourMapFormOpen {
             get {
-                return ((bool)(this["KeyboardFormColourMapFormOpen"]));
+                return ((bool)(this["ColourMapFormOpen"]));
             }
             set {
-                this["KeyboardFormColourMapFormOpen"] = value;
+                this["ColourMapFormOpen"] = value;
             }
         }
         
@@ -122,12 +122,12 @@ namespace KeyMapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool KeyboardFormHasMappingListFormOpen {
+        public bool MappingListFormOpen {
             get {
-                return ((bool)(this["KeyboardFormHasMappingListFormOpen"]));
+                return ((bool)(this["MappingListFormOpen"]));
             }
             set {
-                this["KeyboardFormHasMappingListFormOpen"] = value;
+                this["MappingListFormOpen"] = value;
             }
         }
         
@@ -236,6 +236,18 @@ namespace KeyMapper.Properties {
             }
             set {
                 this["UpgradeRequired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int KeyboardLayout {
+            get {
+                return ((int)(this["KeyboardLayout"]));
+            }
+            set {
+                this["KeyboardLayout"] = value;
             }
         }
     }
