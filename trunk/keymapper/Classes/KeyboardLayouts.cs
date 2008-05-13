@@ -100,16 +100,17 @@ namespace KeyMapper
 
 			switch (layout)
 			{
+				default:
 				case KeyboardLayoutType.US:
 					return new int[] { 28, 86, 56, 109, 59 };
 
 				case KeyboardLayoutType.Punjabi:
 				case KeyboardLayoutType.European:
+
 					return new int[] { 28, 56, 999, 109, 59 }; // Nothing will match 999
 
 			}
 
-			return null;
 		}
 
 		private void PopulateFunctionKeys()

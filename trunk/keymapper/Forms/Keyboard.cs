@@ -23,8 +23,8 @@ namespace KeyMapper
 		float _buttonScale;
 		float _keySize;
 		int _paddingWidth;
-		bool _hasNumberPad ;
-		bool _keysOnly ;
+		bool _hasNumberPad;
+		bool _keysOnly;
 		KeyMapper.KeySniffer _sniffer;
 
 		// Because we are intercepting a keypress before it is processed, can't ask
@@ -96,11 +96,26 @@ namespace KeyMapper
 
 			Properties.Settings userSettings = new Properties.Settings();
 
-			bool firstrun = !userSettings.UserHasSavedSettings;
+			// As user.config is writeable (if you can find it!)
+			// don't want to trust the settings.
 
-			Point savedPosition = userSettings.KeyboardFormLocation;
-			int savedWidth = userSettings.KeyboardFormWidth;
+			bool firstrun = true;
+			Point savedPosition = Point.Empty;
+			int savedWidth = 0;
+			MappingFilter oldFilter = MappingFilter.All;
 
+			firstrun = (userSettings.UserHasSavedSettings == false);
+			savedPosition = userSettings.KeyboardFormLocation;
+			savedWidth = userSettings.KeyboardFormWidth;
+
+			_hasNumberPad = userSettings.KeyboardFormHasNumberPad;
+			_isMacKeyboard = userSettings.KeyboardFormHasMacKeyboard;
+			oldFilter = (MappingFilter)userSettings.LastMappingsFilter;
+
+			if (firstrun == false)
+			{
+				// AppController.SwitchKeyboardLayout((KeyboardLayoutType)userSettings.KeyboardLayout);
+			}
 
 			if (firstrun || savedPosition.IsEmpty)
 				FormsManager.PositionMainForm();
@@ -117,15 +132,9 @@ namespace KeyMapper
 			}
 
 
-			_hasNumberPad = userSettings.KeyboardFormHasNumberPad; // Defaults to true
-
-
-			if (userSettings.KeyboardFormHasMacKeyboard)
-				_isMacKeyboard = true; // Is there any way to find out? (ie Detect parallels)
-
 			// If there are boot mappings and no user mappings and the last view mode was boot, then
 			// start in boot mode - as long as user has the rights to change them..
-			MappingFilter oldFilter = (MappingFilter)userSettings.LastMappingsFilter;
+
 			if (oldFilter == MappingFilter.Boot
 				&& MappingsManager.GetMappingCount(MappingFilter.Boot) > 0
 				&& MappingsManager.GetMappingCount(MappingFilter.User) == 0
@@ -517,12 +526,13 @@ namespace KeyMapper
 			userSettings.KeyboardFormHasNumberPad = this._hasNumberPad;
 			userSettings.KeyboardFormHasMacKeyboard = this._isMacKeyboard;
 
-			userSettings.KeyboardFormColourMapFormOpen = FormsManager.IsColourMapFormOpen();
-			userSettings.KeyboardFormHasMappingListFormOpen = FormsManager.IsMappingListFormOpen();
+			userSettings.ColourMapFormOpen = FormsManager.IsColourMapFormOpen();
+			userSettings.MappingListFormOpen = FormsManager.IsMappingListFormOpen();
 
 			userSettings.LastMappingsFilter = (int)MappingsManager.Filter;
 
 			userSettings.UserHasSavedSettings = true;
+			// userSettings.KeyboardLayout = (int)AppController.KeyboardLayout;
 			userSettings.Save();
 
 		}
@@ -571,14 +581,22 @@ namespace KeyMapper
 
 		void ChangeKeyboard(string name)
 		{
+			ChangeKeyboard(name, false);
+		}
+
+
+		void ChangeKeyboard(string name, bool calledFromCombo)
+		{
 
 			if (KeyboardHelper.InstalledKeyboards.Contains(name))
 			{
 				AppController.SetLocale(KeyboardHelper.InstalledKeyboards[name].ToString());
-				KeyboardListCombo.SelectedIndexChanged -= KeyboardListComboTextChanged;
-				KeyboardListCombo.SelectedItem = name;
-				KeyboardListCombo.SelectedIndexChanged += KeyboardListComboTextChanged;
-
+				if (calledFromCombo == false)
+				{
+					KeyboardListCombo.SelectedIndexChanged -= KeyboardListComboTextChanged;
+					KeyboardListCombo.SelectedItem = name;
+					KeyboardListCombo.SelectedIndexChanged += KeyboardListComboTextChanged;
+				}
 				this.Redraw();
 			}
 		}
@@ -736,7 +754,7 @@ namespace KeyMapper
 
 		private void KeyboardListComboTextChanged(object sender, EventArgs e)
 		{
-			this.ChangeKeyboard(KeyboardListCombo.Text);
+			this.ChangeKeyboard(KeyboardListCombo.Text, true);
 		}
 
 		private void KeyDoubleClick(object sender, EventArgs e)
@@ -939,16 +957,8 @@ namespace KeyMapper
 
 		private void revertToDefaultKeyboardLayoutMenuItemClick(object sender, EventArgs e)
 		{
-			_keysOnly = false;
-	
-			// Not going to reset this. 
-			// _isMacKeyboard = false;
-
-			// Revert to default layout and locale (restores Enter key etc)
+			// Revert to default keyboard layout 
 			this.ChangeKeyboard(KeyboardHelper.GetKeyboardName());
-			AppController.SetLocale(null, true);
-
-			this.ResizeToAspect();
 			this.Redraw();
 		}
 
