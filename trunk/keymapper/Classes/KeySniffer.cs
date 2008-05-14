@@ -6,7 +6,7 @@ using System.Security.Permissions;
 namespace KeyMapper
 {
 	
-	public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+	public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wparam, IntPtr lparam);
 
 	class KeySniffer : IDisposable
 	{

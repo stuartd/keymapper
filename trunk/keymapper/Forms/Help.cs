@@ -28,13 +28,13 @@ namespace KeyMapper
 
 		private void HelpFormMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
-			const int WM_NCLBUTTONDOWN = 0xA1;
-			const int HT_CAPTION = 0x2;
+			uint msg = 0xA1 ; // WM_NCLBUTTONDOWN 
+			IntPtr wparam = (IntPtr)0x2; // HT_CAPTION 
 
 			if (e.Button == MouseButtons.Left)
 			{
 				NativeMethods.ReleaseCapture();
-				NativeMethods.SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+				NativeMethods.SendMessage(Handle, msg, wparam, IntPtr.Zero);
 			}
 		}
 

@@ -15,18 +15,7 @@ namespace KeyMapper
 		static Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
 		static HelpForm _helpForm ;
 
-        public static IWin32Window MainFormHandle // For dialog boxes
-        {
-            get
-            {
-                if (_mainForm != null)
-                    return (IWin32Window)_mainForm;
-                else
-                    return null;
-                }
-        }
-
-		public static void RegisterMainForm(KeyboardForm form)
+   		public static void RegisterMainForm(KeyboardForm form)
 		{
 			_mainForm = form;
 		}
@@ -216,6 +205,12 @@ namespace KeyMapper
 		public static bool IsHelpFormOpen()
 		{
 			return (_helpForm != null);
+		}
+
+		public static void ActivateMainForm()
+		{
+			// Mapping list form steals focus when DataGridView is refreshed.
+			_mainForm.Activate();
 		}
 
 		public static void OpenChildForms()

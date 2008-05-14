@@ -57,6 +57,8 @@ namespace KeyMapper
 		private void Populate()
 		{
 
+			// Form grabs focus from main form when repopulating. Check if we have focus now..
+			bool hasFocus = this.grdMappings.ContainsFocus;
 		
 			// Using grdMappings.Rows.Clear() sometimes results in 
 			// "Can't add rows where there are no columns" error,
@@ -90,6 +92,11 @@ namespace KeyMapper
 			this.MaximumSize = new Size(0, 0);
 			this.SetClientSizeCore(this.ClientSize.Width, height);
 			this.MinimumSize = new Size(_minimumWidth, this.Size.Height);
+
+			// If we didn't have form to start with, set focus back to main form.
+			if (hasFocus == false)
+				FormsManager.ActivateMainForm();
+			
 
 		}
 
@@ -193,8 +200,6 @@ namespace KeyMapper
 
 					MappingsManager.DeleteMapping((KeyMapping)currentRow.Tag, filter);
 				}
-
-				Populate();
 
 			}
 

@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using System.Configuration;
 using System.IO;
+using System.Globalization;
 
 namespace KeyMapper
 {
@@ -1030,11 +1031,11 @@ namespace KeyMapper
 
 		}
 
-		private void WriteMappingsToStream(StreamWriter sw, byte[] bytemappings)
+		private static void WriteMappingsToStream(StreamWriter sw, byte[] bytemappings)
 		{
 			for (int i = 0; i < bytemappings.GetLength(0); i++)
 			{
-				sw.Write(bytemappings[i].ToString("X").PadLeft(2, (char)48));
+				sw.Write(bytemappings[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char)48));
 				if (i < bytemappings.GetLength(0) - 1)
 					sw.Write(",");
 			}

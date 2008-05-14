@@ -14,8 +14,11 @@ namespace KeyMapper
 		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		internal extern static void LockWindowUpdate(IntPtr hWnd);
 
-		[DllImportAttribute("user32.dll")]
-		public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+		//[DllImportAttribute("user32.dll")]
+		//public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+		public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
 		[DllImportAttribute("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
