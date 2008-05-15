@@ -3,12 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Untitled Page</title>
+    <title>Key Mapper FAQ</title>
     <link href="keymapper.css" rel="stylesheet" type="text/css" />
     <script src="faq.js"></script>
 </head>
 <body>
     <form id="form1" runat="server">
+         <h1>Key Mapper FAQ</h1>
         <h3>
             What does Key Mapper do?</h3>
         <p>
@@ -22,35 +23,36 @@
             this, you can log off and on again to set and cancel mappings rather than having
             to restart your computer.</p>
         <h3>
-            Why should I use Key Mapper?</h3>
+            Why would I want to do that?</h3>
         <p>
-            Here's a list of possible reasons why people would use Key Mapper. Click here to show how they would accomplish their needs.</p>
+          Here&#39;s a list of possible reasons why people would use Key Mapper
+            <a href="#" id="showanswers" onclick="return toggleAnswers()" onMouseOver="window.status='Toggle answers'">
+            (click to show or hide how Key Mapper would help them)</a></p>
         <ul id="ScenarioList">
             <li>Mike is fed up of accidentally pressing Num Lock or Insert - keys which he never
                 uses otherwise, but which mess up his typing. He needs to have Num Lock set On,
-                though. <span class="kmusage">Mike can use Key Mapper to disable Num Lock and Insert</span>
+                though. <span class="hideanswer">Mike can use Key Mapper to disable Num Lock and Insert</span>
             </li>
             <li>Sue hates accidentally pressing Caps Lock when she wants Shift. She hardly ever
-                uses Caps Lock.<span class="kmusage">Sue can use Key Mapper to remap Caps Lock to Left
-                    Shift, and to remap Scroll Lock to Caps Lock</span></li>
+                uses Caps Lock.<span class="hideanswer">Sue can use Key Mapper to remap Caps Lock to Left
+                    Shift, and to remap Scroll Lock to Caps Lock for when she needs to set Caps Lock on.</span></li>
             <li>Mark in annoyed that his work keyboard doesn&#39;t have hardware volume up/down
-                buttons like his Mac keyboard at home.<span class="kmusage">Mark uses Key Mapper to
+                buttons like his Mac keyboard at home.<span class="hideanswer">Mark uses Key Mapper to
                     his F10 Key to Play/Pause, F11 key to Volume Down and F12 to Volume Up.</span></li>
             <li>Mary is always looking for her email program and browser in the taskbar. She wishes
                 she could just press a button to make them appear whether they are open or not.<span
-                    class="kmusage">Mary remaps Insert to Email, and Num Lock to Browser.</span></li>
+                    class="hideanswer">Mary remaps Insert to Email, and Num Lock to Browser.</span></li>
             <li>Sandy is frustrated that when using Boot Camp or virtualization to run Windows on
                 her Mac that there&#39;s no Print Screen or Scroll Lock keys (she uses Excel all
                 the time, and it happens to be the only program on Earth that actually takes notice
                 of Scroll Lock). She also gets fed up with pressing Command - expecting it to behave
                 like Control - when in fact it&#39;s the Windows key and opens the Start Menu.<span
-                    class="kmusage">Sandy uses Key Mapper to remap F3 to Print Screen, and F4 to Scroll Lock.</span></li>
-            <li>Andy keeps pressing &quot;Power Off&quot; on his Extended Keyboard because it&#39;s
-                right next to the Delete key, causing much annoyance and inconvenience.</li>
+                    class="hideanswer">Sandy uses Key Mapper to map F3 to Print Screen, F4 to Scroll Lock, and remaps her left Command key from Windows to Control.</span></li>
             <li>Kevin has broken the 6 key on his laptop. He&#39;d like to remap another key to
-                it, like F6, rather than have to buy and fit a new keyboard.<span class=kmusage>Kevin remaps F6 to 6</span></li>
+                it, like F6, rather than have to buy and fit a new keyboard.<span class=hideanswer>Kevin remaps F6 to 6</span></li>
             <li>George hates Sarah and wants to mess with her head, so he wants to remap half her
-                keys and disable the other half.<span class=kmusage>George remaps and disables keys like the crazy man he is, ignoring the warnings about remapping Ctrl, ALt or Delete.</span></li>
+                keys and disable the other half.<span class=hideanswer>
+                George remaps and disables keys like the crazy man he is, ignoring the warnings about remapping Ctrl, Alt or Delete.</span></li>
         </ul>
     </form>
     <h3>
@@ -61,7 +63,8 @@
         to act like Left Shift, drag and drop the Left Shift key onto the Caps Lock key.
     </p>
     <p>
-        To disable a key on the virtual keyboard, drag and drop it off the keyboard.</p>
+        To disable a key you can see on the virtual keyboard, drag and drop it off the 
+        virtual keyboard.</p>
     If you want to remap a key to a key or action that isn&#39;t on the virtual keyboard,
     double-click the key to bring up the Add Mapping screen. From here, you can choose
     what you want the key to do from the lists presented.
@@ -176,8 +179,10 @@
     <h3>
         Why don't the Chinese keyboards work?</h3>
     <p>
-        I think it's because Chinese keyboards require an Input Method Editor: the Korean
-        keyboard doesn't work either. The Japanese one does, though.</p>
+        I think it&#39;s because Chinese keyboards require an Input Method Editor, which use 
+        multiple keypresses to construct a
+        <a href="http://en.wikipedia.org/wiki/Logogram">logogram</a> representing a 
+        Chines word.</p>
     <h3>
         How do you get all those exotic keyboards in Windows XP?</h3>
     <p>
@@ -201,6 +206,12 @@
             processes keypresses - you can map Alt-PrtScr and Ctrl-Break, for example (Alt PrtScr
             puts a screenshot of the program currently running on your clipboard, and Ctrl-Break
             cancels some dialogs, e.g. the Open File dialog.)</p>
+<h3>
+            I&#39;ve disabled Num Lock / Scroll Lock / Caps Lock and now it&#39;s stuck on the wrong 
+            value. How can I change it?</h3>
+<p>
+            You can toggle the value of the Num Lock, Caps Lock and Scroll Lock keys from 
+            Key mapper&#39;s Toggle Keys menu.</p>
     <h3>
         Can Key Mapper create Microsoft Keyboard Layout files?</h3>
     <p>
@@ -214,5 +225,11 @@
         understands. The format is documented <a href="http://www.microsoft.com/whdc/archive/w2kscan-map.mspx">
             here</a>, although the fact that you can have User mappings in Windows XP or
         later isn't documented anywhere.</p>
+<h3>
+        Hey! My mappings have disappeared! Where did they go?</h3>
+<p>
+        If you set user mappings (which are the default in Windows XP and Vista) and 
+        then use Fast User Switching to switch to a user account that&#39;s already logged 
+        on, that user&#39;s mappings will not be loaded.</p>
 </body>
 </html>
