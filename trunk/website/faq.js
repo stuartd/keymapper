@@ -1,7 +1,4 @@
-﻿// On page load, hide the page elements that should be hidden.
-// If scripts are disabled, the page elements will all be shown and the text to show them is itself hidden.
-
-function toggleAnswers()
+﻿function toggleAnswers()
 {
   
    var list=document.getElementById('ScenarioList').getElementsByTagName('span');
@@ -14,4 +11,20 @@ function toggleAnswers()
      return false ;
     
 }
+
+function load()
+{
+// By default - ie without scripting - all elements are shown and the text to show them is itself hidden.
+// In this function, then, call the function to toggle the values ..
+toggleAnswers() ;
+// .. and switch the class of the text.
+var txt = document.getElementById('hideanswerstext') ;
+txt.id = 'showanswerstext' ;
+
+}
+
+
+
+
+
 

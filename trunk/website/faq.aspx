@@ -7,7 +7,7 @@
     <link href="keymapper.css" rel="stylesheet" type="text/css" />
     <script src="faq.js"></script>
 </head>
-<body>
+<body onload="load()">
     <form id="form1" runat="server">
          <h1>Key Mapper FAQ</h1>
         <h3>
@@ -26,32 +26,32 @@
             Why would I want to do that?</h3>
         <p>
           Here&#39;s a list of possible reasons why people would use Key Mapper
-            <a href="#" id="showanswers" onclick="return toggleAnswers()" onMouseOver="window.status='Toggle answers'">
+            <a href="#" id="hideanswerstext" onclick="return toggleAnswers()" onMouseOver="window.status='Toggle answers'">
             (click to show or hide how Key Mapper would help them)</a></p>
         <ul id="ScenarioList">
             <li>Mike is fed up of accidentally pressing Num Lock or Insert - keys which he never
                 uses otherwise, but which mess up his typing. He needs to have Num Lock set On,
-                though. <span class="hideanswer">Mike can use Key Mapper to disable Num Lock and Insert</span>
+                though. <span class="showanswer">Mike can use Key Mapper to disable Num Lock and Insert</span>
             </li>
             <li>Sue hates accidentally pressing Caps Lock when she wants Shift. She hardly ever
-                uses Caps Lock.<span class="hideanswer">Sue can use Key Mapper to remap Caps Lock to Left
+                uses Caps Lock.<span class="showanswer">Sue can use Key Mapper to remap Caps Lock to Left
                     Shift, and to remap Scroll Lock to Caps Lock for when she needs to set Caps Lock on.</span></li>
             <li>Mark in annoyed that his work keyboard doesn&#39;t have hardware volume up/down
-                buttons like his Mac keyboard at home.<span class="hideanswer">Mark uses Key Mapper to
-                    his F10 Key to Play/Pause, F11 key to Volume Down and F12 to Volume Up.</span></li>
+                buttons like his Mac keyboard at home.<span class="showanswer">Mark uses Key Mapper to
+                    map his F10 Key to Play/Pause, F11 key to Volume Down and F12 to Volume Up.</span></li>
             <li>Mary is always looking for her email program and browser in the taskbar. She wishes
                 she could just press a button to make them appear whether they are open or not.<span
-                    class="hideanswer">Mary remaps Insert to Email, and Num Lock to Browser.</span></li>
+                    class="showanswer">Mary remaps Insert to Email, and Num Lock to Browser.</span></li>
             <li>Sandy is frustrated that when using Boot Camp or virtualization to run Windows on
                 her Mac that there&#39;s no Print Screen or Scroll Lock keys (she uses Excel all
                 the time, and it happens to be the only program on Earth that actually takes notice
                 of Scroll Lock). She also gets fed up with pressing Command - expecting it to behave
                 like Control - when in fact it&#39;s the Windows key and opens the Start Menu.<span
-                    class="hideanswer">Sandy uses Key Mapper to map F3 to Print Screen, F4 to Scroll Lock, and remaps her left Command key from Windows to Control.</span></li>
+                    class="showanswer">Sandy uses Key Mapper to map F3 to Print Screen, F4 to Scroll Lock, and remaps her left Command key from Windows to Control.</span></li>
             <li>Kevin has broken the 6 key on his laptop. He&#39;d like to remap another key to
-                it, like F6, rather than have to buy and fit a new keyboard.<span class=hideanswer>Kevin remaps F6 to 6</span></li>
+                it, like F6, rather than have to buy and fit a new keyboard.<span class=showanswer>Kevin remaps F6 to 6</span></li>
             <li>George hates Sarah and wants to mess with her head, so he wants to remap half her
-                keys and disable the other half.<span class=hideanswer>
+                keys and disable the other half.<span class=showanswer>
                 George remaps and disables keys like the crazy man he is, ignoring the warnings about remapping Ctrl, Alt or Delete.</span></li>
         </ul>
     </form>

@@ -31,11 +31,18 @@ li
     background-position:0 8px;
 }
 
-
-#showanswers
+#showanswerstext
 {
-	text-decoration: underline ;
+	display: inline ;
 }
+	
+#hideanswerstext
+{
+	display: none ;
+}
+
+
+
 
 .showanswer
 {
