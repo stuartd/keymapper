@@ -49,6 +49,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -133,7 +141,7 @@
                 "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_F15E482A914646EA88FC7DC9ED3C7AFC"
                 {
                 "Name" = "8:.NET Framework"
-                "Message" = "8:The .NET Framework is required to install this software"
+                "Message" = "8:The .NET Framework 2.0 (or later) is required to install this software. Do you want to download it? (You will have to install it and run this installer again)"
                 "Version" = "8:2.0.50727"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://www.microsoft.com/downloads/details.aspx?FamilyID=0856EACB-4362-4B0D-8EDD-AAB15C5E04F5&displaylang=en"
@@ -230,7 +238,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Key Mapper"
         "ProductCode" = "8:{0FE22A70-F77A-4DB6-86D4-B8AE8714C748}"
-        "PackageCode" = "8:{1490CC0A-B128-4EF4-B14D-6377C09D8DCA}"
+        "PackageCode" = "8:{F2BD7B29-0B4A-4FF2-81AD-1C0CDC90593B}"
         "UpgradeCode" = "8:{13BE75A4-A045-43A0-B293-F3B128D1B3C5}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
