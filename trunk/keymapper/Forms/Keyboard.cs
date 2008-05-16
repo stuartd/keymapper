@@ -68,7 +68,7 @@ namespace KeyMapper
 
 			ResizeToAspect();
 
-			// This needs to be done after the location and size of this form are fully determined.
+			// This needs to be done after location and size of this form are fully determined.
 
 			FormsManager.OpenChildForms();
 
@@ -78,7 +78,7 @@ namespace KeyMapper
 
 			// Create event handlers 
 			this.ResizeEnd += new System.EventHandler(this.KeyboardFormResizeEnd);
-			this.KeyboardListCombo.TextChanged += KeyboardListComboTextChanged;
+			this.KeyboardListCombo.SelectedIndexChanged += KeyboardListSelectedIndexChanged;
 
 			MappingsManager.MappingsChanged += OnMappingsChanged;
 			UserColourSettingManager.ColoursChanged += OnColoursChanged;
@@ -594,9 +594,9 @@ namespace KeyMapper
 				AppController.SetLocale(KeyboardHelper.InstalledKeyboards[name].ToString());
 				if (calledFromCombo == false)
 				{
-					KeyboardListCombo.SelectedIndexChanged -= KeyboardListComboTextChanged;
+					KeyboardListCombo.SelectedIndexChanged -= KeyboardListSelectedIndexChanged;
 					KeyboardListCombo.SelectedItem = name;
-					KeyboardListCombo.SelectedIndexChanged += KeyboardListComboTextChanged;
+					KeyboardListCombo.SelectedIndexChanged += KeyboardListSelectedIndexChanged;
 				}
 				this.Redraw();
 			}
@@ -753,7 +753,7 @@ namespace KeyMapper
 
 		#region Event Methods
 
-		private void KeyboardListComboTextChanged(object sender, EventArgs e)
+		private void KeyboardListSelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.ChangeKeyboard(KeyboardListCombo.Text, true);
 		}

@@ -29,7 +29,7 @@ namespace KeyMapper
 		private static CultureInfo _currentCultureInfo;
 		private static LocalizedKeySet _currentLayout;
 		private static KeyboardLayoutType _keyboardLayout;
-		
+
 		// Base font size for drawing text on keys
 		private static float _baseFontSize;
 
@@ -50,10 +50,10 @@ namespace KeyMapper
 
 		private static bool _userCannotWriteToApplicationRegistryKey;
 
-	
+
 		// Properties
 
-	public static bool UserCannotWriteToApplicationRegistryKey
+		public static bool UserCannotWriteToApplicationRegistryKey
 		{
 			get { return _userCannotWriteToApplicationRegistryKey; }
 		}
@@ -232,7 +232,7 @@ namespace KeyMapper
 				_userCannotWriteToApplicationRegistryKey = true;
 			}
 
-			bool savedMappingsExist = true;
+			bool savedMappingsExist = false;
 
 			if (kmregkey == null && _userCannotWriteToApplicationRegistryKey == false)
 			{
@@ -248,17 +248,21 @@ namespace KeyMapper
 					_userCannotWriteToApplicationRegistryKey = true;
 				}
 
-				// At this point, we know that we have no saved record of what the mappings were
-				// previously, as the reg key doesn't exist. In this case, we want to be able to 
-				// show the mappings as "existing" as they almost certainly are.
-
-				// (It's also possible that this key exists but the values don't if they've been manually deleted)
-				savedMappingsExist = false;
-
 			}
 
 			if (kmregkey != null)
 			{
+
+			string[] values = kmregkey.GetValueNames();
+				for (int i = 0; i < values.Length; i++)
+				{
+					if (values[i] == "User Maps" || values[i] == "Boot Maps")
+					{
+						savedMappingsExist = true;
+						break;
+					}
+				}
+
 				kmregkey.Close();
 				// Really should have access to this key as it's in the user hive. But it isn't a requirement, as such.
 			}
@@ -296,7 +300,7 @@ namespace KeyMapper
 			// the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
 			// time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
 
-			// It can also happen - e.g. when restoring a Parallels VM - 
+			// It can also happen - e.g. when restoring a Parallels Virtual Machine - 
 			// that the boottime is later than logontime.
 
 			if (boottime > logontime)
@@ -449,7 +453,7 @@ namespace KeyMapper
 				try
 				{
 					// if (_currentCultureInfo != null)
-						// Console.WriteLine("Setting culture to: LCID: {0}", _currentCultureInfo.LCID);
+					// Console.WriteLine("Setting culture to: LCID: {0}", _currentCultureInfo.LCID);
 
 					int culture = KeyboardHelper.SetLocale(locale);
 					_currentCultureInfo = new CultureInfo(culture);
