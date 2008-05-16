@@ -14,12 +14,12 @@
 
 function load()
 {
-// By default - ie without scripting - all elements are shown and the text to show them is itself hidden.
-// In this function, then, call the function to toggle the values ..
-toggleAnswers() ;
-// .. and switch the class of the text.
-var txt = document.getElementById('hideanswerstext') ;
-txt.id = 'showanswerstext' ;
+    // By default - ie without scripting - all elements are shown and the text to show them is itself hidden.
+    // In this function, then, call the function to toggle the values ..
+    toggleAnswers() ;
+    // .. and switch the class of the text.
+    var txt = document.getElementById('hideanswerstext') ;
+    txt.id = 'showanswerstext' ;
 
 }
 

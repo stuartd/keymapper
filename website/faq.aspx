@@ -5,11 +5,14 @@
 <head runat="server">
     <title>Key Mapper FAQ</title>
     <link href="keymapper.css" rel="stylesheet" type="text/css" />
+
     <script src="faq.js"></script>
+
 </head>
 <body onload="load()">
     <form id="form1" runat="server">
-         <h1>Key Mapper FAQ</h1>
+        <h1>
+            Key Mapper FAQ</h1>
         <h3>
             What does Key Mapper do?</h3>
         <p>
@@ -25,20 +28,21 @@
         <h3>
             Why would I want to do that?</h3>
         <p>
-          Here&#39;s a list of possible reasons why people would use Key Mapper
-            <a href="#" id="hideanswerstext" onclick="return toggleAnswers()" onMouseOver="window.status='Toggle answers'">
-            (click to show or hide how Key Mapper would help them)</a></p>
+            Here&#39;s a list of possible reasons why people would use Key Mapper <a href="#"
+                id="hideanswerstext" onclick="return toggleAnswers()" onmouseover="window.status='Toggle answers'">
+                (click to show or hide how Key Mapper would help them)</a></p>
         <ul id="ScenarioList">
             <li>Mike is fed up of accidentally pressing Num Lock or Insert - keys which he never
                 uses otherwise, but which mess up his typing. He needs to have Num Lock set On,
                 though. <span class="showanswer">Mike can use Key Mapper to disable Num Lock and Insert</span>
             </li>
             <li>Sue hates accidentally pressing Caps Lock when she wants Shift. She hardly ever
-                uses Caps Lock.<span class="showanswer">Sue can use Key Mapper to remap Caps Lock to Left
-                    Shift, and to remap Scroll Lock to Caps Lock for when she needs to set Caps Lock on.</span></li>
+                uses Caps Lock.<span class="showanswer">Sue can use Key Mapper to remap Caps Lock to
+                    Left Shift, and to remap Scroll Lock to Caps Lock for when she needs to set Caps
+                    Lock on.</span></li>
             <li>Mark in annoyed that his work keyboard doesn&#39;t have hardware volume up/down
-                buttons like his Mac keyboard at home.<span class="showanswer">Mark uses Key Mapper to
-                    map his F10 Key to Play/Pause, F11 key to Volume Down and F12 to Volume Up.</span></li>
+                buttons like his Mac keyboard at home.<span class="showanswer">Mark uses Key Mapper
+                    to map his F10 Key to Play/Pause, F11 key to Volume Down and F12 to Volume Up.</span></li>
             <li>Mary is always looking for her email program and browser in the taskbar. She wishes
                 she could just press a button to make them appear whether they are open or not.<span
                     class="showanswer">Mary remaps Insert to Email, and Num Lock to Browser.</span></li>
@@ -47,12 +51,15 @@
                 the time, and it happens to be the only program on Earth that actually takes notice
                 of Scroll Lock). She also gets fed up with pressing Command - expecting it to behave
                 like Control - when in fact it&#39;s the Windows key and opens the Start Menu.<span
-                    class="showanswer">Sandy uses Key Mapper to map F3 to Print Screen, F4 to Scroll Lock, and remaps her left Command key from Windows to Control.</span></li>
+                    class="showanswer">Sandy uses Key Mapper to map F3 to Print Screen, F4 to Scroll
+                    Lock, and remaps her left Command key from Windows to Control.</span></li>
             <li>Kevin has broken the 6 key on his laptop. He&#39;d like to remap another key to
-                it, like F6, rather than have to buy and fit a new keyboard.<span class=showanswer>Kevin remaps F6 to 6</span></li>
+                it, like F6, rather than have to buy and fit a new keyboard.<span class="showanswer">Kevin
+                    remaps F6 to 6</span></li>
             <li>George hates Sarah and wants to mess with her head, so he wants to remap half her
-                keys and disable the other half.<span class=showanswer>
-                George remaps and disables keys like the crazy man he is, ignoring the warnings about remapping Ctrl, Alt or Delete.</span></li>
+                keys and disable the other half.<span class="showanswer"> George remaps and disables
+                    keys like the crazy man he is, ignoring the warnings about remapping Ctrl, Alt or
+                    Delete.</span></li>
         </ul>
     </form>
     <h3>
@@ -63,18 +70,18 @@
         to act like Left Shift, drag and drop the Left Shift key onto the Caps Lock key.
     </p>
     <p>
-        To disable a key you can see on the virtual keyboard, drag and drop it off the 
-        virtual keyboard.</p>
+        To disable a key you can see on the virtual keyboard, drag and drop it off the virtual
+        keyboard.</p>
     If you want to remap a key to a key or action that isn&#39;t on the virtual keyboard,
     double-click the key to bring up the Add Mapping screen. From here, you can choose
     what you want the key to do from the lists presented.
     <p>
         The key lists are divided into three groups:</p>
     <ul>
-        <li>Useful Keys - these are keys which are commonly used in mappings.</li>
+        <li>Useful Keys - these are keys which are commonly used - and most useful - in mappings.</li>
         <li>All Working Keys - these are all the keys which have worked in mappings in testing</li>
         <li>All Keys - these are all the keys which are available. Some of these require special
-            keyboard drivers to work, and some cannot be used as mappings because of the way
+            keyboard drivers to work, and some cannot be used in mappings because of the way
             Windows processes keys.</li>
     </ul>
     <p>
@@ -110,17 +117,56 @@
         You can also clear all your mappings by choosing Clear All Mappings from the Mappings
         menu.</p>
     <h3>
+        What else can I do?</h3>
+    <p>
+        If there are keys you never use - some function keys, perhaps - you can remap them
+        to something useful.</p>
+    <p>
+        There are some mappings to non-standardkeys that can be useful: how well they work
+        depends on which program you use for music and web browsing.</p>
+    <ul>
+        <li>Volume Keys - you can map keys to Volume Up, Volume Down, and Mute. These are controlled
+            by Windows and will work whatever program you use.</li>
+        <li>Media Keys - Next Track, Previous Track, Play / Pause, and Stop are available, These
+            <a href="http://msdn.microsoft.com/en-us/library/ms997498.aspx">should</a> be recognised
+            by any mainstream music player: some players - iTunes, for example - will only react
+            to keys when they are the frontmost application, some - like VLC - ignore them altogether, 
+            while Windows Media Player can be controlled whether active or even minimised.
+            </li>
+        <li>Browser Keys - Back, Forward, Stop Loading, Refresh, and Home can be mapped to (if
+            you use Internet Explorer, you can also map a key to your 'Favourites'). A key mapped to
+            Browser will start your browser if isn&#39;t already running, and bring it to the front</li>
+        <li>Email - a key mapped to Email will start your email program if it isn&#39;t running,
+            and bring it to the foreground if it is.</li>
+        <li>Browser Search - if you use Internet Explorer 6, the upcoming Firefox 3 or Opera, you can 
+        remap a key to Browser Search: the one I use is F3, because
+            that is the Windows shortcut key for folder search. Remapping it to Browser Search
+            means it still works to search folders as well as moving focus to the search box
+            in your browser.
+            <p>Firefox 2 and Internet Explorer 7 ignore Browser Search</p></li>
+    </ul>
+    <h3>
         How do I undo my changes?</h3>
-    <p>
-        The virtual keyboard supports Undo and Redo from the Edit menu: you can also restore
-        your mappings to their current effective state by choosing Revert To Saved Mappings
-        from the Mappings menu (this restores the mappings shown to those which are currently
-        in effect, discarding any new mappings and restoring any cleared mappings)</p>
-    <p>
+    Key Mapper supports Undo and Redo from the Edit menu: you can also restore your
+    mappings to their current effective state by choosing Revert To Saved Mappings from
+    the Mappings menu (this restores the mappings shown to those which are currently
+    in effect, discarding any new mappings and restoring any cleared mappings)<p>
         You can also clear all your mappings by choosing Clear All Mappings from the Mappings
         menu.</p>
+<h3>
+        I mapped a function key and now I can&#39;t use it anymore in another program where 
+        I need it!</h3>
+<p>
+        You need to unmap the key and choose another: key mappings apply to all programs 
+        or none.</p>
+    <h3>
+        Can I disable my keyboard's Sleep (or Shutdown) key? I keep pressing it my mistake.</h3>
     <p>
-        &nbsp;</p>
+        Probably not. Most keyboard drivers act on special keys before they reach Windows,
+        which means they can't be mapped or disabled.<br />
+        If you want to try, you can select the key from the key lists or try using Key
+        Capture (if you do that, close any open documents as it may well cause your computer
+        to sleep or shut down)</p>
     <h3>
         How do I create mappings which apply to all users?</h3>
     <p>
@@ -135,12 +181,12 @@
         already logged on.</p>
     <p>
         Using Boot Mappings requires you to be an Administrator on your PC. It&#39;s also
-        problematic on Windows Vista, as UAC prevents access from
+        problematic on Windows Vista, as UAC prevents access from the Registry key
     </p>
     <h3>
         How do I change the key colours?</h3>
     <p>
-        Show the Colour Map form from the keyborad&#39;s Windows menu. You can double-click
+        Show the Colour Map form from the virtual keyboard&#39;s Windows menu. You can double-click
         on a button to invoke the Colour Editor, which lets you tweak individual colour
         components and set the font colour. Alternatively, click the Random key until you
         find a colour you like! The Colour Map form has a right-click menu which allows
@@ -163,26 +209,23 @@
     <p>
         If your Enter key is shown in the wrong orientation (i.e. horizontal when it should
         be vertical) you can switch it using the virtual keyboard&#39;s Keyboard menu.
-        <br />
-        If the displayed keyboard is a different language from your current keyboard and
-        you haven't changed your keyboard since Key Mapper started, then that's a bug. The
+        The displayed keyboard should be the same language as your current keyboard if you haven't changed your keyboard since Key Mapper started.</p>
+<p>
+        The
         Keyboard Menu is also the place to specify you have a Mac keyboard (where the Alt
         and Windows (Command) keys are reversed), switch the Number Pad off if you have
         a laptop, or switch to Typewriter Keys Only view for the best view when browsing
-        through the different keyboards installed on your PC.
-    </p>
-    <h3>
-        How do I see all the mappings I've created?</h3>
+        through the different keyboards installed on your PC.         How do I see all the mappings I've created?</h3>
     <p>
         The Mapping List screen shows you all your user and boot mappings, whether current,
         pending or cleared.</p>
     <h3>
-        Why don't the Chinese keyboards work?</h3>
+        Why don't the Chinese aand Korean keyboards work?</h3>
     <p>
-        I think it&#39;s because Chinese keyboards require an Input Method Editor, which use 
-        multiple keypresses to construct a
-        <a href="http://en.wikipedia.org/wiki/Logogram">logogram</a> representing a 
-        Chines word.</p>
+        Chinese and Korean keyboards require an Input Method Editor, which
+        use multiple keypresses to construct a <a href="http://en.wikipedia.org/wiki/Logogram">
+            logogram</a> representing a word. The way Key mapper gets the layouts for 
+        other languages doens&#39;t work on Chinese or Korean keyboards.</p>
     <h3>
         How do you get all those exotic keyboards in Windows XP?</h3>
     <p>
@@ -202,16 +245,16 @@
             programs which will enable you to do it - they run in the background, detect your
             keypresses, and can then launch programs or substitute other characters (and that&#39;s
             why they don&#39;t require you to restart your computer or log off)<br />
-            There are some key combinations which can be mapped though, due to the way Windows
+            There are some quirky key combinations which can be mapped though, due to the way Windows
             processes keypresses - you can map Alt-PrtScr and Ctrl-Break, for example (Alt PrtScr
             puts a screenshot of the program currently running on your clipboard, and Ctrl-Break
-            cancels some dialogs, e.g. the Open File dialog.)</p>
-<h3>
-            I&#39;ve disabled Num Lock / Scroll Lock / Caps Lock and now it&#39;s stuck on the wrong 
-            value. How can I change it?</h3>
-<p>
-            You can toggle the value of the Num Lock, Caps Lock and Scroll Lock keys from 
-            Key mapper&#39;s Toggle Keys menu.</p>
+            cancels some dialogs, e.g. the &#39;Open File&#39; dialog.)</p>
+    <h3>
+        I&#39;ve disabled Num Lock / Scroll Lock / Caps Lock and now it&#39;s stuck on the
+        wrong value. How can I change it?</h3>
+    <p>
+        You can toggle the value of the Num Lock, Caps Lock and Scroll Lock keys from Key
+        mapper&#39;s Toggle Keys menu.</p>
     <h3>
         Can Key Mapper create Microsoft Keyboard Layout files?</h3>
     <p>
@@ -225,11 +268,39 @@
         understands. The format is documented <a href="http://www.microsoft.com/whdc/archive/w2kscan-map.mspx">
             here</a>, although the fact that you can have User mappings in Windows XP or
         later isn't documented anywhere.</p>
-<h3>
+    <h3>
         Hey! My mappings have disappeared! Where did they go?</h3>
-<p>
-        If you set user mappings (which are the default in Windows XP and Vista) and 
-        then use Fast User Switching to switch to a user account that&#39;s already logged 
-        on, that user&#39;s mappings will not be loaded.</p>
+    <p>
+        If you set user mappings (which are the default in Windows XP and Vista) and then
+        use Fast User Switching to switch to a user account that&#39;s already logged on,
+        that user&#39;s mappings will not be loaded.</p>
+    <h3>
+        I&#39;ve disabled Num Lock (or Caps Lock) but when I press it, the light still comes
+        on. What&#39;s up with that?</h3>
+    <p>
+        Your keyboard driver is acting on the keypress before it reaches Windows</p>
+    <h3>
+        I've disabled Insert but now what I type is overwriting my text! How do I turn it
+        off?</h3>
+    <p>
+        If your keyboard has a numeric keypad, Shift-NumericZero toggles Insert. Generally,
+        Insert / Overtype is application-specific: if you're using Word, there's a small
+        button marked OVR at the bottom of the Window which toggles between insert and Overtype
+        modes (in Word 2007 it's hidden away in Word Options / Advanced / ' Use Overtype
+        Mode')</p>
+    <p>
+        Microsoft have a knowledge-base article on the subject with more options, charmingly
+        called "<a href="http://support.microsoft.com/default.aspx/kb/325719">Text that is to
+            the right of the insertion point disappears as you type in Word</a>"
+    </p>
+    <h3>
+        Why does my Anti-Virus / Spyware / Malware program say Key Mapper is suspicious?</h3>
+    <p>
+        Key Mapper uses a keyboard hook for Key Capture, and also to detect if Num Lock
+        or Caps Lock is pressed while the program is running. The source code is available
+        to <a href="http://code.google.com/p/keymapper/source/browse">browse</a> or <a href="http://code.google.com/p/keymapper/downloads/list">
+            download</a>, if you want to make sure for yourself. If you want to build it,
+        you can use Microsoft&#39;s free <a href="http://www.microsoft.com/express/vcsharp/">
+            C# Express Edition</a></p>
 </body>
 </html>
