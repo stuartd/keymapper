@@ -209,7 +209,8 @@ namespace KeyMapper
 
 		public static void ActivateMainForm()
 		{
-			// Mapping list form steals focus when DataGridView is refreshed.
+			// Mapping list form steals focus when DataGridView is refreshed
+            // so it needs to call this method.
 			_mainForm.Activate();
 		}
 
@@ -224,7 +225,7 @@ namespace KeyMapper
 			if (userSettings.MappingListFormOpen)
 				ToggleMappingListForm();
 
-			if (userSettings.ShowHelpFormAtAtStartup)
+			if (userSettings.ShowHelpFormAtStartup)
 			{
 				ToggleHelpForm();
 			}

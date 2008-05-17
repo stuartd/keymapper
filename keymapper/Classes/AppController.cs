@@ -50,7 +50,6 @@ namespace KeyMapper
 
 		private static bool _userCannotWriteToApplicationRegistryKey;
 
-
 		// Properties
 
 		public static bool UserCannotWriteToApplicationRegistryKey
@@ -173,24 +172,34 @@ namespace KeyMapper
 			}
 		}
 
+        public static string GetLogFilename()
+        {
+            string path;
+            try
+            {
+                path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KeyMapper";
+                if (Directory.Exists(path) == false)
+                    Directory.CreateDirectory(path);
+                                           
+            }
+            catch (IOException exc)
+            {
+                Console.WriteLine("Can't get console filename: " + exc.ToString());
+                return string.Empty;
+            }
+
+            return path + @"\" + _consoleOutputFilename;
+                
+        }
+
 		public static void RedirectConsoleOutput()
 		{
 
-			try
-			{
-				string path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KeyMapper";
-				if (Directory.Exists(path) == false)
-					Directory.CreateDirectory(path);
+            string path = GetLogFilename();
+            if (String.IsNullOrEmpty(path))
+                return;
 
-				_consoleWriterStream = new StreamWriter(path + @"\" + _consoleOutputFilename, true, System.Text.Encoding.UTF8);
-
-			}
-			catch (IOException exc)
-			{
-				Console.WriteLine(exc.Message + "Can't create log file.");
-				return;
-			}
-
+             _consoleWriterStream = new StreamWriter(path, true, System.Text.Encoding.UTF8);
 
 			_isConsoleRedirected = true;
 
@@ -208,7 +217,6 @@ namespace KeyMapper
 
 			}
 		}
-
 
 		private static void EstablishSituation()
 		{
@@ -390,7 +398,6 @@ namespace KeyMapper
 
 
 		}
-
 
 		public static void ValidateUserConfigFile()
 		{
@@ -632,39 +639,6 @@ namespace KeyMapper
 			if (value2 == 0) return value1;
 			return GetHighestCommonDenominator(value2, value1 % value2);
 		}
-
-		//[SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-		//public static void InitiateLogOff(bool restart)
-		//{
-
-		//    // Windows XP or later use shutdown.exe (especially with /g for Vista to restart open apps!)
-
-		//    if (Environment.OSVersion.Version.Major >= 5 & Environment.OSVersion.Version.Minor >= 1)
-		//    {
-		//        // Won't work on WIn2k (shouldn't be here anyway)
-		//        System.Diagnostics.Process shutdown = new System.Diagnostics.Process();
-		//        shutdown.StartInfo.FileName = "shutdown.exe";
-		//        // /g for Vista
-
-		//        if (restart)
-		//        {
-		//            if (Environment.OSVersion.Version.Major > 5)
-		//                shutdown.StartInfo.Arguments =
-		//                    " /g /c \"Restart initiated on your behalf by KeyMapper\" /d p:2:4";
-		//            else
-		//                shutdown.StartInfo.Arguments =
-		//                    "/r /c \"Restart initiated on your behalf by KeyMapper. Type shutdown /a in a command prompt to cancel\" /d p:2:4";
-		//        }
-		//        else
-		//        {
-		//            // Log off.
-		//            shutdown.StartInfo.Arguments = " /l";
-		//        }
-		//        shutdown.Start();
-		//        shutdown.Close();
-
-		//    }
-		//	}
 
 		#endregion
 
