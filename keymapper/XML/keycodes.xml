@@ -1180,7 +1180,7 @@
   <keycodes>
     <sc>50</sc>
     <ex>224</ex>
-    <name>Browser</name>
+    <name>Browser Home</name>
     <group>Web Keys</group>
     <localize>false</localize>
     <useful>2</useful>
