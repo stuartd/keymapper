@@ -31,7 +31,7 @@ namespace KeyMapper
 			get { return KeyboardHelper._installedKeyboards; }
 		}
 
-		private static List<int> SystemInputLocaleIdentifiers
+   		private static List<int> SystemInputLocaleIdentifiers
 		{
 			get
 			{
@@ -85,11 +85,6 @@ namespace KeyMapper
 
 		}
 
-		/// <summary>
-		///  Query the current keyboard layout for unshifted and shifted key values
-		/// as these compose the "name" of the key - e.g. 1 and !, [ and {.
-		/// </summary>
-
 		public static string GetKeyName(int scancode, ref bool overlong)
 		{
 			byte[] KeyState = new byte[256];
@@ -102,8 +97,6 @@ namespace KeyMapper
 			KeyState[(int)Keys.HanjaMode] = 0x80;
 			KeyState[(int)Keys.KanjiMode] = 0x80;
 	
-
-			// Will put the unshifted and shifter values into this SB:
 			StringBuilder result = new StringBuilder();
 
 			int bufferLength = 10;	
@@ -284,6 +277,19 @@ namespace KeyMapper
 
 		}
 
+        public static string[] GetInstalledKeyboardListAsStringArray()
+        {
+            if (_installedKeyboards == null)
+                GetInstalledKeyboardList();
+
+            string[] results = new string[_installedKeyboards.Count] ;
+            _installedKeyboards.Keys.CopyTo(results, 0);
+
+            Array.Sort(results);
+            return results;
+
+        }
+        
 
 		public static string GetKeyboardName(string locale)
 		{

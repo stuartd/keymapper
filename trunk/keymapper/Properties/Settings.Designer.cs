@@ -182,12 +182,12 @@ namespace KeyMapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowHelpFormAtAtStartup {
+        public bool ShowHelpFormAtStartup {
             get {
-                return ((bool)(this["ShowHelpFormAtAtStartup"]));
+                return ((bool)(this["ShowHelpFormAtStartup"]));
             }
             set {
-                this["ShowHelpFormAtAtStartup"] = value;
+                this["ShowHelpFormAtStartup"] = value;
             }
         }
         
@@ -200,18 +200,6 @@ namespace KeyMapper.Properties {
             }
             set {
                 this["HelpFormLocation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HelpFormOpen {
-            get {
-                return ((bool)(this["HelpFormOpen"]));
-            }
-            set {
-                this["HelpFormOpen"] = value;
             }
         }
         

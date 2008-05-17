@@ -14,16 +14,6 @@ namespace KeyMapper
 		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		internal extern static void LockWindowUpdate(IntPtr hWnd);
 
-		//[DllImportAttribute("user32.dll")]
-		//public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-
-		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-		public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-		[DllImportAttribute("user32.dll")]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		public static extern bool ReleaseCapture();
-
 		#endregion
 
 		#region AppMutex
@@ -44,14 +34,16 @@ namespace KeyMapper
 		#endregion
 
 		#region Keyboard
-
-
-
-		[DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "MapVirtualKeyExW", ExactSpelling = true)]
+        
+		[DllImport("user32.dll", CharSet = CharSet.Unicode, 
+            EntryPoint = "MapVirtualKeyExW", ExactSpelling = true)]
 		internal static extern uint MapVirtualKeyEx(
 			uint uCode,
 			uint uMapType,
 			IntPtr dwhkl);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern bool GetKeyboardState(byte[] lpKeyState);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
 		internal static extern IntPtr GetKeyboardLayout(int idThread);

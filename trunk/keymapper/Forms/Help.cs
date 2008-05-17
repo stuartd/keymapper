@@ -16,27 +16,16 @@ namespace KeyMapper
             InitializeComponent();
             LoadUserSettings();
             this.FormClosed += FormsManager.ChildFormClosed;
-            this.MouseDown += HelpFormMouseDown;
             this.labelFAQ.Links[0].LinkData = "http://justkeepswimming.net/keymapper/faq.aspx";
         }
 
         private void LoadUserSettings()
         {
             Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-            chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtAtStartup;
+            chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtStartup;
         }
 
-        private void HelpFormMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            uint msg = 0xA1; // WM_NCLBUTTONDOWN 
-            IntPtr wparam = (IntPtr)0x2; // HT_CAPTION 
-
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture();
-                NativeMethods.SendMessage(Handle, msg, wparam, IntPtr.Zero);
-            }
-        }
+   
 
 
         private void HelpFormFormClosed(object sender, FormClosedEventArgs e)
@@ -47,8 +36,7 @@ namespace KeyMapper
         private void SaveUserSettings()
         {
             Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-            userSettings.ShowHelpFormAtAtStartup = chkShowHelpAtStartup.Checked;
-            userSettings.HelpFormOpen = false;
+            userSettings.ShowHelpFormAtStartup = chkShowHelpAtStartup.Checked;
             userSettings.HelpFormLocation = this.Location;
             userSettings.Save();
         }
@@ -56,7 +44,7 @@ namespace KeyMapper
         private void labelFAQClick(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string url = e.Link.LinkData as string;
-            if (url != null && url != string.Empty)
+            if (string.IsNullOrEmpty(url) == false)
                 System.Diagnostics.Process.Start(url);
         }
 

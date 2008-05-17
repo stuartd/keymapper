@@ -56,6 +56,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -238,7 +251,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Key Mapper"
         "ProductCode" = "8:{0FE22A70-F77A-4DB6-86D4-B8AE8714C748}"
-        "PackageCode" = "8:{F2BD7B29-0B4A-4FF2-81AD-1C0CDC90593B}"
+        "PackageCode" = "8:{5C2D0C21-457D-4562-8D5E-ADEC6772A5E6}"
         "UpgradeCode" = "8:{13BE75A4-A045-43A0-B293-F3B128D1B3C5}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -254,7 +267,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Key Mapper Setup"
         "ARPURLINFOABOUT" = "8:http://justkeepswimming.net"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_7E31B4648CC64CD6A96C261F5C5C5371"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
