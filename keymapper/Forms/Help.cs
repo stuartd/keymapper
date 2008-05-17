@@ -9,51 +9,60 @@ using System.Runtime.InteropServices;
 
 namespace KeyMapper
 {
-	public partial class HelpForm : KMBaseForm
-	{
-		public HelpForm()
-		{
-			InitializeComponent();
-			LoadUserSettings();
-			this.FormClosed += FormsManager.ChildFormClosed;
-			this.MouseDown += HelpFormMouseDown;
-			
-		}
+    public partial class HelpForm : KMBaseForm
+    {
+        public HelpForm()
+        {
+            InitializeComponent();
+            LoadUserSettings();
+            this.FormClosed += FormsManager.ChildFormClosed;
+            this.MouseDown += HelpFormMouseDown;
+            this.labelFAQ.Links[0].LinkData = "http://justkeepswimming.net/keymapper/faq.aspx";
+        }
 
-		private void LoadUserSettings()
-		{
-			Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-			chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtAtStartup;
-		}
+        private void LoadUserSettings()
+        {
+            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+            chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtAtStartup;
+        }
 
-		private void HelpFormMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-			uint msg = 0xA1 ; // WM_NCLBUTTONDOWN 
-			IntPtr wparam = (IntPtr)0x2; // HT_CAPTION 
+        private void HelpFormMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            uint msg = 0xA1; // WM_NCLBUTTONDOWN 
+            IntPtr wparam = (IntPtr)0x2; // HT_CAPTION 
 
-			if (e.Button == MouseButtons.Left)
-			{
-				NativeMethods.ReleaseCapture();
-				NativeMethods.SendMessage(Handle, msg, wparam, IntPtr.Zero);
-			}
-		}
+            if (e.Button == MouseButtons.Left)
+            {
+                NativeMethods.ReleaseCapture();
+                NativeMethods.SendMessage(Handle, msg, wparam, IntPtr.Zero);
+            }
+        }
 
 
-		private void HelpFormFormClosed(object sender, FormClosedEventArgs e)
-		{
-			SaveUserSettings();
-		}
+        private void HelpFormFormClosed(object sender, FormClosedEventArgs e)
+        {
+            SaveUserSettings();
+        }
 
-		private void SaveUserSettings()
-		{
-			Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-			userSettings.ShowHelpFormAtAtStartup = chkShowHelpAtStartup.Checked;
-			userSettings.HelpFormOpen = false;
-			userSettings.HelpFormLocation = this.Location;
-			userSettings.Save();
-		}
+        private void SaveUserSettings()
+        {
+            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+            userSettings.ShowHelpFormAtAtStartup = chkShowHelpAtStartup.Checked;
+            userSettings.HelpFormOpen = false;
+            userSettings.HelpFormLocation = this.Location;
+            userSettings.Save();
+        }
 
-	}
+        private void labelFAQClick(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string url = e.Link.LinkData as string;
+            if (url != null && url != string.Empty)
+                System.Diagnostics.Process.Start(url);
+        }
+
+
+
+    }
 
 
 }

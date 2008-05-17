@@ -409,8 +409,7 @@ namespace KeyMapper
             // showHelpToolStripMenuItem
             // 
             this.showHelpToolStripMenuItem.Name = "showHelpToolStripMenuItem";
-            this.showHelpToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.H)));
+            this.showHelpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.showHelpToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.showHelpToolStripMenuItem.Text = "&Show Help";
             this.showHelpToolStripMenuItem.Click += new System.EventHandler(this.showHelpMenuItemClick);
