@@ -36,6 +36,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.labelFAQ = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -107,11 +108,23 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.labelFAQ);
             this.panel1.Controls.Add(this.chkShowHelpAtStartup);
             this.panel1.Location = new System.Drawing.Point(-1, 206);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(500, 26);
             this.panel1.TabIndex = 5;
+            // 
+            // labelFAQ
+            // 
+            this.labelFAQ.AutoSize = true;
+            this.labelFAQ.Location = new System.Drawing.Point(202, 6);
+            this.labelFAQ.Name = "labelFAQ";
+            this.labelFAQ.Size = new System.Drawing.Size(70, 13);
+            this.labelFAQ.TabIndex = 4;
+            this.labelFAQ.TabStop = true;
+            this.labelFAQ.Text = "Online FAQ";
+            this.labelFAQ.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelFAQClick);
             // 
             // HelpForm
             // 
@@ -148,5 +161,6 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.LinkLabel labelFAQ;
 	}
 }
