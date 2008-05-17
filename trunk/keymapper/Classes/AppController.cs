@@ -220,7 +220,7 @@ namespace KeyMapper
 			// In order to notify user when a restart or logoff is required, we need to track 
 			// what mappings were in effect the first time the program was run after reboot/logoff.
 
-			// To do that we need a registry key of our very own, so first up:
+			// To do that we need a registry key of our own.
 			RegistryKey kmregkey = null;
 			try
 			{
@@ -356,6 +356,10 @@ namespace KeyMapper
 				MappingsManager.GetMappingsFromRegistry(MapLocation.KeyMapperCurrentUserKeyboardLayout);
 				MappingsManager.PopulateMappingLists();
 			}
+
+            if (savedMappingsExist == false)
+                MappingsManager.StoreUnsavedMappings();
+
 
 
 		}
@@ -561,7 +565,7 @@ namespace KeyMapper
 
 		public static string GetKeyName(int scancode, int extended)
 		{
-			// Look up the values in our current layout.
+			// Look up the values in the current localized layout.
 			if (scancode == 0 && extended == 0)
 				return "Disabled";
 
