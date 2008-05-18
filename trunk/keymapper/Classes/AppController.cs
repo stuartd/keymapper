@@ -264,7 +264,7 @@ namespace KeyMapper
 			string[] values = kmregkey.GetValueNames();
 				for (int i = 0; i < values.Length; i++)
 				{
-					if (values[i] == "User Maps" || values[i] == "Boot Maps")
+					if (values[i] == "UserMaps" || values[i] == "BootMaps")
 					{
 						savedMappingsExist = true;
 						break;

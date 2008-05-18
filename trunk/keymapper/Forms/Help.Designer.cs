@@ -118,9 +118,10 @@
             // labelFAQ
             // 
             this.labelFAQ.AutoSize = true;
-            this.labelFAQ.Location = new System.Drawing.Point(202, 6);
+            this.labelFAQ.Font = new System.Drawing.Font("Verdana", 9.75F);
+            this.labelFAQ.Location = new System.Drawing.Point(410, 4);
             this.labelFAQ.Name = "labelFAQ";
-            this.labelFAQ.Size = new System.Drawing.Size(70, 13);
+            this.labelFAQ.Size = new System.Drawing.Size(80, 16);
             this.labelFAQ.TabIndex = 4;
             this.labelFAQ.TabStop = true;
             this.labelFAQ.Text = "Online FAQ";
