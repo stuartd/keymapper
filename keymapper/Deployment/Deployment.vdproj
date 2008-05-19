@@ -76,7 +76,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\Deployment.msi"
+        "OutputFilename" = "8:Release\\KeyMapper.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -179,7 +179,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
@@ -251,7 +251,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Key Mapper"
         "ProductCode" = "8:{0FE22A70-F77A-4DB6-86D4-B8AE8714C748}"
-        "PackageCode" = "8:{5C2D0C21-457D-4562-8D5E-ADEC6772A5E6}"
+        "PackageCode" = "8:{AFD6B6CE-C3FC-4180-9E11-5201CC90ED35}"
         "UpgradeCode" = "8:{13BE75A4-A045-43A0-B293-F3B128D1B3C5}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -799,7 +799,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C8D5C4F4B3D049508F782932A147A2D4"
             {
-            "SourcePath" = "8:..\\obj\\Release\\KeyMapper.exe"
+            "SourcePath" = "8:..\\obj\\Debug\\KeyMapper.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E32199F5CCFD408CBBBCE9307C9A492C"

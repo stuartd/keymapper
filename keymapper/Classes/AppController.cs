@@ -59,8 +59,7 @@ namespace KeyMapper
 
 		public static bool UserCannotWriteMappings
 		{
-			get
-			{ return (MappingsManager.Filter == MappingFilter.Boot && !_canWriteBootMappings); }
+			get { return (MappingsManager.Filter == MappingFilter.Boot && !_canWriteBootMappings); }
 		}
 
 		public static bool UserCanWriteBootMappings
@@ -91,6 +90,28 @@ namespace KeyMapper
 		public static CultureInfo CurrentCultureInfo
 		{
 			get { return _currentCultureInfo; }
+		}
+
+		public static string LogFilename
+		{
+			get
+			{
+				string path;
+				try
+				{
+					path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KeyMapper";
+					if (Directory.Exists(path) == false)
+						Directory.CreateDirectory(path);
+
+				}
+				catch (IOException exc)
+				{
+					Console.WriteLine("Can't get console filename: " + exc.ToString());
+					return string.Empty;
+				}
+
+				return path + @"\" + _consoleOutputFilename;
+			}
 		}
 
 		#endregion
@@ -172,30 +193,10 @@ namespace KeyMapper
 			}
 		}
 
-        public static string GetLogFilename()
-        {
-            string path;
-            try
-            {
-                path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KeyMapper";
-                if (Directory.Exists(path) == false)
-                    Directory.CreateDirectory(path);
-                                           
-            }
-            catch (IOException exc)
-            {
-                Console.WriteLine("Can't get console filename: " + exc.ToString());
-                return string.Empty;
-            }
-
-            return path + @"\" + _consoleOutputFilename;
-                
-        }
-
 		public static void RedirectConsoleOutput()
 		{
 
-            string path = GetLogFilename();
+			string path = LogFilename;
             if (String.IsNullOrEmpty(path))
                 return;
 
@@ -602,8 +603,6 @@ namespace KeyMapper
 			{
 				if (loadedbutton != null)
 				{
-					// if (StringComparison.OrdinalIgnoreCase
-
 					if (String.Compare(loadedbutton.Tag.ToString().ToLowerInvariant(), buttonname, StringComparison.OrdinalIgnoreCase) == 0)
 					{
 						return (Bitmap)loadedbutton.Clone();
