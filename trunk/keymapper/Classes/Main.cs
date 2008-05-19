@@ -14,32 +14,26 @@ namespace KeyMapper
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main(string[] args)
+		static void Main()
 		{
 
-			// Redirect console first of all..
+			// Look for a running copy and activate it if it exists
+			if (AppController.CheckForExistingInstances() == true)
+			{
+				AppController.CloseConsoleOutput();
+				return;
+			}
+
+			// Redirect console next. Only one instance of the app can have the log file open
 
 #if DEBUG
 #else
 			Console.Write("Redirecting console output");
 			AppController.RedirectConsoleOutput();
 #endif
-			
-			// Look for a running copy and activate it if it exists
-			// (Writing to log if it does)
-			if (AppController.CheckForExistingInstances() == true)
-			{
-				Console.WriteLine("Switching to existing instance");
-				AppController.CloseConsoleOutput();
-				return;
-			}
-
-			// TODO - arguments: -r to reset main form position 
-			// (or is it easier to delete user config file?)
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-	
 
 			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 			Application.ThreadException += ApplicationThreadException;
@@ -47,12 +41,13 @@ namespace KeyMapper
 
 			AppController.ValidateUserConfigFile();
 
-            Properties.Settings userSettings = new Properties.Settings();
-            if (userSettings.UpgradeRequired)
-            {
-                userSettings.Upgrade();
-                userSettings.UpgradeRequired = false;
-            } 
+			Properties.Settings userSettings = new Properties.Settings();
+			if (userSettings.UpgradeRequired)
+			{
+				userSettings.Upgrade();
+				userSettings.UpgradeRequired = false;
+				userSettings.Save();
+			}
 
 			AppController.StartAppController();
 

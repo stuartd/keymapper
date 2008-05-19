@@ -42,9 +42,6 @@ namespace KeyMapper
 			uint uMapType,
 			IntPtr dwhkl);
 
-        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern bool GetKeyboardState(byte[] lpKeyState);
-
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
 		internal static extern IntPtr GetKeyboardLayout(int idThread);
 
