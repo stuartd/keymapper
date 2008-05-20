@@ -114,7 +114,7 @@ namespace KeyMapper
 
         #endregion
 
-        #region mapping utility methods
+        #region Mapping utility methods
 
         public static void StoreUnsavedMappings()
         {
@@ -510,8 +510,7 @@ namespace KeyMapper
 
             if (maps.Count == 0)
             {
-                // Remove the key.
-                registry.DeleteValue(valuename, false);
+                registry.SetValue(valuename, new byte[0]);
             }
             else
             {

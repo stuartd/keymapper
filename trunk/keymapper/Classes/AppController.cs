@@ -49,6 +49,7 @@ namespace KeyMapper
 		private static string _consoleOutputFilename = "keymapper.log";
 
 		private static bool _userCannotWriteToApplicationRegistryKey;
+		private static bool? _dotNetFrameworkSPInstalled;
 
 		// Properties
 
@@ -114,6 +115,30 @@ namespace KeyMapper
 			}
 		}
 
+		public static bool DotNetFramework2ServicePackInstalled
+		{
+			get
+			{
+				if (_dotNetFrameworkSPInstalled == null)
+				{
+					int sp = 0;
+					RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
+						@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
+
+					if (regkey != null)
+					{
+						sp = (int)regkey.GetValue("SP", 0);
+						regkey.Close();
+					}
+					_dotNetFrameworkSPInstalled = (sp > 0);
+					if (_dotNetFrameworkSPInstalled == false)
+						Console.WriteLine("There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
+				}
+
+				return (bool)_dotNetFrameworkSPInstalled;
+			}
+		}
+
 		#endregion
 
 		#region Controller methods
@@ -125,6 +150,7 @@ namespace KeyMapper
 			KeyboardHelper.GetInstalledKeyboardList();
 			SetLocale();
 			EstablishSituation();
+	
 		}
 
 		public static void CloseAppController()
@@ -193,21 +219,36 @@ namespace KeyMapper
 			}
 		}
 
+		public static void ClearLogFile()
+		{
+			_consoleWriterStream.BaseStream.SetLength(0);
+			Console.WriteLine("Log file cleared: {0}", DateTime.Now);
+		}
+
 		public static void RedirectConsoleOutput()
 		{
 
 			string path = LogFilename;
-            if (String.IsNullOrEmpty(path))
-                return;
+			if (String.IsNullOrEmpty(path))
+				return;
 
-             _consoleWriterStream = new StreamWriter(path, true, System.Text.Encoding.UTF8);
+			// In order to be able to clear the log, the streamwriter must be opened in create mode.
+			// In order to do that, read the contents of the log first..
+
+			StreamReader sr = new StreamReader(path);
+			string logEntries = sr.ReadToEnd();
+			sr.Close();
+
+			_consoleWriterStream = new StreamWriter(path, false, System.Text.Encoding.UTF8);
+			_consoleWriterStream.AutoFlush = true;
+			_consoleWriterStream.Write(logEntries);
 
 			_isConsoleRedirected = true;
 
 			// Direct standard output to the log file.
 			Console.SetOut(_consoleWriterStream);
 
-			Console.WriteLine("Logging started {0}", DateTime.Now);
+			Console.WriteLine("Logging started: {0}", DateTime.Now);
 		}
 
 		public static void CloseConsoleOutput()
@@ -215,7 +256,6 @@ namespace KeyMapper
 			if (_isConsoleRedirected)
 			{
 				_consoleWriterStream.Close();
-
 			}
 		}
 
@@ -262,7 +302,7 @@ namespace KeyMapper
 			if (kmregkey != null)
 			{
 
-			string[] values = kmregkey.GetValueNames();
+				string[] values = kmregkey.GetValueNames();
 				for (int i = 0; i < values.Length; i++)
 				{
 					if (values[i] == "UserMaps" || values[i] == "BootMaps")
@@ -366,8 +406,8 @@ namespace KeyMapper
 				MappingsManager.PopulateMappingLists();
 			}
 
-            if (savedMappingsExist == false)
-                MappingsManager.StoreUnsavedMappings();
+			if (savedMappingsExist == false)
+				MappingsManager.StoreUnsavedMappings();
 
 
 

@@ -227,7 +227,7 @@ namespace KeyMapper
 
 			if (userSettings.ShowHelpFormAtStartup)
 			{
-				ToggleHelpForm();
+				ShowHelpForm();
 			}
 		}
 
@@ -278,7 +278,7 @@ namespace KeyMapper
 		}
 
 
-		public static void ToggleHelpForm()
+		public static void ShowHelpForm()
 		{
 			if (_helpForm == null)
 			{
@@ -292,10 +292,6 @@ namespace KeyMapper
 					_helpForm.Location = formlocation;
 
 				_helpForm.Show((IWin32Window)_mainForm);
-			}
-			else
-			{
-				_helpForm.Close();
 			}
 		}
 
