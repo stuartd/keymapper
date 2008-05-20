@@ -447,9 +447,9 @@ namespace KeyMapper
 				// This only takes tiny amount of time - 14ms for 10000 iterations..
 				stringSize = g.MeasureString(caption, font);
 
-				if (stringSize.Width > (bmp.Width * 0.85F))
+				if (stringSize.Width > (bmp.Width * 0.8F))
 				{
-					fontsize *= ((bmp.Width * 0.85F) / stringSize.Width);
+					fontsize *= ((bmp.Width * 0.8F) / stringSize.Width);
 					font = AppController.GetFontFromCache(fontsize, localizable);
 					stringSize = g.MeasureString(caption, font);
 				}
