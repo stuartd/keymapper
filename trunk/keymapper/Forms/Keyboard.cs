@@ -11,11 +11,10 @@ using System.Configuration;
 using System.IO;
 using System.Globalization;
 using Microsoft.Win32;
+using System.Drawing.Imaging;
 
 namespace KeyMapper
 {
-
-
 	public partial class KeyboardForm : KMBaseForm
 	{
 
@@ -1134,6 +1133,58 @@ namespace KeyMapper
 			RegistryKey regkey = Registry.Users.OpenSubKey(".DEFAULT", true);
 
 		}
+
+        private void printScreenToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveKeyboardImageAsFile(false) ;
+        }
+
+        private void SaveKeyboardImageAsFile(bool autoSave)
+        {
+            Bitmap bmp = new Bitmap(this.Width, this.Height);
+            this.DrawToBitmap(bmp, new Rectangle(Point.Empty, this.Size)) ;
+
+            Size actualSize = new Size(this.ClientSize.Width, this.ClientSize.Height - this.menu.Height - this.StatusBar.Height);
+
+            Bitmap bmp2 = new Bitmap(actualSize.Width, actualSize.Height);
+
+            Point p = this.PointToScreen(Point.Empty) ;
+
+            int x = p.X - this.Left ;
+            int y = p.Y - this.Top + this.menu.Height ;
+
+            using (Graphics g = Graphics.FromImage(bmp2))
+            {
+                g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
+            }
+            if (autoSave)
+            {
+            }
+            else
+            {
+                SaveFileDialog fd = new SaveFileDialog();
+                fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+                fd.OverwritePrompt = true;
+                fd.AutoUpgradeEnabled = true;
+                fd.FileName = this.KeyboardListCombo.Text + " keyboard layout";
+
+                fd.Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp";
+                if (fd.ShowDialog() == DialogResult.OK)
+                {
+                    if (fd.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
+                        fd.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase))
+                        bmp2.Save(fd.FileName, ImageFormat.Jpeg);
+                    if (fd.FileName.EndsWith("bmp", StringComparison.OrdinalIgnoreCase))
+                        bmp2.Save(fd.FileName, ImageFormat.Bmp);
+                    if (fd.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+                        bmp2.Save(fd.FileName, ImageFormat.Png);
+                }
+            }
+            bmp2.Dispose();
+            bmp.Dispose();
+
+        }
 
 		
 		#region Tests

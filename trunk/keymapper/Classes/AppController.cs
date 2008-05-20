@@ -559,7 +559,7 @@ namespace KeyMapper
 				// Helps MeasureString. Can also pass StringFormat.GenericTypographic apparently ??
 
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-				int CharacterWidth = (int)g.MeasureString("@", font).Width;
+				int CharacterWidth = (int)g.MeasureString(((char)77).ToString(), font).Width;
 				// Only use 90% of the bitmap's size to allow for the edges (especially at small sizes)
 				float ratio = ((float)((0.9F * bmp.Height) / 2)) / (float)CharacterWidth;
 				basefontsize = (basefontsize * ratio);
