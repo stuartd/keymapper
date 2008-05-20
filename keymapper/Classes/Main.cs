@@ -50,11 +50,11 @@ namespace KeyMapper
 			}
 
 			AppController.StartAppController();
-
 			Application.Run(new KeyboardForm());
 
 			AppController.CloseAppController();
-			Application.ThreadException -= ApplicationThreadException; // Release static event or else leak.
+			// Release static events or else leak.
+			Application.ThreadException -= ApplicationThreadException;
 			AppDomain.CurrentDomain.UnhandledException -= UnhandledExceptionHandler;
 
 		}

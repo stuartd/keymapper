@@ -250,14 +250,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Key Mapper"
-        "ProductCode" = "8:{0FE22A70-F77A-4DB6-86D4-B8AE8714C748}"
-        "PackageCode" = "8:{AFD6B6CE-C3FC-4180-9E11-5201CC90ED35}"
+        "ProductCode" = "8:{A96C0046-2143-42C0-A28F-BCAF2C520E2A}"
+        "PackageCode" = "8:{94CF3A82-651D-4EA4-95D3-6619AA8159CA}"
         "UpgradeCode" = "8:{13BE75A4-A045-43A0-B293-F3B128D1B3C5}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:Rose Hill Solutions"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://justkeepswimming.net/keymapper/support.aspx"
@@ -799,7 +799,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C8D5C4F4B3D049508F782932A147A2D4"
             {
-            "SourcePath" = "8:..\\obj\\Debug\\KeyMapper.exe"
+            "SourcePath" = "8:..\\obj\\Release\\KeyMapper.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E32199F5CCFD408CBBBCE9307C9A492C"

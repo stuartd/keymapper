@@ -89,11 +89,6 @@ namespace KeyMapper
 			_sniffer.ActivateHook();
 
 			this.Redraw();
-
-#if DEBUG
-            advancedToolStripMenuItem.Visible = true;
-#endif
-
 		}
 
 		private void LoadUserSettings()
@@ -117,12 +112,12 @@ namespace KeyMapper
 			_isMacKeyboard = userSettings.KeyboardFormHasMacKeyboard;
 			oldFilter = (MappingFilter)userSettings.LastMappingsFilter;
 
-			if (firstrun == false)
-			{
-				// AppController.SwitchKeyboardLayout((KeyboardLayoutType)userSettings.KeyboardLayout);
-			}
+			//if (firstrun == false)
+			//{
+			//    // AppController.SwitchKeyboardLayout((KeyboardLayoutType)userSettings.KeyboardLayout);
+			//}
 
-			if (firstrun || savedPosition.IsEmpty)
+			if (firstrun || savedPosition.IsEmpty || savedPosition.X == -32000)
 				FormsManager.PositionMainForm();
 			else
 				this.Location = savedPosition;
@@ -208,7 +203,6 @@ namespace KeyMapper
 			else
 			{
 				// Work out how far back the navkeys extend instead:
-				// navleft = (int)Math.Round(((14.8F * (KeySize + PaddingWidth)) + PaddingWidth * 2), 0);
 				navleft = (int)Math.Round(this.ClientSize.Width - (((_keySize + _paddingWidth) * 3.2)), 0);
 			}
 
@@ -261,9 +255,9 @@ namespace KeyMapper
 
 			// Need to establish what the keys really are.. should know but it doesn't hurt to check,
 			// especially as it went out of kilter at least once in development. 
-			_isCapsLockOn = KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.CapsLock);
-			_isNumLockOn = KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.NumLock);
-			_isScrollLockOn = KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.ScrollLock);
+			_isCapsLockOn = Form.IsKeyLocked(Keys.CapsLock); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.CapsLock);
+			_isNumLockOn = Form.IsKeyLocked(Keys.NumLock); // .IsKKeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.NumLock);
+			_isScrollLockOn = Form.IsKeyLocked(Keys.Scroll); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.ScrollLock);
 
 			SetStatusLabelsText();
 			SetMenuButtonStates();
@@ -498,7 +492,7 @@ namespace KeyMapper
 						break;
 
 					case MappingFilter.Boot:
-						StatusLabelMappingDisplayType.Text = "Editing Boot Mappings";
+						StatusLabelMappingDisplayType.Text = (AppController.UserCanWriteBootMappings ? "Editing" : "Showing") + " Boot Mappings";
 						StatusLabelMappingDisplayType.Visible = true;
 						break;
 
@@ -656,7 +650,6 @@ namespace KeyMapper
 		public void RegenerateMenuExternal()
 		{
 			SetWindowMenuButtonStates();
-			SetHelpMenuButtonStates();
 		}
 
 		void SetToggleMenuButtonStates()
@@ -742,17 +735,9 @@ namespace KeyMapper
 			SetWindowMenuButtonStates();
 			SetEditMenuButtonStates();
 			SetKeyboardLayoutMenuButtonStates();
-			SetHelpMenuButtonStates();
 			SetAdvancedMenuButtonStates();
 		}
 
-		private void SetHelpMenuButtonStates()
-		{
-			if (FormsManager.IsHelpFormOpen())
-				showHelpToolStripMenuItem.Text = "Hide &Help";
-			else
-				showHelpToolStripMenuItem.Text = "Show &Help";
-		}
 
 		private void SetAdvancedMenuButtonStates()
 		{
@@ -831,6 +816,9 @@ namespace KeyMapper
 				// what state the keyboard is in using Form.IsKeySet or WIN32API funcs like
 				// GetKeyState. So, using fields for the state of each key.
 
+				// (In fact, the only thing this achieves is live updating og the Toggle Lock Menu if user presses
+				// a lock key while menu is open. It's a small thing, but would be a shame to lose it)
+
 				switch (key.VirtualKeyCode)
 				{
 					case (int)KeyboardHelper.ToggleKey.CapsLock:
@@ -843,6 +831,7 @@ namespace KeyMapper
 						break;
 					case (int)KeyboardHelper.ToggleKey.ScrollLock:
 						_isScrollLockOn = !_isScrollLockOn;
+						if (_isScrollLockOn != Form.IsKeyLocked(Keys.Scroll))
 						SetToggleMenuButtonStates();
 						break;
 				}
@@ -1002,7 +991,12 @@ namespace KeyMapper
 			fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
 			fd.OverwritePrompt = true;
-			fd.AutoUpgradeEnabled = true;
+
+			if (AppController.DotNetFramework2ServicePackInstalled)
+			{
+				EnableVisualUpgrade((FileDialog)fd);
+			}
+
 			fd.FileName = "Key Mappings";
 			DialogResult dr = fd.ShowDialog();
 			if (dr != DialogResult.OK)
@@ -1077,18 +1071,12 @@ namespace KeyMapper
 
 		private void showHelpMenuItemClick(object sender, EventArgs e)
 		{
-			FormsManager.ToggleHelpForm();
-			SetHelpMenuButtonStates();
+			FormsManager.ShowHelpForm();
 		}
 
 		private void aboutKeyMapperMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ShowAboutForm();
-		}
-
-		private void showAdvancedMenuToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			advancedToolStripMenuItem.Visible = true;
 		}
 
 		private void putKeyboardListOnClipboardToolStripMenuItemClick(object sender, EventArgs e)
@@ -1097,23 +1085,18 @@ namespace KeyMapper
 			StringBuilder keyboards = new StringBuilder();
 			foreach (string keyboard in kblist)
 				keyboards.Append(keyboard + (char)13 + (char)10);
-			try
-			{
-				Clipboard.Clear();
-				Clipboard.SetText(keyboards.ToString(), TextDataFormat.Text);
-			}
-			catch (ExternalException ex)
-			{
-				Console.WriteLine("Clipboard is in use: " + ex.ToString());
-			}
-			catch (System.Threading.ThreadStateException ex)
-			{
-				Console.WriteLine("Clipboard operation failed: " + ex.ToString());
-			}
-			catch (ArgumentNullException ex)
-			{
-				Console.WriteLine("Nothing to put on clipboard " + ex.ToString());
-			}
+
+			// Create a temp file 
+			string tempFile = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".txt";
+
+			FileStream fs = new FileStream(tempFile, FileMode.Create);
+			StreamWriter sw = new StreamWriter(fs);
+			sw.Write(keyboards.ToString());
+			sw.Flush();
+			sw.Close();
+			System.Diagnostics.Process.Start(tempFile);
+
+
 		}
 
 		private void viewLogFileToolStripMenuItemClick(object sender, EventArgs e)
@@ -1126,67 +1109,108 @@ namespace KeyMapper
 
 		}
 
-		#endregion
-
-		private void setCurrentToggleKeysAtBootToolStripMenuItem_Click(object sender, EventArgs e)
+		private void setCurrentToggleKeysAtBootToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			RegistryKey regkey = Registry.Users.OpenSubKey(".DEFAULT", true);
+			if (AppController.UserCanWriteBootMappings == false)
+				return;
+
+			// The HKEY_CURRENT_USER version of this setting is set at logoff.
+
+
+
+			try
+			{
+				RegistryKey regkey = Registry.Users.OpenSubKey(@".DEFAULT\Control Panel\Keyboard", true);
+				if (regkey == null)
+					return;
+
+				int value =
+					(_isCapsLockOn ? 1 : 0) + (_isNumLockOn ? 2 : 0) + (_isScrollLockOn ? 4 : 0);
+
+				regkey.SetValue("InitialKeyboardIndicators", value);
+
+			}
+			catch { }
 
 		}
 
-        private void printScreenToFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveKeyboardImageAsFile(false) ;
-        }
+		private void printScreenToFileToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			SaveKeyboardImageAsFile(false);
+		}
 
-        private void SaveKeyboardImageAsFile(bool autoSave)
-        {
-            Bitmap bmp = new Bitmap(this.Width, this.Height);
-            this.DrawToBitmap(bmp, new Rectangle(Point.Empty, this.Size)) ;
+		private void SaveKeyboardImageAsFile(bool autoSave)
+		{
+			Bitmap bmp = new Bitmap(this.Width, this.Height);
+			this.DrawToBitmap(bmp, new Rectangle(Point.Empty, this.Size));
 
-            Size actualSize = new Size(this.ClientSize.Width, this.ClientSize.Height - this.menu.Height - this.StatusBar.Height);
+			Size actualSize = new Size(this.ClientSize.Width, this.ClientSize.Height - this.menu.Height - this.StatusBar.Height);
 
-            Bitmap bmp2 = new Bitmap(actualSize.Width, actualSize.Height);
+			Bitmap bmp2 = new Bitmap(actualSize.Width, actualSize.Height);
 
-            Point p = this.PointToScreen(Point.Empty) ;
+			Point p = this.PointToScreen(Point.Empty);
 
-            int x = p.X - this.Left ;
-            int y = p.Y - this.Top + this.menu.Height ;
+			int x = p.X - this.Left;
+			int y = p.Y - this.Top + this.menu.Height;
 
-            using (Graphics g = Graphics.FromImage(bmp2))
-            {
-                g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
-            }
-            if (autoSave)
-            {
-            }
-            else
-            {
-                SaveFileDialog fd = new SaveFileDialog();
-                fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+			using (Graphics g = Graphics.FromImage(bmp2))
+			{
+				g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
+			}
+			if (autoSave)
+			{
+			}
+			else
+			{
+				SaveFileDialog fd = new SaveFileDialog();
+				fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
-                fd.OverwritePrompt = true;
-                fd.AutoUpgradeEnabled = true;
-                fd.FileName = this.KeyboardListCombo.Text + " keyboard layout";
+				fd.OverwritePrompt = false;
 
-                fd.Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp";
-                if (fd.ShowDialog() == DialogResult.OK)
-                {
-                    if (fd.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
-                        fd.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase))
-                        bmp2.Save(fd.FileName, ImageFormat.Jpeg);
-                    if (fd.FileName.EndsWith("bmp", StringComparison.OrdinalIgnoreCase))
-                        bmp2.Save(fd.FileName, ImageFormat.Bmp);
-                    if (fd.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
-                        bmp2.Save(fd.FileName, ImageFormat.Png);
-                }
-            }
-            bmp2.Dispose();
-            bmp.Dispose();
+				// AutoUpgradeEnabled introduced in .NET Framework 2 SP1
+				// Can't trap MissingMethodException
+				// As method is JIT'd, if it even contains the call on a machine without SP1 installed
+				// then it throws the exception. Resolution: move the actual call to a separate method
+				// and don't let compiler inline it.
 
-        }
+				if (AppController.DotNetFramework2ServicePackInstalled)
+				{
+					EnableVisualUpgrade((FileDialog)fd);
+				}
 
-		
+				fd.FileName = this.KeyboardListCombo.Text + " keyboard layout";
+
+				fd.Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp";
+				if (fd.ShowDialog() == DialogResult.OK)
+				{
+					if (fd.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
+						fd.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase))
+						bmp2.Save(fd.FileName, ImageFormat.Jpeg);
+					if (fd.FileName.EndsWith("bmp", StringComparison.OrdinalIgnoreCase))
+						bmp2.Save(fd.FileName, ImageFormat.Bmp);
+					if (fd.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+						bmp2.Save(fd.FileName, ImageFormat.Png);
+				}
+			}
+			bmp2.Dispose();
+			bmp.Dispose();
+
+		}
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+		private void EnableVisualUpgrade(FileDialog fd)
+		{
+			fd.AutoUpgradeEnabled = true;
+		}
+
+
+		private void clearLogFileToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			AppController.ClearLogFile();
+		}
+
+		#endregion
+
 		#region Tests
 
 		//private void stressTestToolStripMenuItem_Click(object sender, EventArgs e)
