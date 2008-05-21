@@ -219,11 +219,14 @@ namespace KeyMapper
 			}
 		}
 
-		public static void ClearLogFile()
-		{
-			_consoleWriterStream.BaseStream.SetLength(0);
-			Console.WriteLine("Log file cleared: {0}", DateTime.Now);
-		}
+        public static void ClearLogFile()
+        {
+            if (_consoleWriterStream != null)
+            {
+                _consoleWriterStream.BaseStream.SetLength(0);
+                Console.WriteLine("Log file cleared: {0}", DateTime.Now);
+            }
+        }
 
 		public static void RedirectConsoleOutput()
 		{
