@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System.Globalization;
 using System.IO;
 using System.Configuration;
+using System.Windows.Forms;
 
 
 namespace KeyMapper
@@ -39,8 +40,11 @@ namespace KeyMapper
 		// Whether current user can write to HKLM
 		private static bool _canWriteBootMappings;
 
-		// Whether user mappings work (they don't on W2k)
-		private static bool _canHaveLocalUserMappings;
+		// User mappings don't work on W2k
+		private static bool _isWindows2000;
+
+		// Trickery needed to write to HKLM on Vista
+		private static bool _isVista;
 
 		private static AppMutex _appMutex;
 
@@ -68,9 +72,14 @@ namespace KeyMapper
 			get { return _canWriteBootMappings; }
 		}
 
-		public static bool LocalUserMappingsAllowed
+		public static bool OperatingSystemIsWindows2000
 		{
-			get { return _canHaveLocalUserMappings; }
+			get { return _isWindows2000; }
+		}
+
+		public static bool OperatingSystemIsVista
+		{
+			get { return _isVista; }
 		}
 
 		public static string ApplicationRegistryKeyName
@@ -115,46 +124,26 @@ namespace KeyMapper
 			}
 		}
 
-		public static bool DotNetFramework2ServicePackInstalled
-		{
-			get
-			{
-				if (_dotNetFrameworkSPInstalled == null)
-				{
-					int sp = 0;
-					RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
-						@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
-
-					if (regkey != null)
-					{
-						sp = (int)regkey.GetValue("SP", 0);
-						regkey.Close();
-					}
-					_dotNetFrameworkSPInstalled = (sp > 0);
-					if (_dotNetFrameworkSPInstalled == false)
-						Console.WriteLine("There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
-				}
-
-				return (bool)_dotNetFrameworkSPInstalled;
-			}
-		}
-
 		#endregion
 
 		#region Controller methods
 
 		public static void StartAppController()
 		{
-			// All the pieces matter.. need to have everything complete 
+			// Need to have everything complete 
 			// before keyboard form is shown, so no background tasks.
 			KeyboardHelper.GetInstalledKeyboardList();
 			SetLocale();
 			EstablishSituation();
-	
+
 		}
 
 		public static void CloseAppController()
 		{
+
+		// 	if (_isVista && _canWriteBootMappings == false && MappingsManager.IsRestartRequired())
+				MappingsManager.SaveBootMappingsVista();
+
 			ClearFontCache();
 
 			foreach (Bitmap bmp in _buttonCache)
@@ -218,50 +207,7 @@ namespace KeyMapper
 					return _defaultKeyFont;
 			}
 		}
-
-        public static void ClearLogFile()
-        {
-            if (_consoleWriterStream != null)
-            {
-                _consoleWriterStream.BaseStream.SetLength(0);
-                Console.WriteLine("Log file cleared: {0}", DateTime.Now);
-            }
-        }
-
-		public static void RedirectConsoleOutput()
-		{
-
-			string path = LogFilename;
-			if (String.IsNullOrEmpty(path))
-				return;
-
-			// In order to be able to clear the log, the streamwriter must be opened in create mode.
-			// In order to do that, read the contents of the log first..
-
-			StreamReader sr = new StreamReader(path);
-			string logEntries = sr.ReadToEnd();
-			sr.Close();
-
-			_consoleWriterStream = new StreamWriter(path, false, System.Text.Encoding.UTF8);
-			_consoleWriterStream.AutoFlush = true;
-			_consoleWriterStream.Write(logEntries);
-
-			_isConsoleRedirected = true;
-
-			// Direct standard output to the log file.
-			Console.SetOut(_consoleWriterStream);
-
-			Console.WriteLine("Logging started: {0}", DateTime.Now);
-		}
-
-		public static void CloseConsoleOutput()
-		{
-			if (_isConsoleRedirected)
-			{
-				_consoleWriterStream.Close();
-			}
-		}
-
+		
 		private static void EstablishSituation()
 		{
 
@@ -280,7 +226,7 @@ namespace KeyMapper
 			}
 			catch (System.Security.SecurityException e)
 			{
-				Console.WriteLine("Cannot access KeyMapper registry key: {0}", e);
+				Console.WriteLine("Can't access KeyMapper registry key: {0}", e);
 				_userCannotWriteToApplicationRegistryKey = true;
 			}
 
@@ -330,11 +276,12 @@ namespace KeyMapper
 			_canWriteBootMappings = RegistryHelper.CanUserWriteToKey
 					(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
-			// Are we using an OS later than Windows 2000 where user mappings are allowed?
-			_canHaveLocalUserMappings =
-				System.Environment.OSVersion.Version.Major > 5
-				| (System.Environment.OSVersion.Version.Major == 5 & System.Environment.OSVersion.Version.Minor > 0);
+			_isWindows2000 =
+				(System.Environment.OSVersion.Version.Major < 5
+				| (System.Environment.OSVersion.Version.Major == 5 & System.Environment.OSVersion.Version.Minor == 0));
 
+			_isVista = System.Environment.OSVersion.Version.Major > 5;
+			
 			// When was the system booted? (Milliseconds vs Ticks is correct..)
 			DateTime boottime = DateTime.Now - TimeSpan.FromMilliseconds(System.Environment.TickCount);
 
@@ -382,7 +329,7 @@ namespace KeyMapper
 			MappingsManager.GetMappingsFromRegistry();
 
 			// If user mappings are inappropriate (win2k) default to boot.
-			if (_canHaveLocalUserMappings == false)
+			if (_isWindows2000)
 				MappingsManager.SetFilter(MappingFilter.Boot);
 
 			// If HLKM or HKCU Mappings have not been changed since boot/login 
@@ -544,6 +491,87 @@ namespace KeyMapper
 			return (!_appMutex.GetMutex());
 		}
 
+		public static bool DotNetFramework2ServicePackInstalled
+		{
+			get
+			{
+				if (_dotNetFrameworkSPInstalled == null)
+				{
+					// The key exists in Vista and Windows 2008 Server
+					// but no need to check it.
+					if (System.Environment.OSVersion.Version.Major > 5)
+						_dotNetFrameworkSPInstalled = true;
+					else
+					{
+						int sp = 0;
+						RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
+							@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
+
+						if (regkey != null)
+						{
+							sp = (int)regkey.GetValue("SP", 0);
+							regkey.Close();
+						}
+						_dotNetFrameworkSPInstalled = (sp > 0);
+					}
+					if (_dotNetFrameworkSPInstalled == false)
+						Console.WriteLine("There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
+				}
+
+				return (bool)_dotNetFrameworkSPInstalled;
+			}
+		}
+
+		#endregion
+
+		#region Log methods
+
+		public static void ClearLogFile()
+		{
+			if (_consoleWriterStream != null)
+			{
+				_consoleWriterStream.BaseStream.SetLength(0);
+				Console.WriteLine("Log file cleared: {0}", DateTime.Now);
+			}
+			else
+				Console.Write("Can't clear log in debug mode.");
+		}
+
+		public static void RedirectConsoleOutput()
+		{
+
+			string path = LogFilename;
+			if (String.IsNullOrEmpty(path))
+				return;
+
+			// In order to be able to clear the log, the streamwriter must be opened in create mode.
+			// In order to do that, read the contents of the log first..
+
+			StreamReader sr = new StreamReader(path);
+			string logEntries = sr.ReadToEnd();
+			sr.Close();
+
+			_consoleWriterStream = new StreamWriter(path, false, System.Text.Encoding.UTF8);
+			_consoleWriterStream.AutoFlush = true;
+			_consoleWriterStream.Write(logEntries);
+
+			_isConsoleRedirected = true;
+
+			// Direct standard output to the log file.
+			Console.SetOut(_consoleWriterStream);
+
+			Console.WriteLine("Logging started: {0}", DateTime.Now);
+		}
+
+		public static void CloseConsoleOutput()
+		{
+			if (_isConsoleRedirected)
+			{
+				_consoleWriterStream.Close();
+			}
+		}
+
+
 		#endregion
 
 		#region Cache methods
@@ -680,6 +708,15 @@ namespace KeyMapper
 			// Euclidean algorithm
 			if (value2 == 0) return value1;
 			return GetHighestCommonDenominator(value2, value1 % value2);
+		}
+
+		// This needs to be in a separate method as this property was introduced in .Net Framework 2
+		// Service Pack 1.
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+		public static void EnableVisualUpgrade(FileDialog fd)
+		{
+			fd.AutoUpgradeEnabled = true;
 		}
 
 		#endregion
