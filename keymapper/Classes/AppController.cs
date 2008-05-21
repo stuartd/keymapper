@@ -141,7 +141,7 @@ namespace KeyMapper
 		public static void CloseAppController()
 		{
 
-		// 	if (_isVista && _canWriteBootMappings == false && MappingsManager.IsRestartRequired())
+		if (_isVista && _canWriteBootMappings == false && MappingsManager.IsRestartRequired())
 				MappingsManager.SaveBootMappingsVista();
 
 			ClearFontCache();
@@ -488,7 +488,7 @@ namespace KeyMapper
 		public static bool CheckForExistingInstances()
 		{
 			_appMutex = new AppMutex();
-			return (!_appMutex.GetMutex());
+			return (!_appMutex.GetMutexOrSwitchToExistingInstance());
 		}
 
 		public static bool DotNetFramework2ServicePackInstalled
@@ -546,11 +546,12 @@ namespace KeyMapper
 
 			// In order to be able to clear the log, the streamwriter must be opened in create mode.
 			// In order to do that, read the contents of the log first..
-
-			StreamReader sr = new StreamReader(path);
-			string logEntries = sr.ReadToEnd();
-			sr.Close();
-
+			string logEntries;
+			using (StreamReader sr = new StreamReader(path))
+			{
+				logEntries = sr.ReadToEnd();
+			}
+			
 			_consoleWriterStream = new StreamWriter(path, false, System.Text.Encoding.UTF8);
 			_consoleWriterStream.AutoFlush = true;
 			_consoleWriterStream.Write(logEntries);

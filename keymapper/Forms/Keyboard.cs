@@ -1003,22 +1003,7 @@ namespace KeyMapper
 
 		private void putKeyboardListOnClipboardToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			string[] kblist = KeyboardHelper.GetInstalledKeyboardListAsStringArray();
-			StringBuilder keyboards = new StringBuilder();
-			foreach (string keyboard in kblist)
-				keyboards.Append(keyboard + (char)13 + (char)10);
-
-			// Create a temp file 
-			string tempFile = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".txt";
-
-			FileStream fs = new FileStream(tempFile, FileMode.Create);
-			StreamWriter sw = new StreamWriter(fs);
-			sw.Write(keyboards.ToString());
-			sw.Flush();
-			sw.Close();
-			System.Diagnostics.Process.Start(tempFile);
-
-
+			KeyboardHelper.ShowKeyboardList();
 		}
 
 		private void viewLogFileToolStripMenuItemClick(object sender, EventArgs e)
@@ -1080,8 +1065,12 @@ namespace KeyMapper
 			{
 				g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
 			}
+
+			string filename = this.KeyboardListCombo.Text ; 
+
 			if (autoSave)
 			{
+				// bmp2.Save(@"somefolder" + filename + ".png", ImageFormat.Png) ;
 			}
 			else
 			{
@@ -1101,7 +1090,7 @@ namespace KeyMapper
 					AppController.EnableVisualUpgrade((FileDialog)fd);
 				}
 
-				fd.FileName = this.KeyboardListCombo.Text + " keyboard layout";
+				fd.FileName = filename + " keyboard layout";
 
 				fd.Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp";
 				if (fd.ShowDialog() == DialogResult.OK)
@@ -1109,8 +1098,10 @@ namespace KeyMapper
 					if (fd.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
 						fd.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase))
 						bmp2.Save(fd.FileName, ImageFormat.Jpeg);
+
 					if (fd.FileName.EndsWith("bmp", StringComparison.OrdinalIgnoreCase))
 						bmp2.Save(fd.FileName, ImageFormat.Bmp);
+
 					if (fd.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
 						bmp2.Save(fd.FileName, ImageFormat.Png);
 				}
@@ -1128,7 +1119,9 @@ namespace KeyMapper
 
 		#endregion
 
-		#region Tests
+
+
+		// #region Stress test
 
 		//private void stressTestToolStripMenuItem_Click(object sender, EventArgs e)
 		//{
@@ -1144,7 +1137,7 @@ namespace KeyMapper
 
 		//}
 
-		#endregion
+		// #endregion
 
 	}
 

@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using System.IO;
 
 namespace KeyMapper
 {
@@ -289,6 +290,25 @@ namespace KeyMapper
             return results;
 
         }
+
+		public static void ShowKeyboardList()
+		{
+			string[] kblist = GetInstalledKeyboardListAsStringArray();
+			StringBuilder keyboards = new StringBuilder();
+			foreach (string keyboard in kblist)
+				keyboards.Append(keyboard + (char)13 + (char)10);
+
+			// Create a temp file 
+			string tempFile = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".txt";
+
+			using (FileStream fs = new FileStream(tempFile, FileMode.Create))
+			using (StreamWriter sw = new StreamWriter(fs))
+			{
+				sw.Write(keyboards.ToString());
+				sw.Flush();
+			}
+			System.Diagnostics.Process.Start(tempFile);
+		}
         
 
 		public static string GetKeyboardName(string locale)
