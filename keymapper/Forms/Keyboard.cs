@@ -133,12 +133,12 @@ namespace KeyMapper
 
 
 			// If there are boot mappings and no user mappings and the last view mode was boot, then
-			// start in boot mode - as long as user has the rights to change them..
+			// start in boot mode - as long as user has the rights to change them (or is running Vista)
 
 			if (oldFilter == MappingFilter.Boot
 				&& MappingsManager.GetMappingCount(MappingFilter.Boot) > 0
 				&& MappingsManager.GetMappingCount(MappingFilter.User) == 0
-				&& AppController.UserCanWriteBootMappings)
+				&& (AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista))
 			{
 				MappingsManager.SetFilter(MappingFilter.Boot);
 			}
@@ -361,8 +361,12 @@ namespace KeyMapper
 
 			this.KeyboardPanel.Controls.Add(box);
 
-			if (isPauseButton == false &&
-				((MappingsManager.Filter == MappingFilter.Boot && !AppController.UserCanWriteBootMappings) == false))
+			// Set the event handler if a) this isn't the pause button 
+			// and b) filter is boot mappings and user can't write to boot mappings and this isn't Vista
+			if (isPauseButton == false 
+				&& ((MappingsManager.Filter == MappingFilter.Boot 
+				&& ! AppController.UserCanWriteBootMappings 
+				&& ! AppController.OperatingSystemIsVista)) == false)
 			{
 				box.DoubleClick += new EventHandler(KeyDoubleClick);
 				// box.MouseDown += new MouseEventHandler(KeyPictureBoxMouseDown);
@@ -428,7 +432,7 @@ namespace KeyMapper
 				string usermaptext = string.Empty;
 				if (bootmaps != 0)
 				{
-					if (AppController.LocalUserMappingsAllowed)
+					if (AppController.OperatingSystemIsWindows2000 == false)
 						bootmaptext = bootmaps.ToString(fp) + " boot mapping" + (bootmaps != 1 ? "s" : "");
 					else
 						bootmaptext = bootmaps.ToString(fp) + " mapping" + (bootmaps != 1 ? "s" : "");
@@ -481,7 +485,7 @@ namespace KeyMapper
 		void SetFilterStatusLabelText()
 		{
 
-			if (AppController.LocalUserMappingsAllowed == false)
+			if (AppController.OperatingSystemIsWindows2000)
 				StatusLabelMappingDisplayType.Visible = false;
 			else
 			{
@@ -492,7 +496,8 @@ namespace KeyMapper
 						break;
 
 					case MappingFilter.Boot:
-						StatusLabelMappingDisplayType.Text = (AppController.UserCanWriteBootMappings ? "Editing" : "Showing") + " Boot Mappings";
+						StatusLabelMappingDisplayType.Text = 
+							(AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista ? "Editing" : "Showing") + " Boot Mappings";
 						StatusLabelMappingDisplayType.Visible = true;
 						break;
 
@@ -664,7 +669,7 @@ namespace KeyMapper
 		{
 
 			// Mappings - view all, user, boot.
-			if (AppController.LocalUserMappingsAllowed)
+			if (AppController.OperatingSystemIsWindows2000 == false)
 				switch (MappingsManager.Filter)
 				{
 					case MappingFilter.All:
@@ -693,7 +698,7 @@ namespace KeyMapper
 				MappingsManager.IsLogOnRequired() != false));
 
 			onlyShowBootMappingsToolStripMenuItem.Text = "Boot Mappings" +
-			  (AppController.UserCanWriteBootMappings ? String.Empty : " (Read Only)");
+			  (AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista ? String.Empty : " (Read Only)");
 
 			// Mappings - check current view
 			showAllMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.All);
@@ -701,7 +706,7 @@ namespace KeyMapper
 			onlyShowUserMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.User);
 
 			// Whether to allow the option of viewing user mappings (ie not on W2K) 
-			chooseMappingsToolStripMenuItem.Visible = (AppController.LocalUserMappingsAllowed);
+			chooseMappingsToolStripMenuItem.Visible = (AppController.OperatingSystemIsWindows2000 == false);
 
 			selectFromCaptureToolStripMenuItem.Enabled = !AppController.UserCannotWriteMappings;
 		}
@@ -741,13 +746,10 @@ namespace KeyMapper
 
 		private void SetAdvancedMenuButtonStates()
 		{
-			if (AppController.UserCanWriteBootMappings) // ie user is admin
+			if (AppController.UserCanWriteBootMappings) // Users who can write to HKLM can write to All Users\.DEFAULT
 				setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = true;
 			else
 				setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = false;
-
-
-
 		}
 
 
@@ -832,7 +834,7 @@ namespace KeyMapper
 					case (int)KeyboardHelper.ToggleKey.ScrollLock:
 						_isScrollLockOn = !_isScrollLockOn;
 						if (_isScrollLockOn != Form.IsKeyLocked(Keys.Scroll))
-						SetToggleMenuButtonStates();
+							SetToggleMenuButtonStates();
 						break;
 				}
 
@@ -971,90 +973,10 @@ namespace KeyMapper
 
 		private void exportAsRegistryFileMenuItemClick(object sender, EventArgs e)
 		{
-			// This is the required format:
-
-			//            Windows Registry Editor Version 5.00
-
-			// [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
-			// "Scancode Map"=hex:00,00,00,00,00,00,00,00,02,00,00,00,2a,00,3a,00,00,00,00,00
-
-			// [HKEY_CURRENT_USER\Keyboard Layout]
-			// "Scancode Map"=hex:00,00,00,00,00,00,00,00,04,00,00,00,5d,e0,1c,e0,1d,00,5b,e0,2a,00,3a,00,00,00,00,00
-
-			// Where there are no mappings, delete the valueS:
-			// "Scancode Map"=-
-
-			SaveFileDialog fd = new SaveFileDialog();
-			fd.AddExtension = true;
-			fd.DefaultExt = "reg";
-			fd.Filter = "Registry files (*.reg)|*.reg";
-			fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
-			fd.OverwritePrompt = true;
-
-			if (AppController.DotNetFramework2ServicePackInstalled)
-			{
-				EnableVisualUpgrade((FileDialog)fd);
-			}
-
-			fd.FileName = "Key Mappings";
-			DialogResult dr = fd.ShowDialog();
-			if (dr != DialogResult.OK)
-				return;
-
-			int bootMappingCount = MappingsManager.GetMappingCount(MappingFilter.Boot);
-
-			StreamWriter sw = new StreamWriter(fd.FileName, false, Encoding.Unicode);
-			sw.WriteLine("Windows Registry Editor Version 5.00");
-			sw.WriteLine();
-
-			sw.WriteLine(@"[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
-			sw.Write("\"Scancode Map\"=");
-			if (bootMappingCount > 0)
-			{
-				sw.Write("hex:");
-				WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.Boot)));
-			}
-			else
-				sw.Write("-");
-
-			sw.WriteLine();
-
-
-			if (bootMappingCount > 0)
-				sw.WriteLine();
-
-			sw.WriteLine(@"[HKEY_CURRENT_USER\Keyboard Layout]");
-
-			sw.Write("\"Scancode Map\"=");
-
-			if (MappingsManager.GetMappingCount(MappingFilter.User) > 0)
-			{
-				sw.Write("hex:");
-				WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.User)));
-			}
-			else
-				sw.Write("-");
-
-			sw.WriteLine();
-
-			sw.Close();
-
+			MappingsManager.ExportMappingsAsRegistryFile(MappingFilter.All, false);
 		}
 
-		private static void WriteMappingsToStream(StreamWriter sw, byte[] bytemappings)
-		{
-			for (int i = 0; i < bytemappings.GetLength(0); i++)
-			{
-				sw.Write(bytemappings[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char)48));
-				if (i < bytemappings.GetLength(0) - 1)
-					sw.Write(",");
-			}
-
-
-		}
-
-		private void selectFromListsMenuItemClick(object sender, EventArgs e)
+	private void selectFromListsMenuItemClick(object sender, EventArgs e)
 		{
 			FormsManager.ShowEditMappingForm(new KeyMapping(), false);
 		}
@@ -1112,11 +1034,9 @@ namespace KeyMapper
 		private void setCurrentToggleKeysAtBootToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (AppController.UserCanWriteBootMappings == false)
-				return;
+				return; // TODO: A vista solution akin to the boot mappings.
 
 			// The HKEY_CURRENT_USER version of this setting is set at logoff.
-
-
 
 			try
 			{
@@ -1130,7 +1050,10 @@ namespace KeyMapper
 				regkey.SetValue("InitialKeyboardIndicators", value);
 
 			}
-			catch { }
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error trying to set default toggle keys: {0}", ex.ToString());
+			}
 
 		}
 
@@ -1175,7 +1098,7 @@ namespace KeyMapper
 
 				if (AppController.DotNetFramework2ServicePackInstalled)
 				{
-					EnableVisualUpgrade((FileDialog)fd);
+					AppController.EnableVisualUpgrade((FileDialog)fd);
 				}
 
 				fd.FileName = this.KeyboardListCombo.Text + " keyboard layout";
@@ -1195,12 +1118,6 @@ namespace KeyMapper
 			bmp2.Dispose();
 			bmp.Dispose();
 
-		}
-
-		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
-		private void EnableVisualUpgrade(FileDialog fd)
-		{
-			fd.AutoUpgradeEnabled = true;
 		}
 
 
