@@ -159,7 +159,10 @@ namespace KeyMapper
 			System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
 
 			if (stream != null)
+			{
 				bmp = new System.Drawing.Bitmap(stream);
+				stream.Close();
+			}
 
 			return bmp;
 

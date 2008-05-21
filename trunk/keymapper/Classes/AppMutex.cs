@@ -12,7 +12,7 @@ namespace KeyMapper
 		private bool _disposed = false;
 		System.Threading.Mutex _appMutex;
 
-		public bool GetMutex()
+		public bool GetMutexOrSwitchToExistingInstance()
 		{
 			bool acquired;
 			_appMutex = new System.Threading.Mutex(true, "KeyMapperAppMutex", out acquired);
