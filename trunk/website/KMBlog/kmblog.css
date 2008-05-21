@@ -1,0 +1,58 @@
+﻿body
+{
+	background-position: center top;
+	font-family: Verdana, Helvetica, Arial, Sans-Serif;
+	font-size: 88%;
+	background-color: #FFFFFF;
+	background-image: url(http://justkeepswimming.net/keymapper/images/kmheader.png);
+	background-repeat: no-repeat;
+}
+
+#header
+{
+	border-width: 1px;
+	border-color: #CC3300;
+	padding: 5px;
+	margin: 75px 0px 50px 0px;
+	letter-spacing: 0.25em;
+	text-align: center;
+	font-variant: small-caps;
+}
+
+#maindiv
+{
+	position: absolute ;
+	width: 800px ;
+	left: 50% ;
+	margin-left: -400px ;
+	
+}
+
+.postheader
+{
+	background-color: #d3d3d3;
+	font-size: 130%;
+	margin-bottom: 20px;
+	position: relative ;
+}
+
+.postfooter
+{
+	background-color: #d3d3d3 ;
+	font-size: 115% ;
+}
+
+.posttitle
+{
+	position: absolute ;
+	left: 10px ;
+	top: 0 ;
+}
+
+.postdate
+{
+	position: absolute;
+	right: 10px;
+	top: 0;
+}
+
