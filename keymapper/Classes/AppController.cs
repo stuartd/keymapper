@@ -609,6 +609,12 @@ namespace KeyMapper
 			if (String.IsNullOrEmpty(path))
 				return;
 
+            if (File.Exists(path) == false)
+            {
+                FileStream fs = File.Create(path);
+                fs.Close();
+            }
+
 			// In order to be able to clear the log, the streamwriter must be opened in create mode.
 			// In order to do that, read the contents of the log first..
 			string logEntries;

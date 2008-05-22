@@ -87,7 +87,7 @@
     <name>Left Alt</name>
     <group>Modifier Keys</group>
     <localize>false</localize>
-    <useful>0</useful>
+    <useful>1</useful>
   </keycodes>
   <keycodes>
     <sc>29</sc>
