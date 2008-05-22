@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.XPath;
 using System.Globalization;
+using System.IO;
 
 namespace KeyMapper
 {
@@ -29,15 +30,11 @@ namespace KeyMapper
 
 			_currentassembly = System.Reflection.Assembly.GetExecutingAssembly();
 			// Initialise our navigator from the embedded XML keys file.
-			System.IO.Stream xmlstream = GetXMLDocumentAsStream(_keyfilename);
-
-			if (xmlstream == null)
+			using (Stream xmlstream = GetXMLDocumentAsStream(_keyfilename))
 			{
-				throw new InvalidOperationException("Cannot proceed without embedded keycode file");
+				XPathDocument document = new XPathDocument(xmlstream);
+				_navigator = document.CreateNavigator();
 			}
-
-			XPathDocument document = new XPathDocument(xmlstream);
-			_navigator = document.CreateNavigator();
 
 		}
 
@@ -73,14 +70,12 @@ namespace KeyMapper
 
 			// Get the layout type - US, European etc. The locale in the XML file must be upper case!
 			string expression = @"/keyboards/keyboard[locale='" + locale.ToUpper(CultureInfo.InvariantCulture) + "']";
-			System.IO.Stream xmlstream = GetXMLDocumentAsStream(_keyboardfilename);
+			XPathDocument document;
 
-			if (xmlstream == null)
+			using (Stream xmlstream = GetXMLDocumentAsStream(_keyboardfilename))
 			{
-				throw new InvalidOperationException("Cannot proceed without keyboard file");
+				document = new XPathDocument(xmlstream);
 			}
-
-			XPathDocument document = new XPathDocument(xmlstream);
 			XPathNavigator nav = document.CreateNavigator();
 
 			XPathNodeIterator it = (XPathNodeIterator)nav.Select(expression);
