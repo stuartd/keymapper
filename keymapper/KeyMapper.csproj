@@ -13,7 +13,7 @@
     </StartupObject>
     <SignAssembly>true</SignAssembly>
     <ManifestCertificateThumbprint>C82F5AD128815950084E4EA1756D4C5D7F63D089</ManifestCertificateThumbprint>
-    <ManifestKeyFile>KeyMapper.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Project\KeyMapper.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <TargetZone>Internet</TargetZone>
     <SignManifests>true</SignManifests>
