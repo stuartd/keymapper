@@ -7,6 +7,8 @@ using System.Globalization;
 using System.IO;
 using System.Configuration;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Drawing.Text;
 
 
 namespace KeyMapper
@@ -54,6 +56,8 @@ namespace KeyMapper
 
 		private static bool _userCannotWriteToApplicationRegistryKey;
 		private static bool? _dotNetFrameworkSPInstalled;
+
+		private static bool? _arialUnicodeMSInstalled;
 
 		// Properties
 
@@ -128,7 +132,7 @@ namespace KeyMapper
 
 		#region Controller methods
 
-		public static void StartAppController()
+		public static void Start()
 		{
 			// Need to have everything complete 
 			// before keyboard form is shown, so no background tasks.
@@ -138,7 +142,7 @@ namespace KeyMapper
 
 		}
 
-		public static void CloseAppController()
+		public static void Close()
 		{
 
 		if (_isVista && _canWriteBootMappings == false && MappingsManager.IsRestartRequired())
@@ -161,7 +165,26 @@ namespace KeyMapper
 		public static string GetKeyFontName(bool localizable)
 		{
 
-			if (localizable == false)
+			if (_arialUnicodeMSInstalled == null)
+			{
+				_arialUnicodeMSInstalled = false;
+				InstalledFontCollection installedFonts = new InstalledFontCollection();
+				FontFamily[] fonts = installedFonts.Families;
+				foreach (FontFamily ff in fonts)
+				{
+					if (ff.Name == "Arial Unicode MS")
+					{
+					 	_arialUnicodeMSInstalled = true;
+					 	_defaultKeyFont = "Arial Unicode MS";
+						break;
+					}
+
+				}
+			}
+
+
+
+			if (localizable == false || (bool)_arialUnicodeMSInstalled)
 				return _defaultKeyFont; // Don't want the static keys to change font.
 
 			// Default font for keys is Lucida Sans Unicode as it's on every version of Windows
@@ -485,10 +508,52 @@ namespace KeyMapper
 			_keyboardLayout = layout;
 		}
 
-		public static bool CheckForExistingInstances()
+		public static bool ActivateExistingInstance()
 		{
 			_appMutex = new AppMutex();
-			return (!_appMutex.GetMutexOrSwitchToExistingInstance());
+			bool gotMutex = _appMutex.GetMutex();
+			if (gotMutex == false)
+				SwitchToExistingInstance();
+
+			return gotMutex ;
+		}
+
+		private static void SwitchToExistingInstance()
+		{
+				IntPtr hWnd = IntPtr.Zero;
+				Process process = Process.GetCurrentProcess();
+				Process[] processes = Process.GetProcessesByName(process.ProcessName);
+				foreach (Process _process in processes)
+				{
+					// Get the first instance that is not this instance, has the
+					// same process name and was started from the same file name
+					// and location. Also check that the process has a valid
+					// window handle in this session to filter out other user's
+					// processes.
+					if (_process.Id != process.Id &&
+						_process.MainModule.FileName == process.MainModule.FileName &&
+						_process.MainWindowHandle != IntPtr.Zero)
+					{
+						hWnd = _process.MainWindowHandle;
+						break;
+					}
+				}
+
+
+
+				if (hWnd != IntPtr.Zero)
+				{
+					// Restore window if minimised. Do not restore if already in
+					// normal or maximised window state, since we don't want to
+					// change the current state of the window.
+					if (NativeMethods.IsIconic(hWnd) != 0)
+					{
+						NativeMethods.ShowWindow(hWnd, 9); // SW_RESTORE
+					}
+
+					// Set foreground window.
+					NativeMethods.SetForegroundWindow(hWnd);
+				}
 		}
 
 		public static bool DotNetFramework2ServicePackInstalled
@@ -625,6 +690,7 @@ namespace KeyMapper
 
 			Font font = AppController.GetFontFromCache(basefontsize, false);
 
+			// Not using ButtonImages.GetButtonImage as that is where we were called from..
 			using (Bitmap bmp = ButtonImages.ResizeBitmap(AppController.GetBitmap(BlankButton.Blank), scale, false))
 			using (Graphics g = Graphics.FromImage(bmp))
 			{
@@ -637,9 +703,7 @@ namespace KeyMapper
 				basefontsize = (basefontsize * ratio);
 			}
 
-			_baseFontSize = basefontsize;
-
-			// Console.WriteLine("Base: {0} Double: {1} Multi: {2}", FontSizeSingle, FontSizeDouble, FontSizeMulti);
+				_baseFontSize = basefontsize;
 
 		}
 

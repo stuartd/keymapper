@@ -32,7 +32,7 @@ namespace KeyMapper
 			get { return KeyboardHelper._installedKeyboards; }
 		}
 
-   		private static List<int> SystemInputLocaleIdentifiers
+		private static List<int> SystemInputLocaleIdentifiers
 		{
 			get
 			{
@@ -58,6 +58,11 @@ namespace KeyMapper
 			UnloadLayout();
 			_currentInputLocaleIdentifier = (IntPtr)NativeMethods.LoadKeyboardLayout(
 				locale, NativeMethods.KLF_ACTIVATE | NativeMethods.KLF_SUBSTITUTE_OK);
+
+		
+		
+
+			
 
 			// While we have it, get it's HKL and return the low word of it:
 			// (this allows the appropriate culture to be loaded)
@@ -97,10 +102,10 @@ namespace KeyMapper
 			KeyState[(int)Keys.FinalMode] = 0x80;
 			KeyState[(int)Keys.HanjaMode] = 0x80;
 			KeyState[(int)Keys.KanjiMode] = 0x80;
-	
+
 			StringBuilder result = new StringBuilder();
 
-			int bufferLength = 10;	
+			int bufferLength = 10;
 
 			// Get the key itself:
 			StringBuilder sbUnshifted = new StringBuilder(bufferLength);
@@ -138,7 +143,7 @@ namespace KeyMapper
 
 			if (rc < sbUnshifted.Length)
 			{
-				sbUnshifted.Remove(rc, sbUnshifted.Length - rc); 
+				sbUnshifted.Remove(rc, sbUnshifted.Length - rc);
 			}
 
 			if (rc > 0)
@@ -220,9 +225,9 @@ namespace KeyMapper
 		public static void PressKey(ToggleKey keycode)
 		{
 			// All the ToggleKeys are extended. Press once for down, once for up.
-			NativeMethods.keybd_event((byte)keycode, 0x45, 
-				(uint)	(NativeMethods.KEYEVENTF_EXTENDEDKEY | 0), UIntPtr.Zero);
-			NativeMethods.keybd_event((byte)keycode, 0x45, 
+			NativeMethods.keybd_event((byte)keycode, 0x45,
+				(uint)(NativeMethods.KEYEVENTF_EXTENDEDKEY | 0), UIntPtr.Zero);
+			NativeMethods.keybd_event((byte)keycode, 0x45,
 				(uint)(NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP), UIntPtr.Zero);
 		}
 
@@ -278,18 +283,18 @@ namespace KeyMapper
 
 		}
 
-        public static string[] GetInstalledKeyboardListAsStringArray()
-        {
-            if (_installedKeyboards == null)
-                GetInstalledKeyboardList();
+		public static string[] GetInstalledKeyboardListAsStringArray()
+		{
+			if (_installedKeyboards == null)
+				GetInstalledKeyboardList();
 
-            string[] results = new string[_installedKeyboards.Count] ;
-            _installedKeyboards.Keys.CopyTo(results, 0);
+			string[] results = new string[_installedKeyboards.Count];
+			_installedKeyboards.Keys.CopyTo(results, 0);
 
-            Array.Sort(results);
-            return results;
+			Array.Sort(results);
+			return results;
 
-        }
+		}
 
 		public static void ShowKeyboardList()
 		{
@@ -309,7 +314,7 @@ namespace KeyMapper
 			}
 			System.Diagnostics.Process.Start(tempFile);
 		}
-        
+
 
 		public static string GetKeyboardName(string locale)
 		{

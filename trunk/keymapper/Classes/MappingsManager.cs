@@ -627,46 +627,47 @@ namespace KeyMapper
 
 			int bootMappingCount = MappingsManager.GetMappingCount(MappingFilter.Boot);
 
-			StreamWriter sw = new StreamWriter(filename, false, Encoding.Unicode);
-			sw.WriteLine("Windows Registry Editor Version 5.00");
-			sw.WriteLine();
-
-			if (filter == MappingFilter.Boot || filter == MappingFilter.All)
+			using (StreamWriter sw = new StreamWriter(filename, false, Encoding.Unicode))
 			{
-				sw.WriteLine(@"[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
-				sw.Write("\"Scancode Map\"=");
-				if (bootMappingCount > 0)
-				{
-					sw.Write("hex:");
-					WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.Boot)));
-				}
-				else
-					sw.Write("-");
-
+				sw.WriteLine("Windows Registry Editor Version 5.00");
 				sw.WriteLine();
 
-				if (bootMappingCount > 0)
+				if (filter == MappingFilter.Boot || filter == MappingFilter.All)
+				{
+					sw.WriteLine(@"[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
+					sw.Write("\"Scancode Map\"=");
+					if (bootMappingCount > 0)
+					{
+						sw.Write("hex:");
+						WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.Boot)));
+					}
+					else
+						sw.Write("-");
+
 					sw.WriteLine();
-			}
 
-			if (filter == MappingFilter.User || filter == MappingFilter.All)
-			{
-				sw.WriteLine(@"[HKEY_CURRENT_USER\Keyboard Layout]");
-
-				sw.Write("\"Scancode Map\"=");
-
-				if (MappingsManager.GetMappingCount(MappingFilter.User) > 0)
-				{
-					sw.Write("hex:");
-					WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.User)));
+					if (bootMappingCount > 0)
+						sw.WriteLine();
 				}
-				else
-					sw.Write("-");
 
-				sw.WriteLine();
+				if (filter == MappingFilter.User || filter == MappingFilter.All)
+				{
+					sw.WriteLine(@"[HKEY_CURRENT_USER\Keyboard Layout]");
+
+					sw.Write("\"Scancode Map\"=");
+
+					if (MappingsManager.GetMappingCount(MappingFilter.User) > 0)
+					{
+						sw.Write("hex:");
+						WriteMappingsToStream(sw, MappingsManager.GetMappingsAsByteArray(MappingsManager.GetMappings(MappingFilter.User)));
+					}
+					else
+						sw.Write("-");
+
+					sw.WriteLine();
+				}
+
 			}
-
-			sw.Close();
 
 			return filename;
 		}

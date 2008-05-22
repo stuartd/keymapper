@@ -17,10 +17,9 @@ namespace KeyMapper
 		static void Main()
 		{
 
-			// Look for a running copy and activate it if it exists
-			if (AppController.CheckForExistingInstances() == true)
+			//Method will look for a running copy and activate it if it exists
+			if (AppController.ActivateExistingInstance() == false)
 			{
-				AppController.CloseConsoleOutput();
 				return;
 			}
 
@@ -49,10 +48,11 @@ namespace KeyMapper
 				userSettings.Save();
 			}
 
-			AppController.StartAppController();
+			AppController.Start();
+
 			Application.Run(new KeyboardForm());
 
-			AppController.CloseAppController();
+			AppController.Close();
 			// Release static events or else leak.
 			Application.ThreadException -= ApplicationThreadException;
 			AppDomain.CurrentDomain.UnhandledException -= UnhandledExceptionHandler;
