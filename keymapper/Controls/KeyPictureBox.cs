@@ -351,17 +351,12 @@ namespace KeyMapper
 
 			// Console.WriteLine("Dragover: " + _scancode)
 
-			// Can't drop onto a mapped key.
-			if (true) // (_mapped == false)
-			{
-				this.SetImage(ButtonImages.GetButtonImage
-					(dragged_map.From.Scancode, dragged_map.From.Extended,
-					_button, _horizontalStretch, _verticalStretch, _scale, ButtonEffect.MappedPending));
+			this.SetImage(ButtonImages.GetButtonImage
+				(dragged_map.From.Scancode, dragged_map.From.Extended,
+				_button, _horizontalStretch, _verticalStretch, _scale, ButtonEffect.MappedPending));
 
-				e.Effect = DragDropEffects.Copy;
-			}
-			else
-				e.Effect = DragDropEffects.None;
+			e.Effect = DragDropEffects.Copy;
+
 		}
 
 		// When disposing, make sure that final bitmap is released.
