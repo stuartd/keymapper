@@ -1218,10 +1218,10 @@
     <useful>-1</useful>
   </keycodes>
   <keycodes>
-    <sc>69</sc>
-    <ex>224</ex>
+    <sc>29</sc>
+    <ex>225</ex>
     <name>Pause Break</name>
-    <group>Unmappable Keys</group>
+    <group>Utility Keys</group>
     <localize>false</localize>
     <useful>-1</useful>
   </keycodes>

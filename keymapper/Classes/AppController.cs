@@ -145,9 +145,6 @@ namespace KeyMapper
 		public static void Close()
 		{
 
-		if (_isVista && _canWriteBootMappings == false && MappingsManager.IsRestartRequired())
-				MappingsManager.SaveBootMappingsVista();
-
 			ClearFontCache();
 
 			foreach (Bitmap bmp in _buttonCache)
@@ -362,21 +359,14 @@ namespace KeyMapper
 
 			if (HKLMWrite < boottime || savedMappingsExist == false)
 			{
-				MappingsManager.SaveMappings(Mappings.CurrentBootMappings,
-					MapLocation.KeyMapperLocalMachineKeyboardLayout);
-				// As have overwritten our stored value with a new one, reload it ..
-				MappingsManager.GetMappingsFromRegistry(MapLocation.KeyMapperLocalMachineKeyboardLayout);
-				// .. and recalculate mappings.
-				MappingsManager.PopulateMappingLists();
+				MappingsManager.SaveBootMappingsToKeyMapperKey();
 
 			}
 
 			if (HKCUWrite < logontime || savedMappingsExist == false)
 			{
-				MappingsManager.SaveMappings(Mappings.CurrentUserMappings,
-					MapLocation.KeyMapperCurrentUserKeyboardLayout);
-				MappingsManager.GetMappingsFromRegistry(MapLocation.KeyMapperCurrentUserKeyboardLayout);
-				MappingsManager.PopulateMappingLists();
+				MappingsManager.SaveUserMappingsToKeyMapperKey();
+
 			}
 
 			if (savedMappingsExist == false)
@@ -795,19 +785,20 @@ namespace KeyMapper
 
 		public static int GetHashFromKeyData(int scancode, int extended)
 		{
-			// Slide scancode one bit to the left and add one if extended is nonzero.
-			return ((scancode << 1) + (extended != 0 ? 1 : 0));
+			// Need to preserve the actual extended value as they are all 224 except Pause
+			// which is 225.
+			return (scancode * 1000) + extended;
 		}
 
 		public static int GetScancodeFromHash(int hash)
 		{
-			return (hash >> 1);
+			return (hash / 1000);
 		}
 
 		public static int GetExtendedFromHash(int hash)
 		{
 			// Extended value is 224 when set.
-			return ((hash % 2) != 0 ? 224 : 0);
+			return (hash % 1000);
 		}
 
 		#endregion

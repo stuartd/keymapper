@@ -657,9 +657,9 @@ namespace KeyMapper
 			if (_capturingFromKey)
 			{
 				// Have we been sent a dud??
-				if ((e.Key.Scancode == 0) || 	(e.Key.Scancode == 69 && e.Key.Extended == 224))
+				if (e.Key.Scancode == 0) 
 				{
-					// Can't use a disabled key as From, or the Pause/Break key.
+					// Can't use a disabled key as From
 					_map = new KeyMapping();
 				}
 				else

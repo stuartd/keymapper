@@ -167,8 +167,8 @@ namespace KeyMapper
 				// Cast lParam into our structure
 				KBHookStruct keypress = (KBHookStruct)Marshal.PtrToStructure(lParam, typeof(KBHookStruct));
 
-				// Console.WriteLine("ScanCode: {0}, Extended: {1}, KeyCode: {2}, Name: ",
-				//   keypress.Scancode, keypress.Extended, keypress.VirtualKeyCode, AppController.GetKeyName(keypress.Scancode, keypress.Extended));
+				 //Console.WriteLine("ScanCode: {0}, Extended: {1}, KeyCode: {2}, Name: ",
+				 // keypress.Scancode, keypress.Extended, keypress.VirtualKeyCode, AppController.GetKeyName(keypress.Scancode, keypress.Extended));
 
 				if (keypress.Scancode == 541)
 				{
@@ -182,13 +182,11 @@ namespace KeyMapper
 
 				if (keypress.VirtualKeyCode == 19)
 				{
-					// Pause button reports itself with the wrong scancode. 
-					// and isn't supported by scancode mechanism anyway..
-		
-					// Make sure we pass on the correct scan code 
-					// so callers can discard this key.
-					keypress.Scancode = 69;
-					keypress.KeyFlags = 1;
+					// Pause. This doesn't capture well - it's extended value is 225
+					// rather than 224, so 
+	
+					keypress.Scancode = 29;
+					keypress.KeyFlags = 2;
 
 				}
 
@@ -224,6 +222,8 @@ namespace KeyMapper
 		private int _extrainfo;
 
 		private const int LLKHF_EXTENDED = 0x1;
+		private const int LLKHF_EXTENDED_PAUSE = 0x2;
+
 
 		public int VirtualKeyCode
 		{
@@ -239,7 +239,23 @@ namespace KeyMapper
 
 		public int Extended
 		{
-			get { return (LLKHF_EXTENDED & _flags) == 1 ? 224 : 0; }
+			get
+			{
+
+				if ((LLKHF_EXTENDED & _flags) == LLKHF_EXTENDED)
+				{
+					return 224;
+				}
+				else if ((LLKHF_EXTENDED_PAUSE & _flags) == LLKHF_EXTENDED_PAUSE)
+				{
+					return 225;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+
 		}
 
 		// They *are* flags.
