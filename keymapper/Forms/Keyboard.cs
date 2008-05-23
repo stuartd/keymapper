@@ -1117,6 +1117,10 @@ namespace KeyMapper
 			MappingsManager.SaveUserMappingsToKeyMapperKey(true);
 		}
 
+        private void alwaysUseEnterOrientationForLayout(object sender, EventArgs e)
+        {
+            AppController.AddCustomLayout();
+        }
 
 
 		// #region Stress test
