@@ -10,7 +10,7 @@ namespace KeyMapper
 		#region Fields
 
 		private static string _path = "KeyMapper.Images.";
-		private static float _lastScale ;
+		private static float _lastScale;
 		private static BlankButton _lastButton = BlankButton.None;
 		private static Bitmap _lastImage;
 
@@ -112,7 +112,7 @@ namespace KeyMapper
 			{
 				case ButtonEffect.NoMappingAllowed:
 					return Color.DarkRed;
-			
+
 				default:
 					return Color.Black;
 
@@ -313,10 +313,47 @@ namespace KeyMapper
 
 		#region Caption
 
+		private static float GetMultiLineFontSize(Bitmap bmp, string caption, bool localizable, float fontsize)
+		{
+			string[] words = caption.Split();
+
+			// Ignore words in brackets as they won't be displayed.
+			string longestWord = words[0];
+
+			for (int i = 1; i < words.GetLength(0); i++)
+			{
+				string word = words[i];
+				if (word.StartsWith("(") && word.EndsWith(")"))
+					continue;
+
+				if (word.Length > longestWord.Length)
+					longestWord = word;
+			}
+
+			using (Graphics g = Graphics.FromImage(bmp))
+			{
+				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+				Font font = AppController.GetFontFromCache(fontsize, localizable);
+
+				SizeF stringSize = SizeF.Empty;
+				stringSize = g.MeasureString(longestWord, font);
+
+				if (stringSize.Width > (bmp.Width * 0.8F))
+				{
+					fontsize *= ((bmp.Width * 0.8F) / stringSize.Width);
+				}
+			}
+
+			return fontsize;
+
+		}
+
+		
 		private static Bitmap WriteCaption(Bitmap bmp, string caption, bool overlong, bool localizable, Color fontColour)
 		{
 
-   			// Set the sizes for 2 and 3 or more letters.
+			// Set the sizes for 2 and 3 or more letters.
 			float FontSizeDouble = (AppController.BaseFontSize * 0.75F);
 			float FontSizeMulti = (AppController.BaseFontSize * 0.575F);
 
@@ -369,23 +406,28 @@ namespace KeyMapper
 				default:
 					// More than 3 letters long
 					string[] words = caption.Split(' ');
-                    // If the last word is a word in brackets, remove it
-                    // E.G. Enter (Numberpad) will just be written on the key as Enter.
+
+					FontSizeMulti = GetMultiLineFontSize(bmp, caption, localizable, FontSizeMulti); 
+
+					// If the last word is a word in brackets, remove it
+					// E.G. Enter (Numberpad) will just be written on the key as Enter.
+
+					// Assuming there are only two words.
+
 					switch (words.Length)
 					{
 						case 1:
 							DrawCaptionLine(bmp, words[0], FontSizeMulti, localizable, fontColour);
 							break;
-                        case 2: if ((words[1].Trim().Substring(0, 1) == "("
-                            && words[1].Trim().Substring(words[1].Length - 1, 1) == ")"))
-                            {
-                                DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.Middle, localizable, fontColour);
-                            }
-                            else
-                            {
-                                DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.TextTop, localizable, fontColour);
-                                DrawCaptionLine(bmp, words[1], FontSizeMulti, TextPosition.Bottom, localizable, fontColour);
-                            }
+						case 2: if ((words[1].StartsWith("(") && words[1].EndsWith(")")))
+							{
+								DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.Middle, localizable, fontColour);
+							}
+							else
+							{
+								DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.TextTop, localizable, fontColour);
+								DrawCaptionLine(bmp, words[1], FontSizeMulti, TextPosition.Bottom, localizable, fontColour);
+							}
 							break;
 						default:
 							break;
@@ -433,8 +475,6 @@ namespace KeyMapper
 		private static Bitmap DrawCaptionLine(Bitmap bmp, string caption, float fontsize, TextPosition where, bool localizable, Color fontColour)
 		{
 
-			// Each string needs to be tested to see if it fits in the button or if it has to be bumped down.
-
 			// The upper 10/64 and lower 14/64 of the button are not considered drawing area 
 			// so discount them when calculating the row position. This also knocks the centre down by 4/64.
 
@@ -449,13 +489,6 @@ namespace KeyMapper
 
 				// This only takes tiny amount of time - 14ms for 10000 iterations..
 				stringSize = g.MeasureString(caption, font);
-
-				if (stringSize.Width > (bmp.Width * 0.8F))
-				{
-					fontsize *= ((bmp.Width * 0.8F) / stringSize.Width);
-					font = AppController.GetFontFromCache(fontsize, localizable);
-					stringSize = g.MeasureString(caption, font);
-				}
 
 				int left = (bmp.Width / 2) - (int)(stringSize.Width / 2);
 				int top = 0;
@@ -495,22 +528,22 @@ namespace KeyMapper
 
 		public static ColorMatrix GetMatrix(ButtonEffect effect)
 		{
-			return GetMatrix(effect, false) ;
+			return GetMatrix(effect, false);
 		}
 
 		public static ColorMatrix GetMatrix(ButtonEffect effect, bool ignoreUserSettings)
 		{
 			if (ignoreUserSettings == false)
 			{
-			UserColourSetting setting = UserColourSettingManager.GetColourSettings(effect);
-			if (setting != null)
-				return setting.Matrix;
+				UserColourSetting setting = UserColourSettingManager.GetColourSettings(effect);
+				if (setting != null)
+					return setting.Matrix;
 			}
 			ColorMatrix cm = null;
 
 			switch (effect)
 			{
-					
+
 				case ButtonEffect.None:
 					cm = new ColorMatrix();
 					break;
@@ -548,7 +581,7 @@ namespace KeyMapper
 
 		}
 
-		
+
 		private static Bitmap ApplyEffect(Bitmap bmp, ButtonEffect effect)
 		{
 			ColorMatrix cm = GetMatrix(effect);
