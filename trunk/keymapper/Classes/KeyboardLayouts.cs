@@ -172,7 +172,7 @@ namespace KeyMapper
 				new KeyboardLayoutElement[]{
 				new KeyboardLayoutElement(55, 224, BlankButton.Blank, 0, 0, 0), 
 				new KeyboardLayoutElement(70, 0, BlankButton.Blank, 0, 0, 0), 
-				new KeyboardLayoutElement(69, 224, BlankButton.Blank, 0, 0, 0)})));
+				new KeyboardLayoutElement(29, 225, BlankButton.Blank, 0, 0, 0)})));
 			}
 		}
 

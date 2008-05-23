@@ -72,6 +72,7 @@ namespace KeyMapper
 			this.clearLogFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.setCurrentToggleKeysAtBootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.printScreenToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.forceUserMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutKeyMapperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -407,7 +408,8 @@ namespace KeyMapper
             this.viewLogFileToolStripMenuItem,
             this.clearLogFileToolStripMenuItem,
             this.setCurrentToggleKeysAtBootToolStripMenuItem,
-            this.printScreenToFileToolStripMenuItem});
+            this.printScreenToFileToolStripMenuItem,
+            this.forceUserMappingsToolStripMenuItem});
 			this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
 			this.advancedToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
 			this.advancedToolStripMenuItem.Text = "&Advanced";
@@ -446,6 +448,13 @@ namespace KeyMapper
 			this.printScreenToFileToolStripMenuItem.Size = new System.Drawing.Size(278, 22);
 			this.printScreenToFileToolStripMenuItem.Text = "&Print Screen To File";
 			this.printScreenToFileToolStripMenuItem.Click += new System.EventHandler(this.printScreenToFileToolStripMenuItem_Click);
+			// 
+			// forceUserMappingsToolStripMenuItem
+			// 
+			this.forceUserMappingsToolStripMenuItem.Name = "forceUserMappingsToolStripMenuItem";
+			this.forceUserMappingsToolStripMenuItem.Size = new System.Drawing.Size(278, 22);
+			this.forceUserMappingsToolStripMenuItem.Text = "Force User Mappings To Be Current";
+			this.forceUserMappingsToolStripMenuItem.Click += new System.EventHandler(this.forceUserMappingsToolStripMenuItem_Click);
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -631,6 +640,7 @@ namespace KeyMapper
 		private System.Windows.Forms.ToolStripMenuItem setCurrentToggleKeysAtBootToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printScreenToFileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem clearLogFileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem forceUserMappingsToolStripMenuItem;
 
 
 	}

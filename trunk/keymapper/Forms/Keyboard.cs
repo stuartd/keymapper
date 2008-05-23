@@ -349,22 +349,15 @@ namespace KeyMapper
 		void DrawKey(int scancode, int extended, ref int left, int top, BlankButton button, int horizontalStretch, int verticalStretch)
 		{
 
-			bool isPauseButton = false;
-
-			if (scancode == 69 && extended == 224)
-				isPauseButton = true;
-
-			KeyPictureBox box = new KeyPictureBox(scancode, extended, button, this._buttonScale, horizontalStretch, verticalStretch, isPauseButton);
+			KeyPictureBox box = new KeyPictureBox(scancode, extended, button, this._buttonScale, horizontalStretch, verticalStretch);
 
 			box.Left = left;
 			box.Top = top;
 
 			this.KeyboardPanel.Controls.Add(box);
 
-			// Set the event handler if a) this isn't the pause button 
-			// and b) filter is boot mappings and user can't write to boot mappings and this isn't Vista
-			if (isPauseButton == false 
-				&& ((MappingsManager.Filter == MappingFilter.Boot 
+			// Set the event handler unless filter is boot mappings and user can't write to boot mappings and this isn't Vista
+			if (((MappingsManager.Filter == MappingFilter.Boot 
 				&& ! AppController.UserCanWriteBootMappings 
 				&& ! AppController.OperatingSystemIsVista)) == false)
 			{
@@ -374,11 +367,8 @@ namespace KeyMapper
 			}
 
 			string toolTipText;
-			if (isPauseButton == false)
 				toolTipText = box.Map.MappingDescription();
-			else
-				toolTipText = "The Pause key cannot be used in a mapping";
-
+	
 			if (String.IsNullOrEmpty(toolTipText) == false)
 				FormToolTip.SetToolTip(box, toolTipText);
 
@@ -479,7 +469,7 @@ namespace KeyMapper
 				StatusLabelRestartLogoff.Visible = false;
 			}
 
-			StatusLabelReadOnly.Visible = AppController.UserCannotWriteMappings;
+			StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !AppController.OperatingSystemIsVista);
 		}
 
 		void SetFilterStatusLabelText()
@@ -785,6 +775,9 @@ namespace KeyMapper
 		{
 			// Save settings before we close, so references to subforms are still live.
 			SaveUserSettings();
+
+			if (AppController.OperatingSystemIsVista && AppController.UserCanWriteBootMappings == false && MappingsManager.IsRestartRequired())
+				MappingsManager.SaveBootMappingsVista();
 		}
 
 		private void OnMappingsChanged(object sender, EventArgs e)
@@ -1032,7 +1025,7 @@ namespace KeyMapper
 				int value =
 					(_isCapsLockOn ? 1 : 0) + (_isNumLockOn ? 2 : 0) + (_isScrollLockOn ? 4 : 0);
 
-				regkey.SetValue("InitialKeyboardIndicators", value);
+				regkey.SetValue("InitialKeyboardIndicators", value.ToString());
 
 			}
 			catch (Exception ex)
@@ -1118,6 +1111,11 @@ namespace KeyMapper
 		}
 
 		#endregion
+
+		private void forceUserMappingsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MappingsManager.SaveUserMappingsToKeyMapperKey(true);
+		}
 
 
 

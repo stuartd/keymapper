@@ -452,11 +452,43 @@ namespace KeyMapper
 
 			string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
 
-			string command = " /s " +  (char)34 + tempfile + (char)34 ;
+			string command = " /s " + (char)34 + tempfile + (char)34;
 
 			System.Diagnostics.Process.Start("regedit.exe", command);
 
 		}
+
+		public static void SaveBootMappingsToKeyMapperKey()
+		{
+
+			MappingsManager.SaveMappings(Mappings.CurrentBootMappings,
+				MapLocation.KeyMapperLocalMachineKeyboardLayout);
+			// As have overwritten our stored value with a new one, reload it ...
+			MappingsManager.GetMappingsFromRegistry(MapLocation.KeyMapperLocalMachineKeyboardLayout);
+			// ... and recalculate mappings.
+			MappingsManager.PopulateMappingLists();
+
+		}
+
+		public static void SaveUserMappingsToKeyMapperKey()
+		{
+			SaveUserMappingsToKeyMapperKey(false);
+		}
+
+
+
+		public static void SaveUserMappingsToKeyMapperKey(bool raiseEvent)
+		{
+			MappingsManager.SaveMappings(Mappings.CurrentUserMappings,
+				MapLocation.KeyMapperCurrentUserKeyboardLayout);
+			MappingsManager.GetMappingsFromRegistry(MapLocation.KeyMapperCurrentUserKeyboardLayout);
+			MappingsManager.PopulateMappingLists();
+			if (raiseEvent)
+				RaiseMappingsChangedEvent();
+
+		}
+
+
 
 		public static void SaveMappings()
 		{
@@ -697,6 +729,11 @@ namespace KeyMapper
 
 		public static bool AddMapping(KeyMapping map)
 		{
+			return AddMapping(map, false);
+		}
+
+		public static bool AddMapping(KeyMapping map, bool noStackNoEventRaised)
+		{
 			if (!map.IsValid())
 			{
 				return false;
@@ -705,8 +742,10 @@ namespace KeyMapper
 			int scancode = map.From.Scancode;
 			int extended = map.From.Extended;
 
+			bool disableNumLock = false;
+
 			// If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
-			// that it ould be goodbye to CTRL-ALT-DEL
+			// that it could be goodbye to CTRL-ALT-DEL
 
 			if ((scancode == 29 && extended == 0) || (scancode == 56 && extended == 0) || (scancode == 83 && extended == 224))
 			{
@@ -723,21 +762,90 @@ namespace KeyMapper
 					return false;
 			}
 
+			// If user is remapping Pause, then suggest they will want to disable Num Lock as well.
 
-			PushMappingsOntoUndoStack();
+			if (scancode == 29 && extended == 225 && IsDisabledMapping(map) == false)
+			{
+
+				// Is Num Lock already disabled or remapped?
+				bool numLockIsDisabled = false;
+				bool numLockIsMapped = false;
+
+				Key numLock = new Key(69, 0);
+
+				foreach (KeyMapping km in _bootMappings)
+					if (km.From == numLock)
+					{
+						if (IsDisabledMapping(km))
+							numLockIsDisabled = true;
+						else
+							numLockIsMapped = true;
+					}
+
+				foreach (KeyMapping km in _userMappings)
+				{
+					if (IsDisabledMapping(km))
+						numLockIsDisabled = true;
+					else
+						numLockIsMapped = true;
+				}
+
+				if (numLockIsDisabled == false)
+				{
+
+					string warning = "If you remap Pause, the Num Lock key will be disabled" +
+						(numLockIsMapped ? ((char)13 + "and your existing Num Lock mapping will be removed.") : ".") +
+						 (char)13 + (char)13 + "Do you still want to remap Pause?";
+
+					DialogResult dr = MessageBox.Show(warning, "KeyMapper", MessageBoxButtons.YesNo,
+										MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0);
+
+					if (dr != DialogResult.Yes)
+						return false;
+
+					disableNumLock = true;
+				}
+
+
+			}
+
+			if (noStackNoEventRaised == false)
+				PushMappingsOntoUndoStack();
+
+			// Check for any existing mappings for this key
+			// if they exist, this mapping needs to replace them.
 
 			if (_filter == MappingFilter.Boot)
 			{
 				map.SetType(MappingType.Boot);
+
+				KeyMapping existingMap = GetKeyMapping(map.From.Scancode, map.From.Extended);
+				if (existingMap.IsEmpty() == false && existingMap.MapType == MappingType.Boot)
+					_bootMappings.Remove(existingMap);
+
 				_bootMappings.Add(map);
+
 			}
 			else
 			{
 				map.SetType(MappingType.User);
+
+				KeyMapping existingMap = GetKeyMapping(map.From.Scancode, map.From.Extended);
+				if (existingMap.IsEmpty() == false && existingMap.MapType == MappingType.User)
+					_userMappings.Remove(existingMap);
+
 				_userMappings.Add(map);
 			}
 
-			RaiseMappingsChangedEvent();
+			if (disableNumLock)
+			{
+				KeyMapping nl = new KeyMapping(new Key(69, 0), new Key(0, 0));
+				AddMapping(nl, true);
+
+			}
+
+			if (noStackNoEventRaised == false)
+				RaiseMappingsChangedEvent();
 
 			return true;
 
@@ -786,7 +894,6 @@ namespace KeyMapper
 			RaiseMappingsChangedEvent();
 
 		}
-
 
 		public static void DeleteMapping(KeyMapping map)
 		{

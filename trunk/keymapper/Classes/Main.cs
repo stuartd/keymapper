@@ -23,20 +23,19 @@ namespace KeyMapper
 				return;
 			}
 
-			// Redirect console next. Only one instance of the app can have the log file open
-
-#if DEBUG
-#else
-			Console.Write("Redirecting console output");
-			AppController.RedirectConsoleOutput();
-#endif
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 			Application.ThreadException += ApplicationThreadException;
 			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+
+
+#if DEBUG
+#else
+			Console.Write("Redirecting console output");
+			AppController.RedirectConsoleOutput();
+#endif
 
 			AppController.ValidateUserConfigFile();
 

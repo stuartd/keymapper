@@ -21,7 +21,6 @@ namespace KeyMapper
 		int _verticalStretch;
 		float _scale;
 		Rectangle _dragbox;
-		bool _isPauseButton;
 
 		bool _escapePressed;
 
@@ -37,7 +36,7 @@ namespace KeyMapper
 		}
 
 
-		public KeyPictureBox(int scancode, int extended, BlankButton button, float scale, int horizontalStretch, int verticalStretch, bool isPauseButton)
+		public KeyPictureBox(int scancode, int extended, BlankButton button, float scale, int horizontalStretch, int verticalStretch)
 		{
 
 			_scancode = scancode;
@@ -46,7 +45,6 @@ namespace KeyMapper
 			_scale = scale;
 			_horizontalStretch = horizontalStretch;
 			_verticalStretch = verticalStretch;
-			_isPauseButton = isPauseButton;
 			_dragIconScale = 0.75F;
 			_dragbox = Rectangle.Empty;
 			
@@ -127,8 +125,6 @@ namespace KeyMapper
 
 			}
 
-			if (_isPauseButton)
-				effect = ButtonEffect.NoMappingAllowed;
 
 			keybmp = ButtonImages.GetButtonImage(
 					scancode, extended, _button, _horizontalStretch, _verticalStretch, _scale, effect);
@@ -208,13 +204,10 @@ namespace KeyMapper
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				// Easiest way to avoid any drag events is simply not to create the dragbox:
-				if (_isPauseButton == false)
-				{
+
 					// Create a dragbox so we can tell if the mouse moves far enough while down to trigger a drag event
 					Size dragSize = SystemInformation.DragSize;
 					_dragbox = new Rectangle(new Point(e.X - (dragSize.Width / 2), e.Y - (dragSize.Height / 2)), dragSize);
-				}
 			}
 		}
 
@@ -344,9 +337,6 @@ namespace KeyMapper
 				return;
 			}
 
-			if (_isPauseButton)
-				return;
-
 			KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
 
 			if (dragged_map.To.Scancode >= 0)
@@ -362,7 +352,7 @@ namespace KeyMapper
 			// Console.WriteLine("Dragover: " + _scancode)
 
 			// Can't drop onto a mapped key.
-			if (_mapped == false)
+			if (true) // (_mapped == false)
 			{
 				this.SetImage(ButtonImages.GetButtonImage
 					(dragged_map.From.Scancode, dragged_map.From.Extended,
