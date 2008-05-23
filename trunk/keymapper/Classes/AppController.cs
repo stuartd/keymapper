@@ -606,26 +606,25 @@ namespace KeyMapper
 		{
 
 			string path = LogFilename;
+            string existingLogEntries = String.Empty;
+
 			if (String.IsNullOrEmpty(path))
 				return;
 
-            if (File.Exists(path) == false)
+            if (File.Exists(path))
             {
-                FileStream fs = File.Create(path);
-                fs.Close();
+                // In order to be able to clear the log, the streamwriter must be opened in create mode.
+                // so read the contents of the log first.
+            
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    existingLogEntries = sr.ReadToEnd();
+                }
             }
 
-			// In order to be able to clear the log, the streamwriter must be opened in create mode.
-			// In order to do that, read the contents of the log first..
-			string logEntries;
-			using (StreamReader sr = new StreamReader(path))
-			{
-				logEntries = sr.ReadToEnd();
-			}
-			
 			_consoleWriterStream = new StreamWriter(path, false, System.Text.Encoding.UTF8);
 			_consoleWriterStream.AutoFlush = true;
-			_consoleWriterStream.Write(logEntries);
+			_consoleWriterStream.Write(existingLogEntries);
 
 			_isConsoleRedirected = true;
 
