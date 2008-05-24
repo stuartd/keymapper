@@ -8,13 +8,16 @@
 	background-repeat: no-repeat;
 }
 
+#post {}
+
+
 #header
 {
 	border-width: 1px;
 	border-color: #CC3300;
 	padding: 5px;
 	margin: 75px 0px 50px 0px;
-	letter-spacing: 0.25em;
+	letter-spacing: 0.3em;
 	text-align: center;
 	font-variant: small-caps;
 }
@@ -34,7 +37,6 @@
 
 #posts
 {
-	border: 1px solid silver;
 	padding: 20px;
 	float: left;
 	width: 600px;
@@ -43,11 +45,12 @@
 
 #sidebar
 {
+	padding-top: 20px;
 	float: right;
 	width: 120px;
 }
 
-.postheader
+.subheader
 {
 	background-color: #d3d3d3;
 	font-size: 130%;

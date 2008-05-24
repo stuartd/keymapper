@@ -65,7 +65,17 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="KMBlog.Master.cs">
+      <DependentUpon>KMBlog.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="KMBlog.Master.designer.cs">
+      <DependentUpon>KMBlog.Master</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="KMBlog.Master" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
