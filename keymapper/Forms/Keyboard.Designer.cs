@@ -73,6 +73,7 @@ namespace KeyMapper
             this.setCurrentToggleKeysAtBootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printScreenToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceUserMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutKeyMapperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +83,7 @@ namespace KeyMapper
             this.StatusLabelReadOnly = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelMappingDisplayType = new System.Windows.Forms.ToolStripStatusLabel();
             this.KeyboardListCombo = new KeyMapper.KeyboardListCombo();
-            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -411,7 +412,8 @@ namespace KeyMapper
             this.setCurrentToggleKeysAtBootToolStripMenuItem,
             this.printScreenToFileToolStripMenuItem,
             this.forceUserMappingsToolStripMenuItem,
-            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem});
+            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem,
+            this.stressToolStripMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.advancedToolStripMenuItem.Text = "&Advanced";
@@ -457,6 +459,13 @@ namespace KeyMapper
             this.forceUserMappingsToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.forceUserMappingsToolStripMenuItem.Text = "Force User Mappings To Be Current";
             this.forceUserMappingsToolStripMenuItem.Click += new System.EventHandler(this.forceUserMappingsToolStripMenuItem_Click);
+            // 
+            // alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem
+            // 
+            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Name = "alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem";
+            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Text = "Always Use This Enter Key Orientation For This Layout";
+            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Click += new System.EventHandler(this.alwaysUseEnterOrientationForLayout);
             // 
             // helpToolStripMenuItem
             // 
@@ -563,12 +572,12 @@ namespace KeyMapper
             this.KeyboardListCombo.TabIndex = 12;
             this.KeyboardListCombo.TabStop = false;
             // 
-            // alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem
+            // stressToolStripMenuItem
             // 
-            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Name = "alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem";
-            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
-            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Text = "Always Use This Enter Key Orientation For This Layout";
-            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Click += new System.EventHandler(this.alwaysUseEnterOrientationForLayout);
+            this.stressToolStripMenuItem.Name = "stressToolStripMenuItem";
+            this.stressToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+            this.stressToolStripMenuItem.Text = "Stress";
+            this.stressToolStripMenuItem.Click += new System.EventHandler(this.stressTestToolStripMenuItem_Click);
             // 
             // KeyboardForm
             // 
@@ -651,6 +660,7 @@ namespace KeyMapper
 		private System.Windows.Forms.ToolStripMenuItem clearLogFileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem forceUserMappingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stressToolStripMenuItem;
 
 
 	}

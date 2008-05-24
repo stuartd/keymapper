@@ -75,10 +75,7 @@ namespace KeyMapper
 		internal static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-		internal static extern short GetKeyState(int nKey);
-
-		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-		public static extern int GetKeyNameText(IntPtr lParam, [Out] StringBuilder lpString, int nSize);
+		public static extern int GetKeyNameText(uint lParam, [Out] StringBuilder lpString, int nSize);
 		
 		public const int KEYEVENTF_EXTENDEDKEY = 0x1;
 		public const int KEYEVENTF_KEYUP = 0x2;

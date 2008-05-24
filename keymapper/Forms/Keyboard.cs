@@ -1001,7 +1001,7 @@ namespace KeyMapper
 
 		private void viewLogFileToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			string logfile = AppController.LogFilename;
+			string logfile = AppController.LogFileName;
 			if (string.IsNullOrEmpty(logfile))
 				return;
 
@@ -1025,7 +1025,7 @@ namespace KeyMapper
 				int value =
 					(_isCapsLockOn ? 1 : 0) + (_isNumLockOn ? 2 : 0) + (_isScrollLockOn ? 4 : 0);
 
-				regkey.SetValue("InitialKeyboardIndicators", value.ToString());
+				regkey.SetValue("InitialKeyboardIndicators", value.ToString(CultureInfo.InvariantCulture));
 
 			}
 			catch (Exception ex)
@@ -1123,23 +1123,23 @@ namespace KeyMapper
         }
 
 
-		// #region Stress test
+        #region Stress test
 
-		//private void stressTestToolStripMenuItem_Click(object sender, EventArgs e)
-		//{
+        private void stressTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
-		//    Random r = new Random();
-		//    for (int i = 1; i < 1000; i++)
-		//    {
-		//        int val = r.Next(KeyboardListCombo.Items.Count);
-		//        KeyboardListCombo.SelectedIndex = val;
-		//        Application.DoEvents();
+            Random r = new Random();
+            for (int i = 1; i < 100; i++)
+            {
+                int val = r.Next(KeyboardListCombo.Items.Count);
+                KeyboardListCombo.SelectedIndex = val;
+                Application.DoEvents();
 
-		//    }
+            }
 
-		//}
+        }
 
-		// #endregion
+        #endregion
 
 	}
 

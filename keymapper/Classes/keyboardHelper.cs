@@ -128,7 +128,7 @@ namespace KeyMapper
 				// by calling the function again now.
 				// ref: http://blogs.msdn.com/michkap/archive/2006/03/24/559169.aspx
 
-				int dummy = NativeMethods.ToUnicodeEx(
+				NativeMethods.ToUnicodeEx(
 					(uint)Keys.Space,
 					NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, _currentInputLocaleIdentifier),
 					KeyState,
@@ -212,15 +212,6 @@ namespace KeyMapper
 			ScrollLock = Keys.Scroll
 		} ;
 
-		public static bool IsKeySet(ToggleKey keycode)
-		{
-			int result = NativeMethods.GetKeyState((int)keycode);
-			// result is 0: Not pressed and not toggled on.
-			// result is 1: Not pressed, but toggled on
-			// otherwise: Pressed (and may be toggled on)
-
-			return (result != 0);
-		}
 
 		public static void PressKey(ToggleKey keycode)
 		{

@@ -323,7 +323,7 @@ namespace KeyMapper
 			for (int i = 1; i < words.GetLength(0); i++)
 			{
 				string word = words[i];
-				if (word.StartsWith("(") && word.EndsWith(")"))
+                if (word.StartsWith("(", StringComparison.Ordinal) && word.EndsWith(")", StringComparison.Ordinal))
 					continue;
 
 				if (word.Length > longestWord.Length)
@@ -419,7 +419,7 @@ namespace KeyMapper
 						case 1:
 							DrawCaptionLine(bmp, words[0], FontSizeMulti, localizable, fontColour);
 							break;
-						case 2: if ((words[1].StartsWith("(") && words[1].EndsWith(")")))
+                        case 2: if ((words[1].StartsWith("(", StringComparison.Ordinal) && words[1].EndsWith(")", StringComparison.Ordinal)))
 							{
 								DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.Middle, localizable, fontColour);
 							}

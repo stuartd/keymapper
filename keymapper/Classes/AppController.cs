@@ -119,7 +119,7 @@ namespace KeyMapper
             get { return _currentCultureInfo; }
         }
 
-        public static string LogFilename
+        public static string LogFileName
         {
             get
             {
@@ -181,7 +181,7 @@ namespace KeyMapper
                     if (String.IsNullOrEmpty(nameValuePair))
                         continue;
 
-                    int index = nameValuePair.IndexOf("=");
+                    int index = nameValuePair.IndexOf("=", StringComparison.InvariantCulture);
                     if (index < 0)
                         continue;
 
@@ -682,7 +682,7 @@ namespace KeyMapper
         public static void RedirectConsoleOutput()
         {
 
-            string path = LogFilename;
+            string path = LogFileName;
             string existingLogEntries = String.Empty;
 
             if (String.IsNullOrEmpty(path))
@@ -870,6 +870,7 @@ namespace KeyMapper
 
         #region Key codings
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "scancode*1000")]
         public static int GetHashFromKeyData(int scancode, int extended)
         {
             // Need to preserve the actual extended value as they are all 224 except Pause

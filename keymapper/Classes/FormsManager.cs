@@ -202,11 +202,6 @@ namespace KeyMapper
 			return (_mapListForm != null);
 		}
 
-		public static bool IsHelpFormOpen()
-		{
-			return (_helpForm != null);
-		}
-
 		public static void ActivateMainForm()
 		{
 			// Mapping list form steals focus when DataGridView is refreshed
