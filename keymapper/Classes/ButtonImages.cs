@@ -11,8 +11,8 @@ namespace KeyMapper
 
 		private static string _path = "KeyMapper.Images.";
 		private static float _lastScale;
-		private static BlankButton _lastButton = BlankButton.None;
-		private static Bitmap _lastImage;
+		//private static BlankButton _lastButton = BlankButton.None;
+		// private static Bitmap _lastImage;
 
 		#endregion
 
@@ -184,30 +184,27 @@ namespace KeyMapper
 				bool forceEvenNumber = (verticalStretch != 0);
 				bmp = ResizeBitmap(AppController.GetBitmap(button), scale, forceEvenNumber);
 				bmp = StretchBitmap(bmp, horizontalStretch, verticalStretch);
-				_lastButton = BlankButton.None;
+				// _lastButton = BlankButton.None;
 
 			}
 			else
-			{
-				// If no stretch is applied, can we reuse the last bitmap we created?
-				if (scale == _lastScale && button == _lastButton && _lastImage != null)
-				{
-					bmp = (Bitmap)_lastImage.Clone();
-					// Console.WriteLine("Reusing bitmap");
-				}
-				else
-				{
-					bmp = ResizeBitmap(AppController.GetBitmap(button), scale, false);
-					if (_lastImage != null)
-						_lastImage.Dispose();
+            {
+                //// If no stretch is applied, can we reuse the last bitmap we created?
+                //if (scale == _lastScale && button == _lastButton && _lastImage != null)
+                //{
+                //    bmp = (Bitmap)_lastImage.Clone();
+                //    // Console.WriteLine("Reusing bitmap");
+                //}
+                //else
+                {
+                    bmp = ResizeBitmap(AppController.GetBitmap(button), scale, false);
 
-					_lastImage = (Bitmap)bmp.Clone();
-				}
+                }
 
 
-				_lastButton = button;
+                //_lastButton = button;
 
-			}
+            }
 
 			// Now all decisions have been made..
 			_lastScale = scale;

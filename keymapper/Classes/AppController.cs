@@ -790,23 +790,24 @@ namespace KeyMapper
             // Buttons are stored as lower case.
             string buttonname = button.ToString().ToLowerInvariant();
 
-            foreach (Bitmap loadedbutton in _buttonCache)
-            {
-                if (loadedbutton != null)
-                {
-                    if (String.Compare(loadedbutton.Tag.ToString().ToLowerInvariant(), buttonname, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return (Bitmap)loadedbutton.Clone();
-                    }
-                }
-            }
+            //foreach (Bitmap loadedbutton in _buttonCache)
+            //{
+            //    if (loadedbutton != null)
+            //    {
+            //        if (String.Compare(loadedbutton.Tag.ToString().ToLowerInvariant(), buttonname, StringComparison.OrdinalIgnoreCase) == 0)
+            //        {
+            //            return (Bitmap)loadedbutton.Clone();
+            //        }
+            //    }
+            //}
 
             Bitmap bmp = ButtonImages.GetImage(buttonname, "png");
 
-            bmp.Tag = buttonname.ToString();
-            _buttonCache.Add(bmp);
+            //bmp.Tag = buttonname.ToString();
+            // _buttonCache.Add(bmp);
 
-            return (Bitmap)bmp.Clone();
+            return bmp;
+            // (Bitmap)bmp.Clone();
         }
 
         public static bool IsOverlongKey(int hash)
