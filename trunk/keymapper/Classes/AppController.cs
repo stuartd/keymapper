@@ -23,8 +23,7 @@ namespace KeyMapper
         // as substitutions must be made for some cultures..
         private static string _defaultKeyFont = "Lucida Sans Unicode";
 
-        // Caches
-        private static Hashtable _fontCache = new Hashtable();
+        // Bitmap cache
         private static List<Bitmap> _buttonCache = new List<Bitmap>();
 
         // Keyboard layout and keys
@@ -231,8 +230,6 @@ namespace KeyMapper
         public static void Close()
         {
             SaveCustomLayouts();
-
-            ClearFontCache();
 
             foreach (Bitmap bmp in _buttonCache)
             {
@@ -527,10 +524,6 @@ namespace KeyMapper
         public static void SetLocale(string locale)
         {
 
-            // In case we are switching between locales and loading a different font for each
-            // without changing size..
-            ClearFontCache();
-
             // Only want to reset locale temporarily so save current value
             string currentkeyboardlocale = KeyboardHelper.GetCurrentKeyboardLocale();
 
@@ -724,37 +717,20 @@ namespace KeyMapper
 
         #region Cache methods
 
-        public static Font GetFontFromCache(float size, bool localizable)
+        public static Font GetButtonFont(float size, bool localizable)
         {
+            
             if (size == 0)
             {
                 Console.WriteLine("ERROR: Zero sized font requested");
-                return new Font(GetKeyFontName(localizable), 10);
-            }
-
-            string hash = GetKeyFontName(localizable) + size.ToString(CultureInfo.InvariantCulture.NumberFormat);
-
-            if (_fontCache.Contains(hash))
-            {
-                return (Font)_fontCache[hash];
-            }
+                size = 10 ;
+           }
 
             Font font = new Font(GetKeyFontName(localizable), size);
-            _fontCache.Add(hash, font);
-            return font;
-        }
+            return font ;
+       }
 
-        private static void ClearFontCache()
-        {
-
-            foreach (Font f in _fontCache.Values)
-            {
-                if (f != null)
-                    f.Dispose();
-            }
-            _fontCache.Clear();
-
-        }
+   
 
         #endregion
 
@@ -762,15 +738,12 @@ namespace KeyMapper
 
         public static void SetFontSizes(float scale)
         {
-            // When the scale changes, the fonts all change so may as well release 
-            // what we have as they won't get used again.
 
-            AppController.ClearFontCache();
 
             // See what font size fits the scaled-down button 
             float basefontsize = 36F;
 
-            Font font = AppController.GetFontFromCache(basefontsize, false);
+            Font font = AppController.GetButtonFont(basefontsize, false);
 
             // Not using ButtonImages.GetButtonImage as that is where we were called from..
             using (Bitmap bmp = ButtonImages.ResizeBitmap(AppController.GetBitmap(BlankButton.Blank), scale, false))
