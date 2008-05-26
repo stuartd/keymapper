@@ -334,7 +334,7 @@ namespace KeyMapper
 			{
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-				Font font = AppController.GetFontFromCache(fontsize, localizable);
+				Font font = AppController.GetButtonFont(fontsize, localizable);
 
 				SizeF stringSize = SizeF.Empty;
 				stringSize = g.MeasureString(longestWord, font);
@@ -482,7 +482,7 @@ namespace KeyMapper
 			{
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-				Font font = AppController.GetFontFromCache(fontsize, localizable);
+				Font font = AppController.GetButtonFont(fontsize, localizable);
 
 				// Use width of actual string for left placement:
 				SizeF stringSize = SizeF.Empty;
