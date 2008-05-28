@@ -736,7 +736,7 @@ namespace KeyMapper
 
 		private void SetAdvancedMenuButtonStates()
 		{
-			if (AppController.UserCanWriteBootMappings) // Users who can write to HKLM can write to All Users\.DEFAULT
+			if (AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista) // Users who can write to HKLM can write to All Users\.DEFAULT
 				setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = true;
 			else
 				setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = false;

@@ -8,13 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6957AA0B-1717-4205-973F-A27035338634}"
 	ProjectSection(SolutionItems) = preProject
 		KeyMapper.vsmdi = KeyMapper.vsmdi
-		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = KeyMapper.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release.x64|Any CPU = Release.x64|Any CPU
@@ -31,7 +27,6 @@ Global
 		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release.x64|Any CPU.ActiveCfg = Release.x64
 		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release.x64|Any CPU.Build.0 = Release.x64
 		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release|Any CPU.ActiveCfg = Release
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
