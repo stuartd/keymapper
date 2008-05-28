@@ -450,13 +450,28 @@ namespace KeyMapper
 
 			// TODO: A task dialog.
 
-			string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
+            string text = "In order to write your boot mappings, Key Mapper needs to add to " +
+                "the protected section of your computer's registry. You may need to approve this action " +
+                    "which will be performed by your Registry Editor.";
+        
+        TaskDialogResult result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
+                   TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.SecurityShield);
+
+            if (result != TaskDialogResult.Yes)
+                return;
+
+            string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
 
 			string command = " /s " + (char)34 + tempfile + (char)34;
-
-			System.Diagnostics.Process.Start("regedit.exe", command);
-
-		}
+            try
+            {
+                System.Diagnostics.Process.Start("regedit.exe", command);
+            }
+            catch // System.ComponentModel.Win32Exception             
+            {
+                Console.WriteLine("Writing boot mappings cancelled by user");
+            }
+        }
 
 		public static void SaveBootMappingsToKeyMapperKey()
 		{

@@ -153,6 +153,7 @@
     <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\RegistryHelper.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Classes\TaskDialogEnums.cs" />
     <Compile Include="Classes\UserColours.cs" />
     <Compile Include="Controls\fader.cs">
       <SubType>Component</SubType>

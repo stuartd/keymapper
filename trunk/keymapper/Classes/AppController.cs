@@ -369,7 +369,8 @@ namespace KeyMapper
                 }
 
                 kmregkey.Close();
-                // Really should have access to this key as it's in the user hive. But it isn't a requirement, as such.
+                // Really should have access to this key as it's in the user hive. 
+                // But it isn't a requirement, as such: can't save custom colours without it.
             }
 
             // Mappings in HKCU override mappings in HKLM
