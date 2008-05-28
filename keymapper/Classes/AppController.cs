@@ -80,7 +80,10 @@ namespace KeyMapper
 
         public static bool UserCannotWriteMappings
         {
-            get { return (MappingsManager.Filter == MappingFilter.Boot && !_canWriteBootMappings); }
+            get { return (
+                MappingsManager.Filter == MappingFilter.Boot 
+                && !_canWriteBootMappings
+                && !_isVista ); }
         }
 
         public static bool UserCanWriteBootMappings

@@ -34,14 +34,14 @@
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>false</MapFileExtensions>
+    <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://justkeepswimming.net/KeyMapper/</InstallUrl>
     <TargetCulture>en-GB</TargetCulture>
     <ProductName>Key Mapper</ProductName>
-    <PublisherName>Rose Hill Solutions</PublisherName>
+    <PublisherName>Key Mapper</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>install.html</WebPage>
-    <ApplicationRevision>121</ApplicationRevision>
+    <ApplicationRevision>131</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -267,11 +267,6 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
@@ -315,6 +310,7 @@
     <EmbeddedResource Include="Images\doublewideblank.png" />
     <EmbeddedResource Include="Images\keymapper.ico" />
     <None Include="license.txt" />
+    <None Include="Properties\app.manifest" />
     <EmbeddedResource Include="Images\mediumwideblank.png" />
     <EmbeddedResource Include="Images\quadruplewideblank.png" />
     <EmbeddedResource Include="Images\tallblank.png" />

@@ -42,6 +42,7 @@ namespace KeyMapper
 			Properties.Settings userSettings = new Properties.Settings();
 			if (userSettings.UpgradeRequired)
 			{
+                Console.WriteLine("Upgrading settings to new version");
 				userSettings.Upgrade();
 				userSettings.UpgradeRequired = false;
 				userSettings.Save();
