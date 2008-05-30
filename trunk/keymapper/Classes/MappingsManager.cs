@@ -296,6 +296,30 @@ namespace KeyMapper
 			return false;
 		}
 
+        public static bool VistaMappingsNeedSaving()
+        {
+            // Check whether the current boot mappings and the proposed boot mappings 
+            // are the same: if not, they need saving
+
+            byte[] map = GetScancodeMapFromRegistry(MapLocation.KeyMapperVistaMappingsCache);
+
+            if (map == null)
+                return false;
+
+            Collection<KeyMapping> maps = GetMappingsFromScancodeMap(map, MappingType.Boot);
+
+            if (maps.Count != _bootMappings.Count)
+                return true;
+
+            foreach (KeyMapping km in maps)
+            {
+                if (_bootMappings.Contains(km) == false)
+                    return true;
+            }
+
+            return false;
+        }
+
 		public static bool IsMapped(KeyMapping map)
 		{
 			return IsMapped(map, _filter);
@@ -510,8 +534,6 @@ namespace KeyMapper
 			SaveMappings(Mappings.CurrentUserMappings, MapLocation.CurrentUserKeyboardLayout);
             if (AppController.UserCanWriteBootMappings)
                 SaveMappings(Mappings.CurrentBootMappings, MapLocation.LocalMachineKeyboardLayout);
-            else if (AppController.OperatingSystemIsVista)
-                SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
 		}
 
 		public static void SaveMappings(Mappings whichMappings, MapLocation whereToSave)

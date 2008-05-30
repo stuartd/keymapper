@@ -776,7 +776,7 @@ namespace KeyMapper
 			// Save settings before we close, so references to subforms are still live.
 			SaveUserSettings();
 
-			if (AppController.OperatingSystemIsVista && AppController.UserCanWriteBootMappings == false && MappingsManager.IsRestartRequired())
+			if (AppController.OperatingSystemIsVista && AppController.UserCanWriteBootMappings == false && (MappingsManager.IsRestartRequired() || MappingsManager.VistaMappingsNeedSaving()))
 				MappingsManager.SaveBootMappingsVista();
 		}
 
