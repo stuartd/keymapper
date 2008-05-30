@@ -3,26 +3,23 @@ namespace KeyMapper
 	public struct Key
 	{
 
-		private string _name;
+		private string _name ;
 		private int _scancode;
 		private int _extended;
 
 		public string Name
 		{
 			get { return _name; }
-			set { _name = value; }
 		}
 
 		public int Scancode
 		{
 			get { return _scancode; }
-			set { _scancode = value; }
 		}
 
 		public int Extended
 		{
 			get { return _extended; }
-			set { _extended = value; }
 		}
 
 		public Key(int scancode, int extended, string name)

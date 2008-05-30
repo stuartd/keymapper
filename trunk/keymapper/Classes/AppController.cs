@@ -80,10 +80,13 @@ namespace KeyMapper
 
         public static bool UserCannotWriteMappings
         {
-            get { return (
-                MappingsManager.Filter == MappingFilter.Boot 
-                && !_canWriteBootMappings
-                && !_isVista ); }
+            get
+            {
+                return (
+                    MappingsManager.Filter == MappingFilter.Boot
+                    && !_canWriteBootMappings
+                    && !_isVista);
+            }
         }
 
         public static bool UserCanWriteBootMappings
@@ -719,26 +722,21 @@ namespace KeyMapper
 
         #endregion
 
-        #region Cache methods
+        #region Key methods
 
         public static Font GetButtonFont(float size, bool localizable)
         {
-            
+
             if (size == 0)
             {
                 Console.WriteLine("ERROR: Zero sized font requested");
-                size = 10 ;
-           }
+                size = 10;
+            }
 
             Font font = new Font(GetKeyFontName(localizable), size);
-            return font ;
-       }
-
-   
-
-        #endregion
-
-        #region Key methods
+            return font;
+        }
+        
 
         public static void SetFontSizes(float scale)
         {

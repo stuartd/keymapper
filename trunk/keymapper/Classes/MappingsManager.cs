@@ -508,16 +508,18 @@ namespace KeyMapper
 		public static void SaveMappings()
 		{
 			SaveMappings(Mappings.CurrentUserMappings, MapLocation.CurrentUserKeyboardLayout);
-			if (AppController.UserCanWriteBootMappings)
-				SaveMappings(Mappings.CurrentBootMappings, MapLocation.LocalMachineKeyboardLayout);
+            if (AppController.UserCanWriteBootMappings)
+                SaveMappings(Mappings.CurrentBootMappings, MapLocation.LocalMachineKeyboardLayout);
+            else if (AppController.OperatingSystemIsVista)
+                SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
 		}
 
-		public static void SaveMappings(Mappings col, MapLocation where)
+		public static void SaveMappings(Mappings whichMappings, MapLocation whereToSave)
 		{
 
 			Collection<KeyMapping> maps;
 
-			switch (col)
+			switch (whichMappings)
 			{
 				case Mappings.CurrentBootMappings:
 					maps = _bootMappings;
@@ -531,14 +533,14 @@ namespace KeyMapper
 				case Mappings.SavedUserMappings:
 					maps = _savedUserMappings;
 					break;
-				default:
+                default:
 					return;
 			}
 
 			RegistryHive hive = 0;
 			string keyname = "", valuename = "";
 
-			GetRegistryLocation(where, ref hive, ref keyname, ref valuename);
+			GetRegistryLocation(whereToSave, ref hive, ref keyname, ref valuename);
 
 			RegistryKey registry = null;
 
@@ -562,7 +564,7 @@ namespace KeyMapper
 				{
 					// Would expect to be able to write to HKCU
 					Console.WriteLine("Unexpected failure {2} opening {0} on {1} for write access",
-						keyname, Enum.GetNames(typeof(Mappings))[(int)col], ex.Message);
+						keyname, Enum.GetNames(typeof(Mappings))[(int)whichMappings], ex.Message);
 				}
 
 				return;
@@ -986,7 +988,11 @@ namespace KeyMapper
 					keyname = AppController.ApplicationRegistryKeyName;
 					valuename = "UserMaps";
 					break;
-				default:
+                case MapLocation.KeyMapperVistaMappingsCache:
+                    keyname = AppController.ApplicationRegistryKeyName;
+                    valuename = "VistaBootCache";
+                    break;
+                default:
 					return false;
 			}
 
@@ -1192,7 +1198,11 @@ namespace KeyMapper
 
 	public enum MapLocation
 	{
-		LocalMachineKeyboardLayout, CurrentUserKeyboardLayout, KeyMapperLocalMachineKeyboardLayout, KeyMapperCurrentUserKeyboardLayout
+		LocalMachineKeyboardLayout, 
+        CurrentUserKeyboardLayout, 
+        KeyMapperLocalMachineKeyboardLayout, 
+        KeyMapperCurrentUserKeyboardLayout,
+        KeyMapperVistaMappingsCache
 	}
 
 	public enum Mappings
