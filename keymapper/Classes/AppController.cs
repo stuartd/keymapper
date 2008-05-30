@@ -463,6 +463,9 @@ namespace KeyMapper
             if (savedMappingsExist == false)
                 MappingsManager.StoreUnsavedMappings();
 
+            if (_isVista)
+                MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
+
 
 
         }
