@@ -20,11 +20,8 @@ namespace KeyMapper
         #region Fields, Properties
 
         // Always use the provided method to get this
-        // as substitutions must be made for some cultures..
+        // as substitutions must be made for some cultures unless Arial Unicode MS in installed
         private static string _defaultKeyFont = "Lucida Sans Unicode";
-
-        // Bitmap cache
-        private static List<Bitmap> _buttonCache = new List<Bitmap>();
 
         // Keyboard layout and keys
         private static string _currentLocale;
@@ -50,7 +47,6 @@ namespace KeyMapper
 
         private static AppMutex _appMutex;
 
-        private static bool _isConsoleRedirected;
         private static StreamWriter _consoleWriterStream;
         private static string _consoleOutputFilename = "keymapper.log";
 
@@ -237,12 +233,11 @@ namespace KeyMapper
         {
             SaveCustomLayouts();
 
-            foreach (Bitmap bmp in _buttonCache)
-            {
-                if (bmp != null)
-                    bmp.Dispose();
-            }
-            _buttonCache.Clear();
+
+            if (AppController.OperatingSystemIsVista
+                && AppController.UserCanWriteBootMappings == false
+                && (MappingsManager.IsRestartRequired() || MappingsManager.VistaMappingsNeedSaving()))
+                MappingsManager.SaveBootMappingsVista();
 
             KeyboardHelper.UnloadLayout();
             CloseConsoleOutput();
@@ -706,8 +701,6 @@ namespace KeyMapper
             _consoleWriterStream.AutoFlush = true;
             _consoleWriterStream.Write(existingLogEntries);
 
-            _isConsoleRedirected = true;
-
             // Direct standard output to the log file.
             Console.SetOut(_consoleWriterStream);
 
@@ -716,7 +709,7 @@ namespace KeyMapper
 
         public static void CloseConsoleOutput()
         {
-            if (_isConsoleRedirected)
+            if (_consoleWriterStream != null)
             {
                 _consoleWriterStream.Close();
             }
@@ -739,7 +732,7 @@ namespace KeyMapper
             Font font = new Font(GetKeyFontName(localizable), size);
             return font;
         }
-        
+
 
         public static void SetFontSizes(float scale)
         {
@@ -837,8 +830,7 @@ namespace KeyMapper
         }
 
         // This needs to be in a separate method as this property was introduced in .Net Framework 2
-        // Service Pack 1.
-
+        // Service Pack 1, so JITing a method containing the property raises an exception.
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         public static void EnableVisualUpgrade(FileDialog fd)
         {
@@ -846,6 +838,83 @@ namespace KeyMapper
         }
 
         #endregion
+
+        #region Write to protected registry sections on Vista
+
+        public static bool ConfirmWriteToProtectedSectionOfRegistryOnVista(string innertext)
+        {
+            string text = "In order to write " + innertext + ", Key Mapper needs to add to " +
+                   "the protected section of your computer's registry. You may need to approve this action " +
+                       "which will be performed by your Registry Editor.";
+
+            TaskDialogResult result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
+                       TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.SecurityShield);
+
+            if (result == TaskDialogResult.Yes)
+                return true;
+            else
+                return false;
+
+        }
+
+        public static void WriteRegistryFileToProtectedSectionOfRegistryOnVista(string filepath)
+        {
+
+            string command = " /s " + (char)34 + filepath + (char)34;
+            try
+            {
+                System.Diagnostics.Process.Start("regedit.exe", command);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                Console.WriteLine("Writing boot mappings cancelled by user");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error writing to registry: {0}", ex);
+            }
+
+        }
+
+        public static void WriteToProtectedSectionOfRegistryOnVista(RegistryHive registryHive, string key, string valueName, string value)
+        {
+
+            string filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
+
+            using (StreamWriter sw = new StreamWriter(filename, false, System.Text.Encoding.Unicode))
+            {
+                sw.WriteLine("Windows Registry Editor Version 5.00");
+                sw.WriteLine();
+
+                string hive;
+                switch (registryHive)
+                {
+                    case RegistryHive.LocalMachine:
+                        hive = "HKEY_LOCAL_MACHINE";
+                        break;
+                    case RegistryHive.Users:
+                        hive = "HKEY_USERS";
+                        break;
+                    default:
+                        throw new InvalidOperationException(registryHive.ToString() + " not supported");
+                }
+
+                sw.WriteLine(@"[" + hive + @"\" + key + "]");
+                sw.Write("\"" + valueName + "\"=");
+                if (String.IsNullOrEmpty(value))
+                    sw.Write("-");
+                else
+                    sw.WriteLine((char)34 + value + (char)34);
+            }
+
+            AppController.WriteRegistryFileToProtectedSectionOfRegistryOnVista(filename);
+            System.IO.File.Delete(filename);
+
+
+        }
+
+        #endregion
+
 
         #region Key codings
 
