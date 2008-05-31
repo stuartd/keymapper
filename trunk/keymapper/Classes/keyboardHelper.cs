@@ -304,6 +304,7 @@ namespace KeyMapper
                 sw.Flush();
             }
             System.Diagnostics.Process.Start(tempFile);
+            AppController.RegisterTempFile(tempFile);
         }
 
 

@@ -57,6 +57,8 @@ namespace KeyMapper
 
         private static Hashtable _customKeyboardLayouts = new Hashtable();
 
+        private static List<string> _tempfiles = new List<string>();
+
         // Properties
 
         public static Hashtable CustomKeyboardLayouts
@@ -201,8 +203,7 @@ namespace KeyMapper
 
 
         }
-
-
+        
         public static void AddCustomLayout()
         {
             if (_customKeyboardLayouts.Contains(_currentLocale))
@@ -233,15 +234,23 @@ namespace KeyMapper
         {
             SaveCustomLayouts();
 
+            KeyboardHelper.UnloadLayout();
 
             if (AppController.OperatingSystemIsVista
                 && AppController.UserCanWriteBootMappings == false
                 && (MappingsManager.IsRestartRequired() || MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
 
-            KeyboardHelper.UnloadLayout();
             CloseConsoleOutput();
 
+            foreach (string filepath in _tempfiles)
+            {
+                try
+                {
+                    System.IO.File.Delete(filepath);
+                }
+                catch { }
+            }
         }
 
         public static string GetKeyFontName(bool localizable)
@@ -662,6 +671,11 @@ namespace KeyMapper
             }
         }
 
+        public static void RegisterTempFile(string filepath)
+        {
+            _tempfiles.Add(filepath);
+        }
+
         #endregion
 
         #region Log methods
@@ -861,18 +875,21 @@ namespace KeyMapper
         {
 
             string command = " /s " + (char)34 + filepath + (char)34;
+            
             try
             {
                 System.Diagnostics.Process.Start("regedit.exe", command);
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                Console.WriteLine("Writing boot mappings cancelled by user");
+                Console.WriteLine("Writing to protected section of registry was cancelled");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error writing to registry: {0}", ex);
             }
+
+            _tempfiles.Add(filepath);
 
         }
 
@@ -908,8 +925,7 @@ namespace KeyMapper
             }
 
             AppController.WriteRegistryFileToProtectedSectionOfRegistryOnVista(filename);
-            System.IO.File.Delete(filename);
-
+         
 
         }
 
