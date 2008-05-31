@@ -1024,9 +1024,8 @@ namespace KeyMapper
                 try
                 {
                     RegistryKey regkey = Registry.Users.OpenSubKey(@".DEFAULT\Control Panel\Keyboard", true);
-                    if (regkey == null)
-
-                    regkey.SetValue("InitialKeyboardIndicators", value.ToString(CultureInfo.InvariantCulture));
+                    if (regkey != null)
+                        regkey.SetValue("InitialKeyboardIndicators", value);
 
                 }
                 catch (Exception ex)

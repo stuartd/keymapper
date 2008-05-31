@@ -107,16 +107,7 @@ namespace KeyMapper
 				if (setting != null)
 					return setting.FontColour;
 			}
-
-			switch (effect)
-			{
-				case ButtonEffect.NoMappingAllowed:
-					return Color.DarkRed;
-
-				default:
-					return Color.Black;
-
-			}
+            return Color.Black;
 		}
 
 		#endregion
@@ -569,9 +560,6 @@ namespace KeyMapper
 					cm = GoldenDarken();
 					break;
 
-				case ButtonEffect.NoMappingAllowed:
-					cm = Darken(-0.1F);
-					break;
 			}
 
 			return cm;
@@ -675,7 +663,7 @@ namespace KeyMapper
 
 	public enum ButtonEffect
 	{
-		None, Mapped, MappedPending, Disabled, UnmappedPending, DisabledPending, EnabledPending, NoMappingAllowed
+		None, Mapped, MappedPending, Disabled, UnmappedPending, DisabledPending, EnabledPending
 	}
 
 	public enum TextPosition
