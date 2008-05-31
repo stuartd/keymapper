@@ -95,7 +95,7 @@
     <name>Left Ctrl</name>
     <group>Modifier Keys</group>
     <localize>false</localize>
-    <useful>0</useful>
+    <useful>1</useful>
   </keycodes>
   <keycodes>
     <sc>42</sc>
