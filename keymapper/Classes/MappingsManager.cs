@@ -478,7 +478,7 @@ namespace KeyMapper
             string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
 
             AppController.WriteRegistryFileToProtectedSectionOfRegistryOnVista(tempfile);
-            System.IO.File.Delete(tempfile);
+           //  System.IO.File.Delete(tempfile);
         }
 
         public static void SaveBootMappingsToKeyMapperKey()
