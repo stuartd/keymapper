@@ -52,12 +52,14 @@ namespace KeyMapper
             this.onlyShowBootMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onlyShowUserMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keyboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeOrientationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleNumberPadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showMainKeysOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useMacKeyboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.revertToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.selectLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.revertToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.changeOrientationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.numLockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,8 +88,6 @@ namespace KeyMapper
             this.StatusLabelReadOnly = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelMappingDisplayType = new System.Windows.Forms.ToolStripStatusLabel();
             this.KeyboardListCombo = new KeyMapper.KeyboardListCombo();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.menu.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -127,7 +127,7 @@ namespace KeyMapper
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // exitToolStripMenuItem
@@ -136,7 +136,7 @@ namespace KeyMapper
             this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitMenuItemClick);
             // 
@@ -146,14 +146,14 @@ namespace KeyMapper
             this.undoToolStripMenuItem,
             this.redoToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
             // 
             // undoToolStripMenuItem
             // 
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.undoToolStripMenuItem.Text = "&Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoMenuItemClick);
             // 
@@ -161,7 +161,7 @@ namespace KeyMapper
             // 
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.redoToolStripMenuItem.Text = "&Redo";
             this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoMenuItemClick);
             // 
@@ -176,7 +176,7 @@ namespace KeyMapper
             this.showListToolStripMenuItem,
             this.chooseMappingsToolStripMenuItem});
             this.mappingsToolStripMenuItem.Name = "mappingsToolStripMenuItem";
-            this.mappingsToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+            this.mappingsToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.mappingsToolStripMenuItem.Text = "&Mappings";
             // 
             // toolStripMenuItem1
@@ -185,7 +185,7 @@ namespace KeyMapper
             this.selectFromCaptureToolStripMenuItem,
             this.selectFromListsToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(262, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(189, 22);
             this.toolStripMenuItem1.Text = "Create &New Mapping";
             // 
             // selectFromCaptureToolStripMenuItem
@@ -193,7 +193,7 @@ namespace KeyMapper
             this.selectFromCaptureToolStripMenuItem.Name = "selectFromCaptureToolStripMenuItem";
             this.selectFromCaptureToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.P)));
-            this.selectFromCaptureToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.selectFromCaptureToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.selectFromCaptureToolStripMenuItem.Text = "&Use Key Capture";
             this.selectFromCaptureToolStripMenuItem.Click += new System.EventHandler(this.selectFromCaptureMenuItemClick);
             // 
@@ -202,46 +202,40 @@ namespace KeyMapper
             this.selectFromListsToolStripMenuItem.Name = "selectFromListsToolStripMenuItem";
             this.selectFromListsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.T)));
-            this.selectFromListsToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.selectFromListsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.selectFromListsToolStripMenuItem.Text = "&Select From Lists";
             this.selectFromListsToolStripMenuItem.Click += new System.EventHandler(this.selectFromListsMenuItemClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(259, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
             // 
             // revertToSavedToolStripMenuItem
             // 
             this.revertToSavedToolStripMenuItem.Name = "revertToSavedToolStripMenuItem";
-            this.revertToSavedToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.R)));
-            this.revertToSavedToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.revertToSavedToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.revertToSavedToolStripMenuItem.Text = "&Revert To Saved";
             this.revertToSavedToolStripMenuItem.Click += new System.EventHandler(this.revertToSavedMenuItemClick);
             // 
             // clearAllToolStripMenuItem
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.C)));
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.clearAllToolStripMenuItem.Text = "&Clear All Mappings";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllMenuItemClick);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.X)));
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.exportToolStripMenuItem.Text = "&Export As Registry File";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportAsRegistryFileMenuItemClick);
             // 
             // showListToolStripMenuItem
             // 
             this.showListToolStripMenuItem.Name = "showListToolStripMenuItem";
-            this.showListToolStripMenuItem.Size = new System.Drawing.Size(259, 6);
+            this.showListToolStripMenuItem.Size = new System.Drawing.Size(186, 6);
             // 
             // chooseMappingsToolStripMenuItem
             // 
@@ -250,7 +244,7 @@ namespace KeyMapper
             this.onlyShowBootMappingsToolStripMenuItem,
             this.onlyShowUserMappingsToolStripMenuItem});
             this.chooseMappingsToolStripMenuItem.Name = "chooseMappingsToolStripMenuItem";
-            this.chooseMappingsToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.chooseMappingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.chooseMappingsToolStripMenuItem.Text = "&Show";
             // 
             // showAllMappingsToolStripMenuItem
@@ -287,64 +281,64 @@ namespace KeyMapper
             this.changeOrientationToolStripMenuItem,
             this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem});
             this.keyboardToolStripMenuItem.Name = "keyboardToolStripMenuItem";
-            this.keyboardToolStripMenuItem.Size = new System.Drawing.Size(101, 20);
+            this.keyboardToolStripMenuItem.Size = new System.Drawing.Size(108, 20);
             this.keyboardToolStripMenuItem.Text = "&Keyboard Layout";
-            // 
-            // changeOrientationToolStripMenuItem
-            // 
-            this.changeOrientationToolStripMenuItem.Name = "changeOrientationToolStripMenuItem";
-            this.changeOrientationToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.E)));
-            this.changeOrientationToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
-            this.changeOrientationToolStripMenuItem.Text = "&Switch Enter Key Orientation";
-            this.changeOrientationToolStripMenuItem.Click += new System.EventHandler(this.changeOrientationMenuItemClick);
             // 
             // toggleNumberPadToolStripMenuItem
             // 
             this.toggleNumberPadToolStripMenuItem.Name = "toggleNumberPadToolStripMenuItem";
-            this.toggleNumberPadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.U)));
-            this.toggleNumberPadToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+            this.toggleNumberPadToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
             this.toggleNumberPadToolStripMenuItem.Text = "&Number Pad";
             this.toggleNumberPadToolStripMenuItem.Click += new System.EventHandler(this.toggleNumberPadMenuItemClick);
             // 
             // showMainKeysOnlyToolStripMenuItem
             // 
             this.showMainKeysOnlyToolStripMenuItem.Name = "showMainKeysOnlyToolStripMenuItem";
-            this.showMainKeysOnlyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.K)));
-            this.showMainKeysOnlyToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
-            this.showMainKeysOnlyToolStripMenuItem.Text = "Typewriter &Keys Only";
+            this.showMainKeysOnlyToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
+            this.showMainKeysOnlyToolStripMenuItem.Text = "&Typewriter Keys Only";
             this.showMainKeysOnlyToolStripMenuItem.Click += new System.EventHandler(this.showMainKeysOnlyMenuItemClick);
             // 
             // useMacKeyboardToolStripMenuItem
             // 
             this.useMacKeyboardToolStripMenuItem.Name = "useMacKeyboardToolStripMenuItem";
-            this.useMacKeyboardToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.M)));
-            this.useMacKeyboardToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+            this.useMacKeyboardToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
             this.useMacKeyboardToolStripMenuItem.Text = "&Mac Keyboard";
             this.useMacKeyboardToolStripMenuItem.Click += new System.EventHandler(this.useMacKeyboardMenuItemClick);
             // 
-            // revertToDefaultToolStripMenuItem
+            // toolStripSeparator5
             // 
-            this.revertToDefaultToolStripMenuItem.Name = "revertToDefaultToolStripMenuItem";
-            this.revertToDefaultToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.D)));
-            this.revertToDefaultToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
-            this.revertToDefaultToolStripMenuItem.Text = "&Reset To Default";
-            this.revertToDefaultToolStripMenuItem.Click += new System.EventHandler(this.revertToDefaultKeyboardLayoutMenuItemClick);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(354, 6);
             // 
             // selectLayoutToolStripMenuItem
             // 
             this.selectLayoutToolStripMenuItem.Name = "selectLayoutToolStripMenuItem";
-            this.selectLayoutToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+            this.selectLayoutToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
             this.selectLayoutToolStripMenuItem.Text = "Select &Language";
+            // 
+            // revertToDefaultToolStripMenuItem
+            // 
+            this.revertToDefaultToolStripMenuItem.Name = "revertToDefaultToolStripMenuItem";
+            this.revertToDefaultToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
+            this.revertToDefaultToolStripMenuItem.Text = "&Reset To Default";
+            this.revertToDefaultToolStripMenuItem.Click += new System.EventHandler(this.revertToDefaultKeyboardLayoutMenuItemClick);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(354, 6);
+            // 
+            // changeOrientationToolStripMenuItem
+            // 
+            this.changeOrientationToolStripMenuItem.Name = "changeOrientationToolStripMenuItem";
+            this.changeOrientationToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
+            this.changeOrientationToolStripMenuItem.Text = "&Switch Enter Key Orientation";
+            this.changeOrientationToolStripMenuItem.Click += new System.EventHandler(this.changeOrientationMenuItemClick);
             // 
             // alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem
             // 
             this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Name = "alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem";
-            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+            this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
             this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Text = "Always Use This Enter Key Orientation For This Layout";
             this.alwaysUseThisEnterKeyOrientationForThisLayoutToolStripMenuItem.Click += new System.EventHandler(this.alwaysUseEnterOrientationForLayout);
             // 
@@ -356,34 +350,34 @@ namespace KeyMapper
             this.scrollLockToolStripMenuItem,
             this.setCurrentToggleKeysAtBootToolStripMenuItem});
             this.toggleToolStripMenuItem.Name = "toggleToolStripMenuItem";
-            this.toggleToolStripMenuItem.Size = new System.Drawing.Size(101, 20);
+            this.toggleToolStripMenuItem.Size = new System.Drawing.Size(111, 20);
             this.toggleToolStripMenuItem.Text = "&Toggle Lock Keys";
             // 
             // numLockToolStripMenuItem
             // 
             this.numLockToolStripMenuItem.Name = "numLockToolStripMenuItem";
-            this.numLockToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.numLockToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.numLockToolStripMenuItem.Text = "&Num Lock";
             this.numLockToolStripMenuItem.Click += new System.EventHandler(this.numLockMenuItemClick);
             // 
             // capsLockToolStripMenuItem
             // 
             this.capsLockToolStripMenuItem.Name = "capsLockToolStripMenuItem";
-            this.capsLockToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.capsLockToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.capsLockToolStripMenuItem.Text = "&Caps Lock";
             this.capsLockToolStripMenuItem.Click += new System.EventHandler(this.capsLockMenuItemClick);
             // 
             // scrollLockToolStripMenuItem
             // 
             this.scrollLockToolStripMenuItem.Name = "scrollLockToolStripMenuItem";
-            this.scrollLockToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.scrollLockToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.scrollLockToolStripMenuItem.Text = "&Scroll Lock";
             this.scrollLockToolStripMenuItem.Click += new System.EventHandler(this.scrollLockMenuItemClick);
             // 
             // setCurrentToggleKeysAtBootToolStripMenuItem
             // 
             this.setCurrentToggleKeysAtBootToolStripMenuItem.Name = "setCurrentToggleKeysAtBootToolStripMenuItem";
-            this.setCurrentToggleKeysAtBootToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.setCurrentToggleKeysAtBootToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.setCurrentToggleKeysAtBootToolStripMenuItem.Text = "&Set Current Toggle Keys As Default";
             this.setCurrentToggleKeysAtBootToolStripMenuItem.Click += new System.EventHandler(this.setCurrentToggleKeysAtBootToolStripMenuItemClick);
             // 
@@ -394,33 +388,27 @@ namespace KeyMapper
             this.colourMapFormToolStripMenuItem,
             this.arrangeWindowsToolStripMenuItem});
             this.windowsToolStripMenuItem.Name = "windowsToolStripMenuItem";
-            this.windowsToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.windowsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.windowsToolStripMenuItem.Text = "&Windows";
             // 
             // mappingListFormToolStripMenuItem
             // 
             this.mappingListFormToolStripMenuItem.Name = "mappingListFormToolStripMenuItem";
-            this.mappingListFormToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.I)));
-            this.mappingListFormToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.mappingListFormToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.mappingListFormToolStripMenuItem.Text = "&Mapping List";
             this.mappingListFormToolStripMenuItem.Click += new System.EventHandler(this.viewListMenuItemClick);
             // 
             // colourMapFormToolStripMenuItem
             // 
             this.colourMapFormToolStripMenuItem.Name = "colourMapFormToolStripMenuItem";
-            this.colourMapFormToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.L)));
-            this.colourMapFormToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.colourMapFormToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.colourMapFormToolStripMenuItem.Text = "&Colour Map";
             this.colourMapFormToolStripMenuItem.Click += new System.EventHandler(this.showColourMapFormMenuItemClick);
             // 
             // arrangeWindowsToolStripMenuItem
             // 
             this.arrangeWindowsToolStripMenuItem.Name = "arrangeWindowsToolStripMenuItem";
-            this.arrangeWindowsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.W)));
-            this.arrangeWindowsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.arrangeWindowsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.arrangeWindowsToolStripMenuItem.Text = "&Arrange All";
             this.arrangeWindowsToolStripMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClick);
             // 
@@ -436,58 +424,58 @@ namespace KeyMapper
             this.forceUserMappingsToolStripMenuItem,
             this.stressToolStripMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "&Advanced";
             // 
             // viewKeyboardList
             // 
             this.viewKeyboardList.Name = "viewKeyboardList";
-            this.viewKeyboardList.Size = new System.Drawing.Size(255, 22);
+            this.viewKeyboardList.Size = new System.Drawing.Size(261, 22);
             this.viewKeyboardList.Text = "View Installed &Keyboards";
             this.viewKeyboardList.Click += new System.EventHandler(this.putKeyboardListOnClipboardToolStripMenuItemClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(252, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(258, 6);
             // 
             // viewLogFileToolStripMenuItem
             // 
             this.viewLogFileToolStripMenuItem.Name = "viewLogFileToolStripMenuItem";
-            this.viewLogFileToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.viewLogFileToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
             this.viewLogFileToolStripMenuItem.Text = "&View Log File";
             this.viewLogFileToolStripMenuItem.Click += new System.EventHandler(this.viewLogFileToolStripMenuItemClick);
             // 
             // clearLogFileToolStripMenuItem
             // 
             this.clearLogFileToolStripMenuItem.Name = "clearLogFileToolStripMenuItem";
-            this.clearLogFileToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.clearLogFileToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
             this.clearLogFileToolStripMenuItem.Text = "&Clear Log File";
             this.clearLogFileToolStripMenuItem.Click += new System.EventHandler(this.clearLogFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(252, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(258, 6);
             // 
             // printScreenToFileToolStripMenuItem
             // 
             this.printScreenToFileToolStripMenuItem.Name = "printScreenToFileToolStripMenuItem";
-            this.printScreenToFileToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.printScreenToFileToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
             this.printScreenToFileToolStripMenuItem.Text = "&Print Screen To File";
             this.printScreenToFileToolStripMenuItem.Click += new System.EventHandler(this.printScreenToFileToolStripMenuItem_Click);
             // 
             // forceUserMappingsToolStripMenuItem
             // 
             this.forceUserMappingsToolStripMenuItem.Name = "forceUserMappingsToolStripMenuItem";
-            this.forceUserMappingsToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.forceUserMappingsToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
             this.forceUserMappingsToolStripMenuItem.Text = "Force User Mappings To Be Current";
             this.forceUserMappingsToolStripMenuItem.Click += new System.EventHandler(this.forceUserMappingsToolStripMenuItem_Click);
             // 
             // stressToolStripMenuItem
             // 
             this.stressToolStripMenuItem.Name = "stressToolStripMenuItem";
-            this.stressToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.stressToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
             this.stressToolStripMenuItem.Text = "Stress Test";
             this.stressToolStripMenuItem.Click += new System.EventHandler(this.stressTestToolStripMenuItem_Click);
             // 
@@ -497,21 +485,21 @@ namespace KeyMapper
             this.showHelpToolStripMenuItem,
             this.aboutKeyMapperToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // showHelpToolStripMenuItem
             // 
             this.showHelpToolStripMenuItem.Name = "showHelpToolStripMenuItem";
             this.showHelpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.showHelpToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.showHelpToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.showHelpToolStripMenuItem.Text = "&Show Help";
             this.showHelpToolStripMenuItem.Click += new System.EventHandler(this.showHelpMenuItemClick);
             // 
             // aboutKeyMapperToolStripMenuItem
             // 
             this.aboutKeyMapperToolStripMenuItem.Name = "aboutKeyMapperToolStripMenuItem";
-            this.aboutKeyMapperToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.aboutKeyMapperToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.aboutKeyMapperToolStripMenuItem.Text = "About KeyMapper";
             this.aboutKeyMapperToolStripMenuItem.Click += new System.EventHandler(this.aboutKeyMapperMenuItemClick);
             // 
@@ -524,11 +512,11 @@ namespace KeyMapper
             this.StatusLabelReadOnly,
             this.StatusLabelMappingDisplayType});
             this.StatusBar.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.StatusBar.Location = new System.Drawing.Point(0, 425);
+            this.StatusBar.Location = new System.Drawing.Point(0, 423);
             this.StatusBar.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.StatusBar.Name = "StatusBar";
             this.StatusBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.StatusBar.Size = new System.Drawing.Size(922, 22);
+            this.StatusBar.Size = new System.Drawing.Size(922, 24);
             this.StatusBar.TabIndex = 11;
             this.StatusBar.Text = "statusbar";
             // 
@@ -540,7 +528,7 @@ namespace KeyMapper
             this.StatusLabelMappings.BorderStyle = System.Windows.Forms.Border3DStyle.Adjust;
             this.StatusLabelMappings.Name = "StatusLabelMappings";
             this.StatusLabelMappings.Padding = new System.Windows.Forms.Padding(0, 0, 25, 0);
-            this.StatusLabelMappings.Size = new System.Drawing.Size(146, 17);
+            this.StatusLabelMappings.Size = new System.Drawing.Size(163, 19);
             this.StatusLabelMappings.Text = "Showing all X mappings";
             this.StatusLabelMappings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -552,7 +540,7 @@ namespace KeyMapper
             this.StatusLabelRestartLogoff.BorderStyle = System.Windows.Forms.Border3DStyle.Adjust;
             this.StatusLabelRestartLogoff.Name = "StatusLabelRestartLogoff";
             this.StatusLabelRestartLogoff.Padding = new System.Windows.Forms.Padding(0, 0, 25, 0);
-            this.StatusLabelRestartLogoff.Size = new System.Drawing.Size(115, 17);
+            this.StatusLabelRestartLogoff.Size = new System.Drawing.Size(120, 19);
             this.StatusLabelRestartLogoff.Text = "Restart / LogOff";
             this.StatusLabelRestartLogoff.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -564,7 +552,7 @@ namespace KeyMapper
             this.StatusLabelReadOnly.BorderStyle = System.Windows.Forms.Border3DStyle.Adjust;
             this.StatusLabelReadOnly.Name = "StatusLabelReadOnly";
             this.StatusLabelReadOnly.Padding = new System.Windows.Forms.Padding(0, 0, 25, 0);
-            this.StatusLabelReadOnly.Size = new System.Drawing.Size(87, 17);
+            this.StatusLabelReadOnly.Size = new System.Drawing.Size(92, 19);
             this.StatusLabelReadOnly.Text = "Read-Only";
             this.StatusLabelReadOnly.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.StatusLabelReadOnly.Visible = false;
@@ -577,7 +565,7 @@ namespace KeyMapper
             this.StatusLabelMappingDisplayType.BorderStyle = System.Windows.Forms.Border3DStyle.Adjust;
             this.StatusLabelMappingDisplayType.Name = "StatusLabelMappingDisplayType";
             this.StatusLabelMappingDisplayType.Padding = new System.Windows.Forms.Padding(0, 0, 25, 0);
-            this.StatusLabelMappingDisplayType.Size = new System.Drawing.Size(138, 17);
+            this.StatusLabelMappingDisplayType.Size = new System.Drawing.Size(151, 19);
             this.StatusLabelMappingDisplayType.Text = "Boot / User Mappings";
             this.StatusLabelMappingDisplayType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -595,16 +583,6 @@ namespace KeyMapper
             this.KeyboardListCombo.Size = new System.Drawing.Size(239, 21);
             this.KeyboardListCombo.TabIndex = 12;
             this.KeyboardListCombo.TabStop = false;
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(343, 6);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(343, 6);
             // 
             // KeyboardForm
             // 

@@ -18,7 +18,7 @@ namespace KeyMapper
         public static TaskDialogResult ShowTaskDialog(string text, string instruction, string caption, TaskDialogButtons buttons, TaskDialogIcon icon)
         {
             int p;
-            if (NativeMethods.TaskDialog(_mainForm.Handle, IntPtr.Zero, caption, instruction, text, (int)buttons, new IntPtr((int)icon), out p) != 0)
+            if (NativeMethods.TaskDialog(IntPtr.Zero, IntPtr.Zero, caption, instruction, text, (int)buttons, new IntPtr((int)icon), out p) != 0)
                 throw new InvalidOperationException("Error occurred calling TaskDialog.");
 
             switch (p)
