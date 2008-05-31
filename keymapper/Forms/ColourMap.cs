@@ -277,9 +277,6 @@ namespace KeyMapper
 			if (_showAllButtons || _pendingenabled)
 				AddButton("Pending Enabled", ButtonEffect.EnabledPending);
 
-			if (_showAllButtons)
-				AddButton("Mapping Disallowed", ButtonEffect.NoMappingAllowed);
-
 		}
 
 		private void GetButtons()
