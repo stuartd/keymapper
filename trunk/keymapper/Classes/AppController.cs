@@ -238,7 +238,7 @@ namespace KeyMapper
 
             if (AppController.OperatingSystemIsVista
                 && AppController.UserCanWriteBootMappings == false
-                && (MappingsManager.IsRestartRequired() || MappingsManager.VistaMappingsNeedSaving()))
+                && (MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
 
             CloseConsoleOutput();
@@ -889,7 +889,7 @@ namespace KeyMapper
                 Console.WriteLine("Error writing to registry: {0}", ex);
             }
 
-            _tempfiles.Add(filepath);
+            // _tempfiles.Add(filepath);
 
         }
 
