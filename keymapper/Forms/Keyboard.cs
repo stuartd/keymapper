@@ -731,13 +731,13 @@ namespace KeyMapper
             SetWindowMenuButtonStates();
             SetEditMenuButtonStates();
             SetKeyboardLayoutMenuButtonStates();
-            SetAdvancedMenuButtonStates();
+            // SetAdvancedMenuButtonStates();
         }
 
 
-        private void SetAdvancedMenuButtonStates()
-        {
-        }
+		//private void SetAdvancedMenuButtonStates()
+		//{
+		//}
 
 
         #endregion

@@ -11,8 +11,6 @@ namespace KeyMapper
 
 		private static string _path = "KeyMapper.Images.";
 		private static float _lastScale;
-		//private static BlankButton _lastButton = BlankButton.None;
-		// private static Bitmap _lastImage;
 
 		#endregion
 
@@ -56,12 +54,13 @@ namespace KeyMapper
 
 			Color fontColour = GetFontColour(effect);
 
+			Bitmap bmpWithCaption;
 			if (String.IsNullOrEmpty(caption))
-				bmp = WriteCaption(bmp, scancode, extended, fontColour);
+				bmpWithCaption = WriteCaption(bmp, scancode, extended, fontColour);
 			else
-				bmp = WriteCaption(bmp, caption, false, false, fontColour);
+				bmpWithCaption = WriteCaption(bmp, caption, false, false, fontColour);
 
-			return bmp;
+			return bmpWithCaption;
 		}
 
 		#endregion
@@ -139,6 +138,8 @@ namespace KeyMapper
 					}
 			}
 
+			bmp.Dispose();
+
 			return newbitmap;
 
 		}
@@ -147,14 +148,14 @@ namespace KeyMapper
 		{
 			Bitmap bmp = null;
 
-			System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
-
-			if (stream != null)
+			using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(name))
 			{
-				bmp = new System.Drawing.Bitmap(stream);
-				stream.Close();
+				if (stream != null)
+				{
+					bmp = new System.Drawing.Bitmap(stream);
+					stream.Close();
+				}
 			}
-
 			return bmp;
 
 		}
@@ -180,21 +181,7 @@ namespace KeyMapper
 			}
 			else
             {
-                //// If no stretch is applied, can we reuse the last bitmap we created?
-                //if (scale == _lastScale && button == _lastButton && _lastImage != null)
-                //{
-                //    bmp = (Bitmap)_lastImage.Clone();
-                //    // Console.WriteLine("Reusing bitmap");
-                //}
-                //else
-                {
-                    bmp = ResizeBitmap(AppController.GetBitmap(button), scale, false);
-
-                }
-
-
-                //_lastButton = button;
-
+                  bmp = ResizeBitmap(AppController.GetBitmap(button), scale, false);
             }
 
 			// Now all decisions have been made..
@@ -319,11 +306,10 @@ namespace KeyMapper
 			}
 
 			using (Graphics g = Graphics.FromImage(bmp))
+			using (Font font = AppController.GetButtonFont(fontsize, localizable))
 			{
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-
-				Font font = AppController.GetButtonFont(fontsize, localizable);
-
+				
 				SizeF stringSize = SizeF.Empty;
 				stringSize = g.MeasureString(longestWord, font);
 
@@ -466,11 +452,10 @@ namespace KeyMapper
 			// The upper 10/64 and lower 14/64 of the button are not considered drawing area 
 			// so discount them when calculating the row position. This also knocks the centre down by 4/64.
 
+			using (Font font = AppController.GetButtonFont(fontsize, localizable))
 			using (Graphics g = Graphics.FromImage(bmp))
 			{
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-
-				Font font = AppController.GetButtonFont(fontsize, localizable);
 
 				// Use width of actual string for left placement:
 				SizeF stringSize = SizeF.Empty;
