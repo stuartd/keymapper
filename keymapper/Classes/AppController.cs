@@ -854,7 +854,7 @@ namespace KeyMapper
 
         }
 
-        public static void WriteRegistryFileToProtectedSectionOfRegistryOnVista(string filePath)
+        public static void WriteRegistryFileVista(string filePath)
         {
 
             string command = " /s " + (char)34 + filePath + (char)34;
@@ -871,12 +871,12 @@ namespace KeyMapper
             {
                 Console.WriteLine("Error writing to registry: {0}", ex);
             }
-
+            // Tempfiles are being deleted before registry editor has completed..
             // _tempfiles.Add(filepath);
 
         }
 
-        public static void WriteToProtectedSectionOfRegistryOnVista(RegistryHive registryHive, string key, string valueName, string value)
+        public static void WriteRegistryEntryVista(RegistryHive registryHive, string key, string valueName, string value)
         {
 
             string filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
@@ -907,7 +907,7 @@ namespace KeyMapper
                     sw.WriteLine((char)34 + value + (char)34);
             }
 
-            AppController.WriteRegistryFileToProtectedSectionOfRegistryOnVista(filename);
+            AppController.WriteRegistryFileVista(filename);
          
 
         }
