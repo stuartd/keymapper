@@ -184,7 +184,7 @@ namespace KeyMapper
                     if (String.IsNullOrEmpty(nameValuePair))
                         continue;
 
-                    int index = nameValuePair.IndexOf("=", StringComparison.InvariantCulture);
+                    int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
                     if (index < 0)
                         continue;
 
@@ -274,20 +274,17 @@ namespace KeyMapper
             }
 
 
-
             if (localizable == false || (bool)_arialUnicodeMSInstalled)
                 return _defaultKeyFont; // Don't want the static keys to change font.
 
             // Default font for keys is Lucida Sans Unicode as it's on every version of Windows
-            // (Could look for Arial Unicode MS (which is installed by Office) I suppose as it has lots more in
-            // Bit concerned as it's > 20MB in size though.)
 
             // Lucida Sans Unicode simply doesn't contain the characters for Bengali & Malayalam
-            // Differnet versions of Windows have differernt cultures installed 
+            // Different versions of Windows have differernt cultures installed 
             // e.g. the two above were installed by XP SP2 ..
 
             // It's possible the culture has been installed but the font has been 
-            // deleted. That _could_ be time to wheel out Arial Unicode, would need to test if font is installed each time.
+            // deleted. WIndows will hopefully then do some font substitution.
 
             switch (_currentCultureInfo.LCID)
             {
@@ -671,9 +668,9 @@ namespace KeyMapper
             }
         }
 
-        public static void RegisterTempFile(string filepath)
+        public static void RegisterTempFile(string filePath)
         {
-            _tempfiles.Add(filepath);
+            _tempfiles.Add(filePath);
         }
 
         #endregion
@@ -755,9 +752,10 @@ namespace KeyMapper
             // See what font size fits the scaled-down button 
             float basefontsize = 36F;
 
-            Font font = AppController.GetButtonFont(basefontsize, false);
+            
 
             // Not using ButtonImages.GetButtonImage as that is where we were called from..
+			using (Font font = AppController.GetButtonFont(basefontsize, false))
             using (Bitmap bmp = ButtonImages.ResizeBitmap(AppController.GetBitmap(BlankButton.Blank), scale, false))
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -802,24 +800,9 @@ namespace KeyMapper
             // Buttons are stored as lower case.
             string buttonname = button.ToString().ToLowerInvariant();
 
-            //foreach (Bitmap loadedbutton in _buttonCache)
-            //{
-            //    if (loadedbutton != null)
-            //    {
-            //        if (String.Compare(loadedbutton.Tag.ToString().ToLowerInvariant(), buttonname, StringComparison.OrdinalIgnoreCase) == 0)
-            //        {
-            //            return (Bitmap)loadedbutton.Clone();
-            //        }
-            //    }
-            //}
+           return ButtonImages.GetImage(buttonname, "png");
 
-            Bitmap bmp = ButtonImages.GetImage(buttonname, "png");
-
-            //bmp.Tag = buttonname.ToString();
-            // _buttonCache.Add(bmp);
-
-            return bmp;
-            // (Bitmap)bmp.Clone();
+           
         }
 
         public static bool IsOverlongKey(int hash)
@@ -855,9 +838,9 @@ namespace KeyMapper
 
         #region Write to protected registry sections on Vista
 
-        public static bool ConfirmWriteToProtectedSectionOfRegistryOnVista(string innertext)
+        public static bool ConfirmWriteToProtectedSectionOfRegistryOnVista(string innerText)
         {
-            string text = "In order to write " + innertext + ", Key Mapper needs to add to " +
+            string text = "In order to write " + innerText + ", Key Mapper needs to add to " +
                    "the protected section of your computer's registry. You may need to approve this action " +
                        "which will be performed by your Registry Editor.";
 
@@ -871,10 +854,10 @@ namespace KeyMapper
 
         }
 
-        public static void WriteRegistryFileToProtectedSectionOfRegistryOnVista(string filepath)
+        public static void WriteRegistryFileToProtectedSectionOfRegistryOnVista(string filePath)
         {
 
-            string command = " /s " + (char)34 + filepath + (char)34;
+            string command = " /s " + (char)34 + filePath + (char)34;
             
             try
             {
@@ -930,7 +913,6 @@ namespace KeyMapper
         }
 
         #endregion
-
 
         #region Key codings
 
