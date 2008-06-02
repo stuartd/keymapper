@@ -323,14 +323,12 @@ namespace KeyMapper
             // It's possible the value doesn't exist locally (when using remote desktop, for example)
             // In this case, won't be able to revert to this keyboard after the layout is changed.
 
-            // TODO: Add to FAQ
-            if (registry == null)
+			if (registry == null)
                 return keyboardname;
-
 
             keyboardname = registry.GetValue("Layout Text").ToString();
 
-            // 5.1 and upwards (including 6.0) are valid
+            // 5.1 and upwards are valid
             if (
                 (Environment.OSVersion.Version.Major == 5 & Environment.OSVersion.Version.Minor > 0)
                 | Environment.OSVersion.Version.Major > 5)
@@ -338,27 +336,27 @@ namespace KeyMapper
                 // XP or later - can get localised name for keyboard:
                 // (if it exists - pass empty string so that's the return if it doesn't)
 
-                string keyboardshellname = registry.GetValue("Layout Display Name", "").ToString();
-                string localname = "";
+                string keyboardShellName = registry.GetValue("Layout Display Name", "").ToString();
+				string localName = string.Empty;
 
-                if (keyboardshellname != null && keyboardshellname.Length > 0)
+                if (String.IsNullOrEmpty(keyboardShellName) == false)
                 {
                     StringBuilder sbName = new StringBuilder(260);
 
                     if (NativeMethods.SHLoadIndirectString(
-                        keyboardshellname,
+                        keyboardShellName,
                         sbName,
                         (uint)sbName.Capacity,
                         IntPtr.Zero)
                         == 0)
                     {
-                        localname = sbName.ToString();
+                        localName = sbName.ToString();
                     }
                 }
 
-                if (localname.Length != 0)
+                if (String.IsNullOrEmpty(localName) == false)
                 {
-                    keyboardname = localname;
+                    keyboardname = localName;
                 }
             }
 
