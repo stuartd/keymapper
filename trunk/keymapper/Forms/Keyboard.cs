@@ -1016,7 +1016,7 @@ namespace KeyMapper
                 if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVista("the default toggle keys") == false)
                     return;
 
-                AppController.WriteToProtectedSectionOfRegistryOnVista(
+                AppController.WriteRegistryEntryVista(
                     RegistryHive.Users, @".DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", value);
             }
             else
