@@ -66,6 +66,8 @@ namespace KeyMapper
         private static int _dpix;
         private static int _dpiy;
 
+        private static List<string> _tempfiles;
+
         // Properties
 
         public static int DpiX
@@ -260,6 +262,15 @@ namespace KeyMapper
                 MappingsManager.SaveBootMappingsVista();
 
             CloseConsoleOutput();
+
+            foreach (string filepath in _tempfiles)
+            {
+                try
+                {
+                    System.IO.File.Delete(filepath);
+                }
+                catch { }
+            }
         }
 
         public static string GetKeyFontName(bool localizable)
@@ -478,8 +489,7 @@ namespace KeyMapper
 
             _dpix = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
             _dpiy = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
-            Console.WriteLine("X: {0} Y: {1}", DpiX, DpiY);
-
+           
 
         }
 
@@ -648,6 +658,12 @@ namespace KeyMapper
                 NativeMethods.SetForegroundWindow(hWnd);
             }
         }
+
+        public static void RegisterTempFile(string filepath)
+        {
+            _tempfiles.Add(filepath);
+        }
+
 
         public static bool DotNetFramework2ServicePackInstalled
         {
@@ -863,13 +879,19 @@ namespace KeyMapper
 
         public static void WriteRegistryFileVista(string filePath)
         {
+            _tempfiles.Add(filePath) ;
 
             string command = " /s " + (char)34 + filePath + (char)34;
 
             try
             {
-                System.Diagnostics.Process.Start("regedit.exe", command);
-            }
+
+                System.Diagnostics.Process process = new Process();
+                    process.StartInfo.FileName = "regedit.exe" ;
+                process.StartInfo.Arguments = command;
+                process.Start() ;
+                process.WaitForExit() ;
+             }
             catch (System.ComponentModel.Win32Exception)
             {
                 Console.WriteLine("Writing to protected section of registry was cancelled");
@@ -884,7 +906,7 @@ namespace KeyMapper
         public static void WriteRegistryEntryVista(RegistryHive registryHive, string key, string valueName, string value)
         {
 
-            string filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + "_kmtemp.reg";
+            string filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
 
             using (StreamWriter sw = new StreamWriter(filename, false, System.Text.Encoding.Unicode))
             {

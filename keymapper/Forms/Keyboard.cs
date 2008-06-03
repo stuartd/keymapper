@@ -67,9 +67,9 @@ namespace KeyMapper
 			int currentDPI = AppController.DpiY ;
 
 			if (currentDPI < 96)
-				menu.Height = menu.Height * (96 / currentDPI); // Menu will always show even is fonts are set to less than 100%
+				menu.Height = (int)(menu.Height * (96F / (float)currentDPI)); // Menu will always show even is fonts are set to less than 100%
 			else if (currentDPI > 96)
-				menu.Height = menu.Height * (currentDPI / 96);
+                menu.Height = (int)(menu.Height * ((float)currentDPI / 96F));
 
             LoadUserSettings();
 
@@ -1015,6 +1015,7 @@ namespace KeyMapper
             if (string.IsNullOrEmpty(logfile))
                 return;
 
+            AppController.RegisterTempFile(logfile);
             System.Diagnostics.Process.Start(logfile);
 
         }
