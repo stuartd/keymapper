@@ -64,12 +64,21 @@ namespace KeyMapper
             InitializeComponent();
             FormsManager.RegisterMainForm(this);
 
+			int currentDPI = AppController.DpiY ;
+
+			if (currentDPI < 96)
+				menu.Height = menu.Height * (96 / currentDPI); // Menu will always show even is fonts are set to less than 100%
+			else if (currentDPI > 96)
+				menu.Height = menu.Height * (currentDPI / 96);
+
             LoadUserSettings();
 
             ResizeToAspect();
 
-            // This needs to be done after location and size of this form are fully determined.
+			if (currentDPI != 96)
+				PositionKeyboardCombo();
 
+            // This needs to be done after location and size of this form are fully determined.
             FormsManager.OpenChildForms();
 
             _lastSize = Size;
@@ -91,6 +100,13 @@ namespace KeyMapper
             this.Redraw();
         }
 
+
+		private void PositionKeyboardCombo()
+		{
+			// Combo needs to go in the middle of the status bar..
+			 KeyboardListCombo.Top = (StatusBar.Top + ((StatusBar.Height - KeyboardListCombo.Height) / 2));
+
+		}
         private void LoadUserSettings()
         {
 
