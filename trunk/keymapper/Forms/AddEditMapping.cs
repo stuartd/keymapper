@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace KeyMapper
 {
-	public partial class EditMappingForm : KMBaseForm
+	public partial class AddEditMapping : KMBaseForm
 	{
 
 		#region Fields, Enum
@@ -58,7 +58,7 @@ namespace KeyMapper
 
 		#region Form methods
 
-		public EditMappingForm(KeyMapping map, bool useCapture)
+		public AddEditMapping(KeyMapping map, bool useCapture)
 		{
 			InitializeComponent();
 
@@ -112,7 +112,7 @@ namespace KeyMapper
 			else
 				_keyThreshold = 1;
 
-            SetListOptionsComboIndex();
+			SetListOptionsComboIndex();
 
 			PopulateKeyLists();
 
@@ -125,10 +125,10 @@ namespace KeyMapper
 			SetupForm();
 		}
 
-        private void SetListOptionsComboIndex()
-        {
-            ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
-        }
+		private void SetListOptionsComboIndex()
+		{
+			ListOptionsCombo.SelectedIndex = 1 - _keyThreshold;
+		}
 
 		private void SaveSettings()
 		{
@@ -295,12 +295,20 @@ namespace KeyMapper
 			// Set the buttons' bitmap as required. Always call SetImage as that 
 			// handles releasing the existing bitmap if any..
 
-			// From key = Easy.
+			// From key is straightforward.
+
+			float scale = ((float)AppController.DpiY / 96F);
 
 			if (FromKeyPictureBox.Image == null && _map.IsEmpty())
-				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(-1, -1));
+			{
+				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage
+					(-1, -1, BlankButton.Blank, 0, 0, scale, ButtonEffect.None));
+			}
 			else
-				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
+			{
+				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage
+					(_map.From.Scancode, _map.From.Extended, BlankButton.Blank, 0, 0, scale, ButtonEffect.None));
+			}
 
 			// To Key depends more on state
 			int scancode = 0;
@@ -352,7 +360,7 @@ namespace KeyMapper
 				}
 			}
 
-			SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, 1.0F, effect));
+			SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, scale, effect));
 
 		}
 
@@ -365,7 +373,14 @@ namespace KeyMapper
 				box.Image = null;
 			}
 
+			//// In case Windows font sizes are set to less than 96dpi
+			//if (box.Width < bmp.Width)
+			//    box.Width = bmp.Width;
+
+			//box.BringToFront();
+
 			box.Image = bmp;
+
 			box.Invalidate();
 		}
 
@@ -558,8 +573,8 @@ namespace KeyMapper
 
 					SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
 					_selectingFromKeyFromLists = false;
-                    _keyThreshold = 1;
-                    SetListOptionsComboIndex();
+					_keyThreshold = 1;
+					SetListOptionsComboIndex();
 					SetupForm();
 					return;
 
@@ -657,7 +672,7 @@ namespace KeyMapper
 			if (_capturingFromKey)
 			{
 				// Have we been sent a dud??
-				if (e.Key.Scancode == 0) 
+				if (e.Key.Scancode == 0)
 				{
 					// Can't use a disabled key as From
 					_map = new KeyMapping();
