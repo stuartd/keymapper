@@ -62,9 +62,6 @@ namespace KeyMapper
         // Custom layout (ie Enter key orientation)
         private static Hashtable _customKeyboardLayouts = new Hashtable();
 
-        // Tempfiles. 
-        private static List<string> _tempfiles = new List<string>();
-
         // DPI for extra scaling
         private static int _dpix;
         private static int _dpiy;
@@ -263,15 +260,6 @@ namespace KeyMapper
                 MappingsManager.SaveBootMappingsVista();
 
             CloseConsoleOutput();
-
-            foreach (string filepath in _tempfiles)
-            {
-                try
-                {
-                    System.IO.File.Delete(filepath);
-                }
-                catch { }
-            }
         }
 
         public static string GetKeyFontName(bool localizable)
@@ -692,11 +680,6 @@ namespace KeyMapper
             }
         }
 
-        public static void RegisterTempFile(string filePath)
-        {
-            _tempfiles.Add(filePath);
-        }
-
         #endregion
 
         #region Log methods
@@ -896,14 +879,12 @@ namespace KeyMapper
                 Console.WriteLine("Error writing to registry: {0}", ex);
             }
 
-            // _tempfiles.Add(filepath);
-
         }
 
         public static void WriteRegistryEntryVista(RegistryHive registryHive, string key, string valueName, string value)
         {
 
-            string filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
+            string filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + "_kmtemp.reg";
 
             using (StreamWriter sw = new StreamWriter(filename, false, System.Text.Encoding.Unicode))
             {
