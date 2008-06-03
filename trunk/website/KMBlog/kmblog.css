@@ -1,39 +1,21 @@
-﻿body
-{
-	background-position: center 10px;
-	font-family: Verdana, Helvetica, Arial, Sans-Serif;
-	font-size: 88%;
-	background-color: #FFFFFF;
-	background-image: url(http://justkeepswimming.net/keymapper/images/kmheader.png);
-	background-repeat: no-repeat;
-}
+﻿@import "http://justkeepswimming.net/keymapper/keymapper.css" ;
+
 
 #post {}
 
-
-#header
-{
-	border-width: 1px;
-	border-color: #CC3300;
-	padding: 5px;
-	margin: 75px 0px 50px 0px;
-	letter-spacing: 0.3em;
-	text-align: center;
-	font-variant: small-caps;
-}
 
 #blog
 {
 	border: 1px solid silver ;
 }
 
-#maindiv
+/* #maindiv
 {
 	position: absolute;
 	width: 800px;
 	left: 50%;
 	margin-left: -400px;
-}
+} 
 
 #posts
 {
@@ -49,7 +31,7 @@
 	float: right;
 	width: 120px;
 }
-
+*/
 .subheader
 {
 	background-color: #d3d3d3;

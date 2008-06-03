@@ -1,0 +1,16 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KMBlog.master.cs" Inherits="KMBlog.KMBlog" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="kmblog.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>
