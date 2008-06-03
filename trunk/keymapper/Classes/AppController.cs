@@ -45,21 +45,42 @@ namespace KeyMapper
         // Trickery needed to write to HKLM on Vista
         private static bool _isVista;
 
+        // Single instance handle
         private static AppMutex _appMutex;
 
+        // Redirect console output
         private static StreamWriter _consoleWriterStream;
         private static string _consoleOutputFilename = "keymapper.log";
 
+        // Misc
         private static bool _userCannotWriteToApplicationRegistryKey;
         private static bool? _dotNetFrameworkSPInstalled;
 
+        // Key font name
         private static bool? _arialUnicodeMSInstalled;
 
+        // Custom layout (ie Enter key orientation)
         private static Hashtable _customKeyboardLayouts = new Hashtable();
 
+        // Tempfiles. 
         private static List<string> _tempfiles = new List<string>();
 
+        // DPI for extra scaling
+        private static int _dpix;
+        private static int _dpiy;
+
         // Properties
+
+        public static int DpiX
+        {
+            get { return AppController._dpix; }
+        }
+
+        public static int DpiY
+        {
+            get { return AppController._dpiy; }
+        }
+
 
         public static Hashtable CustomKeyboardLayouts
         {
@@ -203,7 +224,7 @@ namespace KeyMapper
 
 
         }
-        
+
         public static void AddCustomLayout()
         {
             if (_customKeyboardLayouts.Contains(_currentLocale))
@@ -467,6 +488,9 @@ namespace KeyMapper
             if (_isVista)
                 MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
 
+            _dpix = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
+            _dpiy = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
+            Console.WriteLine("X: {0} Y: {1}", DpiX, DpiY);
 
 
         }
@@ -752,10 +776,10 @@ namespace KeyMapper
             // See what font size fits the scaled-down button 
             float basefontsize = 36F;
 
-            
+
 
             // Not using ButtonImages.GetButtonImage as that is where we were called from..
-			using (Font font = AppController.GetButtonFont(basefontsize, false))
+            using (Font font = AppController.GetButtonFont(basefontsize, false))
             using (Bitmap bmp = ButtonImages.ResizeBitmap(AppController.GetBitmap(BlankButton.Blank), scale, false))
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -800,9 +824,9 @@ namespace KeyMapper
             // Buttons are stored as lower case.
             string buttonname = button.ToString().ToLowerInvariant();
 
-           return ButtonImages.GetImage(buttonname, "png");
+            return ButtonImages.GetImage(buttonname, "png");
 
-           
+
         }
 
         public static bool IsOverlongKey(int hash)
@@ -858,7 +882,7 @@ namespace KeyMapper
         {
 
             string command = " /s " + (char)34 + filePath + (char)34;
-            
+
             try
             {
                 System.Diagnostics.Process.Start("regedit.exe", command);
@@ -871,7 +895,7 @@ namespace KeyMapper
             {
                 Console.WriteLine("Error writing to registry: {0}", ex);
             }
-            // Tempfiles are being deleted before registry editor has completed..
+
             // _tempfiles.Add(filepath);
 
         }
@@ -908,7 +932,7 @@ namespace KeyMapper
             }
 
             AppController.WriteRegistryFileVista(filename);
-         
+
 
         }
 
