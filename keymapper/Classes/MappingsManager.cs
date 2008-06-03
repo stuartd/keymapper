@@ -654,7 +654,7 @@ namespace KeyMapper
             string filename;
 
             if (useTempFile)
-                filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
+                filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + "_kmtemp.reg";
             else
             {
 

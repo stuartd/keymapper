@@ -295,7 +295,7 @@ namespace KeyMapper
                 keyboards.Append(keyboard + (char)13 + (char)10);
 
             // Create a temp file 
-            string tempFile = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".txt";
+            string tempFile = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + "_kmtemp.txt";
 
             using (FileStream fs = new FileStream(tempFile, FileMode.Create))
             using (StreamWriter sw = new StreamWriter(fs))
@@ -304,7 +304,6 @@ namespace KeyMapper
                 sw.Flush();
             }
             System.Diagnostics.Process.Start(tempFile);
-            AppController.RegisterTempFile(tempFile);
         }
 
 
