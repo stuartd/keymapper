@@ -310,7 +310,7 @@ namespace KeyMapper
 
         public static void ShowEditMappingForm(KeyMapping km, bool useCapture)
         {
-            EditMappingForm mf = new EditMappingForm(km, useCapture);
+            AddEditMapping mf = new AddEditMapping(km, useCapture);
 
             Properties.Settings userSettings = new Properties.Settings();
 
