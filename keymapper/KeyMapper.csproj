@@ -137,6 +137,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -219,6 +220,9 @@
       <DependentUpon>MappingList.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IKeyData.cs" />
+    <Compile Include="Classes\ngen.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
