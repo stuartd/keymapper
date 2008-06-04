@@ -1015,7 +1015,6 @@ namespace KeyMapper
             if (string.IsNullOrEmpty(logfile))
                 return;
 
-            AppController.RegisterTempFile(logfile);
             System.Diagnostics.Process.Start(logfile);
 
         }

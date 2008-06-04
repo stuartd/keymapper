@@ -66,7 +66,7 @@ namespace KeyMapper
         private static int _dpix;
         private static int _dpiy;
 
-        private static List<string> _tempfiles;
+        private static List<string> _tempfiles = new List<string>();
 
         // Properties
 
@@ -431,12 +431,12 @@ namespace KeyMapper
             // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
             // time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
 
-            // It can also happen - e.g. when restoring a Parallels Virtual Machine - 
+            // It can also happen - e.g. when restoring a Virtual Machine - 
             // that the boottime is later than logontime.
 
             if (boottime > logontime)
             {
-                Console.WriteLine("Boot time greater than logontime: Boot Time {0} Logon Time {1}", boottime, logontime);
+               //  Console.WriteLine("Boot time greater than logontime: Boot Time {0} Logon Time {1}", boottime, logontime);
                 boottime = logontime.AddSeconds(-1);
             }
 
