@@ -140,6 +140,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_8BE03028E9814056A01BF396B08D7B3B"
+            {
+            "Name" = "8:Primary output from KeyMapper (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_C8D5C4F4B3D049508F782932A147A2D4"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_E28801A9_AA5B_4447_A480_2B7925C0197E"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {

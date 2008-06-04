@@ -295,7 +295,7 @@ namespace KeyMapper
                 keyboards.Append(keyboard + (char)13 + (char)10);
 
             string keyboardListFile = Path.Combine(Path.GetTempPath(), "installed keyboards.txt") ;
-            AppController.RegisterTempFile(keyboardListFile); // TODO - see how this behaves using TextPad as editor.
+            AppController.RegisterTempFile(keyboardListFile); // Reluctantly register for deletion
 
             using (FileStream fs = new FileStream(keyboardListFile, FileMode.Create))
             using (StreamWriter sw = new StreamWriter(fs))
