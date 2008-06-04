@@ -478,8 +478,7 @@ namespace KeyMapper
             string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
 
             AppController.WriteRegistryFileVista(tempfile);
-           //  System.IO.File.Delete(tempfile);
-        }
+         }
 
         public static void SaveBootMappingsToKeyMapperKey()
         {
