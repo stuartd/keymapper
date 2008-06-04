@@ -4,7 +4,7 @@
 <asp:Content ID="default_head" ContentPlaceHolderID="head" runat="server">
     <title>Key Mapper Developer Blog</title>
 </asp:Content>
-<asp:Content ID="default" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+<asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <form id="form1" runat="server">
     <div id="maindiv">
         <h1 id="header">
