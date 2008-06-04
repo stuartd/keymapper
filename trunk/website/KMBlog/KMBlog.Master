@@ -6,15 +6,17 @@
     <link href="kmblog.css" rel="stylesheet" type="text/css" />
     <meta name="keywords" content="keymapper, key mapper, scancode, scan code, keyboard" />
     <!-- <script type="text/javascript" src="keymapper.js"></script> -->
+
      <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
+    <title>Key Mapper Placeholder</title>
 </head>
 <body>
     <ul id="topnav">
-        <li><a href="default.aspx">Home</a></li>
+        <li><a href="http://justkeepswimming.net/keymapper/default.aspx">Home</a></li>
         <li><a href="http://code.google.com/p/keymapper/downloads/list">Downloads</a></li>
-        <li><a href="support.aspx">Support</a></li>
-        <li><a href="faq.aspx">FAQ</a></li>
+        <li><a href="http://justkeepswimming.net/keymapper/support.aspx">Support</a></li>
+        <li><a href="http://justkeepswimming.net/keymapper/faq.aspx">FAQ</a></li>
         <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/keymapper">Source
             Code</a></li>
         <li><a href="">Blog</a></li>
