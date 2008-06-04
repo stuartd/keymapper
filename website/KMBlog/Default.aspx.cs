@@ -17,7 +17,11 @@ namespace KMBlog
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			postsRepeater.DataBind();
+		}
 
+		protected void postsRepeater_DataBinding(object sender, EventArgs e)
+		{
 		}
 	}
 }

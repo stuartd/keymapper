@@ -1,37 +1,20 @@
 ﻿@import "http://justkeepswimming.net/keymapper/keymapper.css" ;
 
 
-#post {}
-
-
-#blog
-{
-	border: 1px solid silver ;
-}
-
-/* #maindiv
-{
-	position: absolute;
-	width: 800px;
-	left: 50%;
-	margin-left: -400px;
-} 
+#post, #blog, #maindiv {}
 
 #posts
 {
-	padding: 20px;
 	float: left;
 	width: 600px;
 }
 
-
 #sidebar
 {
-	padding-top: 20px;
 	float: right;
 	width: 120px;
 }
-*/
+
 .subheader
 {
 	background-color: #d3d3d3;
@@ -47,8 +30,7 @@
 }
 
 .posttitle
-{
-}
+{ }
 
 .posttitle a
 {
@@ -66,26 +48,19 @@
 .postdate
 {
 	position: absolute;
-	right: 30px;
+	right: 10px;
 	top: 0;
 }
 
 .postbody
 {
-	margin: 20px;
+	padding: 20px;
 	position: relative;
+	border: 1px solid #d3d3d3 ;
 }
 
-.creator
+.categories
 {
 	position: absolute;
-	left: 10px;
-	top: 0;
 }
 
-.tags
-{
-	position: absolute;
-	right: 30px;
-	top: 0;
-}
