@@ -294,16 +294,16 @@ namespace KeyMapper
             foreach (string keyboard in kblist)
                 keyboards.Append(keyboard + (char)13 + (char)10);
 
-            // Create a temp file 
-            string tempFile = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".txt";
+            string keyboardListFile = Path.Combine(Path.GetTempPath(), "installed keyboards.txt") ;
+            AppController.RegisterTempFile(keyboardListFile); // TODO - see how this behaves using TextPad as editor.
 
-            using (FileStream fs = new FileStream(tempFile, FileMode.Create))
+            using (FileStream fs = new FileStream(keyboardListFile, FileMode.Create))
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 sw.Write(keyboards.ToString());
                 sw.Flush();
             }
-            System.Diagnostics.Process.Start(tempFile);
+            System.Diagnostics.Process.Start(keyboardListFile);
         }
 
 
