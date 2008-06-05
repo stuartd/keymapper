@@ -1,4 +1,5 @@
-﻿@import "http://justkeepswimming.net/keymapper/keymapper.css" ;
+﻿@import "cssreset.css" ;
+@import "http://justkeepswimming.net/keymapper/keymapper.css" ;
 
 
 #post, #blog, #maindiv {}
