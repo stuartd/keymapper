@@ -75,6 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="cssreset.css" />
     <Content Include="KMBlog.Master" />
   </ItemGroup>
   <ItemGroup>

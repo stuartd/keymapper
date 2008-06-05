@@ -14,16 +14,19 @@
                     <div class="subheader">
                         Tags</div>
                     <br />
-                    Key Mapper<br />
-                    C-Sharp<br />
-                    Keyboards<br />
+                    <ul>
+                    <asp:Repeater ID="categoriesRepeater" runat="server">
+                    <ItemTemplate><li><a href="?c=<%# DataBinder.Eval(Container.DataItem, "ID")%>"><%# DataBinder.Eval(Container.DataItem, "Name") %></a></li>
+                    </ItemTemplate>
+                    </asp:Repeater>
+                    </ul>
                 </div>
                 <div id="posts">
-                    <asp:Repeater ID="postsRepeater" runat="server" DataSourceID="SQLBlogData" 
-                        ondatabinding="postsRepeater_DataBinding">
+                    <asp:Repeater ID="postsRepeater" runat="server">
                         <ItemTemplate>
                             <div class="subheader">
-                                <span class="posttitle"><a href="#"><%# DataBinder.Eval(Container.DataItem, "Title") %></a></span> <span class="postdate">Posted: <%# DataBinder.Eval(Container.DataItem, "Postdate") %></span>
+                                <span class="posttitle"><a href="?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>"><%# DataBinder.Eval(Container.DataItem, "Title") %></a>
+                                </span> <span class="postdate">Posted: <%# DataBinder.Eval(Container.DataItem, "Postdate") %></span>
                             </div>
                             <div class="postbody">
                             <%# DataBinder.Eval(Container.DataItem, "Body") %>
@@ -34,9 +37,7 @@
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
-                    <asp:SqlDataSource ID="SQLBlogData" runat="server" ConnectionString="<%$ ConnectionStrings:blogConnectionStringWork %>"
-                        SelectCommand="pr_posts_SelectAll" SelectCommandType="StoredProcedure">
-                    </asp:SqlDataSource>
+
                 </div>
             </div>
         </div>
