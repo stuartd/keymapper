@@ -1,0 +1,1236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<KeycodeData>
+  <keycodes>
+    <sc>84</sc>
+    <ex>0</ex>
+    <name>Alt PrtScr</name>
+    <group>Extra Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>93</sc>
+    <ex>224</ex>
+    <name>Menu</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>14</sc>
+    <ex>0</ex>
+    <name>Backspace</name>
+    <group>Typewriter Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>58</sc>
+    <ex>0</ex>
+    <name>Caps Lock</name>
+    <group>Lock Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>83</sc>
+    <ex>224</ex>
+    <name>Delete</name>
+    <group>Utility Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+    <goodkey>0</goodkey>
+  </keycodes>
+  <keycodes>
+    <sc>79</sc>
+    <ex>224</ex>
+    <name>End</name>
+    <group>Utility Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>28</sc>
+    <ex>0</ex>
+    <name>Enter</name>
+    <group>Typewriter Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>1</sc>
+    <ex>0</ex>
+    <name>Esc</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>71</sc>
+    <ex>224</ex>
+    <name>Home</name>
+    <group>Utility Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>82</sc>
+    <ex>224</ex>
+    <name>Insert</name>
+    <group>Utility Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>56</sc>
+    <ex>0</ex>
+    <name>Left Alt</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>29</sc>
+    <ex>0</ex>
+    <name>Left Ctrl</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>42</sc>
+    <ex>0</ex>
+    <name>Left Shift</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>91</sc>
+    <ex>224</ex>
+    <name>Left Windows</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>69</sc>
+    <ex>0</ex>
+    <name>Num Lock</name>
+    <group>Lock Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>81</sc>
+    <ex>224</ex>
+    <name>Page Down</name>
+    <group>Utility Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>73</sc>
+    <ex>224</ex>
+    <name>Page Up</name>
+    <group>Utility Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>94</sc>
+    <ex>224</ex>
+    <name>Power</name>
+    <group>Power Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>55</sc>
+    <ex>224</ex>
+    <name>Print Screen</name>
+    <group>Extra Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>56</sc>
+    <ex>224</ex>
+    <name>Right Alt</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>29</sc>
+    <ex>224</ex>
+    <name>Right Ctrl</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>54</sc>
+    <ex>224</ex>
+    <name>Right Shift</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>92</sc>
+    <ex>224</ex>
+    <name>Right Windows</name>
+    <group>Modifier Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>70</sc>
+    <ex>0</ex>
+    <name>Scroll Lock</name>
+    <group>Lock Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>70</sc>
+    <ex>224</ex>
+    <name>Ctrl Break</name>
+    <group>Extra Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>95</sc>
+    <ex>224</ex>
+    <name>Sleep</name>
+    <group>Power Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>57</sc>
+    <ex>0</ex>
+    <name>Space</name>
+    <group>Typewriter Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>15</sc>
+    <ex>0</ex>
+    <name>Tab</name>
+    <group>Typewriter Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>99</sc>
+    <ex>224</ex>
+    <name>Wake</name>
+    <group>Power Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>82</sc>
+    <ex>0</ex>
+    <name>0</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>79</sc>
+    <ex>0</ex>
+    <name>1</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>80</sc>
+    <ex>0</ex>
+    <name>2</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>81</sc>
+    <ex>0</ex>
+    <name>3</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>75</sc>
+    <ex>0</ex>
+    <name>4</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>76</sc>
+    <ex>0</ex>
+    <name>5</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>77</sc>
+    <ex>0</ex>
+    <name>6</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>71</sc>
+    <ex>0</ex>
+    <name>7</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>72</sc>
+    <ex>0</ex>
+    <name>8</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>73</sc>
+    <ex>0</ex>
+    <name>9</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>74</sc>
+    <ex>0</ex>
+    <name>-</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>55</sc>
+    <ex>0</ex>
+    <name>*</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>83</sc>
+    <ex>0</ex>
+    <name>.</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>53</sc>
+    <ex>224</ex>
+    <name>/</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>78</sc>
+    <ex>0</ex>
+    <name>+</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>28</sc>
+    <ex>224</ex>
+    <name>Enter (Numberpad)</name>
+    <group>Numberpad Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>80</sc>
+    <ex>224</ex>
+    <name>Down</name>
+    <group>Navigation Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>75</sc>
+    <ex>224</ex>
+    <name>Left</name>
+    <group>Navigation Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>77</sc>
+    <ex>224</ex>
+    <name>Right</name>
+    <group>Navigation Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>72</sc>
+    <ex>224</ex>
+    <name>Up</name>
+    <group>Navigation Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>59</sc>
+    <ex>0</ex>
+    <name>F1</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>60</sc>
+    <ex>0</ex>
+    <name>F2</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>61</sc>
+    <ex>0</ex>
+    <name>F3</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>62</sc>
+    <ex>0</ex>
+    <name>F4</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>63</sc>
+    <ex>0</ex>
+    <name>F5</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>64</sc>
+    <ex>0</ex>
+    <name>F6</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>65</sc>
+    <ex>0</ex>
+    <name>F7</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>66</sc>
+    <ex>0</ex>
+    <name>F8</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>67</sc>
+    <ex>0</ex>
+    <name>F9</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>68</sc>
+    <ex>0</ex>
+    <name>F10</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>87</sc>
+    <ex>0</ex>
+    <name>F11</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>88</sc>
+    <ex>0</ex>
+    <name>F12</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>91</sc>
+    <ex>0</ex>
+    <name>F13</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>92</sc>
+    <ex>0</ex>
+    <name>F14</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>93</sc>
+    <ex>0</ex>
+    <name>F15</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>99</sc>
+    <ex>0</ex>
+    <name>F16</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>100</sc>
+    <ex>0</ex>
+    <name>F17</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>101</sc>
+    <ex>0</ex>
+    <name>F18</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>102</sc>
+    <ex>0</ex>
+    <name>F19</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>103</sc>
+    <ex>0</ex>
+    <name>F20</name>
+    <group>Function Keys</group>
+    <localize>false</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>33</sc>
+    <ex>224</ex>
+    <name>Calculator</name>
+    <group>Programs</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>108</sc>
+    <ex>224</ex>
+    <name>E-Mail</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>109</sc>
+    <ex>224</ex>
+    <name>Media Select</name>
+    <group>Programs</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>17</sc>
+    <ex>224</ex>
+    <name>Messenger (2)</name>
+    <group>Programs</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>107</sc>
+    <ex>224</ex>
+    <name>My Computer</name>
+    <group>Programs</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>40</sc>
+    <ex>0</ex>
+    <name>' "</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>12</sc>
+    <ex>0</ex>
+    <name>- _</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>51</sc>
+    <ex>0</ex>
+    <name>, &lt;</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>52</sc>
+    <ex>0</ex>
+    <name>. &gt;</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>53</sc>
+    <ex>0</ex>
+    <name>/ ?</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>39</sc>
+    <ex>0</ex>
+    <name>; :</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>26</sc>
+    <ex>0</ex>
+    <name>[ {</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>43</sc>
+    <ex>0</ex>
+    <name>\ |</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>27</sc>
+    <ex>0</ex>
+    <name>] }</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>41</sc>
+    <ex>0</ex>
+    <name>` ~</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>13</sc>
+    <ex>0</ex>
+    <name>= +</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>11</sc>
+    <ex>0</ex>
+    <name>0 )</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>2</sc>
+    <ex>0</ex>
+    <name>1 !</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>3</sc>
+    <ex>0</ex>
+    <name>2 @</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>4</sc>
+    <ex>0</ex>
+    <name>3 #</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>5</sc>
+    <ex>0</ex>
+    <name>4 $</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>6</sc>
+    <ex>0</ex>
+    <name>5 %</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>7</sc>
+    <ex>0</ex>
+    <name>6 ^</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>8</sc>
+    <ex>0</ex>
+    <name>7 &amp;</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>9</sc>
+    <ex>0</ex>
+    <name>8 *</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>10</sc>
+    <ex>0</ex>
+    <name>9 (</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>30</sc>
+    <ex>0</ex>
+    <name>A</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>48</sc>
+    <ex>0</ex>
+    <name>B</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>46</sc>
+    <ex>0</ex>
+    <name>C</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>32</sc>
+    <ex>0</ex>
+    <name>D</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>18</sc>
+    <ex>0</ex>
+    <name>E</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>33</sc>
+    <ex>0</ex>
+    <name>F</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>34</sc>
+    <ex>0</ex>
+    <name>G</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>35</sc>
+    <ex>0</ex>
+    <name>H</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>23</sc>
+    <ex>0</ex>
+    <name>I</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>36</sc>
+    <ex>0</ex>
+    <name>J</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>37</sc>
+    <ex>0</ex>
+    <name>K</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>38</sc>
+    <ex>0</ex>
+    <name>L</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>50</sc>
+    <ex>0</ex>
+    <name>M</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>49</sc>
+    <ex>0</ex>
+    <name>N</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>24</sc>
+    <ex>0</ex>
+    <name>O</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>25</sc>
+    <ex>0</ex>
+    <name>P</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>16</sc>
+    <ex>0</ex>
+    <name>Q</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>19</sc>
+    <ex>0</ex>
+    <name>R</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>31</sc>
+    <ex>0</ex>
+    <name>S</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>20</sc>
+    <ex>0</ex>
+    <name>T</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>22</sc>
+    <ex>0</ex>
+    <name>U</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>47</sc>
+    <ex>0</ex>
+    <name>V</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>17</sc>
+    <ex>0</ex>
+    <name>W</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>45</sc>
+    <ex>0</ex>
+    <name>X</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>21</sc>
+    <ex>0</ex>
+    <name>Y</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>44</sc>
+    <ex>0</ex>
+    <name>Z</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+  <keycodes>
+    <sc>64</sc>
+    <ex>224</ex>
+    <name>Close</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>66</sc>
+    <ex>224</ex>
+    <name>Fwd</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>59</sc>
+    <ex>224</ex>
+    <name>Help</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>62</sc>
+    <ex>224</ex>
+    <name>New</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>63</sc>
+    <ex>224</ex>
+    <name>Open</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>88</sc>
+    <ex>224</ex>
+    <name>Print</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>7</sc>
+    <ex>224</ex>
+    <name>Redo</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>65</sc>
+    <ex>224</ex>
+    <name>Reply</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>87</sc>
+    <ex>224</ex>
+    <name>Save</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>67</sc>
+    <ex>224</ex>
+    <name>Send</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>35</sc>
+    <ex>224</ex>
+    <name>Spell</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>61</sc>
+    <ex>224</ex>
+    <name>Task Pane</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>8</sc>
+    <ex>224</ex>
+    <name>Undo</name>
+    <group>F-Lock Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>32</sc>
+    <ex>224</ex>
+    <name>Mute</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>25</sc>
+    <ex>224</ex>
+    <name>Next Track</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>34</sc>
+    <ex>224</ex>
+    <name>Play Pause</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>16</sc>
+    <ex>224</ex>
+    <name>Prev Track</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>36</sc>
+    <ex>224</ex>
+    <name>Stop (Media)</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>46</sc>
+    <ex>224</ex>
+    <name>Volume Down</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>48</sc>
+    <ex>224</ex>
+    <name>Volume Up</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>100</sc>
+    <ex>224</ex>
+    <name>My Pictures</name>
+    <group>Programs</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>5</sc>
+    <ex>224</ex>
+    <name>Messenger (1)</name>
+    <group>Programs</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>22</sc>
+    <ex>224</ex>
+    <name>Log Off</name>
+    <group>Power Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>106</sc>
+    <ex>224</ex>
+    <name>Back</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>102</sc>
+    <ex>224</ex>
+    <name>Favorites</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>105</sc>
+    <ex>224</ex>
+    <name>Forward</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>50</sc>
+    <ex>224</ex>
+    <name>Browser Home</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>103</sc>
+    <ex>224</ex>
+    <name>Refresh</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>101</sc>
+    <ex>224</ex>
+    <name>Search</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>2</useful>
+  </keycodes>
+  <keycodes>
+    <sc>104</sc>
+    <ex>224</ex>
+    <name>Stop (Web)</name>
+    <group>Web Keys</group>
+    <localize>false</localize>
+    <useful>1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>44</sc>
+    <ex>224</ex>
+    <name>Eject</name>
+    <group>Media Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>29</sc>
+    <ex>225</ex>
+    <name>Pause Break</name>
+    <group>Utility Keys</group>
+    <localize>false</localize>
+    <useful>-1</useful>
+  </keycodes>
+  <keycodes>
+    <sc>86</sc>
+    <ex>0</ex>
+    <name>UK Only</name>
+    <group>Typewriter Keys</group>
+    <localize>true</localize>
+    <useful>0</useful>
+  </keycodes>
+</KeycodeData>
