@@ -1,7 +1,6 @@
 ﻿@import "cssreset.css" ;
 @import "http://justkeepswimming.net/keymapper/keymapper.css" ;
 
-
 #post, #blog, #maindiv {}
 
 #posts
@@ -53,6 +52,13 @@
 	top: 0;
 }
 
+.comments
+{
+	position: absolute;
+	right: 10px ;
+}
+
+
 .postbody
 {
 	padding: 20px;
@@ -60,8 +66,4 @@
 	border: 1px solid #d3d3d3 ;
 }
 
-.categories
-{
-	position: absolute;
-}
 

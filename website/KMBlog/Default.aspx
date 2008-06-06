@@ -26,14 +26,15 @@
                         <ItemTemplate>
                             <div class="subheader">
                                 <span class="posttitle"><a href="?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>"><%# DataBinder.Eval(Container.DataItem, "Title") %></a>
-                                </span> <span class="postdate">Posted: <%# DataBinder.Eval(Container.DataItem, "Postdate") %></span>
+                                </span> <span class="postdate">Posted: <%# ((DateTime)DataBinder.Eval(Container.DataItem, "Postdate")).ToLongDateString() %></span>
                             </div>
                             <div class="postbody">
                             <%# DataBinder.Eval(Container.DataItem, "Body") %>
                             </div>
                             <div class="postfooter">
-                                <span class="categories">
-                                </span>Categories: Key Mapper</span>
+                                <span class="categories">Tagged: <%# GetCategoriesForPost((int)DataBinder.Eval(Container.DataItem, "ID")) %>
+                                </span>
+                                <span class="comments">Comments: <%# DataBinder.Eval(Container.DataItem, "commentCount")%></span>
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>

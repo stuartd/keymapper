@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Text;
@@ -10,29 +11,43 @@ namespace KMBlog
 {
 	public partial class _Default : System.Web.UI.Page
 	{
+
+		string _connstring;
+
 		protected void Page_Load(object sender, EventArgs e)
 		{
 
-			string postsQuery = GetPostQuery();
+			_connstring = ConfigurationManager.ConnectionStrings["blogConnectionStringWork"].ConnectionString;
+			GetPosts();
+		}
 
-			Response.Write(postsQuery + "<br />") ;
+		private void GetPosts()
+		{
 
-			string cs = ConfigurationManager.ConnectionStrings["blogConnectionStringWork"].ConnectionString;
 			DataSet categories = new DataSet();
 			DataSet posts = new DataSet();
 			DataSet comments = new DataSet();
 
 			string categoriesQuery = "select ID, name from categories";
 
-			using (SqlConnection connection = new SqlConnection(cs))
+			using (SqlConnection connection = new SqlConnection(_connstring))
 			{
 				if (connection != null)
 				{
 					SqlDataAdapter adapter = new SqlDataAdapter();
+					SqlCommand sc = new SqlCommand("GetAllPosts", connection) ;
+					sc.CommandType = CommandType.StoredProcedure ;
+
+					// sc.Parameters.AddWithValue("DateFrom", SqlDateTime.MinValue) ;
+					// sc.Parameters.AddWithValue("DateTo", SqlDateTime.MaxValue);
+					// sc.Parameters.AddWithValue("NumberOfPosts", 10);
+					// sc.Parameters.AddWithValue("CategoryID", 0);
+
 					adapter.SelectCommand = new SqlCommand(categoriesQuery, connection);
 					adapter.Fill(categories);
-					adapter.SelectCommand = new SqlCommand(postsQuery, connection);
+					adapter.SelectCommand = sc ;
 					adapter.Fill(posts);
+
 				}
 			}
 
@@ -43,81 +58,37 @@ namespace KMBlog
 			postsRepeater.DataBind();
 		}
 
-
-		private string GetPostQuery()
+		public string GetCategoriesForPost(int postID)
 		{
 
-			string defaultQuery = "select top 10 * from posts";
+			StringBuilder cats = new StringBuilder();
 
-			NameValueCollection parameters = Request.QueryString;
-			if (parameters.HasKeys() == false)
-				return defaultQuery;
-
-			StringBuilder query = new StringBuilder("select posts.* from posts ");
-
-			// Parse query string so can determine what posts to show:
-			// (Using Wordpress's conventions as a guide)
-			// All posts by category: ?c=1
-			// Specific post: ?p=1
-			// Specific date: ?d=20080603
-			// Specific month: ?d=200806
-			// Specific year: ?d=2008
-			// anything else: is it a stub? if not, show default page.
-			// eg ?user_mappings
-
-			// WBN to find a way to map /kmblog/user_mappings to here 
-			// without using routing. Or check if can use routing on jks?
-
-			string[] keys = parameters.AllKeys;
-
-			// Look for a p key with a valid value: if found, this overrides any other key.
-			foreach (string key in keys)
+			using (SqlConnection connection = new SqlConnection(_connstring))
 			{
-				if (key.ToUpperInvariant() == "P")
+
+				if (connection != null)
 				{
-					int postID;
-					foreach (string value in parameters.GetValues(key))
+
+					connection.Open();
+
+					SqlCommand sc = new SqlCommand("GetCategoriesByPost", connection);
+					sc.CommandType = CommandType.StoredProcedure;
+					sc.Parameters.AddWithValue("PostID", postID);
+
+					SqlDataReader rdr = sc.ExecuteReader() ;
+					while (rdr.Read())
 					{
-						if (System.Int32.TryParse(value, out postID))
-						{
-							query.Append("where ID = " + postID.ToString());
-							return query.ToString();
-						}
+						cats.Append("<a href=\"?c=" + rdr[0] + "\">" + rdr[1] + "</a>");
 					}
+			
 
 				}
 			}
 
-
-			foreach (string key in keys)
-			{
-				// No specific post. Has a specific category been requested?
-
-				if (key.ToUpperInvariant() == "C")
-				{
-					int categoryID;
-					foreach (string value in parameters.GetValues(key))
-					{
-						if (System.Int32.TryParse(value, out categoryID))
-						{
-							query.Append(" join postcategories on posts.ID = postcategories.postID and postcategories.CategoryID = " + categoryID.ToString());
-						}
-					}
-
-				}
-			}
-			// Has a date range been requested (perhaps in addition to the category)?
-
-			// Need to know whether we have criteria. Todo.
-
-			return query.ToString();
-
+			return cats.ToString();
 
 
 		}
 
-		protected void postsRepeater_DataBinding(object sender, EventArgs e)
-		{
-		}
 	}
 }
