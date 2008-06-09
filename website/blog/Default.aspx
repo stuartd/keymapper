@@ -13,7 +13,6 @@
                 <div id="sidebar">
                     <div class="subheader">
                         Tags</div>
-                    <br />
                     <ul>
                     <asp:Repeater ID="categoriesRepeater" runat="server">
                     <ItemTemplate><li><a href="?c=<%# DataBinder.Eval(Container.DataItem, "ID")%>"><%# DataBinder.Eval(Container.DataItem, "Name") %></a></li>
@@ -34,13 +33,14 @@
                             <div class="postfooter">
                                 <span class="categories">Tagged: <%# GetCategoriesForPost((int)DataBinder.Eval(Container.DataItem, "ID")) %>
                                 </span>
-                                <span class="comments">Comments: <%# DataBinder.Eval(Container.DataItem, "commentCount")%></span>
+                               
+                                <span class="comments"> <%# GetCommentLink((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
 
                 </div>
-                <asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="Button" />
+       
             </div>
         </div>
     </form>

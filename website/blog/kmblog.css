@@ -1,18 +1,42 @@
-﻿@import "http://justkeepswimming.net/keymapper/css/keymapper.css" ;
+﻿@import "http://justkeepswimming.net/keymapper/css/keymapper.css";
 
-#post, #blog, #maindiv {}
-
+#post, #blog, #maindiv
+{
+}
 
 #posts
 {
 	float: left;
-	width: 600px;
+	width: 80%;
 }
+
+body
+{
+	margin:0 auto ;
+	width: 80% ;
+	padding-left: 10% ;
+	padding-right: 10% ;
+}
+
 
 #sidebar
 {
 	float: right;
-	width: 120px;
+	width: 19%;
+	border-left: 1px solid #d3d3d3;
+	border-right: 1px solid #d3d3d3;
+	border-bottom: 1px solid #d3d3d3;
+	border-top: 1px solid #d3d3d3;
+}
+
+#sidebar ul
+{
+	padding-top: 20px;
+}
+
+#sidebar a
+{
+	padding-left: 10px;
 }
 
 .subheader
@@ -30,7 +54,8 @@
 }
 
 .posttitle
-{ }
+{
+}
 
 .posttitle a
 {
@@ -55,7 +80,7 @@
 .comments
 {
 	position: absolute;
-	right: 10px ;
+	right: 10px;
 }
 
 
@@ -63,7 +88,25 @@
 {
 	padding: 20px;
 	position: relative;
-	border: 1px solid #d3d3d3 ;
+	border: 1px solid #d3d3d3;
 }
 
 
+blockquote
+{
+	width: 80%;
+	margin: 0 auto;
+	border: 1px solid black;
+	border-left: 5px solid #A44;
+	padding: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+
+code
+{
+	font-family: Monaco, "Courier New" , Courier, monospace;
+	background-color: #DDD;
+	color: #444;
+}

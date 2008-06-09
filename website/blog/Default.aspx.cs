@@ -20,7 +20,7 @@ namespace KMBlog
 
        
 
-		_connstring = ConfigurationManager.ConnectionStrings["prod"].ConnectionString;
+		_connstring = ConfigurationManager.ConnectionStrings["work"].ConnectionString;
 			GetPosts();
 		}
 
@@ -64,7 +64,7 @@ namespace KMBlog
 		public string GetCategoriesForPost(int postID)
 		{
 
-			StringBuilder cats = new StringBuilder();
+			StringBuilder categories = new StringBuilder();
 
 			using (SqlConnection connection = new SqlConnection(_connstring))
 			{
@@ -81,25 +81,39 @@ namespace KMBlog
 					SqlDataReader rdr = sc.ExecuteReader() ;
 					while (rdr.Read())
 					{
-						cats.Append("<a href=\"?c=" + rdr[0] + "\">" + rdr[1] + "</a>");
+						categories.Append("<a href=\"?c=" + rdr[0] + "\">" + rdr[1] + "</a>");
 					}
 			
 
 				}
 			}
 
-			return cats.ToString();
+			return categories.ToString();
 
 
 		}
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            foreach (object o in Page.Controls)
-            {
-                Response.Write(o.ToString());
-            }
-        }
+		public string GetCommentLink(int postID, int commentCount)
+	{
+
+			// href is something like ?p=1#comments
+			string href = "\"?p=" + postID.ToString() + "#comments\"" ;
+
+			String comment = "<a href=" + href + ">Comment";
+
+			if (commentCount > 0)
+				comment += "s: " + commentCount.ToString();
+
+			comment += "</a>";
+
+
+
+			return comment;
+			
+
+	}
+
 
 	}
 }
+
