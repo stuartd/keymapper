@@ -59,7 +59,7 @@ namespace KeyMapper
 			// 
 			this.FromKeyPictureBox.Location = new System.Drawing.Point(5, 28);
 			this.FromKeyPictureBox.Name = "FromKeyPictureBox";
-			this.FromKeyPictureBox.Size = new System.Drawing.Size(128, 128);
+			this.FromKeyPictureBox.Size = new System.Drawing.Size(139, 128);
 			this.FromKeyPictureBox.TabIndex = 0;
 			this.FromKeyPictureBox.TabStop = false;
 			// 
@@ -67,16 +67,16 @@ namespace KeyMapper
 			// 
 			this.ToKeyPictureBox.Location = new System.Drawing.Point(87, 21);
 			this.ToKeyPictureBox.Name = "ToKeyPictureBox";
-			this.ToKeyPictureBox.Size = new System.Drawing.Size(128, 128);
+			this.ToKeyPictureBox.Size = new System.Drawing.Size(139, 128);
 			this.ToKeyPictureBox.TabIndex = 1;
 			this.ToKeyPictureBox.TabStop = false;
 			// 
 			// MapButton
 			// 
 			this.MapButton.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.MapButton.Location = new System.Drawing.Point(401, 28);
+			this.MapButton.Location = new System.Drawing.Point(405, 28);
 			this.MapButton.Name = "MapButton";
-			this.MapButton.Size = new System.Drawing.Size(76, 34);
+			this.MapButton.Size = new System.Drawing.Size(84, 34);
 			this.MapButton.TabIndex = 4;
 			this.MapButton.Text = "&Map";
 			this.MapButton.UseVisualStyleBackColor = true;
@@ -93,7 +93,7 @@ namespace KeyMapper
 			this.KeyListsPanel.Controls.Add(this.GroupsListbox, 0, 1);
 			this.KeyListsPanel.Controls.Add(this.ListOptionsCombo, 0, 3);
 			this.KeyListsPanel.Controls.Add(this.label1, 0, 2);
-			this.KeyListsPanel.Location = new System.Drawing.Point(141, 9);
+			this.KeyListsPanel.Location = new System.Drawing.Point(146, 9);
 			this.KeyListsPanel.Name = "KeyListsPanel";
 			this.KeyListsPanel.RowCount = 4;
 			this.KeyListsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
@@ -195,9 +195,9 @@ namespace KeyMapper
 			// CaptureAndCancelButton
 			// 
 			this.CaptureAndCancelButton.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.CaptureAndCancelButton.Location = new System.Drawing.Point(401, 120);
+			this.CaptureAndCancelButton.Location = new System.Drawing.Point(405, 120);
 			this.CaptureAndCancelButton.Name = "CaptureAndCancelButton";
-			this.CaptureAndCancelButton.Size = new System.Drawing.Size(76, 34);
+			this.CaptureAndCancelButton.Size = new System.Drawing.Size(84, 34);
 			this.CaptureAndCancelButton.TabIndex = 14;
 			this.CaptureAndCancelButton.Text = "Cap&ture";
 			this.CaptureAndCancelButton.UseVisualStyleBackColor = true;
@@ -206,9 +206,9 @@ namespace KeyMapper
 			// DisableButton
 			// 
 			this.DisableButton.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.DisableButton.Location = new System.Drawing.Point(401, 75);
+			this.DisableButton.Location = new System.Drawing.Point(405, 75);
 			this.DisableButton.Name = "DisableButton";
-			this.DisableButton.Size = new System.Drawing.Size(76, 34);
+			this.DisableButton.Size = new System.Drawing.Size(84, 34);
 			this.DisableButton.TabIndex = 16;
 			this.DisableButton.Text = "Disa&ble";
 			this.DisableButton.UseVisualStyleBackColor = true;
@@ -242,7 +242,7 @@ namespace KeyMapper
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(488, 211);
+			this.ClientSize = new System.Drawing.Size(499, 212);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.EmptyPanel);
 			this.Controls.Add(this.DisableButton);
