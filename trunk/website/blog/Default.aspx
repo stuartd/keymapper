@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="KMBlog._Default"
-    MasterPageFile="~/KMBlog.Master" %>
+    MasterPageFile="~/KMBlog.Master" EnableViewState="false" %>
 
 <asp:Content ID="default_head" ContentPlaceHolderID="head" runat="server">
     <title>Key Mapper Developer Blog</title>
@@ -37,11 +37,14 @@
                                 <span class="comments"> <%# GetCommentLink((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
                             </div>
                         </ItemTemplate>
+                       <FooterTemplate><asp:Repeater ID="commentsRepeater" runat="server"><ItemTemplate>Comments go here.</ItemTemplate></asp:Repeater></FooterTemplate>
                     </asp:Repeater>
 
                 </div>
        
             </div>
         </div>
+        
+        
     </form>
 </asp:Content>

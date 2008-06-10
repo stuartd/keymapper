@@ -10,6 +10,16 @@
 	width: 80%;
 }
 
+#posts li
+{
+	list-style-type: disc ;
+	padding-left: 10px ;
+	padding-bottom: 3px ;
+	list-style-position: inside ;
+	
+}
+
+
 body
 {
 	margin:0 auto ;
@@ -106,7 +116,18 @@ blockquote
 
 code
 {
-	font-family: Monaco, "Courier New" , Courier, monospace;
+	font-family: Monaco, "Lucida Console", "Courier New" , Courier, monospace;
 	background-color: #DDD;
 	color: #444;
 }
+
+#footer
+{
+	width: 80% ;
+	margin-top: 50px ;
+	float: left ;
+	border: 1px solid #d3d3d3;
+	background-color: #eeeeee;
+	text-align:center ;
+}
+
