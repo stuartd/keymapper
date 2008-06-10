@@ -649,8 +649,11 @@ namespace KeyMapper
                     break;
                 default:
                     AppController.SwitchKeyboardLayout(KeyboardLayoutType.US);
+					Redraw();
                     break;
             }
+			// In order to remember the choice..
+			AppController.AddCustomLayout();
         }
 
         #endregion
@@ -879,7 +882,7 @@ namespace KeyMapper
         private void changeOrientationMenuItemClick(object sender, EventArgs e)
         {
             ChangeKeyOrientation();
-        }
+       }
 
         private void capsLockMenuItemClick(object sender, EventArgs e)
         {
@@ -1134,11 +1137,7 @@ namespace KeyMapper
             MappingsManager.SaveUserMappingsToKeyMapperKey(true);
         }
 
-        private void alwaysUseEnterOrientationForLayout(object sender, EventArgs e)
-        {
-            AppController.AddCustomLayout();
-        }
-
+     
 
         #region Stress test
 

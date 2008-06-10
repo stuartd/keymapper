@@ -198,7 +198,9 @@ namespace KeyMapper
             // Beware bad data..
             try
             {
-                string[] layouts = customLayouts.Split(new char[] { (char)13 }, StringSplitOptions.RemoveEmptyEntries);
+				string[] terminators = new string[] {"\r\n"} ;
+
+                string[] layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
                 {
                     if (String.IsNullOrEmpty(nameValuePair))
@@ -221,7 +223,6 @@ namespace KeyMapper
             }
             catch { }
 
-
         }
 
         public static void AddCustomLayout()
@@ -234,19 +235,21 @@ namespace KeyMapper
 
         private static void SaveCustomLayouts()
         {
-            if (_customKeyboardLayouts.Count == 0)
-                return;
+
+			// Always save, but only if layout actuall is custom.
+			// This means next time we only load layouts which are different.
 
             string path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
              + @"\KeyMapper\customlayouts.txt";
 
-            using (StreamWriter sw = new StreamWriter(path))
+			KeyDataXml kd = new KeyDataXml() ;
+
+            using (StreamWriter sw = new StreamWriter(path, false))
             {
                 foreach (DictionaryEntry de in _customKeyboardLayouts)
-                    sw.Write(de.Key + "=" + (int)de.Value);
-
+					if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
+						sw.WriteLine(de.Key + "=" + (int)de.Value);
             }
-
 
         }
 
@@ -422,10 +425,7 @@ namespace KeyMapper
             DateTime logontime = RegistryHelper.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
 
             // Now, the "Volatile Environment" key in RegistryHive.CurrentUser
-            // >isn't< always unloaded on logoff. I though there was a fallback though..
-            //  querying the user's ADSI LastLogin property. Unfortunately 
-            // this gets the last time logged in >including when unlocking Windows<
-            // so this is as good as it gets.
+            // >isn't< always unloaded on logoff.
 
             // Sometimes, as well, logontime returns the wrong time. I think this is because when 
             // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
