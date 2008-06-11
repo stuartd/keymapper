@@ -19,6 +19,11 @@
 	
 }
 
+div.comment
+{
+	border: 1px solid #d3d3d3 ;
+	padding: 20px ;
+}
 
 body
 {
