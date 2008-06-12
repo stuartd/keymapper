@@ -4,6 +4,13 @@
 {
 }
 
+#header a, header a:visited, header a:hover
+{
+	text-decoration: none ;
+	color: Black ;
+		
+}
+
 #posts
 {
 	float: left;
