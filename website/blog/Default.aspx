@@ -7,8 +7,8 @@
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <form id="form1" runat="server">
     <div id="maindiv">
-        <h1 id="header">
-            Key Mapper Developer Blog</h1>
+        <h1 id="header"><a href="/">
+            Key Mapper Developer Blog</a></h1>
         <div id="blog">
             <div id="sidebar">
                 <div class="subheader">
