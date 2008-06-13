@@ -20,8 +20,8 @@ namespace KMBlog
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // _connstring = ConfigurationManager.ConnectionStrings["work"].ConnectionString;
-            _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
+             _connstring = ConfigurationManager.ConnectionStrings["work"].ConnectionString;
+           //  _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
 
 
 

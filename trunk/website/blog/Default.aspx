@@ -21,6 +21,10 @@
                         </ItemTemplate>
                     </asp:Repeater>
                 </ul>
+                <div class="subheader">
+                Admin
+                </div>
+                <a href="admin/admin.aspx">Log In</a>
             </div>
             <div id="posts">
                 <asp:Repeater ID="postsRepeater" runat="server">
