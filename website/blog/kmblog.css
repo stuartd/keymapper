@@ -1,7 +1,25 @@
 ﻿@import "http://justkeepswimming.net/keymapper/css/keymapper.css";
 
-#post, #blog, #maindiv
+html
 {
+ height: 100.02%; 
+}
+
+
+#post
+{
+}
+
+#topnav
+{
+	margin:0 auto ;
+}
+
+#header
+{
+	text-align: center ;
+	margin-bottom: 10px ;
+	border-bottom: 15px solid #bbbbbb ;
 }
 
 #header a, header a:visited, header a:hover
@@ -34,17 +52,22 @@ div.comment
 
 body
 {
+	background-position: top center;
+	background-color: #FFFFFF;
+	background-image: url( "images/kmheader800w.png" );
+	background-repeat: no-repeat ;
+
+	background-position: % 10px ;
 	margin:0 auto ;
 	width: 80% ;
 	padding-left: 10% ;
 	padding-right: 10% ;
 }
 
-
 #sidebar
 {
 	float: right;
-	width: 19%;
+	width: 19.5%;
 	border-left: 1px solid #d3d3d3;
 	border-right: 1px solid #d3d3d3;
 	border-bottom: 1px solid #d3d3d3;
@@ -53,7 +76,8 @@ body
 
 #sidebar ul
 {
-	padding-top: 20px;
+	padding: 20px 0;
+	
 }
 
 #sidebar a
@@ -64,8 +88,9 @@ body
 .subheader
 {
 	background-color: #d3d3d3;
-	font-size: 130%;
+	font-size: 115%;
 	position: relative;
+	padding-left: 5px ;
 }
 
 .postfooter
@@ -83,6 +108,7 @@ body
 {
 	text-decoration: none;
 	color: Black;
+	padding-left: 5px ;
 }
 
 .posttitle a:hover
@@ -135,7 +161,7 @@ code
 
 #footer
 {
-	width: 80% ;
+	width: 100% ;
 	margin-top: 50px ;
 	float: left ;
 	border: 1px solid #d3d3d3;
