@@ -11,39 +11,42 @@ using System.Web.UI.WebControls;
 
 namespace KMBlog
 {
-	public partial class login : System.Web.UI.Page
-	{
-		protected void Page_Load(object sender, EventArgs e)
-		{
+    public partial class login : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
-		}
+        }
 
-		protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
-		{
+        protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
+        {
 
-			_connstring = ConfigurationManager.ConnectionStrings["work"].ConnectionString;
-			//  _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
+            string _connstring = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
 
-			using (SqlConnection conn = new SqlConnection(_connstring))
+            using (SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
 
-			{
+                SqlCommand sc = new SqlCommand("CheckUser", conn);
+                sc.Parameters.AddWithValue("UserName", Login1.UserName);
+                sc.Parameters.AddWithValue("Password", Login1.Password);
+                SqlParameter userlevel = new SqlParameter("UserLevel", SqlDbType.Int, 1, ParameterDirection.Output, true, 1);
 
-				SqlCommand sc = new SqlCommand("GetAdminDetails") ;
-				sc.Parameters.Add("UserName") ;
-				sc.Parameters.Add("Password") ;
-				
+                sc.Parameters.Add(userlevel);
 
 
+                
 
-			if ()
-				
-			{
-				e.Authenticated = true;
-			}
-			else
-			{
-				e.Authenticated = false;
-			}
-		}
-	}
+                if (userlevel == null || userlevel < 1)
+                    e.Authenticated = false;
+                else
+                {
+                    e.Authenticated = true;
+                    // Do something with userlevel
+                }
+
+
+            }
+        }
+    }
 }
