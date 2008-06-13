@@ -9,5 +9,6 @@
         <asp:Login ID="Login1" runat="server" BorderStyle="Solid" 
             TitleText="Please Log In" onauthenticate="Login1_Authenticate">
         </asp:Login>
+        </div>
     </form>
 </asp:Content>

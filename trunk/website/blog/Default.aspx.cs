@@ -20,7 +20,7 @@ namespace KMBlog
 
         protected void Page_Load(object sender, EventArgs e)
         {
-             _connstring = ConfigurationManager.ConnectionStrings["work"].ConnectionString;
+             _connstring = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
            //  _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
 
 
@@ -48,6 +48,8 @@ namespace KMBlog
 
         private void GetPosts()
         {
+
+            
 
             DataTable categories = new DataTable();
             DataTable posts = new DataTable();
