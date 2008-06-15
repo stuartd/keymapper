@@ -219,12 +219,6 @@
     <Compile Include="Forms\MappingList.Designer.cs">
       <DependentUpon>MappingList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\temp.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\temp.Designer.cs">
-      <DependentUpon>temp.cs</DependentUpon>
-    </Compile>
     <Compile Include="Interfaces\IKeyData.cs" />
     <Compile Include="Classes\ngen.cs">
       <SubType>Component</SubType>
@@ -306,10 +300,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MappingList.resx">
       <DependentUpon>MappingList.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\temp.resx">
-      <DependentUpon>temp.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\arrow.png" />
