@@ -28,16 +28,23 @@ namespace KMBlog
                 conn.Open();
 
                 SqlCommand sc = new SqlCommand("CheckUser", conn);
-                sc.Parameters.AddWithValue("UserName", Login1.UserName);
-                sc.Parameters.AddWithValue("Password", Login1.Password);
-                SqlParameter userlevel = new SqlParameter("UserLevel", SqlDbType.Int, 1, ParameterDirection.Output, true, 1);
+                sc.CommandType = CommandType.StoredProcedure;
 
+                sc.Parameters.AddWithValue("username", Login1.UserName);
+                sc.Parameters.AddWithValue("password", Login1.Password);
+                SqlParameter userlevel = new SqlParameter("userlevel", SqlDbType.Int);
+
+                userlevel.Direction = ParameterDirection.Output;
                 sc.Parameters.Add(userlevel);
 
+                SqlDataReader r = sc.ExecuteReader();
+                // sc.ExecuteNonQuery();
 
-                
 
-                if (userlevel == null || userlevel < 1)
+                int? authUserLevel = (int?)sc.Parameters["UserLevel"].Value;
+
+
+                if (authUserLevel == null || authUserLevel < 1)
                     e.Authenticated = false;
                 else
                 {
