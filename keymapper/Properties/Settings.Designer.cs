@@ -238,5 +238,29 @@ namespace KeyMapper.Properties {
                 this["KeyboardLayout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NumLockIsExtended {
+            get {
+                return ((bool)(this["NumLockIsExtended"]));
+            }
+            set {
+                this["NumLockIsExtended"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NumLockHasBeenIdentified {
+            get {
+                return ((bool)(this["NumLockHasBeenIdentified"]));
+            }
+            set {
+                this["NumLockHasBeenIdentified"] = value;
+            }
+        }
     }
 }

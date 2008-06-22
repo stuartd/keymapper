@@ -1014,12 +1014,7 @@ namespace KeyMapper
 
         private void viewLogFileToolStripMenuItemClick(object sender, EventArgs e)
         {
-            string logfile = AppController.LogFileName;
-            if (string.IsNullOrEmpty(logfile))
-                return;
-
-            System.Diagnostics.Process.Start(logfile);
-
+            AppController.ViewLogFile();
         }
 
         private void setCurrentToggleKeysAtBootToolStripMenuItemClick(object sender, EventArgs e)

@@ -3,7 +3,7 @@ using System;
 namespace KeyMapper
 {
 
-	public struct KeyMapping
+	public class KeyMapping
 	{
 
 		#region fields, properties
@@ -31,8 +31,17 @@ namespace KeyMapper
 
 		#region methods
 
+        public KeyMapping()
+        {
+            _from = new Key();
+            _to = new Key(); 
+        }
+
 		public KeyMapping(Key keyFrom, Key keyTo)
 		{
+            if (Object.ReferenceEquals(keyFrom, null) || Object.ReferenceEquals(keyTo, null))
+                throw new NullReferenceException("Key can't be null");
+
 			_from = keyFrom;
 			_to = keyTo;
 			_type = MappingType.Null;
@@ -102,14 +111,14 @@ namespace KeyMapper
 			// and To.Scancode must be at least zero (either disabled or a key)
 
 			// (Key has to able to be mapped to itself so user mappings can override boot mappings)
-			return (
-				!IsEmpty()
-				&& _from != null
-				&& _to != null
-				&& _from.Scancode > 0
-				&& _to.Scancode > -1
-				);
-		}
+
+            return (
+            !IsEmpty()
+            && _from.Scancode > 0
+            && _to.Scancode > -1
+            );
+
+        }
 
 		public static bool operator ==(KeyMapping map1, KeyMapping map2)
 		{
@@ -118,7 +127,10 @@ namespace KeyMapper
 
 		public override bool Equals(object obj)
 		{
-			return (obj is KeyMapping && this == (KeyMapping)obj);
+            if (obj.GetType() != this.GetType())
+                return false;
+
+			return this == (KeyMapping)obj;
 		}
 
 		// The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.

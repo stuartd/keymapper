@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace KeyMapper
 {
-	class KeyPictureBox : PictureBox
+	class KeyPictureBox : KMPictureBox
 	{
 
 		IntPtr _hicon;
@@ -70,11 +70,7 @@ namespace KeyMapper
 
 		}
 
-		public void SetImage(Bitmap bmp)
-		{
-			this.ReleaseImage();
-			this.Image = bmp;
-		}
+
 
 		private void DrawKey()
 		{
@@ -367,17 +363,7 @@ namespace KeyMapper
 
 		}
 
-		private void ReleaseImage()
-		{
 
-			IDisposable cleaner = (IDisposable)(this.Image);
-			if (cleaner != null)
-			{
-				cleaner.Dispose();
-			}
-			this.Image = null;
-
-		}
 
 	}
 }
