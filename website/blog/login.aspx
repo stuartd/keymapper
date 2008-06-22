@@ -1,5 +1,11 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="login.aspx.cs" Inherits="KMBlog.login"
     MasterPageFile="~/KMBlog.Master" Title="Administrative Login"%>
+    
+    <asp:Content ID="loginhead" ContentPlaceHolderID="head" runat="server">
+        <style type="text/css">
+    @import url('kmblog.css') ;
+     </style>
+    </asp:Content>
 
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <form id="form1" runat="server">

@@ -1,33 +1,12 @@
 ﻿@import "http://justkeepswimming.net/keymapper/css/keymapper.css";
 
-html
-{
- height: 100.02%; 
-}
-
-
 #post
 {
 }
 
-#topnav
-{
-	margin:0 auto ;
-}
 
-#header
-{
-	text-align: center ;
-	margin-bottom: 10px ;
-	border-bottom: 15px solid #bbbbbb ;
-}
 
-#header a, header a:visited, header a:hover
-{
-	text-decoration: none ;
-	color: Black ;
-		
-}
+
 
 #posts
 {
@@ -37,32 +16,21 @@ html
 
 #posts li
 {
-	list-style-type: disc ;
-	padding-left: 10px ;
-	padding-bottom: 3px ;
-	list-style-position: inside ;
-	
+	list-style-type: disc;
+	padding-left: 10px;
+	padding-bottom: 3px;
+	list-style-position: inside;
 }
 
 div.comment
-{
-	border: 1px solid #d3d3d3 ;
-	padding: 20px ;
+{ 
+	border-top: 1px solid black;
+	border-left: 	5px solid #A44;
+	border-right: 1px solid black;	
+	border-bottom: 1px solid black;
+	padding: 20px;
 }
 
-body
-{
-	background-position: top center;
-	background-color: #FFFFFF;
-	background-image: url( "images/kmheader800w.png" );
-	background-repeat: no-repeat ;
-
-	background-position: % 10px ;
-	margin:0 auto ;
-	width: 80% ;
-	padding-left: 10% ;
-	padding-right: 10% ;
-}
 
 #sidebar
 {
@@ -77,7 +45,6 @@ body
 #sidebar ul
 {
 	padding: 20px 0;
-	
 }
 
 #sidebar a
@@ -90,7 +57,7 @@ body
 	background-color: #d3d3d3;
 	font-size: 115%;
 	position: relative;
-	padding-left: 5px ;
+	padding-left: 5px;
 }
 
 .postfooter
@@ -98,6 +65,7 @@ body
 	position: relative;
 	background-color: #d3d3d3;
 	font-size: 115%;
+	padding-left: 5px;
 }
 
 .posttitle
@@ -108,7 +76,7 @@ body
 {
 	text-decoration: none;
 	color: Black;
-	padding-left: 5px ;
+	padding-left: 5px;
 }
 
 .posttitle a:hover
@@ -125,12 +93,36 @@ body
 	top: 0;
 }
 
-.comments
+.commentslink
 {
 	position: absolute;
 	right: 10px;
 }
 
+.commenthead
+{
+	display: block ;
+	background-color: #abc ;
+	border: 1px solid silver ;
+}
+
+.commenter
+{
+	left: 10px ;
+}
+
+.commenturl
+{
+	right: 10px ;
+}
+
+.commentbody
+{
+	background-color: White ;
+	display: block ;
+}
+
+	
 
 .postbody
 {
@@ -154,18 +146,9 @@ blockquote
 
 code
 {
-	font-family: Monaco, "Lucida Console", "Courier New" , Courier, monospace;
+	font-family: Monaco, "Lucida Console" , "Courier New" , Courier, monospace;
 	background-color: #DDD;
-	color: #444;
 }
 
-#footer
-{
-	width: 100% ;
-	margin-top: 50px ;
-	float: left ;
-	border: 1px solid #d3d3d3;
-	background-color: #eeeeee;
-	text-align:center ;
-}
+
 
