@@ -301,12 +301,12 @@ namespace KeyMapper
 
 			if (FromKeyPictureBox.Image == null && _map.IsEmpty())
 			{
-				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage
+				FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage
 					(-1, -1, BlankButton.Blank, 0, 0, scale, ButtonEffect.None));
 			}
 			else
 			{
-				SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage
+				FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage
 					(_map.From.Scancode, _map.From.Extended, BlankButton.Blank, 0, 0, scale, ButtonEffect.None));
 			}
 
@@ -360,28 +360,8 @@ namespace KeyMapper
 				}
 			}
 
-			SetImage(ToKeyPictureBox, ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, scale, effect));
+			ToKeyPictureBox.SetImage(ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, scale, effect));
 
-		}
-
-
-		private static void SetImage(PictureBox box, Bitmap bmp)
-		{
-			if (box.Image != null)
-			{
-				box.Image.Dispose();
-				box.Image = null;
-			}
-
-			//// In case Windows font sizes are set to less than 96dpi
-			//if (box.Width < bmp.Width)
-			//    box.Width = bmp.Width;
-
-			//box.BringToFront();
-
-			box.Image = bmp;
-
-			box.Invalidate();
 		}
 
 		private void EditMappingFormClosing(object sender, FormClosingEventArgs e)
@@ -571,7 +551,7 @@ namespace KeyMapper
 					// Need to move panel back to where it was and set the image in the picturebox
 					KeyListsPanel.Location = _savedPanelLocation;
 
-					SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
+					FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
 					_selectingFromKeyFromLists = false;
 					_keyThreshold = 1;
 					SetListOptionsComboIndex();
@@ -669,18 +649,28 @@ namespace KeyMapper
 		private void OnKeyPress(object sender, KeyMapperKeyPressedEventArgs e)
 		{
 
+            int scancode = e.Key.Scancode;
+            int extended = e.Key.Extended;
+            
+            // Is this Num Lock?
+            if (scancode == 69)
+            {
+                AppController.SetNumLockExtendedStatus(extended != 0);
+                if ((bool)AppController.IsNumLockExtended())
+                    extended = 0;
+            }
+
 			if (_capturingFromKey)
 			{
 				// Have we been sent a dud??
-				if (e.Key.Scancode == 0)
+				if (scancode == 0)
 				{
 					// Can't use a disabled key as From
 					_map = new KeyMapping();
 				}
 				else
 				{
-					SetMapToBlankMapping(e.Key.Scancode, e.Key.Extended);
-					// SetImage(FromKeyPictureBox, ButtonImages.GetButtonImage(_map.From.Scancode, _map.From.Extended));
+					SetMapToBlankMapping(scancode, extended);
 				}
 			}
 			else
@@ -692,7 +682,7 @@ namespace KeyMapper
 
 				// So, mapping to a mapped key is de facto allowed.
 
-				_map = new KeyMapping(_map.From, new Key(e.Key.Scancode, e.Key.Extended));
+				_map = new KeyMapping(_map.From, new Key(scancode, extended));
 			}
 
 			this.SetupForm();

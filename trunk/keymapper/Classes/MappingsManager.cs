@@ -478,7 +478,7 @@ namespace KeyMapper
             string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
 
             AppController.WriteRegistryFileVista(tempfile);
-         }
+        }
 
         public static void SaveBootMappingsToKeyMapperKey()
         {
@@ -618,12 +618,21 @@ namespace KeyMapper
 
                     int word2 = map.To.Extended;
 
-                    bytemappings[start + (i * 4)] = (byte)map.To.Scancode; ;
+                    bytemappings[start + (i * 4)] = (byte)map.To.Scancode;
                     bytemappings[start + (i * 4) + 1] = (byte)map.To.Extended;
 
                     // Second pair is the physical key which performs the new action
                     bytemappings[start + (i * 4) + 2] = (byte)map.From.Scancode;
-                    bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
+
+                    // If Num Long uses the extended code, export it as 69 / 224
+                    if (map.From.Scancode == 69 && (bool)AppController.IsNumLockExtended())
+                    {
+                        bytemappings[start + (i * 4) + 3] = (byte)224;
+                    }
+                    else
+                    {
+                        bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
+                    }
                 }
                 else
                     break;
@@ -755,76 +764,103 @@ namespace KeyMapper
         }
 
         public static bool AddMapping(KeyMapping map, bool noStackNoEventRaised)
-		{
-			if (!map.IsValid())
-			{
-				return false;
-			}
+        {
+            if (!map.IsValid())
+            {
+                return false;
+            }
 
-			int scancode = map.From.Scancode;
-			int extended = map.From.Extended;
+            int scancode = map.From.Scancode;
+            int extended = map.From.Extended;
 
-			bool disableNumLock = false;
+                 // Some keyboards map Num Lock to 69 / 224 instead of 69 / 0
+            // so if we are to be sure we are remapping num lock, then 
+            // user has to confirm what their keyboard behaviour is. 
 
-			// If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
-			// that it could be goodbye to CTRL-ALT-DEL
+            if (scancode == 69 && extended == 0)
+            {
+                bool? numLockIsExtended = AppController.IsNumLockExtended();
+                if (numLockIsExtended == null)
+                {
+                    bool isDisabling = (map.To.Scancode == 0 && map.To.Extended == 0);
+                    IdentifyNumLockKey ikform = new IdentifyNumLockKey(isDisabling);
+                    ikform.ShowDialog();
+                    // Recheck
+                    numLockIsExtended = AppController.IsNumLockExtended();
+                    if (numLockIsExtended == null)
+                    {
+                        // User hasn't identified the key..
+                        return false;
+                    }
 
-			if ((scancode == 29 && extended == 0) || (scancode == 56 && extended == 0) || (scancode == 83 && extended == 224))
-			{
-				string action = IsDisabledMapping(map) ? "disable " : "remap ";
+                }
+            }
+
+
+            // If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
+            // that it could be goodbye to CTRL-ALT-DEL
+
+            if ((scancode == 29 && extended == 0) || (scancode == 56 && extended == 0) || (scancode == 83 && extended == 224))
+            {
+                string action = IsDisabledMapping(map) ? "disable " : "remap ";
 
                 string warning = "You are attempting to " + action + map.From.Name +
                     " which is required for CTRL-ALT-DELETE." + (char)13 + "If you continue you may not be able to log on" +
                 " to your PC.";
-                
+
                 string question = "Are you really sure you want to " + action + "this key?";
 
                 if (AppController.OperatingSystemIsVista)
                 {
-                    TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper", TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.Question) ;
+                    TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper", TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.Question);
                     if (dr != TaskDialogResult.Yes)
-                        return false ;
+                        return false;
                 }
                 else
                 {
                     DialogResult dr = MessageBox.Show(warning + (char)13 + (char)13 + question, "Key Mapper", MessageBoxButtons.YesNo,
-					MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, 0);
+                    MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, 0);
 
-				if (dr != DialogResult.Yes)
-					return false;
+                    if (dr != DialogResult.Yes)
+                        return false;
+                }
             }
-			}
 
-			// If user is remapping Pause, then suggest they will want to disable Num Lock as well.
+            // If user is remapping Pause, then suggest they will want to disable Num Lock as well.
 
-			if (scancode == 29 && extended == 225 && IsDisabledMapping(map) == false)
-			{
+            bool disableNumLock = false;
 
-				// Is Num Lock already disabled or remapped?
-				bool numLockIsDisabled = false;
-				bool numLockIsMapped = false;
+            if (scancode == 29 && extended == 225 && IsDisabledMapping(map) == false)
+            {
 
-				Key numLock = new Key(69, 0);
+                // Is Num Lock already disabled or remapped?
+                bool numLockIsDisabled = false;
+                bool numLockIsMapped = false;
 
-				foreach (KeyMapping km in _bootMappings)
-					if (km.From == numLock)
-					{
-						if (IsDisabledMapping(km))
-							numLockIsDisabled = true;
-						else
-							numLockIsMapped = true;
-					}
+                foreach (KeyMapping km in _bootMappings)
+                    if (km.From.Scancode == 69)
+                    {
+                        if (IsDisabledMapping(km))
+                            numLockIsDisabled = true;
+                        else
+                            numLockIsMapped = true;
+                    }
 
-				foreach (KeyMapping km in _userMappings)
-				{
-					if (IsDisabledMapping(km))
-						numLockIsDisabled = true;
-					else
-						numLockIsMapped = true;
-				}
+                // Num Lock could be disabled or mapped in boot
+                // but overridden in user mappings.
+                foreach (KeyMapping km in _userMappings)
+                {
+                    if (km.From.Scancode == 69)
+                    {
+                        if (IsDisabledMapping(km))
+                            numLockIsDisabled = true;
+                        else
+                            numLockIsMapped = true;
+                    }
+                }
 
-				if (numLockIsDisabled == false)
-				{
+                if (numLockIsDisabled == false)
+                {
 
                     string warning = "If you remap Pause, the Num Lock key will be disabled" +
                         (numLockIsMapped ? ((char)13 + "and your existing Num Lock mapping will be removed.") : ".");
@@ -846,53 +882,53 @@ namespace KeyMapper
                         if (dr != DialogResult.Yes)
                             return false;
                     }
-					disableNumLock = true;
-				}
+                    disableNumLock = true;
+                }
 
 
-			}
+            }
 
-			if (noStackNoEventRaised == false)
-				PushMappingsOntoUndoStack();
+            if (noStackNoEventRaised == false)
+                PushMappingsOntoUndoStack();
 
-			// Check for any existing mappings for this key
-			// if they exist, this mapping needs to replace them.
+            // Check for any existing mappings for this key
+            // if they exist, this mapping needs to replace them.
 
-			if (_filter == MappingFilter.Boot)
-			{
-				map.SetType(MappingType.Boot);
+            if (_filter == MappingFilter.Boot)
+            {
+                map.SetType(MappingType.Boot);
 
-				KeyMapping existingMap = GetKeyMapping(map.From.Scancode, map.From.Extended);
-				if (existingMap.IsEmpty() == false && existingMap.MapType == MappingType.Boot)
-					_bootMappings.Remove(existingMap);
+                KeyMapping existingMap = GetKeyMapping(map.From.Scancode, map.From.Extended);
+                if (existingMap.IsEmpty() == false && existingMap.MapType == MappingType.Boot)
+                    _bootMappings.Remove(existingMap);
 
-				_bootMappings.Add(map);
+                _bootMappings.Add(map);
 
-			}
-			else
-			{
-				map.SetType(MappingType.User);
+            }
+            else
+            {
+                map.SetType(MappingType.User);
 
-				KeyMapping existingMap = GetKeyMapping(map.From.Scancode, map.From.Extended);
-				if (existingMap.IsEmpty() == false && existingMap.MapType == MappingType.User)
-					_userMappings.Remove(existingMap);
+                KeyMapping existingMap = GetKeyMapping(map.From.Scancode, map.From.Extended);
+                if (existingMap.IsEmpty() == false && existingMap.MapType == MappingType.User)
+                    _userMappings.Remove(existingMap);
 
-				_userMappings.Add(map);
-			}
+                _userMappings.Add(map);
+            }
 
-			if (disableNumLock)
-			{
-				KeyMapping nl = new KeyMapping(new Key(69, 0), new Key(0, 0));
-				AddMapping(nl, true);
+            if (disableNumLock)
+            {
+                KeyMapping nl = new KeyMapping(new Key(69, 0), new Key(0, 0));
+                AddMapping(nl, true);
 
-			}
+            }
 
-			if (noStackNoEventRaised == false)
-				RaiseMappingsChangedEvent();
+            if (noStackNoEventRaised == false)
+                RaiseMappingsChangedEvent();
 
-			return true;
+            return true;
 
-		}
+        }
 
         public static void DeleteMapping(KeyMapping map, MappingFilter filter)
         {
@@ -1101,6 +1137,12 @@ namespace KeyMapper
                     // Second pair is the physical key which performs the new action
                     word1 = map[start + (i * 4) + 2];
                     word2 = map[start + (i * 4) + 3];
+
+                    if (word1 == 69)
+                    {
+                       // Always store Num Lock as 69 / 0 
+                        word2 = 0;
+                    }
 
                     Key fromkey = new Key(word1, word2);
 

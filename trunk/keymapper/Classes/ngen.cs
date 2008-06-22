@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace KeyMapper
 {
 	[RunInstaller(true)]
-	public class ngen : Installer
+	public class Ngen : Installer
 	{
 
 		// From http://dotnetperls.com/Content/Ngen-Installer-Class.aspx

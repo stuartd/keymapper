@@ -6,7 +6,7 @@ using System.Security.Permissions;
 namespace KeyMapper
 {
 	
-	public delegate IntPtr LowLevelKeyboardProc(int Code, IntPtr wParam, IntPtr lParam);
+	public delegate IntPtr LowLevelKeyboardProc(int code, IntPtr wParam, IntPtr lParam);
 
 	class KeySniffer : IDisposable
 	{
@@ -168,7 +168,7 @@ namespace KeyMapper
 				KBHookStruct keypress = (KBHookStruct)Marshal.PtrToStructure(lParam, typeof(KBHookStruct));
                 
 				//  Console.WriteLine("ScanCode: {0}, Extended: {1}, KeyCode: {2}, Name: {3}",
-				//  keypress.Scancode, keypress.Extended, keypress.VirtualKeyCode, AppController.GetKeyName(keypress.Scancode, keypress.Extended));
+				 //  keypress.Scancode, keypress.Extended, keypress.VirtualKeyCode, AppController.GetKeyName(keypress.Scancode, keypress.Extended));
 
 				if (keypress.Scancode == 541)
 				{

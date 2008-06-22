@@ -9,7 +9,7 @@ namespace KeyMapper
     [Flags]
     public enum TaskDialogButtons
     {
-        OK = 0x0001,
+        Ok = 0x0001,
         Cancel = 0x0008,
         Yes = 0x0002,
         No = 0x0004,
@@ -34,7 +34,7 @@ namespace KeyMapper
     public enum TaskDialogResult
     {
         None,
-        OK,
+        Ok,
         Cancel,
         Yes,
         No,

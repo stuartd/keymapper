@@ -23,7 +23,7 @@ namespace KeyMapper
 
             switch (p)
             {
-                case 1: return TaskDialogResult.OK;
+                case 1: return TaskDialogResult.Ok;
                 case 2: return TaskDialogResult.Cancel;
                 case 4: return TaskDialogResult.Retry;
                 case 6: return TaskDialogResult.Yes;

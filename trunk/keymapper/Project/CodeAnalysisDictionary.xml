@@ -5,6 +5,7 @@
       <Word>KeyMapper</Word>
       <Word>scancode</Word>
       <Word>Colour</Word>
+      <Word>Num</Word>
     </Recognized>
   </Words>
 </Dictionary>

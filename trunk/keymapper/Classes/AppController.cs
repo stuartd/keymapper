@@ -156,7 +156,7 @@ namespace KeyMapper
                 }
                 catch (IOException exc)
                 {
-                    Console.WriteLine("Can't get console filename: " + exc.ToString());
+                    Console.WriteLine("Can't get log filename: " + exc.ToString());
                     return string.Empty;
                 }
 
@@ -198,7 +198,7 @@ namespace KeyMapper
             // Beware bad data..
             try
             {
-				string[] terminators = new string[] {"\r\n"} ;
+                string[] terminators = new string[] { "\r\n" };
 
                 string[] layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
@@ -236,19 +236,19 @@ namespace KeyMapper
         private static void SaveCustomLayouts()
         {
 
-			// Always save, but only if layout actuall is custom.
-			// This means next time we only load layouts which are different.
+            // Always save, but only if layout actuall is custom.
+            // This means next time we only load layouts which are different.
 
             string path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
              + @"\KeyMapper\customlayouts.txt";
 
-			KeyDataXml kd = new KeyDataXml() ;
+            KeyDataXml kd = new KeyDataXml();
 
             using (StreamWriter sw = new StreamWriter(path, false))
             {
                 foreach (DictionaryEntry de in _customKeyboardLayouts)
-					if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
-						sw.WriteLine(de.Key + "=" + (int)de.Value);
+                    if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
+                        sw.WriteLine(de.Key + "=" + (int)de.Value);
             }
 
         }
@@ -431,12 +431,19 @@ namespace KeyMapper
             // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
             // time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
 
+            if (logontime == DateTime.MinValue)
+            {
+                // If using Run As to run KeyMapper, then logontime will be 01/01/0001 00:00:00
+                // as the Volatile key won't exist.
+                logontime = boottime.AddSeconds(1);
+            }
+
             // It can also happen - e.g. when restoring a Virtual Machine - 
             // that the boottime is later than logontime.
 
             if (boottime > logontime)
             {
-               //  Console.WriteLine("Boot time greater than logontime: Boot Time {0} Logon Time {1}", boottime, logontime);
+                //  Console.WriteLine("Boot time greater than logontime: Boot Time {0} Logon Time {1}", boottime, logontime);
                 boottime = logontime.AddSeconds(-1);
             }
 
@@ -489,7 +496,7 @@ namespace KeyMapper
 
             _dpix = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
             _dpiy = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
-           
+
 
         }
 
@@ -519,6 +526,24 @@ namespace KeyMapper
 
 
         }
+
+        public static bool? IsNumLockExtended()
+        {
+            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+            if ((bool)(userSettings["NumLockHasBeenIdentified"]) == true)
+                return (bool?)(userSettings["NumLockIsExtended"]);
+            else
+                return null;
+        }
+
+        public static void SetNumLockExtendedStatus(bool extended)
+        {
+            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+            userSettings["NumLockHasBeenIdentified"] = true;
+            userSettings["NumLockIsExtended"] = extended;
+            userSettings.Save();
+        }
+
 
         public static void ValidateUserConfigFile()
         {
@@ -659,9 +684,9 @@ namespace KeyMapper
             }
         }
 
-        public static void RegisterTempFile(string filepath)
+        public static void RegisterTempFile(string filePath)
         {
-            _tempfiles.Add(filepath);
+            _tempfiles.Add(filePath);
         }
 
 
@@ -747,6 +772,15 @@ namespace KeyMapper
             {
                 _consoleWriterStream.Close();
             }
+        }
+
+        public static void ViewLogFile()
+        {
+            string logfile = LogFileName;
+            if (string.IsNullOrEmpty(logfile))
+                return;
+
+            System.Diagnostics.Process.Start(logfile);
         }
 
 
@@ -879,7 +913,7 @@ namespace KeyMapper
 
         public static void WriteRegistryFileVista(string filePath)
         {
-            _tempfiles.Add(filePath) ;
+            _tempfiles.Add(filePath);
 
             string command = " /s " + (char)34 + filePath + (char)34;
 
@@ -887,11 +921,11 @@ namespace KeyMapper
             {
 
                 System.Diagnostics.Process process = new Process();
-                    process.StartInfo.FileName = "regedit.exe" ;
+                process.StartInfo.FileName = "regedit.exe";
                 process.StartInfo.Arguments = command;
-                process.Start() ;
-                process.WaitForExit() ;
-             }
+                process.Start();
+                process.WaitForExit();
+            }
             catch (System.ComponentModel.Win32Exception)
             {
                 Console.WriteLine("Writing to protected section of registry was cancelled");
