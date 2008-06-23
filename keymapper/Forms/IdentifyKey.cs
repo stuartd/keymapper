@@ -95,5 +95,10 @@ namespace KeyMapper
             }
         }
 
+		private void OKButtonClick(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+
     }
 }
