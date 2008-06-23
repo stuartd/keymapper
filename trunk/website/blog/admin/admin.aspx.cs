@@ -17,6 +17,8 @@ namespace KMBlog.admin
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			if (IsPostBack)
+				Response.Write("You wrote: " + MyTextBox.Text);
 
 		}
 	}
