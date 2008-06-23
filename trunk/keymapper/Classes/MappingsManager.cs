@@ -625,7 +625,9 @@ namespace KeyMapper
                     bytemappings[start + (i * 4) + 2] = (byte)map.From.Scancode;
 
                     // If Num Long uses the extended code, export it as 69 / 224
-                    if (map.From.Scancode == 69 && (bool)AppController.IsNumLockExtended())
+					bool? isExtended = AppController.IsNumLockExtended() ;
+
+                    if (map.From.Scancode == 69 && isExtended != null && (bool)isExtended == true)
                     {
                         bytemappings[start + (i * 4) + 3] = (byte)224;
                     }

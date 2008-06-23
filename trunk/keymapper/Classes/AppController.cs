@@ -462,7 +462,8 @@ namespace KeyMapper
             DateTime HKCUWrite = RegistryHelper.GetRegistryKeyTimestamp
                 (RegistryHive.CurrentUser, @"Keyboard Layout");
 
-            //  Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", boottime, logontime, HKLMWrite, HKCUWrite);
+            // Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", 
+			// boottime, logontime, HKLMWrite, HKCUWrite);
 
             // Get the current scancode maps
             MappingsManager.GetMappingsFromRegistry();
@@ -547,10 +548,14 @@ namespace KeyMapper
 
         public static void ValidateUserConfigFile()
         {
+
+			// Even with these checks, occasinally get a "failed to load configuration system" exception.
+			
             try
             {
                 // If file is corrupt this will trigger an exception
-                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+                Configuration config = ConfigurationManager.OpenExeConfiguration
+					(ConfigurationUserLevel.PerUserRoamingAndLocal);
             }
 
             catch (ConfigurationErrorsException ex)
@@ -562,8 +567,8 @@ namespace KeyMapper
             try
             {
                 // Access a property to find any other error types - invalid XML etc.
-                Properties.Settings u = new KeyMapper.Properties.Settings();
-                Point p = u.ColourEditorLocation;
+                Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+                Point p = userSettings.ColourEditorLocation;
             }
 
 
