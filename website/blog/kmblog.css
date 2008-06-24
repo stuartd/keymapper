@@ -5,6 +5,27 @@
 }
 
 
+a.buttonlink
+{
+	height: 2em;
+	line-height: 2em;
+	width: 6.5em ;
+	border: 1px solid black;
+	color: #000;
+	text-decoration: none;
+	text-align: center;
+	background-color: rgb(235, 235, 235);
+	display: block;
+}
+
+
+a.buttonlink:hover
+{
+	color: #111;
+	background-color: rgb(220, 220, 220);
+	color: Blue;
+}
+
 
 
 
@@ -23,10 +44,10 @@
 }
 
 div.comment
-{ 
+{
 	border-top: 1px solid black;
-	border-left: 	5px solid #A44;
-	border-right: 1px solid black;	
+	border-left: 5px solid #A44;
+	border-right: 1px solid black;
 	border-bottom: 1px solid black;
 	padding: 20px;
 }
@@ -101,28 +122,28 @@ div.comment
 
 .commenthead
 {
-	display: block ;
-	background-color: #abc ;
-	border: 1px solid silver ;
+	display: block;
+	background-color: #abc;
+	border: 1px solid silver;
 }
 
 .commenter
 {
-	left: 10px ;
+	left: 10px;
 }
 
 .commenturl
 {
-	right: 10px ;
+	right: 10px;
 }
 
 .commentbody
 {
-	background-color: White ;
-	display: block ;
+	background-color: White;
+	display: block;
 }
 
-	
+
 
 .postbody
 {
