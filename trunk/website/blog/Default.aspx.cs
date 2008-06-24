@@ -5,9 +5,6 @@ using System.Data.SqlTypes;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Text;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 
 
 namespace KMBlog
