@@ -27,6 +27,7 @@ namespace KeyMapper
         bool _hasNumberPad;
         bool _keysOnly;
         KeyMapper.KeySniffer _sniffer;
+        bool _cancelSlideshow;
 
         // Because we are intercepting a keypress before it is processed, can't ask
         // what state the keyboard is in using Form.IsKeySet or WIN32API funcs like
@@ -186,14 +187,19 @@ namespace KeyMapper
         void Redraw()
         {
 
-            NativeMethods.LockWindowUpdate(this.Handle);
-
+            try
+            {
+                NativeMethods.LockWindowUpdate(this.Handle);
+            }
+            catch (ObjectDisposedException)
+            {
+                _cancelSlideshow = true;
+                return;
+            }
             FormToolTip.RemoveAll();
             FormToolTip.SetToolTip(KeyboardListCombo, "Change the displayed keyboard");
 
-            // TODO: Fix that nasty border on the enter key.
-
-            // Need to make sure these dispose as they have bitmap resources, so not using Controls.Clear()
+              // Need to make sure these dispose as they have bitmap resources, so not using Controls.Clear()
             // as it didn't release them properly..
             for (int i = this.KeyboardPanel.Controls.Count - 1; i >= 0; i--)
                 this.KeyboardPanel.Controls[i].Dispose();
@@ -793,6 +799,13 @@ namespace KeyMapper
             SaveUserSettings();
         }
 
+        void KeyboardFormKeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+                _cancelSlideshow = true;
+
+        }
+
         private void OnMappingsChanged(object sender, EventArgs e)
         {
             this.Redraw();
@@ -1136,21 +1149,38 @@ namespace KeyMapper
 
         #region Stress test
 
-        private void stressTestToolStripMenuItem_Click(object sender, EventArgs e)
+        private void keyboardSlideshowToolStripMenuItemClick(object sender, EventArgs e)
         {
-
-            Random r = new Random();
-            for (int i = 1; i < 100; i++)
+            string caption = this.Text;
+            int currentKeyboard = KeyboardListCombo.SelectedIndex;
+            this.Text += " (press Escape to stop slideshow)";
+            _cancelSlideshow = false;
+            this.KeyPress += KeyboardFormKeyPress;
+            for (int i = 0; i < KeyboardListCombo.Items.Count; i++)
             {
-                int val = r.Next(KeyboardListCombo.Items.Count);
-                KeyboardListCombo.SelectedIndex = val;
-                Application.DoEvents();
+                if (_cancelSlideshow)
+                {
+                    KeyboardListCombo.SelectedIndex = currentKeyboard;
+                    Application.DoEvents();
+                    break;
+                }
 
+                KeyboardListCombo.SelectedIndex = i;
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(250);
+                
             }
+            this.KeyPress -= KeyboardFormKeyPress;
+            this.Text = caption;
 
         }
 
         #endregion
+
+        private void resetUserSetingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+        }
 
     }
 
