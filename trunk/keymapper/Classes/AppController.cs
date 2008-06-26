@@ -543,6 +543,7 @@ namespace KeyMapper
             userSettings["NumLockHasBeenIdentified"] = true;
             userSettings["NumLockIsExtended"] = extended;
             userSettings.Save();
+            Console.WriteLine("Num Lock is" + (extended ? "" : " not") + " extended");
         }
 
 
