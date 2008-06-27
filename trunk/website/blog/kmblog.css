@@ -6,15 +6,20 @@
 
 .errortext
 {
-	color: Red ;
+	color: Red;
 }
 
+.controls
+{
+	border: 1px solid black;
+	background-color: rgb(235, 235, 235);
+}
 
 a.buttonlink
 {
 	height: 2em;
 	line-height: 2em;
-	width: 6.5em ;
+	width: 6.5em;
 	border: 1px solid black;
 	color: #000;
 	text-decoration: none;

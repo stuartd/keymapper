@@ -19,7 +19,7 @@ tinyMCoE.init({
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <h3 id="header">
         Blog Post Editor</h3>
-    <form id="form1" runat="server" method="post" action="post-edit.aspx">
+    <form id="form1" runat="server" method="post" action="post-edit.aspx" >
         <div id="edit_title">
             Title:
             <asp:TextBox ID="blogtitle" runat="server" Width="30em">
@@ -38,8 +38,11 @@ tinyMCoE.init({
         <div id="edit_body">
             <textarea id="blogpost" cols="80" rows="20" runat="server"></textarea>
         </div>
+        <div id="controls">
         <input type="hidden" id="hiddenPostID" runat="server" />
-        <input type="submit" value="Save" causesvalidation="true" />
+        <input type="submit" id="submitpost" value="Save" causesvalidation="true" />
         <input type="button" value="Cancel" causesvalidation="false" runat="server"></input>
+        <asp:Label ID="resultlabel" runat="server"></asp:Label>
+        </div>
     </form>
 </asp:Content>
