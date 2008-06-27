@@ -18,13 +18,18 @@ namespace KMBlog
 
 			if (Page.IsPostBack)
 			{
+				Response.Write(Request.Form["buttonname"]);
+											
+				if (Request.Form["buttonname"] == "Cancel")
+					Response.Redirect("admin.aspx");
+
 				if (SavePost())
 				{
-					Response.Write("Post saved");
+					resultlabel.Text = "Your post has been saved.";
 				}
 				else
 				{
-					Response.Write("Post not saved");
+					resultlabel.Text = "There are some missing fields: your post has not been saved.";
 				}
 				return;
 			}
@@ -142,7 +147,30 @@ namespace KMBlog
 			if (String.IsNullOrEmpty(postday.Text) || String.IsNullOrEmpty(postmonth.Text) || String.IsNullOrEmpty(postyear.Text))
 				return "The Day, Month and Year fields must all be entered";
 
-			return "";
+			// So why is this not a valid date?
+
+			int year = Int32.Parse(postyear.Text) ;
+			if (year < 1 || year > 9999)
+				return "The Year must be between 0001 and 9999";
+
+			// Check the month text is valid:
+
+			DateTime dt;
+			int month ;
+
+			if (DateTime.TryParse("01 " + postmonth.Text + " 1900", out dt) == false)
+				return postmonth.Text + " is not a valid month" ;
+			else
+				month = dt.Month ;
+
+			// Now check that the day is valid for the month and year.
+
+			int day = Int32.Parse(postday.Text);
+			if (day < 1 || day > DateTime.DaysInMonth(year, month))
+				return day.ToString() + " is not a valid day for " + postmonth.Text + " " + postyear.Text;
+
+			return "The date is not valid";
+
 
 		}
 
