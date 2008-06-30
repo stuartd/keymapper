@@ -8,7 +8,7 @@
     <title>Key Mapper Placeholder</title>
 </head>
 <body>
-    <ul id="topnav">
+    <ul class="topnav" id="sitenav">
         <li><a href="http://justkeepswimming.net/keymapper/default.aspx">Home</a></li>
         <li><a href="http://code.google.com/p/keymapper/downloads/list">Downloads</a></li>
         <li><a href="http://justkeepswimming.net/keymapper/support.aspx">Support</a></li>

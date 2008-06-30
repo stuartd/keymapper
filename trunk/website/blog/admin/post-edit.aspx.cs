@@ -215,6 +215,7 @@ namespace KMBlog
 				if (postID == 0)
 				{
 					sc = new SqlCommand("CreatePost");
+                    sc.Parameters.AddWithValue("stub", GetStub(blogtitle.Text));
 				}
 				else
 				{
@@ -223,8 +224,8 @@ namespace KMBlog
 				}
 
 				sc.Parameters.AddWithValue("title", blogtitle.Text);
-				sc.Parameters.AddWithValue("stub", GetStub(blogtitle.Text));
 				sc.Parameters.AddWithValue("body", blogpost.InnerHtml);
+                sc.Parameters.AddWithValue("postdate", dt);
 
 				sc.Connection = connection;
 				sc.CommandType = CommandType.StoredProcedure;
