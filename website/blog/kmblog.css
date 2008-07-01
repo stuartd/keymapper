@@ -1,12 +1,64 @@
 ﻿@import "http://justkeepswimming.net/keymapper/css/keymapper.css";
 
+/* Hide main navigation */
+#sitenav
+{
+	display: none;
+}
+
 #post
 {
 }
 
-.errortext
+
+#post_timestamp
+{
+}
+
+#editarea
+{
+}
+
+#blogpost
+{
+	width: 80%;
+}
+
+#controls
+{
+}
+
+.loginBox
+{
+	position: relative ;
+	margin: 50px ;
+}
+.loginLabel
+{
+	position: absolute ;
+	left: 0 ;
+	width: 30px ;
+}
+
+.loginTitle
+{
+	position: absolute ;
+	left: 0 ;
+}
+
+.loginTextBox
+{
+	position: absolute ;
+	left: 30px ;
+	width: 30px ;
+}
+
+
+
+.dateerrortext
 {
 	color: Red;
+	clear: both;
 }
 
 .controls
@@ -15,29 +67,7 @@
 	background-color: rgb(235, 235, 235);
 }
 
-a.buttonlink
-{
-	height: 2em;
-	line-height: 2em;
-	width: 6.5em;
-	border: 1px solid black;
-	color: #000;
-	text-decoration: none;
-	text-align: center;
-	background-color: rgb(235, 235, 235);
-	display: block;
-}
-
-
-a.buttonlink:hover
-{
-	color: #111;
-	background-color: rgb(220, 220, 220);
-	color: Blue;
-}
-
-
-
+/* Main page */
 
 #posts
 {

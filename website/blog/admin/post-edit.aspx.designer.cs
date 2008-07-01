@@ -32,6 +32,42 @@ namespace KMBlog {
         protected global::System.Web.UI.WebControls.TextBox blogtitle;
         
         /// <summary>
+        /// blogpost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea blogpost;
+        
+        /// <summary>
+        /// hiddenPostID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenPostID;
+        
+        /// <summary>
+        /// submitpost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button submitpost;
+        
+        /// <summary>
+        /// canceledit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button canceledit;
+        
+        /// <summary>
         /// postday control.
         /// </summary>
         /// <remarks>
@@ -66,24 +102,6 @@ namespace KMBlog {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label date_error;
-        
-        /// <summary>
-        /// blogpost control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTextArea blogpost;
-        
-        /// <summary>
-        /// hiddenPostID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenPostID;
         
         /// <summary>
         /// resultlabel control.

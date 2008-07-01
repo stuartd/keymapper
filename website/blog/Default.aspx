@@ -1,11 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="KMBlog._Default"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="KMBlog._Default"
     MasterPageFile="~/KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog"%>
 
-<asp:Content ID="default_head" ContentPlaceHolderID="head" runat="server">
-    <style type="text/css">
-    @import url('kmblog.css') ;
-     </style>
-</asp:Content>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <form id="form1" runat="server">
     <div id="maindiv">

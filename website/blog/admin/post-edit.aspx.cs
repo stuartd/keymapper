@@ -12,17 +12,16 @@ namespace KMBlog
 	public partial class post_edit : System.Web.UI.Page
 	{
 
+		public void CancelEdit(object sender, EventArgs e)
+		{
+			Response.Redirect("admin.aspx");
+		}
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
 
 			if (Page.IsPostBack)
 			{
-				Response.Write(Request.Form["buttonname"]);
-											
-				if (Request.Form["buttonname"] == "Cancel")
-					Response.Redirect("admin.aspx");
-
 				if (SavePost())
 				{
 					resultlabel.Text = "Your post has been saved.";
