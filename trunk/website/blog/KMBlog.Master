@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KMBlog.master.cs" Inherits="KMBlog.KMBlog"  %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KMBlog.master.cs" Inherits="KMBlog.KMBlog" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="kmhead" runat="server">
@@ -6,6 +6,9 @@
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <title>Key Mapper Placeholder</title>
+    <style type="text/css">
+        @import url('/kmblog.css');
+    </style>
 </head>
 <body>
     <ul class="topnav" id="sitenav">

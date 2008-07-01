@@ -1,16 +1,17 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" AutoEventWireup="true" CodeBehind="admin.aspx.cs"
     Inherits="KMBlog.admin" Title="Key Mapper Blog Admin" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <style type="text/css">
-        @import url('../kmblog.css');
-    </style>
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+<form id="pageform" runat="server">
     <h3 id="header">
         Key Mapper Blog Admin</h3>
-    <a class="buttonlink" href="post-edit.aspx">New post</a><br />
-    <asp:Repeater ID="postsRepeater" runat="server">
+        <ul class="topnav">
+        <li><a href="post-edit.aspx">New Post</a></li>
+        <li><a href="../default.aspx">View Blog</a></li>
+        <li><a href="edit-categories.aspx">Categories</a></li>
+        </ul>
+<div id ="maindiv">
+     <asp:Repeater ID="postsRepeater" runat="server">
         <HeaderTemplate>
             <table border="0" cellpadding="0" cellspacing="0" width="40%">
                 <caption style="text-align: left">
@@ -30,4 +31,6 @@
         <FooterTemplate>
             </table></FooterTemplate>
     </asp:Repeater>
+    </div>
+    </form>
 </asp:Content>
