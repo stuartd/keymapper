@@ -6,15 +6,8 @@
         <div id="maindiv">
             <h1 id="header">
                 <a href="/">Key Mapper Blog Admin Login</a></h1>
-            <p>
-                Please Log In</p>
-            <asp:Label ID="lblUserName" runat="server" AssociatedControlID="txtUserName" Text="User Name:"></asp:Label>
-            <asp:TextBox ID="txtUserName" runat="server"></asp:TextBox>
-            <br />
-            <asp:Label ID="lblPassword" runat="server" AssociatedControlID="txtPassword" Text="Password:" ></asp:Label>
-            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"></asp:TextBox>
-            <br />
-            <asp:Button ID="btnLogin" runat="server" Text="Log In" />
         </div>
+        <asp:Login ID="KMLogin" runat="server" onauthenticate="Login1_Authenticate">
+        </asp:Login>
     </form>
 </asp:Content>
