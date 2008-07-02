@@ -2,8 +2,7 @@
   <PropertyGroup>
     <PublishUrlHistory>ftp://justkeepswimming.net/httpdocs/KeyMapper/|ftp://justkeepswimming.net/httpdocs/KMTest/|ftp://justkeepswimming.net/KeyMapper/|C:\Published Programs\KeyMapper\|http://localhost/KeyMapper/</PublishUrlHistory>
     <InstallUrlHistory>http://justkeepswimming.net/KeyMapper/|http://justkeepswimming.net/KMTest/|http://localhost/install.html/</InstallUrlHistory>
-    <SupportUrlHistory>
-    </SupportUrlHistory>
+    <SupportUrlHistory>http://justkeepswimming.net/KeyMapper/support.aspx</SupportUrlHistory>
     <UpdateUrlHistory>
     </UpdateUrlHistory>
     <BootstrapperUrlHistory>
