@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace KMBlog
 {
-    public class post
+    public class Post
     {
 
         public int ID { get; private set; }
@@ -11,19 +11,15 @@ namespace KMBlog
         public List<Category> Categories { get; private set; }
         public DateTime Postdate { get; set; }
 
-        public post CreateNewPost()
+        public static Post CreateNewPost()
         {
-            Title = String.Empty;
-            Postdate = DateTime.Now;
-            Categories = new List<Category>();
+			Post p = new Post();
+            p.Title = String.Empty;
+            p.Postdate = DateTime.Now;
+            p.Categories = new List<Category>();
+
+			return p;
         }
-
-        public void AddCategoryToPost() { }
-
-        public void DeleteCategoryFromPost() { }
-
-        public void DeletePost(int id) { }
-
 
     }
 }

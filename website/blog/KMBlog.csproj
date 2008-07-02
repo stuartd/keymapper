@@ -66,6 +66,10 @@
     <Compile Include="admin\post-edit.aspx.designer.cs">
       <DependentUpon>post-edit.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Code\blog.cs" />
+    <Compile Include="Code\category.cs" />
+    <Compile Include="Code\IBlogData.cs" />
+    <Compile Include="Code\post.cs" />
     <Compile Include="default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>default.aspx</DependentUpon>

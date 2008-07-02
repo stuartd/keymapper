@@ -10,12 +10,5 @@ namespace KMBlog
         public string Title { get; set; }
         // private List<post> _posts;
 
-        public post GetPostByID(int id)
-        {
-            // DataProvider dp = new dataProvider();
-            // return dp.GetPostByID(id);
-
-            
-        }
     }
 }
