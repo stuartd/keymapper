@@ -66,8 +66,6 @@
     <Compile Include="admin\post-edit.aspx.designer.cs">
       <DependentUpon>post-edit.aspx</DependentUpon>
     </Compile>
-    <Compile Include="App_Data\blog.cs" />
-    <Compile Include="App_Data\category.cs" />
     <Compile Include="default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>default.aspx</DependentUpon>
@@ -89,7 +87,6 @@
     <Compile Include="login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="App_Data\post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
