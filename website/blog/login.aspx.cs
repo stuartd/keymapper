@@ -30,8 +30,8 @@ namespace KMBlog
 				SqlCommand sc = new SqlCommand("CheckUser", conn);
 				sc.CommandType = CommandType.StoredProcedure;
 
-				sc.Parameters.AddWithValue("username", Login1.UserName);
-				sc.Parameters.AddWithValue("password", Login1.Password);
+				sc.Parameters.AddWithValue("username", KMLogin.UserName);
+				sc.Parameters.AddWithValue("password", KMLogin.Password);
 				SqlParameter userlevel = new SqlParameter("userlevel", SqlDbType.Int);
 
 				userlevel.Direction = ParameterDirection.Output;
