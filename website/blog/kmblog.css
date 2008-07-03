@@ -6,16 +6,7 @@
 	display: none;
 }
 
-#post
-{
-}
-
-
-#post_timestamp
-{
-}
-
-#editarea
+#post, #post_timestamp, #editarea, #controls
 {
 }
 
@@ -24,47 +15,10 @@
 	width: 80%;
 }
 
-#controls
-{
-}
-
-.loginBox
-{
-	position: relative ;
-	margin: 50px ;
-}
-.loginLabel
-{
-	position: absolute ;
-	left: 0 ;
-	width: 30px ;
-}
-
-.loginTitle
-{
-	position: absolute ;
-	left: 0 ;
-}
-
-.loginTextBox
-{
-	position: absolute ;
-	left: 30px ;
-	width: 30px ;
-}
-
-
-
 .dateerrortext
 {
 	color: Red;
 	clear: both;
-}
-
-.controls
-{
-	border: 1px solid black;
-	background-color: rgb(235, 235, 235);
 }
 
 /* Main page */
@@ -90,6 +44,8 @@ div.comment
 	border-right: 1px solid black;
 	border-bottom: 1px solid black;
 	padding: 20px;
+	margin-bottom: 10px ;
+	position: relative ;
 }
 
 
@@ -162,9 +118,8 @@ div.comment
 
 .commenthead
 {
-	display: block;
 	background-color: #abc;
-	border: 1px solid silver;
+	border: 2px solid silver;
 }
 
 .commenter
@@ -174,15 +129,14 @@ div.comment
 
 .commenturl
 {
-	right: 10px;
+	position: absolute ;
+	right: 30px;
 }
 
 .commentbody
 {
-	background-color: White;
-	display: block;
+	blackground-color: White;
 }
-
 
 
 .postbody
@@ -200,15 +154,14 @@ blockquote
 	border: 1px solid black;
 	border-left: 5px solid #A44;
 	padding: 10px;
-	margin-top: 10px;
-	margin-bottom: 10px;
+	margin: 10px 0;
 }
 
 
 code
 {
 	font-family: Monaco, "Lucida Console" , "Courier New" , Courier, monospace;
-	background-color: #DDD;
+	background-color: #EEE;
 }
 
 

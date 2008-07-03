@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace KMBlog
-{
+
     public class Category
     {
         public int ID { get; private set; }
@@ -12,10 +11,22 @@ namespace KMBlog
             return new Category();
         }
 
-        private Category()
+        public Category()
         {
             ID = 0;
             Name = String.Empty;
         }
+
+		public Category(int categoryID, string categoryName)
+		{
+			ID = categoryID;
+			Name = categoryName;
+		}
+
+
+		public bool Save()
+		{
+			return true;
+		}
     }
-}
+
