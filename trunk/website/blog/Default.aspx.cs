@@ -5,6 +5,7 @@ using System.Data.SqlTypes;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Text;
+using System.Collections.Generic;
 
 
 namespace KMBlog
@@ -19,8 +20,6 @@ namespace KMBlog
         {
              _connstring = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
            //  _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
-
-
 
             GetPosts();
         }
@@ -45,91 +44,64 @@ namespace KMBlog
 
         private void GetPosts()
         {
-
-            
-
+    
             DataTable categories = new DataTable();
-            DataTable posts = new DataTable();
+            // DataTable posts = new DataTable();
             DataTable comments = new DataTable();
 
-            using (SqlConnection connection = new SqlConnection(_connstring))
-            {
-                if (connection != null)
-                {
-                    connection.Open();
-
-                    SqlCommand sc = new SqlCommand();
-                    SqlDataReader reader;
+			List<Post> posts ;
+			
+			IDataAccess da = DataAccess.CreateInstance() ;
 
                     // A request for a specific post overrides all other parameters
                     int postID = IsQueryForSpecificPost();
                     if (postID != 0)
                     {
-                        sc.CommandText = "GetPostByID";
-                        sc.Parameters.AddWithValue("PostID", postID);
+					Post post = da.GetPostByID(postID) ;
+						posts = new List<Post>(1) ;
+                       posts.Add(post) ;
                         _singlePost = true;
+
                     }
                     else
                     {
-                        sc.CommandText = "GetAllPosts";
-
-                        // Parameters for GetAllPosts
-                        // sc.Parameters.AddWithValue("DateFrom", SqlDateTime.MinValue) ;
-                        // sc.Parameters.AddWithValue("DateTo", SqlDateTime.MaxValue);
-                        // sc.Parameters.AddWithValue("NumberOfPosts", 10); TODO: Get from settings.
-                        // sc.Parameters.AddWithValue("CategoryID", 0);
 
                         int categoryID = IsQueryForSpecificCategory();
-                        if (categoryID > 0)
-                            sc.Parameters.AddWithValue("CategoryID", categoryID);
-
                         DateTime dateFrom, dateTo;
-                        if (IsQueryForSpecificDateRange(out dateFrom, out dateTo))
-                        {
-                            sc.Parameters.AddWithValue("DateFrom", dateFrom);
-                            sc.Parameters.AddWithValue("DateTo", dateTo);
-                        }
+                        GetDateRangeFromQueryString(out dateFrom, out dateTo) ;
 
+						posts = da.GetAllPosts(categoryID, dateFrom, dateTo) ;
+               
                     }
 
-                    sc.CommandType = CommandType.StoredProcedure;
-                    sc.Connection = connection;
+					//if (_singlePost && posts.Count > 0) // Reuse parameter to get comments
+					//{
+					//    sc.CommandText = "GetCommentsByPost";
+					//    using (reader = sc.ExecuteReader())
+					//    {
+					//        comments.Load(reader);
+					//    }
+					//}
 
-                    using (reader = sc.ExecuteReader())
-                        posts.Load(reader);
+					//// Reuse command object to get category list
+					//sc.Parameters.Clear();
 
-                    if (_singlePost && posts.Rows.Count > 0) // Reuse parameter to get comments
-                    {
-                        sc.CommandText = "GetCommentsByPost";
-                        using (reader = sc.ExecuteReader())
-                        {
-                            comments.Load(reader);
-                        }
-                    }
+					//sc.CommandText = "GetAllCategories";
+					//using (reader = sc.ExecuteReader())
+					//    categories.Load(reader);
 
-                    // Reuse command object to get category list
-                    sc.Parameters.Clear();
-
-                    sc.CommandText = "GetAllCategories";
-                    using (reader = sc.ExecuteReader())
-                        categories.Load(reader);
-
-
-                }
-            }
-
-            categoriesRepeater.DataSource = categories;
-            categoriesRepeater.DataBind();
+           //  categoriesRepeater.DataSource = categories;
+        //     categoriesRepeater.DataBind();
 
             postsRepeater.DataSource = posts;
             postsRepeater.DataBind();
 
 
-            if (_singlePost)
-            {
-                commentsRepeater.DataSource = comments;
-                commentsRepeater.DataBind();
-            }
+			//if (_singlePost)
+			//{
+			//    commentsRepeater.DataSource = comments;
+			//    commentsRepeater.DataBind();
+			//}
         }
 
         /// <summary>
@@ -186,7 +158,7 @@ namespace KMBlog
 
 
 
-        private bool IsQueryForSpecificDateRange(out DateTime dateFrom, out DateTime dateTo)
+		private void GetDateRangeFromQueryString(out DateTime dateFrom, out DateTime dateTo)
         {
 
             NameValueCollection parameters = Request.QueryString;
@@ -234,7 +206,7 @@ namespace KMBlog
             {
                 dateFrom = SqlDateTime.MinValue.Value;
                 dateTo = SqlDateTime.MaxValue.Value;
-                return false;
+                return ;
             }
 
             if (month < 1 || month > 12)
@@ -255,8 +227,6 @@ namespace KMBlog
                 dateFrom = new DateTime(year, month, day, 0, 0, 0);
                 dateTo = new DateTime(year, month, day, 23, 59, 59);
             }
-
-            return true;
         }
 
         public void GetCommentsForPost(int postID)
