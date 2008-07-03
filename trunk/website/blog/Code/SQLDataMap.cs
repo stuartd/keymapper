@@ -24,11 +24,11 @@ using System.Collections.Generic;
 
 			p.Categories = new List<Category>();
 
-			reader.NextResult();
-			while (reader.Read())
-			{
-				p.Categories.Add(new Category(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"])));
-			}
+			//reader.NextResult();
+			//while (reader.Read())
+			//{
+			//    p.Categories.Add(new Category(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"])));
+			//}
 
 			return p;
 
