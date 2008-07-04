@@ -5,7 +5,7 @@ using System.Data.SqlTypes;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Text;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 
 namespace KMBlog
@@ -49,7 +49,7 @@ namespace KMBlog
             // DataTable posts = new DataTable();
             DataTable comments = new DataTable();
 
-			List<Post> posts ;
+			Collection<Post> posts ;
 			
 			IDataAccess da = DataAccess.CreateInstance() ;
 
@@ -58,7 +58,7 @@ namespace KMBlog
                     if (postID != 0)
                     {
 					Post post = da.GetPostByID(postID) ;
-						posts = new List<Post>(1) ;
+					posts = new Collection<Post>();
                        posts.Add(post) ;
                         _singlePost = true;
 

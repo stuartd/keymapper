@@ -15,11 +15,9 @@ namespace KMBlog
         {
             _connstring = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
             //  _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
-
-            
+        
 
             GetPostList();
-
 
         }
 
