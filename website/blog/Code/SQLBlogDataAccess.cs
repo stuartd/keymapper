@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 
 public class SQLBlogDataAccess : IDataAccess
@@ -10,26 +10,26 @@ public class SQLBlogDataAccess : IDataAccess
 
 	#region IDataAccess Members
 
-	public System.Collections.Generic.List<Post> GetAllPosts()
+	public Collection<Post> GetAllPosts()
 	{
 		return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value);
 	}
 
-	public System.Collections.Generic.List<Post> GetAllPosts(int categoryID)
+	public Collection<Post> GetAllPosts(int categoryID)
 	{
 		return GetAllPosts(categoryID, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value);
 	}
 
-	public System.Collections.Generic.List<Post> GetAllPosts(DateTime startDate, DateTime endDate)
+	public Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate)
 	{
 		return GetAllPosts(0, startDate, endDate);
 	}
 
-	public System.Collections.Generic.List<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
+	public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
 	{
 
 		int numberOfPosts = 10;
-		List<Post> posts = new List<Post>();
+		Collection<Post> posts = new Collection<Post>();
 
 		using (SqlConnection connection = new SqlConnection(GetConnectionString()))
 		{
@@ -38,7 +38,7 @@ public class SQLBlogDataAccess : IDataAccess
 				connection.Open();
 
 				SqlCommand sc = new SqlCommand();
-				
+
 				sc.CommandText = "GetAllPosts";
 
 				sc.Parameters.AddWithValue("NumberOfPosts", numberOfPosts);
@@ -51,11 +51,7 @@ public class SQLBlogDataAccess : IDataAccess
 
 				using (SqlDataReader reader = sc.ExecuteReader())
 				{
-					while (reader.Read())
-					{
-						Post p = SQLDataMap.CreatePostFromReader(reader);
-						posts.Add(p);
-					}
+					posts = SQLDataMap.CreatePostsFromReader(reader);
 				}
 
 
@@ -116,9 +112,9 @@ public class SQLBlogDataAccess : IDataAccess
 		throw new NotImplementedException();
 	}
 
-	public List<Comment> GetCommentsForPost(int postID)
+	public Collection<Comment> GetCommentsForPost(int postID)
 	{
-		return new List<Comment>();
+		return new Collection<Comment>();
 	}
 
 	#endregion

@@ -9,7 +9,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 
 /// <summary>
@@ -19,13 +19,13 @@ public interface IDataAccess
 {
 	#region posts
 
-	List<Post> GetAllPosts();
+	Collection<Post> GetAllPosts();
 
-	List<Post> GetAllPosts(int categoryID);
+	Collection<Post> GetAllPosts(int categoryID);
 
-	List<Post> GetAllPosts(DateTime startDate, DateTime endDate);
+	Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate);
 
-	List<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate);
+	Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate);
 
 	Post GetPostByID(int postID);
 

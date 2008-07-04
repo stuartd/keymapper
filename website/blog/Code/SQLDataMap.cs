@@ -1,16 +1,36 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Linq;
 
 
 
-	public class SQLDataMap
+public class SQLDataMap
+{
+
+	public static Collection<Post> CreatePostsFromReader(SqlDataReader reader)
 	{
+		// First result set is the postcategories.
 
-		public static Post CreatePostFromReader(SqlDataReader reader)
+		// Put these in a dictionary.
+		Dictionary<int, Category> postcats = new Dictionary<int, Category>();
+
+		while (reader.Read())
 		{
-			// First result set is the post..
+			postcats.Add(Convert.ToInt32(reader["postID"]), 
+				new Category(Convert.ToInt32(reader["categoryID"]), Convert.ToString(reader["Name"])));
+		}
+
+		// Second resultset is the categories
+		reader.NextResult();
+
+				Collection<Post> postlist = new Collection<Post>();
+
+		while (reader.Read())
+		{
+
 			Post p = new Post();
 
 			p.ID = Convert.ToInt32(reader["ID"]);
@@ -19,21 +39,24 @@ using System.Collections.Generic;
 			p.Body = Convert.ToString(reader["Body"]);
 			p.Stub = Convert.ToString(reader["Stub"]);
 			p.CommentCount = Convert.ToInt32(reader["CommentCount"]);
-
-			// .. then the categories.
-
 			p.Categories = new List<Category>();
 
-			//reader.NextResult();
-			//while (reader.Read())
-			//{
-			//    p.Categories.Add(new Category(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"])));
-			//}
+			// .. then the categories.
+			IEnumerable<Category> cats =
+				from entry in postcats
+				where (entry.Key == p.ID)
+				select entry.Value;
 
-			return p;
+			foreach (Category cat in cats)
+				p.Categories.Add(cat);
 
+			postlist.Add(p);
 		}
 
+		return postlist;
 
 	}
+
+
+}
 
