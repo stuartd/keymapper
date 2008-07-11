@@ -10,52 +10,106 @@ using System.Linq;
 public class SQLDataMap
 {
 
-	public static Collection<Post> CreatePostsFromReader(SqlDataReader reader)
-	{
-		// First result set is the postcategories.
+    public static Collection<Comment> CreateCommentsFromReader(SqlDataReader reader)
+    {
 
-		// Put these in a dictionary.
-		Dictionary<int, Category> postcats = new Dictionary<int, Category>();
+        Collection<Comment> commentlist = new Collection<Comment>();
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
 
-		while (reader.Read())
-		{
-			postcats.Add(Convert.ToInt32(reader["postID"]), 
-				new Category(Convert.ToInt32(reader["categoryID"]), Convert.ToString(reader["Name"])));
-		}
+                Comment c = new Comment();
 
-		// Second resultset is the categories
-		reader.NextResult();
+                c.CommentBody = Convert.ToString(reader["comment"]);
+                c.Commenter = Convert.ToString(reader["commenter_name"]);
+                c.CommenterEmail = Convert.ToString(reader["commenter_email"]);
+                c.CommenterURL = Convert.ToString(reader["commenter_url"]);
 
-				Collection<Post> postlist = new Collection<Post>();
+                commentlist.Add(c);
+            }
+        }
 
-		while (reader.Read())
-		{
+        return commentlist;
+     
 
-			Post p = new Post();
 
-			p.ID = Convert.ToInt32(reader["ID"]);
-			p.Title = Convert.ToString(reader["Title"]);
-			p.Postdate = Convert.ToDateTime(reader["PostDate"]);
-			p.Body = Convert.ToString(reader["Body"]);
-			p.Stub = Convert.ToString(reader["Stub"]);
-			p.CommentCount = Convert.ToInt32(reader["CommentCount"]);
-			p.Categories = new List<Category>();
 
-			// .. then the categories.
-			IEnumerable<Category> cats =
-				from entry in postcats
-				where (entry.Key == p.ID)
-				select entry.Value;
+    }
 
-			foreach (Category cat in cats)
-				p.Categories.Add(cat);
+    public static Collection<Post> CreatePostsFromReader(SqlDataReader reader)
+    {
+        // First result set is the postcategories. 
 
-			postlist.Add(p);
-		}
+        Dictionary<int, Category> postcats = new Dictionary<int, Category>() ;
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
 
-		return postlist;
+                // Oops - key can't be PostID as key has to be unique. Need to use a different collection..
+                int categoryID = Convert.ToInt32(reader["categoryID"]) ;
+                int postHash = (Convert.ToInt32(reader["postID"]) * 10000) + categoryID ;
+                postcats.Add(postHash, new Category(categoryID, Convert.ToString(reader["Name"])));
+            }
+        }
+        // Second resultset is the post(s)
+        reader.NextResult();
 
-	}
+        Collection<Post> postlist = new Collection<Post>();
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+
+                Post p = new Post();
+
+                p.ID = Convert.ToInt32(reader["ID"]);
+                p.Title = Convert.ToString(reader["Title"]);
+                p.Postdate = Convert.ToDateTime(reader["PostDate"]);
+                p.Body = Convert.ToString(reader["Body"]);
+                p.Stub = Convert.ToString(reader["Stub"]);
+                p.CommentCount = Convert.ToInt32(reader["CommentCount"]);
+                p.Categories = new Collection<Category>();
+
+                // .. then the categories.
+                IEnumerable<Category> cats =
+                    from entry in postcats
+                    where ((entry.Key / 10000) == p.ID)
+                    select entry.Value;
+
+                foreach (Category cat in cats)
+                    p.Categories.Add(cat);
+
+                postlist.Add(p);
+            }
+        }
+        return postlist;
+
+    }
+
+    public static Collection<Category> CreateCategoriesFromReader(SqlDataReader reader)
+    {
+        Collection<Category> catlist = new Collection<Category>();
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+
+                Category c = new Category();
+
+                c.ID = Convert.ToInt32(reader["ID"]);
+                c.Name = Convert.ToString(reader["Name"]);
+
+                catlist.Add(c);
+            }
+        }
+
+        return catlist;
+
+
+    }
+
 
 
 }

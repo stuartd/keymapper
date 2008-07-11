@@ -23,13 +23,22 @@ namespace KMBlog {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// blogtitle control.
+        /// posttitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox blogtitle;
+        protected global::System.Web.UI.WebControls.TextBox posttitle;
+        
+        /// <summary>
+        /// CatList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CatList;
         
         /// <summary>
         /// blogpost control.
@@ -38,34 +47,25 @@ namespace KMBlog {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTextArea blogpost;
+        protected global::System.Web.UI.WebControls.TextBox blogpost;
         
         /// <summary>
-        /// hiddenPostID control.
+        /// stublabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenPostID;
+        protected global::System.Web.UI.WebControls.Label stublabel;
         
         /// <summary>
-        /// submitpost control.
+        /// poststub control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button submitpost;
-        
-        /// <summary>
-        /// canceledit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button canceledit;
+        protected global::System.Web.UI.WebControls.TextBox poststub;
         
         /// <summary>
         /// postday control.
@@ -102,6 +102,42 @@ namespace KMBlog {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label date_error;
+        
+        /// <summary>
+        /// hiddenPostID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenPostID;
+        
+        /// <summary>
+        /// submitpost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button submitpost;
+        
+        /// <summary>
+        /// savepost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button savepost;
+        
+        /// <summary>
+        /// canceledit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button canceledit;
         
         /// <summary>
         /// resultlabel control.

@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Configuration;
+using System.Collections.ObjectModel;
 
 namespace KMBlog
 {
@@ -15,7 +16,7 @@ namespace KMBlog
         {
             _connstring = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
             //  _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
-        
+
 
             GetPostList();
 
@@ -23,34 +24,15 @@ namespace KMBlog
 
         void GetPostList()
         {
+            IDataAccess da = DataAccess.CreateInstance();
 
-            DataTable posts = new DataTable();
+            Collection<Post> posts = da.GetAllPosts();
 
-            using (SqlConnection connection = new SqlConnection(_connstring))
-            {
-                if (connection != null)
-                {
-                    connection.Open();
+            postsRepeater.DataSource = posts;
+            postsRepeater.DataBind();
 
-                    SqlCommand sc = new SqlCommand();
-                    SqlDataReader reader;
-
-                    sc.CommandText = "GetPostList";
-                    sc.Parameters.AddWithValue("NumberOfPosts", 10);
-
-                    sc.CommandType = CommandType.StoredProcedure;
-                    sc.Connection = connection;
-
-                    using (reader = sc.ExecuteReader())
-                        posts.Load(reader);
-
-
-                    postsRepeater.DataSource = posts;
-                    postsRepeater.DataBind();
-
-                }
-
-            }
         }
+
+
     }
 }

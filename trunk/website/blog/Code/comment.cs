@@ -13,6 +13,7 @@ using System.Xml.Linq;
 
 	public class Comment
 	{
+        public int ID { get; set; }
 		public String Commenter { get; set; }
 		public String CommenterURL { get; set; }
 		public String CommenterEmail { get; set; }

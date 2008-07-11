@@ -19,33 +19,35 @@ public interface IDataAccess
 {
 	#region posts
 
-	Collection<Post> GetAllPosts();
+    Collection<Post> GetAllPosts();
 
-	Collection<Post> GetAllPosts(int categoryID);
+    //Collection<Post> GetAllPosts(int categoryID);
 
-	Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate);
+    //Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate);
 
-	Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate);
+    Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate);
+
+	Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate, int NumberOfPosts);
 
 	Post GetPostByID(int postID);
 
-	bool AddPost(Post p);
-
-	bool EditPost(Post p);
+	int SavePost(Post p);
 
 	bool DeletePost(int postID);
+
+    bool DoesStubExist(string stub);
 
 	#endregion
 
 	#region categories
 
-	bool AddCategoryToPost(int postID, int catID);
-
-	bool DeleteCategoryFromPost(int postID, int catID);
+    void SyncCategories(int postID, Collection<int> categories);
 
 	bool AddCategory(int categoryID, string categoryName);
 
 	bool DeleteCategory(int categoryID);
+
+    Collection<Category> GetAllCategories();
 
 	#endregion
 
@@ -55,7 +57,18 @@ public interface IDataAccess
 
 	bool DeleteComment(int commentID);
 
+    Collection<Comment> GetCommentsForPost(int postID);
+
 	#endregion
+
+
+    #region Users
+
+    int GetUserLevel(string username, string passwordhash);
+
+
+    #endregion
+
 }
 
 internal class DataAccess
