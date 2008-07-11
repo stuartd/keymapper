@@ -5,288 +5,328 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.UI;
 using System.Text;
+using System.Collections.ObjectModel;
+using System.Web.UI.WebControls;
 
 
 namespace KMBlog
 {
-	public partial class post_edit : System.Web.UI.Page
-	{
-
-		public void CancelEdit(object sender, EventArgs e)
-		{
-			Response.Redirect("admin.aspx");
-		}
-
-		protected void Page_Load(object sender, EventArgs e)
-		{
-
-			if (Page.IsPostBack)
-			{
-				if (SavePost())
-				{
-					resultlabel.Text = "Your post has been saved.";
-				}
-				else
-				{
-					resultlabel.Text = "There are some missing fields: your post has not been saved.";
-				}
-				return;
-			}
-
-			postmonth.Items.Add("January");
-			postmonth.Items.Add("February");
-			postmonth.Items.Add("March");
-			postmonth.Items.Add("April");
-			postmonth.Items.Add("May");
-			postmonth.Items.Add("June");
-			postmonth.Items.Add("July");
-			postmonth.Items.Add("August");
-			postmonth.Items.Add("September");
-			postmonth.Items.Add("October");
-			postmonth.Items.Add("November");
-			postmonth.Items.Add("December");
-
-			int postID = GetPostIDFromQueryString();
-
-			if (postID != 0)
-			{
-
-				hiddenPostID.Value = postID.ToString();
-
-				string cs = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
-
-				using (SqlConnection connection = new SqlConnection(cs))
-				{
-					if (connection != null)
-					{
-
-						connection.Open();
-						SqlCommand sc = new SqlCommand();
-
-						sc.Connection = connection;
-
-						sc.CommandText = "GetPostByID";
-						sc.Parameters.AddWithValue("PostID", postID);
-						sc.CommandType = CommandType.StoredProcedure;
-
-						form1.Style.Add("display", "none");
-
-						using (SqlDataReader dr = sc.ExecuteReader())
-						{
-							while (dr.Read())
-							{
-								// Only one result will be returned.
-								form1.Style.Remove("display");
-								form1.Style.Add("display", "block");
-								blogpost.InnerHtml = dr["body"].ToString();
-								blogtitle.Text = dr["title"].ToString();
-								DateTime postdate = (DateTime)dr["postdate"];
-								postyear.Text = postdate.Year.ToString();
-								postday.Text = postdate.Day.ToString();
-								postmonth.Text = postdate.ToString("MMMM");
-								hiddenPostID.Value = postID.ToString();
-
-
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				// New post.
-				postyear.Text = DateTime.Now.Year.ToString();
-				postday.Text = DateTime.Now.Day.ToString();
-				postmonth.Text = DateTime.Now.ToString("MMMM");
-			}
-		}
-
-
-		protected int GetPostIDFromQueryString()
-		{
-
-			NameValueCollection parameters = Request.QueryString;
-
-			string[] keys = parameters.AllKeys;
-
-			int postID = 0;
-			foreach (string key in keys)
-			{
-				if (key.ToUpperInvariant() == "P")
-				{
-					foreach (string value in parameters.GetValues(key))
-					{
-						if (System.Int32.TryParse(value, out postID))
-						{
-							break;
-						}
-					}
-				}
-			}
-			return postID;
-		}
+    public partial class post_edit : System.Web.UI.Page
+    {
+
+        public void CancelEdit(object sender, EventArgs e)
+        {
+            Response.Redirect("admin.aspx");
+        }
+
+        private void LoadMonthNames()
+        {
+            postmonth.Items.Add("January");
+            postmonth.Items.Add("February");
+            postmonth.Items.Add("March");
+            postmonth.Items.Add("April");
+            postmonth.Items.Add("May");
+            postmonth.Items.Add("June");
+            postmonth.Items.Add("July");
+            postmonth.Items.Add("August");
+            postmonth.Items.Add("September");
+            postmonth.Items.Add("October");
+            postmonth.Items.Add("November");
+            postmonth.Items.Add("December");
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            if (Page.IsPostBack == false)
+            {
+
+                LoadMonthNames();
+
+                GetPost();
+            }
+        }
+
+        private void GetPost()
+        {
+            int postID = GetPostIDFromQueryString();
+
+            IDataAccess da = DataAccess.CreateInstance();
+
+            Collection<Category> allCats = da.GetAllCategories();
+
+            if (postID != 0)
+            {
+
+                hiddenPostID.Value = postID.ToString();
+
+                Post p = da.GetPostByID(postID);
+
+                if (p == null)
+                    form1.Style.Add("display", "none");
+                else
+                {
+
+                    blogpost.Text = p.Body;
+                    posttitle.Text = p.Title;
+                    poststub.Text = p.Stub;
+                    DateTime postdate = p.Postdate;
+                    postyear.Text = postdate.Year.ToString();
+                    postday.Text = postdate.Day.ToString();
+                    postmonth.Text = postdate.ToString("MMMM");
+                    hiddenPostID.Value = postID.ToString();
+
+                    // Select the categories this post belongs to
+
+                    foreach (Category cat in allCats)
+                    {
+                        System.Web.UI.WebControls.ListItem item = new System.Web.UI.WebControls.ListItem();
+                        item.Text = cat.Name;
+                        bool postInCategory = false;
+                        foreach (Category c in p.Categories)
+                        {
+                            if (c.ID == cat.ID && c.Name == cat.Name)
+                            {
+                                postInCategory = true;
+                                break;
+                            }
+                        }
+                        item.Selected = postInCategory;
+                        item.Value = cat.ID.ToString();
+                        CatList.Items.Add(item);
+                    }
+
+                }
+            }
+            else
+            {
+                // New post.
+                postyear.Text = DateTime.Now.Year.ToString();
+                postday.Text = DateTime.Now.Day.ToString();
+                postmonth.Text = DateTime.Now.ToString("MMMM");
+                poststub.Visible = false;
+                stublabel.Visible = false;
+
+                foreach (Category cat in allCats)
+                {
+                    System.Web.UI.WebControls.ListItem item = new System.Web.UI.WebControls.ListItem();
+                    item.Text = cat.Name;
+                    item.Value = cat.ID.ToString();
+                    CatList.Items.Add(item);
+                }
+            }
 
-		private DateTime GetPostDate()
-		{
-			DateTime dt = DateTime.MinValue;
 
-			if (String.IsNullOrEmpty(postday.Text) || String.IsNullOrEmpty(postmonth.Text) || String.IsNullOrEmpty(postyear.Text))
-				return dt;
 
-			string postdate = postday.Text + " " + postmonth.Text + " " + postyear.Text;
 
-			DateTime.TryParse(postdate, out dt);
-			return dt;
+        }
 
-		}
 
-		private string GetPostDateErrors()
-		{
+        protected int GetPostIDFromQueryString()
+        {
 
-			if (String.IsNullOrEmpty(postday.Text) || String.IsNullOrEmpty(postmonth.Text) || String.IsNullOrEmpty(postyear.Text))
-				return "The Day, Month and Year fields must all be entered";
+            NameValueCollection parameters = Request.QueryString;
 
-			// So why is this not a valid date?
+            string[] keys = parameters.AllKeys;
 
-			int year = Int32.Parse(postyear.Text) ;
-			if (year < 1 || year > 9999)
-				return "The Year must be between 0001 and 9999";
+            int postID = 0;
+            foreach (string key in keys)
+            {
+                if (key.ToUpperInvariant() == "P")
+                {
+                    foreach (string value in parameters.GetValues(key))
+                    {
+                        if (System.Int32.TryParse(value, out postID))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            return postID;
+        }
 
-			// Check the month text is valid:
+        private DateTime GetPostDate()
+        {
+            DateTime dt = DateTime.MinValue;
 
-			DateTime dt;
-			int month ;
+            if (String.IsNullOrEmpty(postday.Text) || String.IsNullOrEmpty(postmonth.Text) || String.IsNullOrEmpty(postyear.Text))
+                return dt;
 
-			if (DateTime.TryParse("01 " + postmonth.Text + " 1900", out dt) == false)
-				return postmonth.Text + " is not a valid month" ;
-			else
-				month = dt.Month ;
+            string postdate = postday.Text + " " + postmonth.Text + " " + postyear.Text;
 
-			// Now check that the day is valid for the month and year.
+            DateTime.TryParse(postdate, out dt);
+            return dt;
 
-			int day = Int32.Parse(postday.Text);
-			if (day < 1 || day > DateTime.DaysInMonth(year, month))
-				return day.ToString() + " is not a valid day for " + postmonth.Text + " " + postyear.Text;
+        }
 
-			return "The date is not valid";
+        private string GetPostDateErrors()
+        {
 
+            if (String.IsNullOrEmpty(postday.Text) || String.IsNullOrEmpty(postmonth.Text) || String.IsNullOrEmpty(postyear.Text))
+                return "The Day, Month and Year must all be entered and can't be blank";
 
-		}
+            // So why is this not a valid date?
 
-		public bool SavePost()
-		{
+            int year = Int32.Parse(postyear.Text);
+            if (year < 1 || year > 9999)
+                return "The Year must be between 0001 and 9999";
 
+            // Check the month text is valid:
 
-			Page.Validate();
+            DateTime dt;
+            int month;
 
-			bool pageIsValid = Page.IsValid ;
+            if (DateTime.TryParse("01 " + postmonth.Text + " 1900", out dt) == false)
+                return postmonth.Text + " is not a valid month";
+            else
+                month = dt.Month;
 
-			DateTime dt = GetPostDate();
-			if (dt == DateTime.MinValue)
-			{
-				string errors = GetPostDateErrors();
-				date_error.Text = errors;
-				pageIsValid = false;
-			}
-			else
-				date_error.Text = String.Empty;
+            // Now check that the day is valid for the month and year.
 
-			if (pageIsValid == false)
-			{
-				return false;
-			}
+            int day = Int32.Parse(postday.Text);
+            if (day < 1 || day > DateTime.DaysInMonth(year, month))
+                return day.ToString() + " is not a valid day for " + postmonth.Text + " " + postyear.Text;
 
-			int postID;
-			if (Int32.TryParse(hiddenPostID.Value, out postID) == false)
-				postID = 0;
+            return "The date is not valid";
 
-			string cs = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
 
-			using (SqlConnection connection = new SqlConnection(cs))
-			{
-				if (connection == null)
-					return false;
+        }
 
-				connection.Open();
+        public void SavePost(object sender, CommandEventArgs e)
+        {
 
-				SqlCommand sc;
+            Page.Validate();
 
-				if (postID == 0)
-				{
-					sc = new SqlCommand("CreatePost");
-                    sc.Parameters.AddWithValue("stub", GetStub(blogtitle.Text));
-				}
-				else
-				{
-					sc = new SqlCommand("EditPost");
-					sc.Parameters.AddWithValue("PostID", postID);
-				}
+            bool pageIsValid = Page.IsValid;
 
-				sc.Parameters.AddWithValue("title", blogtitle.Text);
-				sc.Parameters.AddWithValue("body", blogpost.InnerHtml);
-                sc.Parameters.AddWithValue("postdate", dt);
+            DateTime dt = GetPostDate();
+            if (dt == DateTime.MinValue)
+            {
+                string errors = GetPostDateErrors();
+                date_error.Text = errors;
+                pageIsValid = false;
+            }
+            else
+                date_error.Text = String.Empty;
 
-				sc.Connection = connection;
-				sc.CommandType = CommandType.StoredProcedure;
+            if (pageIsValid == false)
+            {
+                return;
+            }
 
-				int result = sc.ExecuteNonQuery();
+            Post p = new Post();
 
-				return (result > -2);
+            int postID;
+            if (Int32.TryParse(hiddenPostID.Value, out postID) == false)
+                postID = 0;
 
-			}
+            p.ID = postID;
 
-		}
+            p.Stub = GetStub(posttitle.Text);
 
-		string GetStub(string title)
-		{
-			string stub = title.Replace(" ", "-").ToLower();
-			int suffix = 1;
-			while (DoesStubAlreadyExist(stub) == true)
-			{
-				stub += suffix.ToString();
-				suffix++;
-			}
+            p.Title = posttitle.Text;
+            p.Body = blogpost.Text;
+            p.Postdate = dt;
 
-			return stub;
+            p.Published = (e.CommandName == "Publish" ? 1 : 0);
 
+            IDataAccess da = DataAccess.CreateInstance();
 
-		}
+            int savedPostID = da.SavePost(p) ;
+           
+            SyncCategories(postID);
 
-		bool DoesStubAlreadyExist(string stub)
-		{
+            if (postID == 0)
+                Response.Redirect("post-edit.aspx?p=" + Convert.ToString(savedPostID));
 
-			string cs = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
+        }
 
-			using (SqlConnection connection = new SqlConnection(cs))
-			{
-				if (connection != null)
-				{
+        bool SyncCategories(int postID)
+        {
+            Collection<int> categories = new Collection<int>();
 
-					connection.Open();
-					SqlCommand sc = new SqlCommand();
+            foreach (System.Web.UI.WebControls.ListItem item in CatList.Items)
+            {
+                if (item.Selected)
+                {
+                    int catID;
+                    if (Int32.TryParse(item.Value, out catID))
+                        categories.Add(catID);
 
-					sc.Connection = connection;
+                }
+            }
 
-					sc.CommandText = "DoesStubExist";
-					sc.Parameters.AddWithValue("Stub", stub);
-					sc.CommandType = CommandType.StoredProcedure;
+            IDataAccess da = DataAccess.CreateInstance();
+            Collection<Category> postcats;
+            if (postID == 0)
+                postcats = new Collection<Category>();
+            else
+                postcats = (da.GetPostByID(postID).Categories);
 
-					bool exists = ((int)sc.ExecuteScalar() != 0);
+            bool categoriesChanged = false;
+            if (postcats.Count == categories.Count)
+            {
+                foreach (Category cat in postcats)
+                {
+                    if (categories.Contains(cat.ID) == false)
+                    {
+                        categoriesChanged = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                categoriesChanged = true;
+            }
 
-					return exists;
-				}
-				else
-				{
-					return true; // If can't determine, assume it exists
-				}
-			}
+            if (categoriesChanged == false)
+                return true;
 
-		}
+            da.SyncCategories(postID, categories);
 
 
-	}
+            return true;
+        }
+
+
+        string GetStub(string title)
+        {
+            string stub = title.Replace(" ", "-").ToLower();
+            int suffix = 1;
+            while (DoesStubAlreadyExist(stub) == true)
+            {
+                stub += suffix.ToString();
+                suffix++;
+            }
+
+            return stub;
+
+
+        }
+
+        bool DoesStubAlreadyExist(string stub)
+        {
+
+            IDataAccess da = DataAccess.CreateInstance();
+            return da.DoesStubExist(stub);
+
+        }
+
+     
+
+
+
+
+
+
+
+    }
 
 }
+
+
 
 
 

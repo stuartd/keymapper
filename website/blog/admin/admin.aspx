@@ -15,7 +15,7 @@
         <HeaderTemplate>
             <table border="0" cellpadding="0" cellspacing="0" width="40%">
                 <caption style="text-align: left">
-                    Manage posts</caption>
+                    <h4>Manage posts</h4></caption>
         </HeaderTemplate>
         <ItemTemplate>
             <tr>

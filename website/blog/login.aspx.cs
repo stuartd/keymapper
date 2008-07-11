@@ -11,53 +11,29 @@ using System.Web.UI.WebControls;
 
 namespace KMBlog
 {
-	public partial class login : System.Web.UI.Page
-	{
-		protected void Page_Load(object sender, EventArgs e)
-		{
+    public partial class login : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
-		}
+        }
 
-		protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
-		{
+        protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
+        {
+            IDataAccess da = DataAccess.CreateInstance();
 
-			string _connstring = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
+            int userlevel = da.GetUserLevel(KMLogin.UserName,
+                System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(KMLogin.Password, "SHA1"));
 
-			using (SqlConnection conn = new SqlConnection(_connstring))
-			{
-				conn.Open();
+            if (userlevel < 1)
+                e.Authenticated = false;
+            else
+            {
+                e.Authenticated = true;
+                // Store userlevel in encrypted cookie
+            }
 
-				SqlCommand sc = new SqlCommand("CheckUser", conn);
-				sc.CommandType = CommandType.StoredProcedure;
 
-				sc.Parameters.AddWithValue("username", KMLogin.UserName);
-				sc.Parameters.AddWithValue("password", KMLogin.Password);
-				SqlParameter userlevel = new SqlParameter("userlevel", SqlDbType.Int);
-
-				userlevel.Direction = ParameterDirection.Output;
-				sc.Parameters.Add(userlevel);
-
-				sc.ExecuteNonQuery();
-
-				string value = sc.Parameters["UserLevel"].Value.ToString();
-
-				if (String.IsNullOrEmpty(value))
-				{
-					e.Authenticated = false;
-				}
-				else
-				{
-					int authUserLevel;
-					if (Int32.TryParse(value, out authUserLevel))
-						if (authUserLevel > 0)
-						{
-							e.Authenticated = true;
-							// Do something with userlevel
-							return;
-						}
-					e.Authenticated = false;
-				}
-			}
-		}
-	}
+        }
+    }
 }

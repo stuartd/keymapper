@@ -1,5 +1,18 @@
 ﻿@import "http://justkeepswimming.net/keymapper/css/keymapper.css";
 
+/* Colours
+
+Gray: #d3d3d3
+Red: #A44
+Anchors: #06c;
+
+ */
+
+a
+{
+	color: #06c;
+}
+
 /* Hide main navigation */
 #sitenav
 {
@@ -9,6 +22,20 @@
 #post, #post_timestamp, #editarea, #controls
 {
 }
+
+.post
+{
+	margin-bottom: 2em;
+	border: 1px solid #d4d4d4;
+}
+
+#edit_categories
+{
+	float: right;
+	width: 19%;
+	border: 1px solid #d3d3d3;
+}
+
 
 #blogpost
 {
@@ -44,8 +71,8 @@ div.comment
 	border-right: 1px solid black;
 	border-bottom: 1px solid black;
 	padding: 20px;
-	margin-bottom: 10px ;
-	position: relative ;
+	margin-bottom: 10px;
+	position: relative;
 }
 
 
@@ -53,21 +80,8 @@ div.comment
 {
 	float: right;
 	width: 19.5%;
-	border-left: 1px solid #d3d3d3;
-	border-right: 1px solid #d3d3d3;
-	border-bottom: 1px solid #d3d3d3;
-	border-top: 1px solid #d3d3d3;
 }
 
-#sidebar ul
-{
-	padding: 20px 0;
-}
-
-#sidebar a
-{
-	padding-left: 10px;
-}
 
 .subheader
 {
@@ -77,11 +91,19 @@ div.comment
 	padding-left: 5px;
 }
 
+.sidebarcontent
+{
+	margin-bottom: 2em;
+	border: 1px solid #d3d3d3 ;
+	padding-left: 10px ;
+}
+
+
 .postfooter
 {
 	position: relative;
 	background-color: #d3d3d3;
-	font-size: 115%;
+	font-size: 105%;
 	padding-left: 5px;
 }
 
@@ -129,7 +151,7 @@ div.comment
 
 .commenturl
 {
-	position: absolute ;
+	position: absolute;
 	right: 30px;
 }
 
@@ -143,7 +165,6 @@ div.comment
 {
 	padding: 20px;
 	position: relative;
-	border: 1px solid #d3d3d3;
 }
 
 

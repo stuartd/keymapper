@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace KMBlog
 {
-	internal interface IBlogData
+	internal interface IBloogData
 	{
 
 		#region posts
 
 		Post GetPostByID(int postID);
 
-		bool AddPost(Post p);
-
-		bool EditPost(Post p);
+		bool SavePost(Post p);
 
 		bool DeletePost(int postID);
 
@@ -28,11 +26,15 @@ namespace KMBlog
 
 		bool DeleteCategory(int categoryID);
 
+        Collection<Category> GetAllCategories();
+
+        bool SyncCategories(Collection<int> catlist, int postID);
+
 		#endregion
 
 		#region comments
 
-		List<Comment> GetCommentsForPost(int postID);
+		Collection<Comment> GetCommentsForPost(int postID);
 
 		bool AddCommentToPost(int postID, string comment);
 
