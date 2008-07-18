@@ -8,11 +8,26 @@ Anchors: #06c;
 
  */
 
+#adminposts
+{
+	margin-top: 1em;
+	border-top: 3px solid #d3d3d3;
+}
+
+#adminposts tr
+{
+	text-align: left;
+}
+
 a
 {
 	color: #06c;
 }
 
+.clearfloats
+{
+	clear: both;
+}
 /* Hide main navigation */
 #sitenav
 {
@@ -94,8 +109,8 @@ div.comment
 .sidebarcontent
 {
 	margin-bottom: 2em;
-	border: 1px solid #d3d3d3 ;
-	padding-left: 10px ;
+	border: 1px solid #d3d3d3;
+	padding-left: 10px;
 }
 
 

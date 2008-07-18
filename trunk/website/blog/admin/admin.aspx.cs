@@ -4,22 +4,16 @@ using System.Data;
 using System.Data.SqlTypes;
 using System.Configuration;
 using System.Collections.ObjectModel;
+using System.Web.UI.WebControls;
 
 namespace KMBlog
 {
     public partial class admin : System.Web.UI.Page
     {
 
-        string _connstring;
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            _connstring = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
-            //  _connstring = ConfigurationManager.ConnectionStrings["home.jks"].ConnectionString;
-
-
             GetPostList();
-
         }
 
         void GetPostList()
@@ -32,6 +26,19 @@ namespace KMBlog
             postsRepeater.DataBind();
 
         }
+
+        public void DeletePost(object sender, CommandEventArgs e)
+        {
+
+            int postID;
+            if (Int32.TryParse(e.CommandArgument.ToString(), out postID) == false)
+                return;
+
+            IDataAccess da = DataAccess.CreateInstance();
+            da.DeletePost(postID);
+            GetPostList();
+        }
+
 
 
     }
