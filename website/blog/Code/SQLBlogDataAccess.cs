@@ -133,7 +133,7 @@ public class SQLBlogDataAccess : IDataAccess
                 return Convert.ToInt32(sc.Parameters["NewPostID"].Value);
             else
                 return p.ID;
-            
+
 
 
         }
@@ -177,9 +177,20 @@ public class SQLBlogDataAccess : IDataAccess
     }
 
 
-    public bool DeletePost(int postID)
+    public void DeletePost(int postID)
     {
-        throw new NotImplementedException();
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
+
+            SqlCommand sc = new SqlCommand("DeletePost", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("PostID", postID);
+
+            sc.ExecuteNonQuery();
+
+        }
+
     }
 
     public void SyncCategories(int postID, Collection<int> categories)
@@ -187,7 +198,7 @@ public class SQLBlogDataAccess : IDataAccess
         using (SqlConnection connection = GetConnection())
         {
             connection.Open();
-            
+
             SqlCommand sc = new SqlCommand("DeleteCategoriesFromPost", connection);
             sc.CommandType = CommandType.StoredProcedure;
             sc.Parameters.AddWithValue("PostID", postID);

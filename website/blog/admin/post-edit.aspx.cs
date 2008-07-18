@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
 
 
 namespace KMBlog
@@ -40,9 +41,7 @@ namespace KMBlog
 
             if (Page.IsPostBack == false)
             {
-
                 LoadMonthNames();
-
                 GetPost();
             }
         }
@@ -104,8 +103,7 @@ namespace KMBlog
                 postyear.Text = DateTime.Now.Year.ToString();
                 postday.Text = DateTime.Now.Day.ToString();
                 postmonth.Text = DateTime.Now.ToString("MMMM");
-                poststub.Visible = false;
-                stublabel.Visible = false;
+                stubdiv.Style.Add("Display", "None");
 
                 foreach (Category cat in allCats)
                 {
@@ -115,10 +113,6 @@ namespace KMBlog
                     CatList.Items.Add(item);
                 }
             }
-
-
-
-
         }
 
 
@@ -219,11 +213,16 @@ namespace KMBlog
 
             int postID;
             if (Int32.TryParse(hiddenPostID.Value, out postID) == false)
+            {
                 postID = 0;
+                p.Stub = GetStub(posttitle.Text);
+            }
+            else
+            {
+                p.Stub = poststub.Text;
+            }
 
             p.ID = postID;
-
-            p.Stub = GetStub(posttitle.Text);
 
             p.Title = posttitle.Text;
             p.Body = blogpost.Text;
@@ -233,11 +232,13 @@ namespace KMBlog
 
             IDataAccess da = DataAccess.CreateInstance();
 
-            int savedPostID = da.SavePost(p) ;
-           
+            int savedPostID = da.SavePost(p);
+
             SyncCategories(postID);
 
-            if (postID == 0)
+            if (p.Published > 0)
+                Response.Redirect("admin.aspx");
+            else if (postID == 0)
                 Response.Redirect("post-edit.aspx?p=" + Convert.ToString(savedPostID));
 
         }
@@ -293,9 +294,11 @@ namespace KMBlog
 
         string GetStub(string title)
         {
-            string stub = title.Replace(" ", "-").ToLower();
+
+            string stub = Regex.Replace(title.Replace(" ", "-"), @"[^\w\-]", "").ToLower();
+
             int suffix = 1;
-            while (DoesStubAlreadyExist(stub) == true)
+            while (String.IsNullOrEmpty(stub) || DoesStubAlreadyExist(stub) == true)
             {
                 stub += suffix.ToString();
                 suffix++;
@@ -314,7 +317,17 @@ namespace KMBlog
 
         }
 
-     
+        protected void RegenerateStub(object sender, EventArgs e)
+        {
+            string title = posttitle.Text;
+            if (String.IsNullOrEmpty(title))
+                return;
+
+            string stub = GetStub(title);
+            poststub.Text = stub;
+        }
+
+
 
 
 

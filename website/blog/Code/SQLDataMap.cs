@@ -70,6 +70,7 @@ public class SQLDataMap
                 p.Body = Convert.ToString(reader["Body"]);
                 p.Stub = Convert.ToString(reader["Stub"]);
                 p.CommentCount = Convert.ToInt32(reader["CommentCount"]);
+                p.Published = Convert.ToInt32(reader["Published"]);
                 p.Categories = new Collection<Category>();
 
                 // .. then the categories.

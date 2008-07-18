@@ -33,7 +33,7 @@ public interface IDataAccess
 
 	int SavePost(Post p);
 
-	bool DeletePost(int postID);
+	void DeletePost(int postID);
 
     bool DoesStubExist(string stub);
 
