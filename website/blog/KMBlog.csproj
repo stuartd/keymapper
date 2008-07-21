@@ -59,12 +59,26 @@
     <Compile Include="admin\admin.aspx.designer.cs">
       <DependentUpon>admin.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\edit-categories.aspx.cs">
       <DependentUpon>edit-categories.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\edit-categories.aspx.designer.cs">
       <DependentUpon>edit-categories.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\post-delete.aspx.cs">
+      <DependentUpon>post-delete.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\post-delete.aspx.designer.cs">
+      <DependentUpon>post-delete.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\post-edit.aspx.cs">
       <DependentUpon>post-edit.aspx</DependentUpon>
@@ -77,7 +91,6 @@
     <Compile Include="Code\category.cs" />
     <Compile Include="Code\comment.cs" />
     <Compile Include="Code\IDataAccess.cs" />
-    <Compile Include="Code\IBlogData.cs" />
     <Compile Include="Code\post.cs" />
     <Compile Include="Code\SQLBlogDataAccess.cs" />
     <Compile Include="Code\SQLDataMap.cs" />
@@ -111,7 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin\admin.aspx" />
+    <Content Include="admin\default.aspx" />
     <Content Include="admin\edit-categories.aspx" />
+    <Content Include="admin\post-delete.aspx" />
     <Content Include="admin\post-edit.aspx" />
     <Content Include="admin\Web.config" />
     <Content Include="kmblogIE.css" />

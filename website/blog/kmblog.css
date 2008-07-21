@@ -155,19 +155,14 @@ div.comment
 
 .commenthead
 {
-	background-color: #abc;
-	border: 2px solid silver;
+	border: 2px solid #d3d3d3;
+	margin-bottom: 10px ;
 }
 
 .commenter
 {
+	position: relative;
 	left: 10px;
-}
-
-.commenturl
-{
-	position: absolute;
-	right: 30px;
 }
 
 .commentbody
@@ -175,6 +170,11 @@ div.comment
 	background-color: White;
 }
 
+.comment_text
+{
+	width: 50% ;
+	height: 100px ;
+}
 
 .postbody
 {

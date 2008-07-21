@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="KMBlog._Default"
-    MasterPageFile="~/KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
+    MasterPageFile="/KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
 
 <%@ Import Namespace="System.Collections.ObjectModel" %>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
@@ -54,28 +54,53 @@
                                 <span class="categories">Tagged:
                                     <%# GetCategoriesForPost((Collection<Category>)DataBinder.Eval(Container.DataItem, "Categories")) %>
                                 </span><span class="commentslink">
-                                    <%# GetCommentLink((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
+                                    <%# GetCommentLinkText((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
                                 <br />
                             </div>
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>
-                <br />
-                <asp:Repeater ID="commentsRepeater" runat="server">
-                    <HeaderTemplate>
-                        <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label></HeaderTemplate>
-                    <ItemTemplate>
-                        <div class="comment">
-                            <div class="commenthead">
-                                <span class="commenter">From:
-                                    <%# DataBinder.Eval(Container.DataItem, "commenter_name")%></span> <span class="commenturl">
-                                        URL/Email: <a href="<%# DataBinder.Eval(Container.DataItem, "commenter_url")%>">
-                                            <%# DataBinder.Eval(Container.DataItem, "commenter_url")%></a></span></div>
-                            <div class="commentbody">
-                                <%# DataBinder.Eval(Container.DataItem, "comment")%></div>
-                        </div>
-                    </ItemTemplate>
-                </asp:Repeater>
+                <div id="comments" runat="server">
+                    <asp:Repeater ID="commentsRepeater" runat="server">
+                        <HeaderTemplate>
+                            <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label></HeaderTemplate>
+                        <ItemTemplate>
+                            <div class="comment">
+                                <div class="commenthead">
+                                    <span class="commenter">
+                                        <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
+                                      DataBinder.Eval(Container.DataItem, "url").ToString())%></span> </span>
+                                </div>
+                                <div class="commentbody">
+                                    <%# DataBinder.Eval(Container.DataItem, "text")%>
+                                </div>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    <div id="newcomment">
+                        Leave a comment. All fields are optional except the text. Your Email will not be
+                        displayed or used in any other way except to remember your details.<br />
+                        <asp:TextBox ID="txtName" runat="server" />
+                        <asp:Label ID="labelName" AssociatedControlID="txtName" runat="server" Text="Name" />
+                        <br />
+                        <asp:TextBox ID="txtEmail" runat="server" Text="" />
+                        <asp:Label ID="labelEMail" AssociatedControlID="txtEmail" runat="server" Text="Email" />
+                        <br />
+                        <asp:TextBox ID="txtURL" runat="server" Text="" />
+                        <asp:Label ID="labelWebsite" AssociatedControlID="txtURL" runat="server" Text="Website" />
+                        <br />
+                        <asp:Label ID="labelText" AssociatedControlID="text" runat="server" Text="Text" />
+                        <asp:RequiredFieldValidator runat="server" ControlToValidate="text" ErrorMessage="Comment text must be entered" />
+                        <br />
+                        
+                        <asp:TextBox ID="text" runat="server" TextMode="MultiLine" CssClass="comment_text" />
+                    </div>
+                    <asp:Button ID="btnSaveComment" runat="server" Text="Save" 
+                        onclick="SaveComment" />
+                    <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" 
+                        onclick="CancelComment" />
+                    
+                </div>
             </div>
         </div>
     </div>

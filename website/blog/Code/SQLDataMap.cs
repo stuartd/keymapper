@@ -21,10 +21,12 @@ public class SQLDataMap
 
                 Comment c = new Comment();
 
-                c.CommentBody = Convert.ToString(reader["comment"]);
-                c.Commenter = Convert.ToString(reader["commenter_name"]);
-                c.CommenterEmail = Convert.ToString(reader["commenter_email"]);
-                c.CommenterURL = Convert.ToString(reader["commenter_url"]);
+                c.ID = Convert.ToInt32(reader["ID"]);
+                c.PostID = Convert.ToInt32(reader["PostID"]);
+                c.Text = Convert.ToString(reader["text"]);
+                c.Name = Convert.ToString(reader["name"]);
+                c.Email = Convert.ToString(reader["email"]);
+                c.URL = Convert.ToString(reader["url"]);
 
                 commentlist.Add(c);
             }
