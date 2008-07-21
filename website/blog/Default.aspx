@@ -1,5 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="KMBlog._Default"
-    MasterPageFile="/KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="~/default.aspx.cs" Inherits="KMBlog._Default"
+    MasterPageFile="~/KMBlog.Master"  EnableViewState="false" Title="Key Mapper Developer Blog" %>
 
 <%@ Import Namespace="System.Collections.ObjectModel" %>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
