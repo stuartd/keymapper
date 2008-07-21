@@ -6,9 +6,8 @@
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <title>Key Mapper Placeholder</title>
-    <style type="text/css">
-        @import url('/kmblog.css');
-    </style>
+   <link href="kmblog.css" rel="Stylesheet" type ="text/css" />
+   
         <!--[if gte IE 6]>
 <link href="kmblogIE.css" rel="stylesheet" type="text/css" />
 <![endif]-->

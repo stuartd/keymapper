@@ -34,9 +34,8 @@ namespace KMBlog
             if (Int32.TryParse(e.CommandArgument.ToString(), out postID) == false)
                 return;
 
-            IDataAccess da = DataAccess.CreateInstance();
-            da.DeletePost(postID);
-            GetPostList();
+            Response.Redirect("post-delete.aspx?p=" + postID.ToString());
+
         }
 
 

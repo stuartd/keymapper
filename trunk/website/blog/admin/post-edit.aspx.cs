@@ -48,7 +48,7 @@ namespace KMBlog
 
         private void GetPost()
         {
-            int postID = GetPostIDFromQueryString();
+            int postID = Post.GetPostIDFromQueryString(Request.QueryString);
 
             IDataAccess da = DataAccess.CreateInstance();
 
@@ -116,29 +116,6 @@ namespace KMBlog
         }
 
 
-        protected int GetPostIDFromQueryString()
-        {
-
-            NameValueCollection parameters = Request.QueryString;
-
-            string[] keys = parameters.AllKeys;
-
-            int postID = 0;
-            foreach (string key in keys)
-            {
-                if (key.ToUpperInvariant() == "P")
-                {
-                    foreach (string value in parameters.GetValues(key))
-                    {
-                        if (System.Int32.TryParse(value, out postID))
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-            return postID;
-        }
 
         private DateTime GetPostDate()
         {

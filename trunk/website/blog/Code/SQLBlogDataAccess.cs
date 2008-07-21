@@ -234,9 +234,26 @@ public class SQLBlogDataAccess : IDataAccess
 
 
 
-    public bool AddCommentToPost(int postID, string comment)
+    public bool AddCommentToPost(Comment c)
     {
-        throw new NotImplementedException();
+        int rowcount = 0;
+        using (SqlConnection connection = GetConnection())
+        {
+
+            connection.Open();
+
+            SqlCommand sc = new SqlCommand("AddComment", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+
+            sc.Parameters.AddWithValue("PostID", c.PostID);
+            sc.Parameters.AddWithValue("Name", c.Name);
+            sc.Parameters.AddWithValue("Email", c.Email);
+            sc.Parameters.AddWithValue("URL", c.URL);
+            sc.Parameters.AddWithValue("Text", c.Text);
+            rowcount = sc.ExecuteNonQuery();
+
+        }
+        return (rowcount > 0);
     }
 
     public bool DeleteComment(int commentID)

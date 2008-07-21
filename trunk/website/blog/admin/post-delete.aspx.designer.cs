@@ -11,7 +11,7 @@
 namespace KMBlog {
     
     
-    public partial class _Default {
+    public partial class post_delete {
         
         /// <summary>
         /// form1 control.
@@ -23,39 +23,21 @@ namespace KMBlog {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// categoriesRepeater control.
+        /// btnYes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater categoriesRepeater;
+        protected global::System.Web.UI.WebControls.Button btnYes;
         
         /// <summary>
-        /// postsRepeater control.
+        /// btnNo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater postsRepeater;
-        
-        /// <summary>
-        /// comments control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl comments;
-        
-        /// <summary>
-        /// commentsRepeater control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater commentsRepeater;
+        protected global::System.Web.UI.WebControls.Button btnNo;
     }
 }

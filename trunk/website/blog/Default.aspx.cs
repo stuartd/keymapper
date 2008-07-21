@@ -13,8 +13,6 @@ namespace KMBlog
     public partial class _Default : System.Web.UI.Page
     {
 
-        bool _singlePost = false;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             GetPosts();
@@ -66,14 +64,15 @@ namespace KMBlog
 
             }
 
-
-
-            if (singlePost && posts.Count > 0) 
-            {
-                Collection<Comment> clist = da.GetCommentsForPost(postID);
-                commentsRepeater.DataSource = clist;
-                commentsRepeater.DataBind();
-            }
+            if (singlePost == false)
+                comments.Style.Add("Display", "None");
+            else
+                if (posts.Count > 0)
+                {
+                    Collection<Comment> clist = da.GetCommentsForPost(postID);
+                    commentsRepeater.DataSource = clist;
+                    commentsRepeater.DataBind();
+                }
 
             Collection<Category> catlist = da.GetAllCategories();
 
@@ -215,7 +214,7 @@ namespace KMBlog
             IDataAccess da = DataAccess.CreateInstance();
 
             Collection<Comment> commentlist = da.GetCommentsForPost(postID);
-            
+
             commentsRepeater.DataSource = commentlist;
             commentsRepeater.DataBind();
 
@@ -227,36 +226,74 @@ namespace KMBlog
         {
 
             StringBuilder categories = new StringBuilder();
-                  
+
             foreach (Category cat in catlist)
-                    categories.Append("<a href=\"?c=" + cat.ID + "\">" + cat.Name + "</a> ");
+                categories.Append("<a href=\"?c=" + cat.ID + "\">" + cat.Name + "</a> ");
 
             return categories.ToString();
 
 
         }
 
-        public string GetCommentLink(int postID, int commentCount)
+        public string GetCommentLink(string name, string URL)
         {
-            if (_singlePost)
-                return String.Empty;
+            if (String.IsNullOrEmpty(URL))
+                return name;
+            else
+            {
+                if (URL.StartsWith(@"http://", StringComparison.OrdinalIgnoreCase) == false)
+                    URL = @"http://" + URL; // TODO: Probably should be done on save
 
+                return "<a href='" + URL + "'>" + name + "</a>";
+            }
+        }
 
-            // href is something like ?p=1#comments
+        public string GetCommentLinkText(int postID, int commentCount)
+        {
+
+            // href is ?p=1#comments
             string href = "\"?p=" + postID.ToString() + "#comments\"";
+            string text;
 
-            String comment = "<a href=" + href + ">Comment";
+            if (commentCount == 0)
+                text = "No comments";
+            else
+            {
+                text = commentCount.ToString() + " comment";
+                if (commentCount > 0)
+                    text += "s";
+            }
 
-            if (commentCount > 0)
-                comment += "s: " + commentCount.ToString();
-
-            comment += "</a>";
+            String comment = "<a href=" + href + ">" + text + "</a>";
 
             return comment;
+
+        }
+
+        public void SaveComment(object sender, EventArgs e)
+        {
+
+            Page.Validate();
+
+            if (Page.IsValid == false)
+                return;
+
+            Comment c = new Comment();
+            c.Email = txtEmail.Text;
+            c.URL = txtUrl.Text;
+            c.Name = txtName.Text;
+            c.PostID = Post.GetPostIDFromQueryString(Request.QueryString);
+
+            IDataAccess da = DataAccess.CreateInstance();
+            da.AddCommentToPost(c);
 
 
         }
 
+        public void CancelComment(object sender, EventArgs e)
+        {
+
+        }
 
 
 

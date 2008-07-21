@@ -53,7 +53,7 @@ public interface IDataAccess
 
 	#region comments
 
-	bool AddCommentToPost(int postID, string comment);
+	bool AddCommentToPost(Comment c);
 
 	bool DeleteComment(int commentID);
 

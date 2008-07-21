@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Data;
+using System.Collections;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -10,14 +11,13 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 
-
-public class Comment
+namespace KMBlog
 {
-    public int ID { get; set; }
-    public int PostID { get; set; }
-    public String Name { get; set; }
-    public String URL { get; set; }
-    public String Email { get; set; }
-    public String Text { get; set; }
+    public partial class _default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            Response.Redirect("admin.aspx");
+        }
+    }
 }
-
