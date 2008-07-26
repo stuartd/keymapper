@@ -25,7 +25,6 @@ public class SQLDataMap
                 c.PostID = Convert.ToInt32(reader["PostID"]);
                 c.Text = Convert.ToString(reader["text"]);
                 c.Name = Convert.ToString(reader["name"]);
-                c.Email = Convert.ToString(reader["email"]);
                 c.URL = Convert.ToString(reader["url"]);
 
                 commentlist.Add(c);
@@ -72,7 +71,7 @@ public class SQLDataMap
                 p.Body = Convert.ToString(reader["Body"]);
                 p.Stub = Convert.ToString(reader["Stub"]);
                 p.CommentCount = Convert.ToInt32(reader["CommentCount"]);
-                p.Published = Convert.ToInt32(reader["Published"]);
+                p.Published = Convert.ToBoolean(reader["Published"]);
                 p.Categories = new Collection<Category>();
 
                 // .. then the categories.

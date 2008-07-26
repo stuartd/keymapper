@@ -7,14 +7,14 @@ using System.Collections.Specialized;
 public class Post
 {
 
-	public int ID { get; set; }
-	public string Title { get; set; }
-	public Collection<Category> Categories { get; set; }
-	public DateTime Postdate { get; set; }
-	public string Body { get; set; }
-	public string Stub { get; set; }
-	public int CommentCount { get; set; }
-    public int Published { get; set; }
+    public int ID { get; set; }
+    public string Title { get; set; }
+    public Collection<Category> Categories { get; set; }
+    public DateTime Postdate { get; set; }
+    public string Body { get; set; }
+    public string Stub { get; set; }
+    public int CommentCount { get; set; }
+    public bool Published { get; set; }
 
     public static int GetPostIDFromQueryString(NameValueCollection parameters)
     {
@@ -37,5 +37,24 @@ public class Post
         }
         return postID;
     }
+
+    public static bool Save(Post p)
+    {
+
+        if (!p)
+            return false;
+
+        IDataAccess da = DataAccess.CreateInstance();
+        int savedPostID = da.SavePost(p);
+        p.ID = savedPostID;
+        return (p.ID > 0);
+    }
+
+    public static implicit operator bool(Post p)
+    {
+        return !(string.IsNullOrEmpty(p.Stub) || string.IsNullOrEmpty(p.Title));
+    }
+
+
 
 }

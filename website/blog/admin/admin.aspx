@@ -9,14 +9,15 @@
         <li><a href="post-edit.aspx">New Post</a></li>
         <li><a href="../default.aspx">View Blog</a></li>
         <li><a href="edit-categories.aspx">Categories</a></li>
+        <li><asp:LoginStatus ID="LoginStatus1" runat="server" /></li>
         </ul><div class="clearfloats">   </div>
 <div id ="maindiv">
      <asp:Repeater ID="postsRepeater" runat="server">
         <HeaderTemplate>
-            <table border="0" cellpadding="0" cellspacing="0" width="40%" id="adminposts">
+            <table border="0" cellpadding="0" cellspacing="0" width="60%" id="adminposts">
                 <caption style="text-align: left">
                     <h4>Manage posts</h4></caption>
-                    <tr><th>Post</th><th>Date</th><th>Status</th></tr>
+                    <tr><th>Post</th><th>Date</th><th>Status</th><th>Delete</th><th>Comments</th></tr>
         </HeaderTemplate>
         <ItemTemplate>
             <tr>
@@ -28,11 +29,12 @@
                     <%# ((DateTime)DataBinder.Eval(Container.DataItem, "Postdate")).ToLongDateString() %>
                 </td>
                 <td>
-                    <%# (((int)DataBinder.Eval(Container.DataItem, "Published")) == 1 ? "Published" : "Draft") %>
+                    <%# (((bool)DataBinder.Eval(Container.DataItem, "Published")) ? "Published" : "Draft") %>
                 </td>
                 <td>
                     <asp:Button runat="server" ID="DeletePost" Text="Delete" OnCommand="DeletePost" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' />
                 </td>
+                <td><%# GetCommentLinkText((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></td>
             </tr>
         </ItemTemplate>
         <FooterTemplate>

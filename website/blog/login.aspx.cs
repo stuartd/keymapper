@@ -8,6 +8,9 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Web;
+using System.Security.Principal;
+using System.Web.Security;
 
 namespace KMBlog
 {
@@ -30,10 +33,20 @@ namespace KMBlog
             else
             {
                 e.Authenticated = true;
-                // Store userlevel in encrypted cookie
+                // Store userlevel in encrypted cookie..
+
+                string role;
+                if (userlevel == 1)
+                    role = "Admin";
+                else
+                    role = "Demo";
+
+                HttpCookie cookie = AppController.CreateAuthenticationTicket(KMLogin.UserName, role);
+                Response.Cookies.Add(cookie);
+                Response.Redirect(FormsAuthentication.GetRedirectUrl(KMLogin.UserName, true)) ;
+
             }
-
-
         }
+
     }
 }

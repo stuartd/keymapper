@@ -13,6 +13,12 @@ namespace KMBlog
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            if (User.IsInRole("Admin"))
+                Response.Write("User is admin");
+            else
+                Response.Write("User is not admin");
+
             GetPostList();
         }
 
@@ -37,6 +43,31 @@ namespace KMBlog
             Response.Redirect("post-delete.aspx?p=" + postID.ToString());
 
         }
+
+        public string GetCommentLinkText(int postID, int commentCount)
+        {
+
+            if (commentCount == 0)
+                return "No comments";
+
+
+            // href is edit-comments?p=
+            // (TODO: This is the same code as the admin page's GetCommentLinkText
+            // - need to refactor when can think of somewhere to put the code - 
+            // in the comment class maybe?)
+            string href = "\"edit-comments.aspx?p=" + postID.ToString() + "\"";
+            string text;
+
+            text = commentCount.ToString() + " comment";
+            if (commentCount > 0)
+                text += "s";
+
+            String comment = "<a href=" + href + ">" + text + "</a>";
+
+            return comment;
+
+        }
+
 
 
 
