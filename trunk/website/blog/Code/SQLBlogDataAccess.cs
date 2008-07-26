@@ -247,7 +247,6 @@ public class SQLBlogDataAccess : IDataAccess
 
             sc.Parameters.AddWithValue("PostID", c.PostID);
             sc.Parameters.AddWithValue("Name", c.Name);
-            sc.Parameters.AddWithValue("Email", c.Email);
             sc.Parameters.AddWithValue("URL", c.URL);
             sc.Parameters.AddWithValue("Text", c.Text);
             rowcount = sc.ExecuteNonQuery();

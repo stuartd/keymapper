@@ -1,23 +1,61 @@
 ﻿using System;
-using System.Data;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-
 
 public class Comment
 {
+
     public int ID { get; set; }
     public int PostID { get; set; }
-    public String Name { get; set; }
-    public String URL { get; set; }
-    public String Email { get; set; }
+    string _name;
+    string _url;
+
+
+    public String Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            if (String.IsNullOrEmpty(value))
+                _name  = "Anonymous";
+            else
+                _name = value;
+        }
+    }
+    public String URL
+    {
+        get
+        {
+            return _url;
+        }
+        set
+        {
+            if (value.StartsWith(@"http://") == false && String.IsNullOrEmpty(value) == false)
+                _url = @"http://" + value;
+            else
+                _url = value;
+
+        }
+    }
+
     public String Text { get; set; }
+
+    public void Save()
+    {
+        if (this)
+        {
+            IDataAccess da = DataAccess.CreateInstance();
+            da.AddCommentToPost(this);
+        }
+    }
+
+    public static implicit operator bool(Comment c)
+    {
+        return !(string.IsNullOrEmpty(c.Text) || c.PostID < 1);
+    }
+
+
+
 }
 

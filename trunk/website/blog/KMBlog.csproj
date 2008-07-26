@@ -38,6 +38,9 @@
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -73,6 +76,13 @@
     <Compile Include="admin\edit-categories.aspx.designer.cs">
       <DependentUpon>edit-categories.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\edit-comments.aspx.cs">
+      <DependentUpon>edit-comments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\edit-comments.aspx.designer.cs">
+      <DependentUpon>edit-comments.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\post-delete.aspx.cs">
       <DependentUpon>post-delete.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -87,19 +97,30 @@
     <Compile Include="admin\post-edit.aspx.designer.cs">
       <DependentUpon>post-edit.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Code\blogposts.cs" />
+    <Compile Include="Code\AppController.cs" />
     <Compile Include="Code\category.cs" />
     <Compile Include="Code\comment.cs" />
+    <Compile Include="Code\feeds.cs" />
     <Compile Include="Code\IDataAccess.cs" />
     <Compile Include="Code\post.cs" />
     <Compile Include="Code\SQLBlogDataAccess.cs" />
     <Compile Include="Code\SQLDataMap.cs" />
+    <Compile Include="Controls\comment-editor.ascx.cs">
+      <DependentUpon>comment-editor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\comment-editor.ascx.designer.cs">
+      <DependentUpon>comment-editor.ascx</DependentUpon>
+    </Compile>
     <Compile Include="default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>default.aspx</DependentUpon>
     </Compile>
     <Compile Include="default.aspx.designer.cs">
       <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="KMBlog.Master.cs">
       <DependentUpon>KMBlog.Master</DependentUpon>
@@ -126,9 +147,12 @@
     <Content Include="admin\admin.aspx" />
     <Content Include="admin\default.aspx" />
     <Content Include="admin\edit-categories.aspx" />
+    <Content Include="admin\edit-comments.aspx" />
     <Content Include="admin\post-delete.aspx" />
     <Content Include="admin\post-edit.aspx" />
     <Content Include="admin\Web.config" />
+    <Content Include="Controls\comment-editor.ascx" />
+    <Content Include="Global.asax" />
     <Content Include="kmblogIE.css" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

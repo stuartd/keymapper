@@ -205,19 +205,17 @@ namespace KMBlog
             p.Body = blogpost.Text;
             p.Postdate = dt;
 
-            p.Published = (e.CommandName == "Publish" ? 1 : 0);
+            p.Published = (e.CommandName == "Publish");
 
-            IDataAccess da = DataAccess.CreateInstance();
+            if (Post.Save(p))
+            {
+                SyncCategories(p.ID);
 
-            int savedPostID = da.SavePost(p);
-
-            SyncCategories(postID);
-
-            if (p.Published > 0)
-                Response.Redirect("admin.aspx");
-            else if (postID == 0)
-                Response.Redirect("post-edit.aspx?p=" + Convert.ToString(savedPostID));
-
+                if (p.Published)
+                    Response.Redirect("admin.aspx");
+                else if (postID == 0)
+                    Response.Redirect("post-edit.aspx?p=" + Convert.ToString(p.ID));
+            }
         }
 
         bool SyncCategories(int postID)

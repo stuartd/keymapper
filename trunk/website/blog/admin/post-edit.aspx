@@ -30,11 +30,11 @@
             </div>
             <div id="post_timestamp">
                 Datestamp:
-                <asp:TextBox ID="postday" runat="server" Width="2em">
+                <asp:TextBox ID="postday" runat="server" Width="2em" TabIndex="5">
                 </asp:TextBox>
-                <asp:DropDownList ID="postmonth" runat="server" Width="10em">
+                <asp:DropDownList ID="postmonth" runat="server" Width="10em" TabIndex="6">
                 </asp:DropDownList>
-                <asp:TextBox ID="postyear" runat="server" Width="4em">
+                <asp:TextBox ID="postyear" runat="server" Width="4em" TabIndex="7">
                 </asp:TextBox>
                 <asp:Label ID="date_error" runat="server" CssClass="dateerrortext"></asp:Label>
                 <br />
@@ -43,7 +43,7 @@
             <asp:Button ID="submitpost" Text="Publish" CommandName="Publish" CausesValidation="true"
                 runat="server" OnCommand="SavePost" TabIndex="3" />
             <asp:Button ID="savepost" CommandName="Draft" Text="Save As Draft" CausesValidation="true"
-                runat="server" OnCommand="SavePost" />
+                runat="server" OnCommand="SavePost" TabIndex="4" />
             <asp:Button ID="canceledit" Text="Cancel" CausesValidation="false" runat="server"
                 OnClick="CancelEdit" />
         </div>

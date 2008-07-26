@@ -11,87 +11,69 @@
 namespace KMBlog {
     
     
-    public partial class _Default {
+    public partial class comment_editor {
         
         /// <summary>
-        /// form1 control.
+        /// txtName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.TextBox txtName;
         
         /// <summary>
-        /// categoriesRepeater control.
+        /// labelName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater categoriesRepeater;
+        protected global::System.Web.UI.WebControls.Label labelName;
         
         /// <summary>
-        /// postsRepeater control.
+        /// txtURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater postsRepeater;
+        protected global::System.Web.UI.WebControls.TextBox txtURL;
         
         /// <summary>
-        /// comments control.
+        /// labelWebsite control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl comments;
+        protected global::System.Web.UI.WebControls.Label labelWebsite;
         
         /// <summary>
-        /// commentsRepeater control.
+        /// labelText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater commentsRepeater;
+        protected global::System.Web.UI.WebControls.Label labelText;
         
         /// <summary>
-        /// editcomment control.
+        /// RequiredFieldValidator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::KMBlog.comment_editor editcomment;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
         
         /// <summary>
-        /// chkRememberDetails control.
+        /// txtText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkRememberDetails;
-        
-        /// <summary>
-        /// btnSaveComment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSaveComment;
-        
-        /// <summary>
-        /// btnCancelComment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelComment;
+        protected global::System.Web.UI.WebControls.TextBox txtText;
     }
 }
