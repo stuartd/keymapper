@@ -1,0 +1,5 @@
+insert into categories (Name) values('Key Mapper')
+insert into categories (Name) values('C Sharp')
+insert into categories (Name) values('Keyboards')
+insert into categories (Name) values('ASP.Net')
+

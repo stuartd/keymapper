@@ -131,31 +131,31 @@ namespace KMBlog {
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenPostID;
         
         /// <summary>
-        /// submitpost control.
+        /// btnPublishPost control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button submitpost;
+        protected global::System.Web.UI.WebControls.Button btnPublishPost;
         
         /// <summary>
-        /// savepost control.
+        /// btnSavePost control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button savepost;
+        protected global::System.Web.UI.WebControls.Button btnSavePost;
         
         /// <summary>
-        /// canceledit control.
+        /// btnCancelEdit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button canceledit;
+        protected global::System.Web.UI.WebControls.Button btnCancelEdit;
         
         /// <summary>
         /// resultlabel control.

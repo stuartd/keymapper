@@ -213,24 +213,62 @@ public class SQLBlogDataAccess : IDataAccess
                 sc.Parameters.AddWithValue("PostID", postID);
                 sc.Parameters.AddWithValue("CategoryID", catID);
                 sc.ExecuteNonQuery();
-
             }
-
-
         }
-
     }
 
 
-    public bool AddCategory(int categoryID, string categoryName)
+    public bool AddCategory(string categoryName)
     {
-        throw new NotImplementedException();
+		int result;
+		using (SqlConnection connection = GetConnection())
+		{
+			connection.Open();
+
+			SqlCommand sc = new SqlCommand("CreateCategory", connection);
+			sc.CommandType = CommandType.StoredProcedure;
+			sc.Parameters.AddWithValue("Name", categoryName);
+
+			result = sc.ExecuteNonQuery();
+		}
+
+		return (result == 1);
+
     }
 
     public bool DeleteCategory(int categoryID)
     {
-        throw new NotImplementedException();
+		int result;
+		using (SqlConnection connection = GetConnection())
+		{
+			connection.Open();
+
+			SqlCommand sc = new SqlCommand("DeleteCategory", connection);
+			sc.CommandType = CommandType.StoredProcedure;
+			sc.Parameters.AddWithValue("ID", categoryID);
+
+			result = sc.ExecuteNonQuery();
+		}
+
+		return (result == 1);
     }
+
+	public bool EditCategory(int categoryID, string categoryName)
+	{
+		int result;
+		using (SqlConnection connection = GetConnection())
+		{
+			connection.Open();
+
+			SqlCommand sc = new SqlCommand("UpdateCategory", connection);
+			sc.CommandType = CommandType.StoredProcedure;
+			sc.Parameters.AddWithValue("ID", categoryID);
+			sc.Parameters.AddWithValue("Name", categoryName);
+			result = sc.ExecuteNonQuery();
+		}
+
+		return (result == 1);
+	}
 
 
 

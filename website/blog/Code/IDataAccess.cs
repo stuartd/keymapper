@@ -43,9 +43,11 @@ public interface IDataAccess
 
     void SyncCategories(int postID, Collection<int> categories);
 
-	bool AddCategory(int categoryID, string categoryName);
+	bool AddCategory(string categoryName);
 
 	bool DeleteCategory(int categoryID);
+
+	bool EditCategory(int categoryID, string categoryName);
 
     Collection<Category> GetAllCategories();
 
@@ -60,7 +62,6 @@ public interface IDataAccess
     Collection<Comment> GetCommentsForPost(int postID);
 
 	#endregion
-
 
     #region Users
 

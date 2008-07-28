@@ -12,12 +12,17 @@ namespace KMBlog
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+			if (User.IsInRole("Admin") == false)
+				btnYes.Enabled = false;
         }
 
 
         public void DeletePost(object sender, EventArgs e)
         {
+
+			if (User.IsInRole("Admin") == false)
+				return;
+
             int postID = Post.GetPostIDFromQueryString(Request.QueryString);
 
             IDataAccess da = DataAccess.CreateInstance();
