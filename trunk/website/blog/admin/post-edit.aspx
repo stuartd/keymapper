@@ -40,11 +40,11 @@
                 <br />
             </div>
             <input type="hidden" id="hiddenPostID" runat="server" />
-            <asp:Button ID="submitpost" Text="Publish" CommandName="Publish" CausesValidation="true"
+            <asp:Button ID="btnPublishPost" Text="Publish" CommandName="Publish" CausesValidation="true"
                 runat="server" OnCommand="SavePost" TabIndex="3" />
-            <asp:Button ID="savepost" CommandName="Draft" Text="Save As Draft" CausesValidation="true"
+            <asp:Button ID="btnSavePost" CommandName="Draft" Text="Save As Draft" CausesValidation="true"
                 runat="server" OnCommand="SavePost" TabIndex="4" />
-            <asp:Button ID="canceledit" Text="Cancel" CausesValidation="false" runat="server"
+            <asp:Button ID="btnCancelEdit" Text="Cancel" CausesValidation="false" runat="server"
                 OnClick="CancelEdit" />
         </div>
         <asp:Label ID="resultlabel" runat="server"></asp:Label>

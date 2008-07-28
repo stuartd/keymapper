@@ -14,10 +14,10 @@ namespace KMBlog
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if (User.IsInRole("Admin"))
-                Response.Write("User is admin");
-            else
-                Response.Write("User is not admin");
+			if (User.IsInRole("Admin") == false)
+				lblUserLevel.Text = "Demonstration Mode - you won't be able to save any changes";
+			else
+				lblUserLevel.Style.Add("Display", "None");
 
             GetPostList();
         }

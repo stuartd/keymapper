@@ -39,6 +39,13 @@ namespace KMBlog
         protected void Page_Load(object sender, EventArgs e)
         {
 
+			if (User.IsInRole("Admin") == false)
+			{
+				btnSavePost.Enabled = false;
+				btnPublishPost.Enabled = false;
+
+			}
+
             if (Page.IsPostBack == false)
             {
                 LoadMonthNames();
@@ -166,6 +173,9 @@ namespace KMBlog
 
         public void SavePost(object sender, CommandEventArgs e)
         {
+
+			if (User.IsInRole("Admin") == false)
+				return;
 
             Page.Validate();
 
