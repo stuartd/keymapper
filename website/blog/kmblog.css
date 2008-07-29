@@ -28,11 +28,6 @@ a
 {
 	clear: both;
 }
-/* Hide main navigation */
-#sitenav
-{
-	display: none;
-}
 
 #post, #post_timestamp, #editarea, #controls
 {

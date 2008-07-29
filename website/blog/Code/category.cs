@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.ObjectModel;
 
 public class Category
 {
@@ -15,9 +15,26 @@ public class Category
         Name = categoryName;
     }
 
-    public bool Save()
+	public static Collection<Category> GetAllCategories()
+	{
+		return DataAccess.CreateInstance().GetAllCategories();
+	}
+
+	public static bool Add(string categoryName)
+	{
+		return DataAccess.CreateInstance().AddCategory(categoryName);
+	}
+
+	 public static bool Edit(Category c)
     {
-        return true;
+		return DataAccess.CreateInstance().EditCategory(c);
     }
+
+	public static bool Delete(int categoryID)
+	{
+		return DataAccess.CreateInstance().DeleteCategory(categoryID);
+
+	}
+
 }
 
