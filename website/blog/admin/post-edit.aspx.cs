@@ -309,7 +309,8 @@ namespace KMBlog
                 return;
 
             string stub = GetStub(title);
-            poststub.Text = stub;
+            if (stub != poststub.Text)
+                poststub.Text = stub;
         }
 
 

@@ -1,5 +1,51 @@
-insert into categories (Name) values('Key Mapper')
-insert into categories (Name) values('C Sharp')
-insert into categories (Name) values('Keyboards')
-insert into categories (Name) values('ASP.Net')
+insert into categories (Name, Stub) values('Key Mapper', 'keymapper')
+insert into categories (Name, Stub) values('C Sharp', 'c-sharp')
+insert into categories (Name, Stub) values('Keyboards', 'keyboards')
+insert into categories (Name, Stub) values('ASP.Net', 'asp-dot-net')
 
+<p>One thing that distinguishes Key Mapper from other scancode mapping
+programs is that it lets you map or disable keys on a per-user basis:
+when Microsoft <a
+href="http://www.microsoft.com/whdc/archive/w2kscan-map.mspx">originally
+implemented scancode mappings in Windows 2000</a>, they stated in the
+'disadvantages' section:</p>
+<blockquote>The mappings stored in the registry work at system level
+and apply to all users. These mappings cannot be set to work
+differently depending on the current user.</blockquote>
+<p>This is because the mappings are stored in <code
+class="regkey">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard
+Layout</code> which needs Administrative access to change and is only
+loaded at boot time.</p><br /><p>In Windows XP, though, per-user
+mappings were quietly introduced, with no fanfare or documentation:
+scancode mappings set in the <code
+class="regkey">HKEY_CURRENT_USER\Keyboard Layout</code> key are
+recognised, and apply to an individual user profile. This means that
+mappings can be added or removed by logging off and logging back on
+again - still inconvenient, but less so than a full reboot: it also
+means that mappings can be set up users without Administrative rights.
+(Mappings set in <code class="regkey">HKEY_LOCAL_MACHINE</code> are
+overridden by those in <code
+class="regkey">HKEY_CURRENT_USER</code>).</p><br />
+<p>It's possible that Microsoft kept this quiet because user mappings
+are incompatible with Fast User Switching: when you switch to an
+account that's already logged on, the mappings are not reloaded. It's
+also possible that because they kept it quiet, the Fast User Switching
+development team didn't realise that user mappings should be reloaded
+when switching users. Boot mappings persist through Fast User
+Switching.</p><br />
+<p>While this is a possible disadvantage to using user mappings, most
+people probably don't use more than one account on their computer
+anyway, and in computers attached to a domain (i.e. corporate PCs)
+which may often be used by different people Fast User Switching isn't
+available anyway.</p><br />
+<p>There are some other advantages to user mappings:
+<ul>
+<li>They don't require Administrative rights to be set or removed.</li>
+<li>Different users can have different mappings - one can have Caps
+Lock disabled but Num Lock enabled, another can have them the other
+way round</li>
+<li>Keys can be mapped on shared computers without affecting all users</li>
+</ul><br />
+There is yet another place scancode mappings can be set - in the <code
+class="regkey">HKEY_USERS\.DEFAULT\Keyboard Layout</code> key. These
+apply at the login prompt, but are then removed when logged in.</p>
