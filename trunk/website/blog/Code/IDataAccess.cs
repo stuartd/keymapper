@@ -47,7 +47,7 @@ public interface IDataAccess
 
 	bool DeleteCategory(int categoryID);
 
-	bool EditCategory(int categoryID, string categoryName);
+	bool EditCategory(Category c);
 
     Collection<Category> GetAllCategories();
 

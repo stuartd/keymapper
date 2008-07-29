@@ -1,5 +1,6 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" AutoEventWireup="true" 
-CodeBehind="post-delete.aspx.cs" Inherits="KMBlog.post_delete" Title="Confirm Deletion" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" 
+AutoEventWireup="true" CodeBehind="post-delete.aspx.cs" 
+Inherits="KMBlog.post_delete" Title="Confirm Deletion" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

@@ -10,7 +10,9 @@ public class SQLBlogDataAccess : IDataAccess
 
     #region IDataAccess Members
 
-    public Collection<Post> GetAllPosts()
+	#region Posts
+
+	public Collection<Post> GetAllPosts()
     {
         return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, 999);
     }
@@ -24,12 +26,12 @@ public class SQLBlogDataAccess : IDataAccess
     //{
     //    return GetAllPosts(0, startDate, endDate);
     //}
-    public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
+
+	public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
     {
         return GetAllPosts(categoryID, startDate, endDate, 10);
     }
-
-
+	
     public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate, int NumberOfPosts)
     {
 
@@ -159,25 +161,7 @@ public class SQLBlogDataAccess : IDataAccess
         }
     }
 
-    public Collection<Category> GetAllCategories()
-    {
-        Collection<Category> cats;
-        using (SqlConnection connection = GetConnection())
-        {
-            connection.Open();
-            SqlCommand sc = new SqlCommand("GetAllCategories", connection);
-
-            sc.CommandType = CommandType.StoredProcedure;
-            using (SqlDataReader reader = sc.ExecuteReader())
-            {
-                cats = SQLDataMap.CreateCategoriesFromReader(reader);
-            }
-        }
-        return cats;
-    }
-
-
-    public void DeletePost(int postID)
+	public void DeletePost(int postID)
     {
         using (SqlConnection connection = GetConnection())
         {
@@ -191,9 +175,13 @@ public class SQLBlogDataAccess : IDataAccess
 
         }
 
-    }
+	}
 
-    public void SyncCategories(int postID, Collection<int> categories)
+	#endregion
+
+	#region Categories
+
+	public void SyncCategories(int postID, Collection<int> categories)
     {
         using (SqlConnection connection = GetConnection())
         {
@@ -217,6 +205,22 @@ public class SQLBlogDataAccess : IDataAccess
         }
     }
 
+	public Collection<Category> GetAllCategories()
+	{
+		Collection<Category> cats;
+		using (SqlConnection connection = GetConnection())
+		{
+			connection.Open();
+			SqlCommand sc = new SqlCommand("GetAllCategories", connection);
+
+			sc.CommandType = CommandType.StoredProcedure;
+			using (SqlDataReader reader = sc.ExecuteReader())
+			{
+				cats = SQLDataMap.CreateCategoriesFromReader(reader);
+			}
+		}
+		return cats;
+	}
 
     public bool AddCategory(string categoryName)
     {
@@ -253,7 +257,7 @@ public class SQLBlogDataAccess : IDataAccess
 		return (result == 1);
     }
 
-	public bool EditCategory(int categoryID, string categoryName)
+	public bool EditCategory(Category c)
 	{
 		int result;
 		using (SqlConnection connection = GetConnection())
@@ -262,17 +266,19 @@ public class SQLBlogDataAccess : IDataAccess
 
 			SqlCommand sc = new SqlCommand("UpdateCategory", connection);
 			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("ID", categoryID);
-			sc.Parameters.AddWithValue("Name", categoryName);
+			sc.Parameters.AddWithValue("ID", c.ID);
+			sc.Parameters.AddWithValue("Name", c.Name);
 			result = sc.ExecuteNonQuery();
 		}
 
 		return (result == 1);
 	}
 
+	#endregion
 
+	#region Comments
 
-    public bool AddCommentToPost(Comment c)
+	public bool AddCommentToPost(Comment c)
     {
         int rowcount = 0;
         using (SqlConnection connection = GetConnection())
@@ -318,6 +324,8 @@ public class SQLBlogDataAccess : IDataAccess
     }
 
     #endregion
+	
+	#endregion
 
     public SqlConnection GetConnection()
     {
@@ -328,7 +336,6 @@ public class SQLBlogDataAccess : IDataAccess
             return sc;
 
     }
-
 
     public int GetUserLevel(string username, string passwordhash)
     {

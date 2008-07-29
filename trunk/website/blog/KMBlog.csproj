@@ -62,6 +62,13 @@
     <Compile Include="admin\admin.aspx.designer.cs">
       <DependentUpon>admin.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\category-edit.aspx.cs">
+      <DependentUpon>category-edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\category-edit.aspx.designer.cs">
+      <DependentUpon>category-edit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -145,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin\admin.aspx" />
+    <Content Include="admin\category-edit.aspx" />
     <Content Include="admin\default.aspx" />
     <Content Include="admin\edit-categories.aspx" />
     <Content Include="admin\edit-comments.aspx" />
