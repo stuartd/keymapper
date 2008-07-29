@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Web.UI.WebControls;
 
 namespace KMBlog
 {
@@ -10,6 +11,12 @@ namespace KMBlog
 			Collection<Category> catlist = Category.GetAllCategories();
 			rptCategories.DataSource = catlist;
 			rptCategories.DataBind();
+        }
+
+        public void DeleteCategory(object sender, CommandEventArgs e)
+        {
+
+
         }
     }
 }

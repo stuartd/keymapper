@@ -25,8 +25,7 @@ namespace KMBlog
 
             int postID = Post.GetPostIDFromQueryString(Request.QueryString);
 
-            IDataAccess da = DataAccess.CreateInstance();
-            da.DeletePost(postID);
+            Post.Delete(postID);
             Response.Redirect("admin.aspx");
         }
 

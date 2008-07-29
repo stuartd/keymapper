@@ -5,14 +5,16 @@ public class Category
 {
     public int ID { get; set; }
     public string Name { get; set; }
+    public string Stub { get; set; }
 
     public Category()
     { }
 
-    public Category(int categoryID, string categoryName)
+    public Category(int categoryID, string categoryName, string categoryStub)
     {
         ID = categoryID;
         Name = categoryName;
+        Stub = categoryStub;
     }
 
 	public static Collection<Category> GetAllCategories()

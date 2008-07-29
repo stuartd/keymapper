@@ -38,6 +38,23 @@ public class Post
         return postID;
     }
 
+    public static void Delete(int postID)
+    {
+        IDataAccess da = DataAccess.CreateInstance();
+        da.DeletePost(postID);
+
+    }
+
+    public static Collection<Post> GetAllPosts()
+    {
+
+        IDataAccess da = DataAccess.CreateInstance();
+
+        Collection<Post> posts = da.GetAllPosts();
+
+        return posts;
+    }
+
     public static bool Save(Post p)
     {
 

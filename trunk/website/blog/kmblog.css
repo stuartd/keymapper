@@ -8,13 +8,13 @@ Anchors: #06c;
 
  */
 
-#adminposts
+#adminposts, #admincategories
 {
 	margin-top: 1em;
 	border-top: 3px solid #d3d3d3;
 }
 
-#adminposts tr
+#adminposts tr, #admincategories tr
 {
 	text-align: left;
 }
@@ -23,6 +23,9 @@ a
 {
 	color: #06c;
 }
+
+
+
 
 .clearfloats
 {

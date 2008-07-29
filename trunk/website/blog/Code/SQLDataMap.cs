@@ -49,9 +49,10 @@ public class SQLDataMap
             {
 
                 // Oops - key can't be PostID as key has to be unique. Need to use a different collection..
+                // .. for now, make a hash of the post and category IDs.
                 int categoryID = Convert.ToInt32(reader["categoryID"]) ;
                 int postHash = (Convert.ToInt32(reader["postID"]) * 10000) + categoryID ;
-                postcats.Add(postHash, new Category(categoryID, Convert.ToString(reader["Name"])));
+                postcats.Add(postHash, new Category(categoryID, Convert.ToString(reader["Name"]), Convert.ToString(reader["Stub"])));
             }
         }
         // Second resultset is the post(s)
@@ -102,6 +103,7 @@ public class SQLDataMap
 
                 c.ID = Convert.ToInt32(reader["ID"]);
                 c.Name = Convert.ToString(reader["Name"]);
+                c.Stub = Convert.ToString(reader["Stub"]);
 
                 catlist.Add(c);
             }

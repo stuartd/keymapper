@@ -24,9 +24,7 @@ namespace KMBlog
 
         void GetPostList()
         {
-            IDataAccess da = DataAccess.CreateInstance();
-
-            Collection<Post> posts = da.GetAllPosts();
+            Collection<Post> posts = Post.GetAllPosts();
 
             postsRepeater.DataSource = posts;
             postsRepeater.DataBind();
