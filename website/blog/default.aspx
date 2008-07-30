@@ -17,7 +17,7 @@
         <div id="blog">
             <div id="sidebar">
                 <div class="subheader">
-                    Tags</div>
+                    Categories</div>
                 <div class="sidebarcontent">
                     <ul>
                         <asp:Repeater ID="categoriesRepeater" runat="server">
@@ -58,7 +58,7 @@
                                 <%# DataBinder.Eval(Container.DataItem, "Body") %>
                             </div>
                             <div class="postfooter">
-                                <span class="categories">Tagged:
+                                <span class="categories">Categories:
                                     <%# GetCategoriesForPost((Collection<Category>)DataBinder.Eval(Container.DataItem, "Categories")) %>
                                 </span><span class="commentslink">
                                     <%# GetCommentLinkText((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
