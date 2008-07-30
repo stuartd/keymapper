@@ -11,7 +11,7 @@ Anchors: #06c;
 #newcategory
 {
 	border: 1px solid #d3d3d3;
-	width: 30em;
+	width: 40em;
 	margin-top: 3em;
 	padding: 1em 2px;
 }
@@ -27,8 +27,6 @@ Anchors: #06c;
 #newcategory label
 {
 	width: 4em;
-	float: left;
-	text-align: right;
 	margin-right: 0.5em;
 }
 
