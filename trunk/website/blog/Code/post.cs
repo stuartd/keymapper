@@ -12,7 +12,7 @@ public class Post
     public Collection<Category> Categories { get; set; }
     public DateTime Postdate { get; set; }
     public string Body { get; set; }
-    public string Stub { get; set; }
+    public string Slug { get; set; }
     public int CommentCount { get; set; }
     public bool Published { get; set; }
 
@@ -69,7 +69,7 @@ public class Post
 
     public static implicit operator bool(Post p)
     {
-        return !(string.IsNullOrEmpty(p.Stub) || string.IsNullOrEmpty(p.Title));
+        return !(string.IsNullOrEmpty(p.Slug) || string.IsNullOrEmpty(p.Title));
     }
 
 

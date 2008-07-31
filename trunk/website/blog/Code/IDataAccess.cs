@@ -35,7 +35,7 @@ public interface IDataAccess
 
 	void DeletePost(int postID);
 
-    bool DoesStubExist(string stub);
+    bool DoesSlugExist(string slug);
 
 	#endregion
 

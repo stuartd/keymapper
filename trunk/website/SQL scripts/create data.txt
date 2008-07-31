@@ -1,7 +1,11 @@
-insert into categories (Name, Stub) values('Key Mapper', 'keymapper')
-insert into categories (Name, Stub) values('C Sharp', 'c-sharp')
-insert into categories (Name, Stub) values('Keyboards', 'keyboards')
-insert into categories (Name, Stub) values('ASP.Net', 'asp-dot-net')
+insert into categories (Name, Slug) values('Key Mapper', 'keymapper')
+insert into categories (Name, Slug) values('C Sharp', 'c-sharp')
+insert into categories (Name, Slug) values('Keyboards', 'keyboards')
+insert into categories (Name, Slug) values('ASP.Net', 'asp-dot-net')
+
+insert into users (username, passwordhash, userlevel) values ('stuartd', '4c90a67814d193124c37610ef9a7d286e25adbaf', 1)
+insert into users (username, passwordhash, userlevel) values('demo', '89e495e7941cf9e40e6980d14a16bf023ccd4c91', 0)
+
 
 <p>One thing that distinguishes Key Mapper from other scancode mapping
 programs is that it lets you map or disable keys on a per-user basis:

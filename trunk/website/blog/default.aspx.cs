@@ -26,7 +26,7 @@ namespace KMBlog
 		// Posts on a specific date: ?d=20080603
 		// Specific month: ?d=200806
 		// Specific year: ?d=2008
-		// anything else: is it a stub? if not, show default page.
+		// anything else: is it a slug? if not, show default page.
 		// eg ?user_mappings
 
 		// Nice to actually expose blog/posts/1

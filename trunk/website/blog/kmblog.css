@@ -7,35 +7,38 @@ Red: #A44
 Anchors: #06c;
 
  */
+ 
+ .loginform
+ {
+ 	border: 10px solid green ;
+ }
+ 
 
-#newcategory
+#newcategory, .loginform
 {
 	border: 1px solid #d3d3d3;
 	width: 40em;
-	margin-top: 3em;
 	padding: 1em 2px;
 }
 
-#newcategory legend
-{
-	background: #d3d3d3;
-	padding: 2px 6px;
-	margin-top: -2em;
-	margin-left: -3px;
-}
 
-#newcategory label
+#newcategory label, .loginform label
 {
-	width: 4em;
+	width: 8em;
 	margin-right: 0.5em;
+	display: inline-block ;
+	display: -moz-inline-box ;
 }
 
-#newcategory input
+#newcategory input_textbox, .loginform input_textbox
 {
-	border-color: #d3d3d3 ;
-	border-style: solid ;
+	border-color: #d3d3d3;
 }
 
+#newcategory li
+{
+	padding: 5px ;
+}
 
 
 #adminposts, #admincategories

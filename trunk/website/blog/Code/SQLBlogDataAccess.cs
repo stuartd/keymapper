@@ -120,7 +120,7 @@ public class SQLBlogDataAccess : IDataAccess
                 sc.Parameters.AddWithValue("PostID", p.ID);
             }
 
-            sc.Parameters.AddWithValue("stub", p.Stub);
+            sc.Parameters.AddWithValue("slug", p.Slug);
             sc.Parameters.AddWithValue("title", p.Title);
             sc.Parameters.AddWithValue("body", p.Body);
             sc.Parameters.AddWithValue("postdate", p.Postdate);
@@ -143,15 +143,15 @@ public class SQLBlogDataAccess : IDataAccess
 
     }
 
-    public bool DoesStubExist(string stub)
+    public bool DoesSlugExist(string slug)
     {
 
         using (SqlConnection connection = GetConnection())
         {
 
             connection.Open();
-            SqlCommand sc = new SqlCommand("DoesStubExist", connection);
-            sc.Parameters.AddWithValue("Stub", stub);
+            SqlCommand sc = new SqlCommand("DoesSlugExist", connection);
+            sc.Parameters.AddWithValue("Slug", slug);
             sc.CommandType = CommandType.StoredProcedure;
 
             bool exists = ((int)sc.ExecuteScalar() != 0);
