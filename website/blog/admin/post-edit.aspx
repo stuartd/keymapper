@@ -23,10 +23,10 @@
                 TabIndex="2"></asp:TextBox>
         </div>
         <div id="controls">
-            <div id="stubdiv" runat="server">
-                <asp:Label AssociatedControlID="poststub" ID="stublabel" runat="server">Stub</asp:Label>
-                <asp:TextBox runat="server" ID="poststub" ReadOnly="True"></asp:TextBox>
-                <asp:Button ID="btnRegenerateStub" runat="server" Text="Regenerate" OnClick="RegenerateStub" />
+            <div id="slugdiv" runat="server">
+                <asp:Label AssociatedControlID="postslug" ID="sluglabel" runat="server">Slug</asp:Label>
+                <asp:TextBox runat="server" ID="postslug" ReadOnly="True"></asp:TextBox>
+                <asp:Button ID="btnRegenerateSlug" runat="server" Text="Regenerate" OnClick="RegenerateSlug" />
             </div>
             <div id="post_timestamp">
                 Datestamp:

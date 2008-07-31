@@ -50,40 +50,40 @@ namespace KMBlog {
         protected global::System.Web.UI.WebControls.TextBox blogpost;
         
         /// <summary>
-        /// stubdiv control.
+        /// slugdiv control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl stubdiv;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl slugdiv;
         
         /// <summary>
-        /// stublabel control.
+        /// sluglabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label stublabel;
+        protected global::System.Web.UI.WebControls.Label sluglabel;
         
         /// <summary>
-        /// poststub control.
+        /// postslug control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox poststub;
+        protected global::System.Web.UI.WebControls.TextBox postslug;
         
         /// <summary>
-        /// btnRegenerateStub control.
+        /// btnRegenerateSlug control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRegenerateStub;
+        protected global::System.Web.UI.WebControls.Button btnRegenerateSlug;
         
         /// <summary>
         /// postday control.

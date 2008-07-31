@@ -75,7 +75,7 @@ namespace KMBlog
 
                     blogpost.Text = p.Body;
                     posttitle.Text = p.Title;
-                    poststub.Text = p.Stub;
+                    postslug.Text = p.Slug;
                     DateTime postdate = p.Postdate;
                     postyear.Text = postdate.Year.ToString();
                     postday.Text = postdate.Day.ToString();
@@ -110,7 +110,7 @@ namespace KMBlog
                 postyear.Text = DateTime.Now.Year.ToString();
                 postday.Text = DateTime.Now.Day.ToString();
                 postmonth.Text = DateTime.Now.ToString("MMMM");
-                stubdiv.Style.Add("Display", "None");
+                slugdiv.Style.Add("Display", "None");
 
                 foreach (Category cat in allCats)
                 {
@@ -202,11 +202,11 @@ namespace KMBlog
             if (Int32.TryParse(hiddenPostID.Value, out postID) == false)
             {
                 postID = 0;
-                p.Stub = GetStub(posttitle.Text);
+                p.Slug = GetSlug(posttitle.Text);
             }
             else
             {
-                p.Stub = poststub.Text;
+				p.Slug = postslug.Text;
             }
 
             p.ID = postID;
@@ -277,40 +277,40 @@ namespace KMBlog
         }
 
 
-        string GetStub(string title)
+        string GetSlug(string title)
         {
 
-            string stub = Regex.Replace(title.Replace(" ", "-"), @"[^\w\-]", "").ToLower();
+            string slug = Regex.Replace(title.Replace(" ", "-"), @"[^\w\-]", "").ToLower();
 
             int suffix = 1;
-            while (String.IsNullOrEmpty(stub) || DoesStubAlreadyExist(stub) == true)
+            while (String.IsNullOrEmpty(slug) || DoesSlugAlreadyExist(slug) == true)
             {
-                stub += suffix.ToString();
+                slug += suffix.ToString();
                 suffix++;
             }
 
-            return stub;
+            return slug;
 
 
         }
 
-        bool DoesStubAlreadyExist(string stub)
+        bool DoesSlugAlreadyExist(string slug)
         {
 
             IDataAccess da = DataAccess.CreateInstance();
-            return da.DoesStubExist(stub);
+            return da.DoesSlugExist(slug);
 
         }
 
-        protected void RegenerateStub(object sender, EventArgs e)
+        protected void RegenerateSlug(object sender, EventArgs e)
         {
             string title = posttitle.Text;
             if (String.IsNullOrEmpty(title))
                 return;
 
-            string stub = GetStub(title);
-            if (stub != poststub.Text)
-                poststub.Text = stub;
+            string slug = GetSlug(title);
+            if (slug != postslug.Text)
+                postslug.Text = slug;
         }
 
 

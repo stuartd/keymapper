@@ -52,7 +52,7 @@ public class SQLDataMap
                 // .. for now, make a hash of the post and category IDs.
                 int categoryID = Convert.ToInt32(reader["categoryID"]) ;
                 int postHash = (Convert.ToInt32(reader["postID"]) * 10000) + categoryID ;
-                postcats.Add(postHash, new Category(categoryID, Convert.ToString(reader["Name"]), Convert.ToString(reader["Stub"])));
+                postcats.Add(postHash, new Category(categoryID, Convert.ToString(reader["Name"]), Convert.ToString(reader["Slug"])));
             }
         }
         // Second resultset is the post(s)
@@ -70,7 +70,7 @@ public class SQLDataMap
                 p.Title = Convert.ToString(reader["Title"]);
                 p.Postdate = Convert.ToDateTime(reader["PostDate"]);
                 p.Body = Convert.ToString(reader["Body"]);
-                p.Stub = Convert.ToString(reader["Stub"]);
+                p.Slug = Convert.ToString(reader["Slug"]);
                 p.CommentCount = Convert.ToInt32(reader["CommentCount"]);
                 p.Published = Convert.ToBoolean(reader["Published"]);
                 p.Categories = new Collection<Category>();
@@ -103,7 +103,7 @@ public class SQLDataMap
 
                 c.ID = Convert.ToInt32(reader["ID"]);
                 c.Name = Convert.ToString(reader["Name"]);
-                c.Stub = Convert.ToString(reader["Stub"]);
+                c.Slug = Convert.ToString(reader["Slug"]);
 
                 catlist.Add(c);
             }
