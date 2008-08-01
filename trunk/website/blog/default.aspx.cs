@@ -44,13 +44,11 @@ namespace KMBlog
 			Collection<Post> posts;
 			bool singlePost = false;
 
-			IDataAccess da = DataAccess.CreateInstance();
-
 			// A request for a specific post overrides all other parameters
 			int postID = IsQueryForSpecificPost();
 			if (postID != 0)
 			{
-				Post post = da.GetPostByID(postID);
+				Post post = Post.GetPostByID(postID);
 				posts = new Collection<Post>();
 				posts.Add(post);
 				singlePost = true;
@@ -69,7 +67,7 @@ namespace KMBlog
 				DateTime dateFrom, dateTo;
 				GetDateRangeFromQueryString(out dateFrom, out dateTo);
 
-				posts = da.GetAllPosts(categoryID, dateFrom, dateTo);
+				posts = Post.GetAllPosts(categoryID, dateFrom, dateTo);
 
 			}
 
@@ -78,12 +76,12 @@ namespace KMBlog
 			else
 				if (posts.Count > 0)
 				{
-					Collection<Comment> clist = da.GetCommentsForPost(postID);
+					Collection<Comment> clist = Post.GetCommentsForPost(postID);
 					commentsRepeater.DataSource = clist;
 					commentsRepeater.DataBind();
 				}
 
-			Collection<Category> catlist = da.GetAllCategories();
+			Collection<Category> catlist = Category.GetAllCategories();
 
 			categoriesRepeater.DataSource = catlist;
 			categoriesRepeater.DataBind();
@@ -220,8 +218,7 @@ namespace KMBlog
 
 		public void GetCommentsForPost(int postID)
 		{
-			IDataAccess da = DataAccess.CreateInstance();
-			Collection<Comment> commentlist = da.GetCommentsForPost(postID);
+			Collection<Comment> commentlist = Post.GetCommentsForPost(postID);
 			commentsRepeater.DataSource = commentlist;
 			commentsRepeater.DataBind();
 		}

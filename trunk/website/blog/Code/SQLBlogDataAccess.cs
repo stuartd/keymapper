@@ -222,7 +222,7 @@ public class SQLBlogDataAccess : IDataAccess
 		return cats;
 	}
 
-    public bool AddCategory(string categoryName)
+    public bool AddCategory(string categoryName, string categorySlug)
     {
 		int result;
 		using (SqlConnection connection = GetConnection())
@@ -232,6 +232,7 @@ public class SQLBlogDataAccess : IDataAccess
 			SqlCommand sc = new SqlCommand("CreateCategory", connection);
 			sc.CommandType = CommandType.StoredProcedure;
 			sc.Parameters.AddWithValue("Name", categoryName);
+			sc.Parameters.AddWithValue("Slug", categorySlug);
 
 			result = sc.ExecuteNonQuery();
 		}

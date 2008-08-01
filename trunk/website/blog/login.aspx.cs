@@ -14,39 +14,38 @@ using System.Web.Security;
 
 namespace KMBlog
 {
-    public partial class login : System.Web.UI.Page
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
+	public partial class login : System.Web.UI.Page
+	{
+		protected void Page_Load(object sender, EventArgs e)
+		{
 
-        }
+		}
 
-        protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
-        {
-            IDataAccess da = DataAccess.CreateInstance();
+		protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
+		{
+			int userlevel = AppController.AuthenticateUser(KMLogin.UserName,
+				System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(KMLogin.Password, "SHA1"));
 
-            int userlevel = da.GetUserLevel(KMLogin.UserName,
-                System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(KMLogin.Password, "SHA1"));
+			if (userlevel < 1)
+			{
+				e.Authenticated = false;
+				return;
+			}
 
-            if (userlevel < 1)
-                e.Authenticated = false;
-            else
-            {
-                e.Authenticated = true;
-                // Store userlevel in encrypted cookie..
+			e.Authenticated = true;
 
-                string role;
-                if (userlevel == 1)
-                    role = "Admin";
-                else
-                    role = "Demo";
+			string role;
+			if (userlevel == 1)
+				role = "Admin";
+			else
+				role = "Demo";
 
-                HttpCookie cookie = AppController.CreateAuthenticationTicket(KMLogin.UserName, role);
-                Response.Cookies.Add(cookie);
-                Response.Redirect(FormsAuthentication.GetRedirectUrl(KMLogin.UserName, true)) ;
+			HttpCookie cookie = AppController.CreateAuthenticationTicket(KMLogin.UserName, role);
+			Response.Cookies.Add(cookie);
+			// Need to redirect now as otherwise our cookie is overwritten
+			Response.Redirect(FormsAuthentication.GetRedirectUrl(KMLogin.UserName, true));
 
-            }
-        }
+		}
 
-    }
+	}
 }

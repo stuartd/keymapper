@@ -12,18 +12,24 @@ using System.Xml.Linq;
 
 namespace KMBlog
 {
-    public class AppController
-    {
+	public class AppController
+	{
 
-        public static HttpCookie CreateAuthenticationTicket(string username, string role)
-        {
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket
-                 (2, username, DateTime.Now, DateTime.Now.AddMinutes(60), false, role);
+		public static int AuthenticateUser(string username, string passwordhash)
+		{
+			return DataAccess.CreateInstance().GetUserLevel(username, passwordhash);
+		}
 
-             string encryptedTicket = FormsAuthentication.Encrypt(ticket) ;
-            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket) ;
-            return cookie;
-        }
 
-    }
+		public static HttpCookie CreateAuthenticationTicket(string username, string role)
+		{
+			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket
+				 (2, username, DateTime.Now, DateTime.Now.AddMinutes(60), false, role);
+
+			string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+			HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+			return cookie;
+		}
+
+	}
 }

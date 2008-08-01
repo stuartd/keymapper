@@ -57,16 +57,14 @@ namespace KMBlog
         {
             int postID = Post.GetPostIDFromQueryString(Request.QueryString);
 
-            IDataAccess da = DataAccess.CreateInstance();
-
-            Collection<Category> allCats = da.GetAllCategories();
+            Collection<Category> allCats = Category.GetAllCategories();
 
             if (postID != 0)
             {
 
                 hiddenPostID.Value = postID.ToString();
 
-                Post p = da.GetPostByID(postID);
+                Post p = Post.GetPostByID(postID);
 
                 if (p == null)
                     form1.Style.Add("display", "none");
@@ -228,6 +226,7 @@ namespace KMBlog
             }
         }
 
+
         bool SyncCategories(int postID)
         {
             Collection<int> categories = new Collection<int>();
@@ -243,12 +242,11 @@ namespace KMBlog
                 }
             }
 
-            IDataAccess da = DataAccess.CreateInstance();
             Collection<Category> postcats;
-            if (postID == 0)
-                postcats = new Collection<Category>();
-            else
-                postcats = (da.GetPostByID(postID).Categories);
+			if (postID == 0)
+				postcats = new Collection<Category>();
+			else
+				postcats = Category.GetCategoriesForPost(postID);
 
             bool categoriesChanged = false;
             if (postcats.Count == categories.Count)
@@ -270,9 +268,8 @@ namespace KMBlog
             if (categoriesChanged == false)
                 return true;
 
-            da.SyncCategories(postID, categories);
-
-
+			Category.SyncCategories(postID, categories); 
+			
             return true;
         }
 
@@ -296,10 +293,7 @@ namespace KMBlog
 
         bool DoesSlugAlreadyExist(string slug)
         {
-
-            IDataAccess da = DataAccess.CreateInstance();
-            return da.DoesSlugExist(slug);
-
+		       return Post.DoesSlugExist(slug);
         }
 
         protected void RegenerateSlug(object sender, EventArgs e)
