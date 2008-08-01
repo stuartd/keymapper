@@ -45,8 +45,7 @@ public class Comment
     {
         if (this)
         {
-            IDataAccess da = DataAccess.CreateInstance();
-            da.AddCommentToPost(this);
+           DataAccess.CreateInstance().AddCommentToPost(this);
         }
     }
 

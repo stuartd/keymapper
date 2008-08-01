@@ -43,7 +43,7 @@ public interface IDataAccess
 
     void SyncCategories(int postID, Collection<int> categories);
 
-	bool AddCategory(string categoryName);
+	bool AddCategory(string categoryName, string categorySlug);
 
 	bool DeleteCategory(int categoryID);
 

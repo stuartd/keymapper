@@ -25,7 +25,6 @@ namespace KMBlog
         void GetPostList()
         {
             Collection<Post> posts = Post.GetAllPosts();
-
             postsRepeater.DataSource = posts;
             postsRepeater.DataBind();
 
@@ -46,7 +45,7 @@ namespace KMBlog
         {
 
             if (commentCount == 0)
-                return "No comments";
+               return "No comments";
 
 
             // href is edit-comments?p=

@@ -15,8 +15,15 @@ namespace KMBlog
 
         public void DeleteCategory(object sender, CommandEventArgs e)
         {
+			// int CategoryID = 0;
 
 
         }
+
+		public void SaveCategory(object sender, EventArgs e)
+		{
+
+
+		}
     }
 }

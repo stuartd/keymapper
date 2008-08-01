@@ -22,9 +22,27 @@ public class Category
 		return DataAccess.CreateInstance().GetAllCategories();
 	}
 
-	public static bool Add(string categoryName)
+	public static Collection<Category> GetCategoriesForPost(int postID)
 	{
-		return DataAccess.CreateInstance().AddCategory(categoryName);
+		return DataAccess.CreateInstance().GetPostByID(postID).Categories;
+	}
+
+	public static void SyncCategories(int postID, Collection<int> categories)
+	{
+		DataAccess.CreateInstance().SyncCategories(postID, categories);
+	}
+
+	public static bool Add(string categoryName, string categorySlug)
+	{
+		if (String.IsNullOrEmpty(categoryName))
+			throw new NullReferenceException("Category name can't be empty") ;
+
+		// TODO: Sort out all this slug stuff! 
+
+		if (String.IsNullOrEmpty(categorySlug)) // Hmm. Need to check if category slug exists already, like with post
+			categorySlug = AppController.GetSlug(categoryName);
+
+		return DataAccess.CreateInstance().AddCategory(categoryName, categorySlug);
 	}
 
 	 public static bool Edit(Category c)
@@ -35,8 +53,9 @@ public class Category
 	public static bool Delete(int categoryID)
 	{
 		return DataAccess.CreateInstance().DeleteCategory(categoryID);
-
 	}
+
+
 
 }
 

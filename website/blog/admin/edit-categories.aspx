@@ -51,7 +51,7 @@
                     <asp:Label ID="lblCategorySlug" runat="server" Text="Slug" AssociatedControlID="txtCategorySlug"></asp:Label>
                     <asp:TextBox ID="txtCategorySlug" runat="server" CssClass="input_textbox"></asp:TextBox></li>
             </ol>
-            <asp:Button ID="SaveCategory" runat="server" Text="Save" />
+            <asp:Button ID="btnSaveCategory" runat="server" Text="Save" OnClick="SaveCategory" />
         </fieldset>
     </form>
 </asp:Content>
