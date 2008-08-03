@@ -7,35 +7,30 @@ Red: #A44
 Anchors: #06c;
 
  */
- 
- .loginform
- {
- 	border: 10px solid green ;
- }
+
  
 
-#newcategory, .loginform
+#category-editor, .loginform
 {
-	border: 1px solid #d3d3d3;
-	width: 40em;
+	width: auto ;
 	padding: 1em 2px;
 }
 
 
-#newcategory label, .loginform label
+#category-editor label, .loginform label
 {
-	width: 8em;
+	width: 5em;
 	margin-right: 0.5em;
 	display: inline-block ;
 	display: -moz-inline-box ;
 }
 
-#newcategory input_textbox, .loginform input_textbox
+.input_textbox
 {
 	border-color: #d3d3d3;
 }
 
-#newcategory li
+#category-editor  li
 {
 	padding: 5px ;
 }

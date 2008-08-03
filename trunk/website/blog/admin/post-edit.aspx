@@ -5,8 +5,7 @@
     <h3 id="header">
         Blog Post Editor</h3>
     <a href="admin.aspx">Back to Admin page</a>
-    <form id="form1" runat="server">
-    <div id="editarea">
+    <div id="editarea" runat="server">
         <div id="edit_title">
             Title:
             <asp:TextBox ID="posttitle" runat="server" Width="30em" TabIndex="1"></asp:TextBox>
@@ -49,5 +48,4 @@
         </div>
         <asp:Label ID="resultlabel" runat="server"></asp:Label>
     </div>
-    </form>
 </asp:Content>

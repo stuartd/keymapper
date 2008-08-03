@@ -12,7 +12,7 @@ namespace KMBlog
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			if (User.IsInRole("Admin") == false)
+			if (AppController.IsUserAdmin(User) == false)
 				btnYes.Enabled = false;
         }
 
@@ -20,7 +20,7 @@ namespace KMBlog
         public void DeletePost(object sender, EventArgs e)
         {
 
-			if (User.IsInRole("Admin") == false)
+			if (AppController.IsUserAdmin(User) == false)
 				return;
 
             int postID = Post.GetPostIDFromQueryString(Request.QueryString);

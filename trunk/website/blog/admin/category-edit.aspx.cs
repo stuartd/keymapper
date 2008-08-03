@@ -17,7 +17,28 @@ namespace KMBlog
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+            editcategory.CategorySaved += new EventHandler<EventArgs>(CategorySaved);
+            int categoryID = Category.GetCategoryIDFromQueryString(Request.QueryString);
+
+            // Loat category
+            Category c = Category.GetCategoryByID(categoryID);
+            if (categoryID == 0 || c == null)
+            {
+                lblCategoryDoesNotExist.Text = "The requested category does not exist. Perhaps it has been deleted?";
+                editcategory.Visible = false;
+            }
+            else
+            {
+                editcategory.Name = c.Name;
+                editcategory.Slug = c.Slug;
+                editcategory.CategoryID = c.ID;
+            }
 
 		}
+
+        void CategorySaved(object sender, EventArgs e)
+        {
+            Response.Redirect("edit-categories.aspx");
+        }
 	}
 }

@@ -8,22 +8,45 @@ namespace KMBlog
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			Collection<Category> catlist = Category.GetAllCategories();
-			rptCategories.DataSource = catlist;
-			rptCategories.DataBind();
+            newcategory.SetSaveAsDefaultButton();
+
+            LoadCategories();
+            if (AppController.IsUserAdmin(User) == false)
+                newcategory.DisableSave();
+
+            newcategory.CategorySaved += NewCategorySaved;
+
+        }
+
+        void NewCategorySaved(object sender, EventArgs e)
+        {
+            LoadCategories();
+        }
+
+        
+
+        private void LoadCategories()
+        {
+            rptCategories.DataSource = null;
+            Collection<Category> catlist = Category.GetAllCategories();
+            rptCategories.DataSource = catlist;
+            rptCategories.DataBind();
         }
 
         public void DeleteCategory(object sender, CommandEventArgs e)
         {
-			// int CategoryID = 0;
+            if (AppController.IsUserAdmin(User) == false)
+                return;
 
+            int categoryID;
+            if (Int32.TryParse(e.CommandArgument.ToString(), out categoryID) == false)
+                return;
+
+            Category.Delete(categoryID);
+
+            LoadCategories();
 
         }
 
-		public void SaveCategory(object sender, EventArgs e)
-		{
-
-
-		}
     }
 }

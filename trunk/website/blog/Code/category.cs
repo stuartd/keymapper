@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 public class Category
 {
@@ -15,6 +16,33 @@ public class Category
         ID = categoryID;
         Name = categoryName;
         Slug = categorySlug;
+    }
+
+    public static int GetCategoryIDFromQueryString(NameValueCollection parameters)
+    {
+
+        string[] keys = parameters.AllKeys;
+
+        int categoryID = 0;
+        foreach (string key in keys)
+        {
+            if (key.ToUpperInvariant() == "C")
+            {
+                foreach (string value in parameters.GetValues(key))
+                {
+                    if (System.Int32.TryParse(value, out categoryID))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        return categoryID;
+    }
+
+    public static bool DoesCategoryExist(string name)
+    {
+        return DataAccess.CreateInstance().DoesCategoryExist(name) ;
     }
 
 	public static Collection<Category> GetAllCategories()
@@ -39,9 +67,10 @@ public class Category
 
 		// TODO: Sort out all this slug stuff! 
 
-		if (String.IsNullOrEmpty(categorySlug)) // Hmm. Need to check if category slug exists already, like with post
-			categorySlug = AppController.GetSlug(categoryName);
-
+        if (String.IsNullOrEmpty(categorySlug)) // Hmm. Need to check if category slug exists already, like with post
+        {
+            categorySlug = AppController.GetSlug(categoryName);
+        }
 		return DataAccess.CreateInstance().AddCategory(categoryName, categorySlug);
 	}
 
@@ -55,7 +84,9 @@ public class Category
 		return DataAccess.CreateInstance().DeleteCategory(categoryID);
 	}
 
-
-
+    internal static Category GetCategoryByID(int categoryID)
+    {
+        return DataAccess.CreateInstance().GetCategoryByID(categoryID);
+    }
 }
 

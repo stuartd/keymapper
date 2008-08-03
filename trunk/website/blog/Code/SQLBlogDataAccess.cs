@@ -10,9 +10,9 @@ public class SQLBlogDataAccess : IDataAccess
 
     #region IDataAccess Members
 
-	#region Posts
+    #region Posts
 
-	public Collection<Post> GetAllPosts()
+    public Collection<Post> GetAllPosts()
     {
         return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, 999);
     }
@@ -27,11 +27,11 @@ public class SQLBlogDataAccess : IDataAccess
     //    return GetAllPosts(0, startDate, endDate);
     //}
 
-	public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
+    public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
     {
         return GetAllPosts(categoryID, startDate, endDate, 10);
     }
-	
+
     public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate, int NumberOfPosts)
     {
 
@@ -161,7 +161,7 @@ public class SQLBlogDataAccess : IDataAccess
         }
     }
 
-	public void DeletePost(int postID)
+    public void DeletePost(int postID)
     {
         using (SqlConnection connection = GetConnection())
         {
@@ -175,13 +175,56 @@ public class SQLBlogDataAccess : IDataAccess
 
         }
 
-	}
+    }
 
-	#endregion
+    #endregion
 
-	#region Categories
+    #region Categories
 
-	public void SyncCategories(int postID, Collection<int> categories)
+    public Category GetCategoryByID(int categoryID)
+    {
+        Collection<Category> cats;
+
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
+            SqlCommand sc = new SqlCommand("GetCategoryByID", connection);
+
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("CategoryID", categoryID);
+
+            using (SqlDataReader reader = sc.ExecuteReader())
+            {
+                cats = SQLDataMap.CreateCategoriesFromReader(reader);
+            }
+        }
+        if (cats.Count > 0)
+            return cats[0];
+        else
+            return null;
+}
+
+    public bool DoesCategoryExist(string name)
+    {
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
+            SqlCommand sc = new SqlCommand("GetCategoryByName", connection);
+
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("CategoryName", name);
+            SqlParameter param = new SqlParameter("CategoryID", 0);
+            param.Direction = ParameterDirection.Output;
+            sc.Parameters.Add(param);
+
+            sc.ExecuteNonQuery();
+
+            return Convert.ToInt32(sc.Parameters["CategoryID"].Value) > 0;
+
+        }
+    }
+
+    public void SyncCategories(int postID, Collection<int> categories)
     {
         using (SqlConnection connection = GetConnection())
         {
@@ -205,81 +248,81 @@ public class SQLBlogDataAccess : IDataAccess
         }
     }
 
-	public Collection<Category> GetAllCategories()
-	{
-		Collection<Category> cats;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
-			SqlCommand sc = new SqlCommand("GetAllCategories", connection);
+    public Collection<Category> GetAllCategories()
+    {
+        Collection<Category> cats;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
+            SqlCommand sc = new SqlCommand("GetAllCategories", connection);
 
-			sc.CommandType = CommandType.StoredProcedure;
-			using (SqlDataReader reader = sc.ExecuteReader())
-			{
-				cats = SQLDataMap.CreateCategoriesFromReader(reader);
-			}
-		}
-		return cats;
-	}
+            sc.CommandType = CommandType.StoredProcedure;
+            using (SqlDataReader reader = sc.ExecuteReader())
+            {
+                cats = SQLDataMap.CreateCategoriesFromReader(reader);
+            }
+        }
+        return cats;
+    }
 
     public bool AddCategory(string categoryName, string categorySlug)
     {
-		int result;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+        int result;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("CreateCategory", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("Name", categoryName);
-			sc.Parameters.AddWithValue("Slug", categorySlug);
+            SqlCommand sc = new SqlCommand("CreateCategory", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("Name", categoryName);
+            sc.Parameters.AddWithValue("Slug", categorySlug);
 
-			result = sc.ExecuteNonQuery();
-		}
+            result = sc.ExecuteNonQuery();
+        }
 
-		return (result == 1);
+        return (result == 1);
 
     }
 
     public bool DeleteCategory(int categoryID)
     {
-		int result;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+        int result;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("DeleteCategory", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("ID", categoryID);
+            SqlCommand sc = new SqlCommand("DeleteCategory", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("categoryID", categoryID);
 
-			result = sc.ExecuteNonQuery();
-		}
+            result = sc.ExecuteNonQuery();
+        }
 
-		return (result == 1);
+        return (result == 1);
     }
 
-	public bool EditCategory(Category c)
-	{
-		int result;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+    public bool EditCategory(Category c)
+    {
+        int result;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("UpdateCategory", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("ID", c.ID);
-			sc.Parameters.AddWithValue("Name", c.Name);
-			result = sc.ExecuteNonQuery();
-		}
+            SqlCommand sc = new SqlCommand("UpdateCategory", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("ID", c.ID);
+            sc.Parameters.AddWithValue("Name", c.Name);
+            result = sc.ExecuteNonQuery();
+        }
 
-		return (result == 1);
-	}
+        return (result == 1);
+    }
 
-	#endregion
+    #endregion
 
-	#region Comments
+    #region Comments
 
-	public bool AddCommentToPost(Comment c)
+    public bool AddCommentToPost(Comment c)
     {
         int rowcount = 0;
         using (SqlConnection connection = GetConnection())
@@ -325,8 +368,8 @@ public class SQLBlogDataAccess : IDataAccess
     }
 
     #endregion
-	
-	#endregion
+
+    #endregion
 
     public SqlConnection GetConnection()
     {

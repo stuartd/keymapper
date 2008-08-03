@@ -121,26 +121,7 @@ namespace KMBlog
 
 		private int GetCategoryFromQueryString()
 		{
-
-			NameValueCollection parameters = Request.QueryString;
-
-			string[] keys = parameters.AllKeys;
-
-			int categoryID = 0;
-			foreach (string key in keys)
-			{
-				if (key.ToUpperInvariant() == "C")
-				{
-					foreach (string value in parameters.GetValues(key))
-					{
-						if (System.Int32.TryParse(value, out categoryID))
-						{
-							break;
-						}
-					}
-				}
-			}
-			return categoryID;
+            return Category.GetCategoryIDFromQueryString(Request.QueryString);
 		}
 
 

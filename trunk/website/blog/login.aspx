@@ -4,11 +4,12 @@
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <div id="maindiv">
         <h1 id="header">
-            <a href="/">Key Mapper Blog Admin Login</a></h1>
-        <form id="form1" runat="server" class="loginform">
+            Key Mapper Blog Admin Login</h1>
+            You can use the username: demo and password: demo to see the admin page. You won't be able to save any changes.<br />
+        <div class="loginform">
             <asp:Login ID="KMLogin" runat="server" OnAuthenticate="Login1_Authenticate">
                 <TextBoxStyle CssClass="input_textbox" />
             </asp:Login>
-        </form>
+        </div>
     </div>
 </asp:Content>
