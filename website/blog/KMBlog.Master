@@ -1,4 +1,5 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KMBlog.master.cs" Inherits="KMBlog.KMBlog" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KMBlog.master.cs" Inherits="KMBlogMaster" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="kmhead" runat="server">
@@ -12,12 +13,12 @@
 <![endif]-->
 </head>
 <body>
-    <div>
-        <asp:ContentPlaceHolder ID="body" runat="server">
-        </asp:ContentPlaceHolder>
-        <div id="footer">
-            Copyright Stuart Dunkeld 2008. All rights reserved.
-        </div>
+    <form runat="server" id="masterform">
+    <asp:ContentPlaceHolder ID="body" runat="server">
+    </asp:ContentPlaceHolder>
+    </form>
+    <div id="footer">
+        Copyright Stuart Dunkeld 2008. All rights reserved.
     </div>
 </body>
 </html>

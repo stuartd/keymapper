@@ -11,11 +11,10 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 
-
-    public partial class KMBlogMaster : System.Web.UI.MasterPage
+namespace KMBlog
+{
+    public partial class KMBlogAdmin : System.Web.UI.MasterPage
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
+   
     }
+}

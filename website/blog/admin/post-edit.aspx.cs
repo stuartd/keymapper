@@ -39,7 +39,7 @@ namespace KMBlog
         protected void Page_Load(object sender, EventArgs e)
         {
 
-			if (User.IsInRole("Admin") == false)
+			if (AppController.IsUserAdmin(User) == false)
 			{
 				btnSavePost.Enabled = false;
 				btnPublishPost.Enabled = false;
@@ -67,7 +67,7 @@ namespace KMBlog
                 Post p = Post.GetPostByID(postID);
 
                 if (p == null)
-                    form1.Style.Add("display", "none");
+                    editarea.Style.Add("display", "none");
                 else
                 {
 
@@ -172,7 +172,7 @@ namespace KMBlog
         public void SavePost(object sender, CommandEventArgs e)
         {
 
-			if (User.IsInRole("Admin") == false)
+			if (AppController.IsUserAdmin(User) == false)
 				return;
 
             Page.Validate();
@@ -277,7 +277,7 @@ namespace KMBlog
         string GetSlug(string title)
         {
 
-            string slug = Regex.Replace(title.Replace(" ", "-"), @"[^\w\-]", "").ToLower();
+            string slug = AppController.GetSlug(title);
 
             int suffix = 1;
             while (String.IsNullOrEmpty(slug) || DoesSlugAlreadyExist(slug) == true)

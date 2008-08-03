@@ -14,7 +14,7 @@ namespace KMBlog
         protected void Page_Load(object sender, EventArgs e)
         {
 
-			if (User.IsInRole("Admin") == false)
+			if (AppController.IsUserAdmin(User) == false)
 				lblUserLevel.Text = "Demonstration Mode - you won't be able to save any changes";
 			else
 				lblUserLevel.Style.Add("Display", "None");

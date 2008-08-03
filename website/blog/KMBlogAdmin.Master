@@ -1,0 +1,5 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KMBlogAdmin.master.cs"
+    MasterPageFile="~/KMBlog.Master" Inherits="KMBlog.KMBlogAdmin" %>
+<asp:Content ContentPlaceHolderID="body" runat="server" ID="AdminMasterBody">
+    Fooooooooooooooooooooooooo
+</asp:Content>

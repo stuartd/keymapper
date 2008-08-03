@@ -11,15 +11,6 @@
 namespace KMBlog {
     
     
-    public partial class edit_comments {
-        
-        /// <summary>
-        /// editcomment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::KMBlog.comment_editor editcomment;
+    public partial class KMBlogAdmin {
     }
 }

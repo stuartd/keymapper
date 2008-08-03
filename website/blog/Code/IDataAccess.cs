@@ -51,7 +51,11 @@ public interface IDataAccess
 
     Collection<Category> GetAllCategories();
 
-	#endregion
+    bool DoesCategoryExist(string name);
+
+    Category GetCategoryByID(int categoryID);
+
+    #endregion
 
 	#region comments
 
