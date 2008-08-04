@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" AutoEventWireup="true" CodeBehind="edit-comments.aspx.cs"
+﻿<%@ Page Language="C#" MasterPageFile="~/KMBlogAdmin.Master" AutoEventWireup="true" CodeBehind="edit-comments.aspx.cs"
     Inherits="KMBlog.edit_comments" Title="Untitled Page" %>
 
 <%@ Register TagPrefix="comment" TagName="comment_editor" Src="~/Controls/comment-editor.ascx" %>

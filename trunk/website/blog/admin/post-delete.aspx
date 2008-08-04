@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" 
+﻿<%@ Page Language="C#" MasterPageFile="~/KMBlogAdmin.Master" 
 AutoEventWireup="true" CodeBehind="post-delete.aspx.cs" 
 Inherits="KMBlog.post_delete" Title="Confirm Deletion" %>
 

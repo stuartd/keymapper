@@ -4,17 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <h3 id="header">
         Key Mapper Blog Admin</h3>
-    <ul class="topnav">
-        <li><a href="post-edit.aspx">New Post</a></li>
-        <li><a href="../default.aspx">View Blog</a></li>
-        <li><a href="edit-categories.aspx">Categories</a></li>
-        <li>
-            <asp:LoginStatus ID="LoginStatus1" runat="server" />
-        </li>
-    </ul>
-    <div class="clearfloats">
-    </div>
-    <div id="maindiv">
+     <div id="maindiv">
         <div>
             <asp:Label ID="lblUserLevel" Text="" runat="server" /></div>
         <asp:Repeater ID="postsRepeater" runat="server">

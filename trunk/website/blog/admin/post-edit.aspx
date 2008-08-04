@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" AutoEventWireup="true" CodeBehind="post-edit.aspx.cs"
+﻿<%@ Page Language="C#" MasterPageFile="~/KMBlogAdmin.Master" AutoEventWireup="true" CodeBehind="post-edit.aspx.cs"
     Inherits="KMBlog.post_edit" Title="Post Editor" ValidateRequest="false" %>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">

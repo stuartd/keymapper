@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="kmhead" runat="server">
-    <meta name="keywords" content="keymapper, key mapper, scancode, scan code, keyboard" />
+    <meta name="keywords" content="keymapper, key mapper, scancode, scan code, keyboard layout, blog" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <title>Key Mapper Placeholder</title>

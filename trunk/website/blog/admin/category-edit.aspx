@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" AutoEventWireup="true" CodeBehind="category-edit.aspx.cs"
+﻿<%@ Page Language="C#" MasterPageFile="~/KMBlogAdmin.Master" AutoEventWireup="true" CodeBehind="category-edit.aspx.cs"
     Inherits="KMBlog.category_edit" Title="Edit A Category" %>
 
 <%@ Register TagPrefix="category" TagName="category_editor" Src="~/Controls/category-editor.ascx" %>

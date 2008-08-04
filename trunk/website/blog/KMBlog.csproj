@@ -136,19 +136,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="KMBlogAdmin.master.cs">
+      <DependentUpon>KMBlogAdmin.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="KMBlogAdmin.master.designer.cs">
+      <DependentUpon>KMBlogAdmin.master</DependentUpon>
+    </Compile>
     <Compile Include="KMBlog.Master.cs">
       <DependentUpon>KMBlog.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="KMBlog.Master.designer.cs">
       <DependentUpon>KMBlog.Master</DependentUpon>
-    </Compile>
-    <Compile Include="KMBlogAdmin.Master.cs">
-      <DependentUpon>KMBlogAdmin.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="KMBlogAdmin.Master.designer.cs">
-      <DependentUpon>KMBlogAdmin.Master</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
@@ -179,7 +179,7 @@
     <Content Include="kmblogIE.css" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="KMBlogAdmin.Master" />
+    <Content Include="KMBlogAdmin.master" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
