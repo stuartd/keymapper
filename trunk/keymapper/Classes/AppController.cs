@@ -528,25 +528,6 @@ namespace KeyMapper
 
         }
 
-        public static bool? IsNumLockExtended()
-        {
-            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-            if ((bool)(userSettings["NumLockHasBeenIdentified"]) == true)
-                return (bool?)(userSettings["NumLockIsExtended"]);
-            else
-                return null;
-        }
-
-        public static void SetNumLockExtendedStatus(bool extended)
-        {
-            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-            userSettings["NumLockHasBeenIdentified"] = true;
-            userSettings["NumLockIsExtended"] = extended;
-            userSettings.Save();
-            Console.WriteLine("Num Lock is" + (extended ? "" : " not") + " extended");
-        }
-
-
         public static void ValidateUserConfigFile()
         {
 

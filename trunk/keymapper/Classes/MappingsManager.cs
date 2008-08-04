@@ -623,18 +623,7 @@ namespace KeyMapper
 
                     // Second pair is the physical key which performs the new action
                     bytemappings[start + (i * 4) + 2] = (byte)map.From.Scancode;
-
-                    // If Num Long uses the extended code, export it as 69 / 224
-					bool? isExtended = AppController.IsNumLockExtended() ;
-
-                    if (map.From.Scancode == 69 && isExtended != null && (bool)isExtended == true)
-                    {
-                        bytemappings[start + (i * 4) + 3] = (byte)224;
-                    }
-                    else
-                    {
-                        bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
-                    }
+                    bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
                 }
                 else
                     break;
@@ -774,30 +763,6 @@ namespace KeyMapper
 
             int scancode = map.From.Scancode;
             int extended = map.From.Extended;
-
-                 // Some keyboards map Num Lock to 69 / 224 instead of 69 / 0
-            // so if we are to be sure we are remapping num lock, then 
-            // user has to confirm what their keyboard behaviour is. 
-
-            if (scancode == 69 && extended == 0)
-            {
-                bool? numLockIsExtended = AppController.IsNumLockExtended();
-                if (numLockIsExtended == null)
-                {
-                    bool isDisabling = (map.To.Scancode == 0 && map.To.Extended == 0);
-                    IdentifyNumLockKey ikform = new IdentifyNumLockKey(isDisabling);
-                    ikform.ShowDialog();
-                    // Recheck
-                    numLockIsExtended = AppController.IsNumLockExtended();
-                    if (numLockIsExtended == null)
-                    {
-                        // User hasn't identified the key..
-                        return false;
-                    }
-
-                }
-            }
-
 
             // If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
             // that it could be goodbye to CTRL-ALT-DEL
@@ -1139,12 +1104,6 @@ namespace KeyMapper
                     // Second pair is the physical key which performs the new action
                     word1 = map[start + (i * 4) + 2];
                     word2 = map[start + (i * 4) + 3];
-
-                    if (word1 == 69)
-                    {
-                       // Always store Num Lock as 69 / 0 
-                        word2 = 0;
-                    }
 
                     Key fromkey = new Key(word1, word2);
 
