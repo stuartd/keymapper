@@ -1,9 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/KMBlog.Master" AutoEventWireup="true" CodeBehind="edit-categories.aspx.cs"
+﻿<%@ Page Language="C#" MasterPageFile="~/KMBlogAdmin.Master" AutoEventWireup="true" CodeBehind="edit-categories.aspx.cs"
     Inherits="KMBlog.edit_categories" Title="Edit Categories" EnableEventValidation="false" %>
 
 <%@ Register TagPrefix="category" TagName="category_editor" Src="~/Controls/category-editor.ascx" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <h1 id="header">
         Category Editor</h1>

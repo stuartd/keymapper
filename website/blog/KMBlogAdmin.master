@@ -1,0 +1,19 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/KMBlog.Master" AutoEventWireup="true" CodeBehind="KMBlogAdmin.master.cs" Inherits="KMBlogAdmin" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
+<ul class="topnav">
+        <li><a href="admin.aspx">Manage Posts</a></li>
+            <li><a href="post-edit.aspx">New Post</a></li>
+        <li><a href="../default.aspx" target="_blank">View Blog</a></li>
+        <li><a href="edit-categories.aspx">Categories</a></li>
+        <li>
+            <asp:LoginStatus ID="LoginStatus1" runat="server" />
+        </li>
+    </ul>
+    <div class="clearfloats">
+    </div>
+    <asp:ContentPlaceHolder ID="body" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+
+
+

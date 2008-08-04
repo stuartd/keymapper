@@ -42,7 +42,7 @@ namespace KMBlog
             {
                 ticket = FormsAuthentication.Decrypt(cookie.Value);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }
