@@ -2,8 +2,6 @@
 AutoEventWireup="true" CodeBehind="post-delete.aspx.cs" 
 Inherits="KMBlog.post_delete" Title="Confirm Deletion" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
 
     <p>

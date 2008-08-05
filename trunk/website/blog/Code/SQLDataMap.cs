@@ -25,7 +25,7 @@ public class SQLDataMap
                 c.PostID = Convert.ToInt32(reader["PostID"]);
                 c.Text = Convert.ToString(reader["text"]);
                 c.Name = Convert.ToString(reader["name"]);
-                c.URL = Convert.ToString(reader["url"]);
+                c.Url = Convert.ToString(reader["url"]);
 
                 commentlist.Add(c);
             }

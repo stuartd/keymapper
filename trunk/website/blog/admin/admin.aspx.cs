@@ -56,7 +56,7 @@ namespace KMBlog
             string text;
 
             text = commentCount.ToString() + " comment";
-            if (commentCount > 0)
+            if (commentCount != 1)
                 text += "s";
 
             String comment = "<a href=" + href + ">" + text + "</a>";

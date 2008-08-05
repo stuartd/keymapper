@@ -8,21 +8,22 @@ Anchors: #06c;
 
  */
 
- 
+
 
 #category-editor, .loginform
 {
-	width: auto ;
+	width: auto;
 	padding: 1em 2px;
 }
 
+/* Firefox 2 doesn't support inline-block */
 
 #category-editor label, .loginform label
 {
 	width: 5em;
 	margin-right: 0.5em;
-	display: inline-block ;
-	display: -moz-inline-box ;
+	display: -moz-inline-box;
+	display: inline-block;
 }
 
 .input_textbox
@@ -30,9 +31,9 @@ Anchors: #06c;
 	border-color: #d3d3d3;
 }
 
-#category-editor  li
+#category-editor li
 {
-	padding: 5px ;
+	padding: 5px;
 }
 
 

@@ -1,8 +1,10 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/KMBlogAdmin.Master" AutoEventWireup="true" CodeBehind="edit-categories.aspx.cs"
     Inherits="KMBlog.edit_categories" Title="Edit Categories" EnableEventValidation="false" %>
 
-<%@ Register TagPrefix="category" TagName="category_editor" Src="~/Controls/category-editor.ascx" %>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+<%@ Register TagPrefix="category" TagName="CategoryEditor" Src="~/Controls/category-editor.ascx" %>
+<%@ Register TagPrefix="Confirm" TagName="ConfirmButton" Src="~/Controls/ConfirmButton.ascx" %>
+
+		<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <h1 id="header">
         Category Editor</h1>
     <asp:Repeater ID="rptCategories" runat="server">
@@ -27,9 +29,9 @@
                     <a href="category-edit.aspx?c=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
                         <%# DataBinder.Eval(Container.DataItem, "Name") %></a> </td>
                 <td>
-                    <asp:Button runat="server" ID="DeleteCategory" Text="Delete" OnCommand="DeleteCategory"
+                    <Asp:Button runat="server" ID="DeleteCategory" Text="Delete" OnCommand="DeleteCategory"
                         CausesValidation="false" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>'
-                        Enabled="<%# AppController.IsUserAdmin(Page.User) %>" />
+                        Enabled="<%# AppController.IsUserAdmin(Page.User) %>" OnClientClick="return __doConfirm(this);" />
                 </td>
             </tr>
         </ItemTemplate>
@@ -38,6 +40,6 @@
     </asp:Repeater>
     <h4>
         Add A New Category</h4>
-    <category:category_editor ID="newcategory" runat="server" />
+    <category:CategoryEditor ID="newcategory" runat="server" />
  
 </asp:Content>
