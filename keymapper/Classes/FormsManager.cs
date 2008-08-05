@@ -48,7 +48,7 @@ namespace KeyMapper
                 _helpForm = null;
             else if (sender is ColourEditor)
             {
-                ColourEditor ce = sender as ColourEditor;
+                ColourEditor ce = (ColourEditor)sender ;
                 if (_editorForms.ContainsKey(ce.Effect))
                     _editorForms.Remove(ce.Effect);
             }
