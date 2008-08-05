@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="comment-editor.ascx.cs"
-    Inherits="KMBlog.comment_editor" %>
+    Inherits="KMBlog.CommentEditor" %>
 <div id="comment_editor">
     <asp:TextBox ID="txtName" runat="server" />
     <asp:Label ID="labelName" AssociatedControlID="txtName" runat="server" Text="Name" />

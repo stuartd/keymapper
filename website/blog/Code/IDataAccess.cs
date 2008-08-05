@@ -51,7 +51,7 @@ public interface IDataAccess
 
     Collection<Category> GetAllCategories();
 
-    bool DoesCategoryExist(string name);
+    int GetCategoryIDByName(string name);
 
     Category GetCategoryByID(int categoryID);
 

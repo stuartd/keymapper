@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace KMBlog
 {
-    public partial class comment_editor : System.Web.UI.UserControl
+    public partial class CommentEditor : System.Web.UI.UserControl
     {
 
         public bool IsValid()

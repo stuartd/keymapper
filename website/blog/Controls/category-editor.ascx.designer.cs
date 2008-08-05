@@ -10,7 +10,7 @@
 
 
 
-public partial class category_editor {
+public partial class CategoryEditor {
     
     /// <summary>
     /// lblCategoryName control.
@@ -65,6 +65,15 @@ public partial class category_editor {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.TextBox txtCategorySlug;
+    
+    /// <summary>
+    /// fldCategoryID control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlInputHidden fldCategoryID;
     
     /// <summary>
     /// btnSaveCategory control.

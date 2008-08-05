@@ -17,10 +17,13 @@ namespace KMBlog
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			if (Page.IsPostBack)
+				return;
+
             editcategory.CategorySaved += new EventHandler<EventArgs>(CategorySaved);
             int categoryID = Category.GetCategoryIDFromQueryString(Request.QueryString);
 
-            // Loat category
+            // Load category
             Category c = Category.GetCategoryByID(categoryID);
             if (categoryID == 0 || c == null)
             {

@@ -1,8 +1,8 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="KMBlog._Default"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="KMBlog.DefaultPage"
     MasterPageFile="~/KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
 
 <%@ Import Namespace="System.Collections.ObjectModel" %>
-<%@ Register TagPrefix="comment" TagName="comment_editor" Src="~/Controls/comment-editor.ascx" %>
+<%@ Register TagPrefix="comment_edit" TagName="CommentEditor" Src="~/Controls/comment-editor.ascx" %>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <ul class="topnav" id="sitenav">
         <li><a href="http://justkeepswimming.net/keymapper/default.aspx">Key Mapper</a></li>
@@ -84,7 +84,7 @@
                         </ItemTemplate>
                     </asp:Repeater>
                     If you want to leave a comment, all fields are optional except the text.<br />
-                    <comment:comment_editor ID="editcomment" runat="server" />
+                    <comment_edit:CommentEditor ID="editcomment" runat="server" />
                     <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" />
                     <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
                     <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />

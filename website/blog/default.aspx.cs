@@ -12,13 +12,12 @@ using System.Web;
 
 namespace KMBlog
 {
-	public partial class _Default : System.Web.UI.Page
+	public partial class DefaultPage : System.Web.UI.Page
 	{
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			GetPosts();
-
 		}
 
 		// Specific post: ?p=1 -- overrides all other options.
@@ -259,7 +258,7 @@ namespace KMBlog
 
 			Comment c = new Comment();
 
-			c.URL = editcomment.URL;
+			c.Url = editcomment.URL;
 			c.Name = editcomment.Name;
 			c.PostID = Post.GetPostIDFromQueryString(Request.QueryString);
 			c.Text = editcomment.Text;
@@ -271,7 +270,7 @@ namespace KMBlog
 
 				HttpCookie details = new HttpCookie("userDetails");
 				details.Values.Add("Name", c.Name);
-				details.Values.Add("URL", c.URL);
+				details.Values.Add("URL", c.Url);
 				Response.Cookies.Add(details);
 			}
 			else

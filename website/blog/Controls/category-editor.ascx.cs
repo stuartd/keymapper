@@ -1,96 +1,106 @@
 ﻿using System;
-using System.Collections;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
 
 
-public partial class category_editor : System.Web.UI.UserControl
+public partial class CategoryEditor : System.Web.UI.UserControl
 {
 
-    int _categoryID;
+	public event EventHandler<EventArgs> CategorySaved;
 
-    public event EventHandler<EventArgs> CategorySaved;
+	public void DisableSave()
+	{
+		btnSaveCategory.Enabled = false;
+	}
 
-    public void DisableSave()
-    {
-        btnSaveCategory.Enabled = false;
-    }
+	public void SetSaveAsDefaultButton()
+	{
+		Page.Form.DefaultButton = btnSaveCategory.UniqueID;
+	}
 
-    public void SetSaveAsDefaultButton()
-    {
-        Page.Form.DefaultButton = btnSaveCategory.UniqueID;
-    }
+	public int CategoryID
+	{
+		get
+		{
+			int catID;
+			if (Int32.TryParse(fldCategoryID.Value, out catID))
+				return catID;
+			else
+				return 0;
+		}
+		set
+		{
+			fldCategoryID.Value = value.ToString();
+		}
+	}
 
-    public int CategoryID
-    {
-        get
-        {
-            return _categoryID;
-        }
-        set
-        {
-            _categoryID = value;
-        }
-    }
+	public string Name
+	{
+		get
+		{
+			return txtCategoryName.Text;
+		}
+		set
+		{
+			txtCategoryName.Text = value;
+		}
+	}
 
-    public string Name
-    {
-        get
-        {
-            return txtCategoryName.Text;
-        }
-        set
-        {
-            txtCategoryName.Text = value;
-        }
-    }
-
-    public string Slug
-    {
-        get
-        {
-            return txtCategorySlug.Text;
-        }
-        set
-        {
-            txtCategorySlug.Text = value;
-        }
-    }
-
-
-    public void SaveCategory(object sender, EventArgs e)
-    {
-        if (AppController.IsUserAdmin(Page.User) == false)
-            return;
-
-        if (Page.IsValid == false)
-            return;
-
-        Category.Add(Name, Slug);
-
-        if (this.CategorySaved != null)
-        {
-            CategorySaved(null, null);
-        }
-        Name = String.Empty;
-        Slug = String.Empty;
-    }
+	public string Slug
+	{
+		get
+		{
+			return txtCategorySlug.Text;
+		}
+		set
+		{
+			txtCategorySlug.Text = value;
+		}
+	}
 
 
+	public void SaveCategory(object sender, EventArgs e)
+	{
+		if (AppController.IsUserAdmin(Page.User) == false)
+			return;
 
-    protected void CategoryNameExistsValidator_ServerValidate(object source, ServerValidateEventArgs args)
-    {
-        if (Category.DoesCategoryExist(args.Value))
-        {
-            args.IsValid = false;
-        }
-    }
+		if (Page.IsValid == false)
+			return;
+
+		if (CategoryID != 0)
+		{
+			Category c = new Category(CategoryID, Name, Slug);
+			if (c)
+			{
+				Category.Edit(c);
+			}
+		}
+		else
+		{
+			Category.Add(Name, Slug);
+			Name = String.Empty;
+			Slug = String.Empty;
+		}
+
+		if (this.CategorySaved != null)
+		{
+			CategorySaved(null, null);
+		}
+
+		if (CategoryID != 0)
+			Response.Redirect("edit-categories.aspx");
+
+	}
+
+
+
+	protected void CategoryNameExistsValidator_ServerValidate(object source, ServerValidateEventArgs args)
+	{
+		int catID;
+		catID = Category.GetCategoryIDByName(args.Value);
+		if (catID != 0 && catID != CategoryID)
+		{
+			args.IsValid = false;
+		}
+	}
 }

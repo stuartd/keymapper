@@ -40,9 +40,9 @@ public class Category
         return categoryID;
     }
 
-    public static bool DoesCategoryExist(string name)
+    public static int GetCategoryIDByName(string name)
     {
-        return DataAccess.CreateInstance().DoesCategoryExist(name) ;
+        return DataAccess.CreateInstance().GetCategoryIDByName(name) ;
     }
 
 	public static Collection<Category> GetAllCategories()
@@ -63,7 +63,7 @@ public class Category
 	public static bool Add(string categoryName, string categorySlug)
 	{
 		if (String.IsNullOrEmpty(categoryName))
-			throw new NullReferenceException("Category name can't be empty") ;
+			throw new ArgumentException("Category name can't be empty") ;
 
 		// TODO: Sort out all this slug stuff! 
 
@@ -74,9 +74,9 @@ public class Category
 		return DataAccess.CreateInstance().AddCategory(categoryName, categorySlug);
 	}
 
-	 public static bool Edit(Category c)
+	 public static bool Edit(Category cat)
     {
-		return DataAccess.CreateInstance().EditCategory(c);
+		return DataAccess.CreateInstance().EditCategory(cat);
     }
 
 	public static bool Delete(int categoryID)
@@ -88,5 +88,12 @@ public class Category
     {
         return DataAccess.CreateInstance().GetCategoryByID(categoryID);
     }
+
+	// Operator overload
+	public static implicit operator bool(Category cat)
+	{
+		return cat.ID != 0 && String.IsNullOrEmpty(cat.Name) == false && String.IsNullOrEmpty(cat.Slug) == false;
+	}
+
 }
 

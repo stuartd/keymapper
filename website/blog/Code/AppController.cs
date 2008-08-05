@@ -38,9 +38,9 @@ public class AppController
         return Regex.Replace(seed, @"[^\w\-]", "-").ToLower();
     }
 
-    public static bool IsUserAdmin(IPrincipal User)
+    public static bool IsUserAdmin(IPrincipal user)
     {
-        return User.IsInRole("Admin");
+        return user.IsInRole("Admin");
     }
 
 }
