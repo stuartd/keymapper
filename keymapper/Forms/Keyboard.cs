@@ -837,7 +837,7 @@ namespace KeyMapper
                 // what state the keyboard is in using Form.IsKeySet or WIN32API funcs like
                 // GetKeyState. So, using fields for the state of each key.
 
-                // (In fact, the only thing this achieves is live updating og the Toggle Lock Menu if user presses
+                // (In fact, the only thing this achieves is live updating of the Toggle Lock Menu if user presses
                 // a lock key while menu is open. It's a small thing, but would be a shame to lose it)
 
                 switch (key.VirtualKeyCode)

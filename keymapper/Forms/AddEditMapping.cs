@@ -652,15 +652,7 @@ namespace KeyMapper
             int scancode = e.Key.Scancode;
             int extended = e.Key.Extended;
             
-            // Some keyboards report Num Lock as having the extended bit set
-            // on keypress, but that doesn't work in a mapping.
-            if (scancode == 69 && extended == 224)
-            {
-                // The Keyboard lies.
-                extended = 0;
-            }
-
-			if (_capturingFromKey)
+  			if (_capturingFromKey)
 			{
 				// Have we been sent a dud??
 				if (scancode == 0)
