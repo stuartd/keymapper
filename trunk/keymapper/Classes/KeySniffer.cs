@@ -190,6 +190,14 @@ namespace KeyMapper
 
 				}
 
+                // Some keyboards report Num Lock as having the extended bit set
+                // on keypress, but that doesn't work in a mapping.
+                if (keypress.Scancode == 69 && keypress.Extended == 224)
+                {
+                    // The Keyboard lies.
+                    keypress.Extended = 0;
+                }
+
 				// Raise the event:
 				if (this.KeyPressed != null)
 				{
@@ -228,7 +236,6 @@ namespace KeyMapper
 		public int VirtualKeyCode
 		{
 			get { return _vkcode; }
-			set { _vkcode = value; }
 		}
 
 		public int Scancode
@@ -255,7 +262,14 @@ namespace KeyMapper
 					return 0;
 				}
 			}
+            set
+            {
+                if (value == 224)
+                    _flags = LLKHF_EXTENDED;
+                else
+                    _flags = 0;
 
+            }
 		}
 
 		// They *are* flags.
