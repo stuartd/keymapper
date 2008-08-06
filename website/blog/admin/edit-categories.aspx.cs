@@ -16,10 +16,13 @@ namespace KMBlog
 
             newcategory.CategorySaved += NewCategorySaved;
 
-			ClientScript.RegisterClientScriptBlock(this.GetType(),
+			if (ClientScript.IsClientScriptBlockRegistered("confirmButtonScript") == false)
+			{
+				ClientScript.RegisterClientScriptBlock(this.GetType(),
 			"confirmButtonScript",
-			"function __doConfirm(btn){if (confirm('Are you sure you wish to submit?')){return true;}else{return false;}}",
+			"function __doConfirm(btn){if (confirm('Are you sure you wish to delete this category?')){return true;}else{return false;}}",
 			true);
+			}
 
         }
 
