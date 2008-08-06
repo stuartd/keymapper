@@ -14,7 +14,7 @@ namespace KMBlog
         protected void Page_Load(object sender, EventArgs e)
         {
 
-			((KMBlogMaster)Page.Master).SetTitle("Key Mapper Blog Admin");
+			// ((KMBlogMaster)Page.Master).SetTitle("Key Mapper Blog Admin");
 
 			if (AppController.IsUserAdmin(User) == false)
 				lblUserLevel.Text = "Demonstration Mode - you won't be able to save any changes";
