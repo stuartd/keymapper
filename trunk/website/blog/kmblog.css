@@ -22,8 +22,8 @@ Anchors: #06c;
 {
 	width: 5em;
 	margin-right: 0.5em;
-	display: -moz-inline-box;
 	display: inline-block;
+	display: -moz-inline-box;
 }
 
 .input_textbox
