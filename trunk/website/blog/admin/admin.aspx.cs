@@ -14,17 +14,27 @@ namespace KMBlog
         protected void Page_Load(object sender, EventArgs e)
         {
 
+			((KMBlogMaster)Page.Master).SetTitle("Key Mapper Blog Admin");
+
 			if (AppController.IsUserAdmin(User) == false)
 				lblUserLevel.Text = "Demonstration Mode - you won't be able to save any changes";
 			else
 				lblUserLevel.Style.Add("Display", "None");
+
+			if (ClientScript.IsClientScriptBlockRegistered("confirmButtonScript") == false)
+			{
+				ClientScript.RegisterClientScriptBlock(this.GetType(),
+			"confirmButtonScript",
+			"function __doConfirm(){if (confirm('Are you sure you wish to delete this post?')){return true;}else{return false;}}",
+			true);
+			}
 
             GetPostList();
         }
 
         void GetPostList()
         {
-            Collection<Post> posts = Post.GetAllPosts();
+			Collection<Post> posts = Post.GetAllPosts();
             postsRepeater.DataSource = posts;
             postsRepeater.DataBind();
 
@@ -33,12 +43,16 @@ namespace KMBlog
         public void DeletePost(object sender, CommandEventArgs e)
         {
 
+			if (AppController.IsUserAdmin(User) == false)
+				return;
+
             int postID;
             if (Int32.TryParse(e.CommandArgument.ToString(), out postID) == false)
                 return;
 
-            Response.Redirect("post-delete.aspx?p=" + postID.ToString());
-
+			Post.Delete(postID);
+			GetPostList();
+			
         }
 
         public string GetCommentLinkText(int postID, int commentCount)

@@ -2,7 +2,6 @@
     Inherits="KMBlog.edit_categories" Title="Edit Categories" EnableEventValidation="false" %>
 
 <%@ Register TagPrefix="category" TagName="CategoryEditor" Src="~/Controls/category-editor.ascx" %>
-<%@ Register TagPrefix="Confirm" TagName="ConfirmButton" Src="~/Controls/ConfirmButton.ascx" %>
 
 		<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <h1 id="header">

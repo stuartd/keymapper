@@ -2,8 +2,6 @@
     EnableEventValidation="false" Inherits="KMBlog.admin" Title="Key Mapper Blog Admin" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <h3 id="header">
-        Key Mapper Blog Admin</h3>
      <div id="maindiv">
         <div>
             <asp:Label ID="lblUserLevel" Text="" runat="server" /></div>
@@ -45,7 +43,8 @@
                     </td>
                     <td>
                         <asp:Button runat="server" ID="DeletePost" Text="Delete" Enabled="<%# AppController.IsUserAdmin(Page.User) %>"
-                            OnCommand="DeletePost" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' />
+                            OnCommand="DeletePost" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' 
+                            OnClientClick="return __doConfirm();"/>
                     </td>
                     <td>
                         <%# GetCommentLinkText((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %>

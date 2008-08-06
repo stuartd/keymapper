@@ -124,15 +124,20 @@ namespace KMBlog
 
         private DateTime GetPostDate()
         {
-            DateTime dt = DateTime.MinValue;
+            DateTime postdatetime = DateTime.MinValue;
 
             if (String.IsNullOrEmpty(postday.Text) || String.IsNullOrEmpty(postmonth.Text) || String.IsNullOrEmpty(postyear.Text))
-                return dt;
+                return postdatetime;
 
-            string postdate = postday.Text + " " + postmonth.Text + " " + postyear.Text;
+			string postdate = postday.Text + " " + postmonth.Text + " " + postyear.Text;
 
-            DateTime.TryParse(postdate, out dt);
-            return dt;
+			if (DateTime.TryParse(postdate, out postdatetime))
+			{
+				if (postdatetime.Date == DateTime.Now.Date)
+					postdatetime = DateTime.Now ;
+			}
+
+			return postdatetime;
 
         }
 
