@@ -25,15 +25,12 @@
                         <th>
                             Delete
                         </th>
-                        <th>
-                            Comments
-                        </th>
                     </tr>
             </HeaderTemplate>
             <ItemTemplate>
                 <tr>
                     <td>
-                        <a href="post-edit.aspx?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
+                        <a href="comment-edit.aspx?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
                             <%# DataBinder.Eval(Container.DataItem, "Title") %></a> </td>
                     <td>
                         <%# ((DateTime)DataBinder.Eval(Container.DataItem, "Postdate")).ToLongDateString() %>

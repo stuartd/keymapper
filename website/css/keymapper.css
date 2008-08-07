@@ -1,0 +1,136 @@
+﻿@import "cssreset.css";
+
+html
+{
+	height: 100%;
+	margin-bottom: 1px ;
+}
+
+body
+{
+	background-position: 100px 10px ;
+	background-color: #FFFFFF;
+	background-image: url( 'http://justkeepswimming.net/KeyMapper/images/kmheader800w.png' );
+	background-repeat: no-repeat;
+	width: 80%;
+	padding-left: 100px;
+	padding-right: 10%;
+	padding-top: 100px;
+	line-height: 1.8em;
+	font-size: 87%;
+	font-family: Trebuchet MS, Verdana, Helvetica, Arial, sans-serif;
+}
+
+#showhidetocanchor
+{
+	text-decoration: underline ;
+	cursor: pointer ;
+	cursor: hand ;
+}
+
+#maindiv
+{
+	padding-top: 20px ;
+	clear: both ;
+}
+
+.header
+{
+	margin-top: -5px ;
+	font-size: 200%;
+	line-height: 3em;
+	letter-spacing: 0.3em;
+	font-variant: small-caps;
+	text-align: left;
+	margin-bottom: 10px;
+	border-bottom: 5px solid #aaaaaa;
+}
+
+#topdiv
+{
+	}
+
+.show
+{
+	display:inherit ;
+}
+
+.hide
+{
+	display: none ;
+}
+
+
+h3
+{
+	font-size: 120%;
+	letter-spacing: 0.1em;
+}
+
+h4
+{
+	font-size: 120% ;
+}
+
+
+
+.topnav li
+{	
+	float: left ;
+	list-style-type: none;
+	cursor: default;
+	display: inline;
+	background: none;
+	margin: 0.15em 0.15em;
+}
+
+.topnav li a
+{
+	height: 2em;
+	line-height: 2em;
+	width: 6.5em;
+	border: 1px solid black;
+	color: #000000;
+	text-decoration: none;
+	text-align: center;
+	background-color: rgb(235, 235, 235);
+	display: block;
+}
+
+
+.topnav a:hover
+{
+	color: #111111;
+	background-color: rgb(220, 220, 220);
+	color: Blue;
+}
+
+
+ul.basiclist
+{
+	list-style-type: disc;
+}
+ul.basiclist li
+{
+	list-style-position: inside;
+	margin: 0.1em 0;
+}
+
+
+
+#header a, header a:visited, header a:hover
+{
+	text-decoration: none;
+	color: Black;
+}
+
+#footer
+{
+	width: 100%;
+	margin-top: 50px;
+	float: left;
+	border: 1px solid #d3d3d3;
+	background-color: #eeeeee;
+	text-align: center;
+}
+
