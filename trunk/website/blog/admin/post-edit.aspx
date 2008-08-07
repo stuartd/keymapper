@@ -2,9 +2,6 @@
     Inherits="KMBlog.post_edit" Title="Post Editor" ValidateRequest="false" %>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <h3 id="header">
-        Blog Post Editor</h3>
-    <a href="admin.aspx">Back to Admin page</a>
     <div id="editarea" runat="server">
         <div id="edit_title">
             Title:

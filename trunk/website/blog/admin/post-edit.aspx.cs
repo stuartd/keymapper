@@ -39,6 +39,8 @@ namespace KMBlog
         protected void Page_Load(object sender, EventArgs e)
         {
 
+			((KMBlogMaster)Page.Master).SetTitle("Blog Post Editor");
+
 			if (AppController.IsUserAdmin(User) == false)
 			{
 				btnSavePost.Enabled = false;

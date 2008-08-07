@@ -4,15 +4,9 @@
 <%@ Register TagPrefix="category" TagName="CategoryEditor" Src="~/Controls/category-editor.ascx" %>
 
 		<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <h1 id="header">
-        Category Editor</h1>
-    <asp:Repeater ID="rptCategories" runat="server">
+     <asp:Repeater ID="rptCategories" runat="server">
         <HeaderTemplate>
             <table border="0" cellpadding="0" cellspacing="0" width="30%" id="admincategories">
-                <caption style="text-align: left">
-                    <h4>
-                        Manage Categories</h4>
-                </caption>
                 <tr>
                     <th>
                         Edit Category
