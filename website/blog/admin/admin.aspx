@@ -8,10 +8,6 @@
         <asp:Repeater ID="postsRepeater" runat="server">
             <HeaderTemplate>
                 <table border="0" cellpadding="0" cellspacing="0" width="60%" id="adminposts">
-                    <caption style="text-align: left">
-                        <h4>
-                            Manage posts</h4>
-                    </caption>
                     <tr>
                         <th>
                             Post

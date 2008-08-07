@@ -90,13 +90,6 @@
     <Compile Include="admin\edit-comments.aspx.designer.cs">
       <DependentUpon>edit-comments.aspx</DependentUpon>
     </Compile>
-    <Compile Include="admin\post-delete.aspx.cs">
-      <DependentUpon>post-delete.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\post-delete.aspx.designer.cs">
-      <DependentUpon>post-delete.aspx</DependentUpon>
-    </Compile>
     <Compile Include="admin\post-edit.aspx.cs">
       <DependentUpon>post-edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -170,7 +163,6 @@
     <Content Include="admin\default.aspx" />
     <Content Include="admin\edit-categories.aspx" />
     <Content Include="admin\edit-comments.aspx" />
-    <Content Include="admin\post-delete.aspx" />
     <Content Include="admin\post-edit.aspx" />
     <Content Include="admin\Web.config" />
     <Content Include="Controls\category-editor.ascx" />

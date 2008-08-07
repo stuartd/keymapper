@@ -12,11 +12,8 @@ using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 
 
-public partial class KMBlogAdmin : System.Web.UI.MasterPage
+public partial class KMBlogAdmin : KMBlogMaster
 {
-	protected void Page_Load(object sender, EventArgs e)
-	{
 
-	}
 }
 

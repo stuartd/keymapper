@@ -17,7 +17,7 @@ namespace KMBlog
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+			((KMBlogMaster)Page.Master).SetTitle("Edit Comments");
         }
     }
 }

@@ -12,10 +12,35 @@ using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 
 
-    public partial class KMBlogMaster : System.Web.UI.MasterPage
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
+public partial class KMBlogMaster : System.Web.UI.MasterPage
+{
 
-        }
-    }
+	public void SetTitle(string title)
+	{
+		RecurseControls(this.Controls, title);
+	}
+
+	private void RecurseControls(ControlCollection c, string title)
+	{
+
+		foreach (Control con in c)
+		{
+			if (con.ID == "Header")
+			{
+				HtmlGenericControl header = con as HtmlGenericControl;
+				if (header != null)
+				{
+					header.InnerText = title;
+					return;
+				}
+
+			}
+			RecurseControls(con.Controls, title);
+		}
+	}
+}
+
+
+
+
+
