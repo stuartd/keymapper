@@ -17,7 +17,12 @@ namespace KMBlog
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			((KMBlogMaster)Page.Master).SetTitle("Edit Comments");
+            int postID = Post.GetPostIDFromQueryString(Request.QueryString);
+            if (postID == 0)
+            {
+                ((KMBlogMaster)Page.Master).SetTitle("Edit Comments");
+                
+            }
         }
     }
 }

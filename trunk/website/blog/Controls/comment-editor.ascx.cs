@@ -56,5 +56,12 @@ namespace KMBlog
                 txtText.Text = value;
             }
         }
+
+        internal void ClearValues()
+        {
+            txtName.Text = String.Empty;
+            txtText.Text = String.Empty;
+            txtURL.Text = String.Empty;
+        }
     }
 }

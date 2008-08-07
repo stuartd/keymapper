@@ -227,5 +227,8 @@ code
 	background-color: #EEE;
 }
 
-
+samp
+{
+	font-family: Monaco, "Lucida Console" , "Courier New" , Courier, monospace;
+}
 

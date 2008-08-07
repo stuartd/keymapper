@@ -263,6 +263,7 @@ namespace KMBlog
 			c.Name = editcomment.Name;
 			c.PostID = Post.GetPostIDFromQueryString(Request.QueryString);
 			c.Text = editcomment.Text;
+            c.Posted = DateTime.Now;
 
 			c.Save();
 
@@ -285,6 +286,7 @@ namespace KMBlog
 				}
 			}
 
+            editcomment.ClearValues();
 
 			GetPosts();
 
