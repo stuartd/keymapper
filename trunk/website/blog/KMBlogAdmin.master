@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" MasterPageFile="KMBlog.Master" AutoEventWireup="true" CodeBehind="KMBlogAdmin.master.cs" Inherits="KMBlogAdmin" %>
+﻿<%@ Master Language="C#" MasterPageFile="KMBlog.Master" AutoEventWireup="true" codefile="KMBlogAdmin.master.cs" Inherits="KMBlogAdmin" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
 <ul class="topnav">
         <li><a href="admin.aspx">Manage Posts</a></li>
