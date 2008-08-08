@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="category-editor.ascx.cs"
+﻿<%@ Control Language="C#" AutoEventWireup="true" codefile="category-editor.ascx.cs"
     Inherits="CategoryEditor" %>
 <fieldset id="category-editor">
     <ol>

@@ -1,8 +1,8 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="KMBlog.DefaultPage"
-    MasterPageFile="~/KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
+    MasterPageFile="KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
 
 <%@ Import Namespace="System.Collections.ObjectModel" %>
-<%@ Register TagPrefix="comment_edit" TagName="CommentEditor" Src="~/Controls/comment-editor.ascx" %>
+<%@ Register TagPrefix="comment_edit" TagName="CommentEditor" Src="Controls/comment-editor.ascx" %>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <ul class="topnav" id="sitenav">
         <li><a href="http://justkeepswimming.net/keymapper/default.aspx">Key Mapper</a></li>

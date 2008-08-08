@@ -11,8 +11,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.Xml.Linq;
 
-namespace KMBlog
-{
+
 	public partial class category_edit : System.Web.UI.Page
 	{
 		protected void Page_Load(object sender, EventArgs e)
@@ -47,4 +46,4 @@ namespace KMBlog
             Response.Redirect("edit-categories.aspx");
         }
 	}
-}
+
