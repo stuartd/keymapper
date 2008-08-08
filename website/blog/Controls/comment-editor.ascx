@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="comment-editor.ascx.cs"
+﻿<%@ Control Language="C#" AutoEventWireup="true" codefile="comment-editor.ascx.cs"
     Inherits="KMBlog.CommentEditor" %>
 <div id="comment_editor">
     <asp:TextBox ID="txtName" runat="server" />

@@ -57,7 +57,7 @@ namespace KMBlog
             }
         }
 
-        internal void ClearValues()
+        public void ClearValues()
         {
             txtName.Text = String.Empty;
             txtText.Text = String.Empty;

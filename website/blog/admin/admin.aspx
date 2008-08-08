@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/KMBlogAdmin.Master" AutoEventWireup="true" CodeBehind="admin.aspx.cs"
+﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true" codefile="admin.aspx.cs"
     EnableEventValidation="false" Inherits="KMBlog.admin" Title="Key Mapper Blog Admin" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">

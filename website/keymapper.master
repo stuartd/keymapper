@@ -25,7 +25,7 @@
             <li><a href="faq.aspx">FAQ</a></li>
             <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/keymapper">Source
                 Code</a></li>
-            <!-- <li><a href="">Blog</a></li> -->
+            <li><a href="blog">Blog</a></li>
         </ul>
     </div>
     <div id="maindiv">

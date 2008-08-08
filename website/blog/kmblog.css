@@ -13,7 +13,7 @@ Anchors: #06c;
 #category-editor, .loginform
 {
 	width: auto;
-	padding: 1em 2px;
+	padding: 1em 0;
 }
 
 /* Firefox 2 doesn't support inline-block */
@@ -33,7 +33,7 @@ Anchors: #06c;
 
 #category-editor li
 {
-	padding: 5px;
+	padding: 5px 0;
 }
 
 
