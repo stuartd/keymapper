@@ -36,7 +36,7 @@ public class Feeds
 			SyndicationItem item = new SyndicationItem();
 			item.Id = Guid.NewGuid().ToString();
 			item.Title = new TextSyndicationContent(p.Title);
-			item.Content = new TextSyndicationContent(p.Body, TextSyndicationContentKind.Html);
+			item.Content = new TextSyndicationContent(p.Body);
 
 			SyndicationLink itemlink = new SyndicationLink();
 			itemlink.Title = "Key Mapper Blog";

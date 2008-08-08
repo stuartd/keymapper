@@ -3,14 +3,14 @@
 html
 {
 	height: 100%;
-	margin-bottom: 1px ;
+	margin-bottom: 1px;
 }
 
 body
 {
-	background-position: 100px 10px ;
+	background-position: 100px 10px;
 	background-color: #FFFFFF;
-	background-image: url( 'http://justkeepswimming.net/KeyMapper/images/kmheader800w.png' );
+	background-image: url(  'http://justkeepswimming.net/KeyMapper/images/kmheader800w.png' );
 	background-repeat: no-repeat;
 	width: 80%;
 	padding-left: 100px;
@@ -23,41 +23,31 @@ body
 
 #showhidetocanchor
 {
-	text-decoration: underline ;
-	cursor: pointer ;
-	cursor: hand ;
+	text-decoration: underline;
+	cursor: pointer;
+	cursor: hand;
 }
 
 #maindiv
 {
-	padding-top: 20px ;
-	clear: both ;
+	padding-top: 20px;
+	clear: both;
 }
 
 .header
 {
-	margin-top: -5px ;
+	margin-top: -5px;
 	font-size: 200%;
 	line-height: 3em;
 	letter-spacing: 0.3em;
 	font-variant: small-caps;
 	text-align: left;
 	margin-bottom: 10px;
-	border-bottom: 5px solid #aaaaaa;
+	border-bottom: 5px solid #d3d3d3;
 }
 
 #topdiv
 {
-	}
-
-.show
-{
-	display:inherit ;
-}
-
-.hide
-{
-	display: none ;
 }
 
 
@@ -69,14 +59,14 @@ h3
 
 h4
 {
-	font-size: 120% ;
+	font-size: 120%;
 }
 
 
 
 .topnav li
-{	
-	float: left ;
+{
+	float: left;
 	list-style-type: none;
 	cursor: default;
 	display: inline;
