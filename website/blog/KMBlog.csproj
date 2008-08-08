@@ -57,42 +57,42 @@
   <ItemGroup>
     <Compile Include="admin\admin.aspx.cs">
       <DependentUpon>admin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="admin\admin.aspx.designer.cs">
       <DependentUpon>admin.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\category-edit.aspx.cs">
       <DependentUpon>category-edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="admin\category-edit.aspx.designer.cs">
       <DependentUpon>category-edit.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="admin\default.aspx.designer.cs">
       <DependentUpon>default.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\edit-categories.aspx.cs">
       <DependentUpon>edit-categories.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="admin\edit-categories.aspx.designer.cs">
       <DependentUpon>edit-categories.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\edit-comments.aspx.cs">
       <DependentUpon>edit-comments.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="admin\edit-comments.aspx.designer.cs">
       <DependentUpon>edit-comments.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\post-edit.aspx.cs">
       <DependentUpon>post-edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="admin\post-edit.aspx.designer.cs">
       <DependentUpon>post-edit.aspx</DependentUpon>
@@ -107,20 +107,20 @@
     <Compile Include="Code\SQLDataMap.cs" />
     <Compile Include="Controls\category-editor.ascx.cs">
       <DependentUpon>category-editor.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="Controls\category-editor.ascx.designer.cs">
       <DependentUpon>category-editor.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\comment-editor.ascx.cs">
       <DependentUpon>comment-editor.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="Controls\comment-editor.ascx.designer.cs">
       <DependentUpon>comment-editor.ascx</DependentUpon>
     </Compile>
     <Compile Include="default.aspx.cs">
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
       <DependentUpon>default.aspx</DependentUpon>
     </Compile>
     <Compile Include="default.aspx.designer.cs">
@@ -131,21 +131,21 @@
     </Compile>
     <Compile Include="KMBlogAdmin.master.cs">
       <DependentUpon>KMBlogAdmin.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="KMBlogAdmin.master.designer.cs">
       <DependentUpon>KMBlogAdmin.master</DependentUpon>
     </Compile>
     <Compile Include="KMBlog.Master.cs">
       <DependentUpon>KMBlog.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="KMBlog.Master.designer.cs">
       <DependentUpon>KMBlog.Master</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>ASPXcodefile</SubType>
     </Compile>
     <Compile Include="login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
