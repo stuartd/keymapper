@@ -5,6 +5,7 @@ insert into categories (Name, Slug) values('ASP.Net', 'asp-dot-net')
 
 insert into users (username, passwordhash, userlevel) values ('stuartd', '4c90a67814d193124c37610ef9a7d286e25adbaf', 1)
 insert into users (username, passwordhash, userlevel) values('demo', '89e495e7941cf9e40e6980d14a16bf023ccd4c91', 2)
+
 insert into posts (title, postdate, slug, published, body) values
 ('User Key Mappings', CAST('20080801' as datetime), 'user_key_mappings', 1, '
 <p>One thing that distinguishes Key Mapper from other scancode mapping
@@ -58,8 +59,9 @@ apply at the login prompt, but are then removed when logged in.</p>')
 insert into postcategories (postID, categoryID) values (1, 1)
 
 
-
-If you want to nest master pages - i.e. have a master page which inherits from another master page and so on - then there's nothing to stop you from replicating the first master page's ContentPlaceHolder down the hierarchy:
+insert into posts (title, postdate, slug, published, body) values
+('Nested Master Pages', CAST('20080802' as datetime), 'nested-master-pages', 1, '
+If you want to nest master pages - i.e. have a master page which inherits from another master page and so on - then there''s nothing to stop you from replicating the first master page''s ContentPlaceHolder down the hierarchy:
 
 This is the base master page:
 <pre><samp>
@@ -137,4 +139,4 @@ Subclass Master Body
 Content body 
 </pre>
 
-
+')

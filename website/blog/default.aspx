@@ -5,11 +5,12 @@
 <%@ Register TagPrefix="comment_edit" TagName="CommentEditor" Src="Controls/comment-editor.ascx" %>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <ul class="topnav" id="sitenav">
-        <li><a href="http://justkeepswimming.net/keymapper/default.aspx">Key Mapper</a></li>
+        <li><a href="../default.aspx">Key Mapper</a></li>
         <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/blog">Blog
             Source</a></li>
-        <li><a href="/">Blog Home</a></li>
+        <li><a href="../blog">Blog Home</a></li>
     </ul>
+    <div class="clearfloats">   </div>
     <div id="blog">
         <div id="sidebar">
             <div class="subheader">

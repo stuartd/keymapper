@@ -56,8 +56,8 @@ function CompareVersions(v1, v2)
         The .NET Framework 2.0 is required to run this program.</div>
     <br />
     <div id="not_installed_or_not_IE">
-        If the framework is already installed, you can <a href="KeyMapper.application">launch</a>
-        the application now. Otherwise, <a id="A1" href="setup.exe">click here</a> to run
+        If the framework is already installed, you can <a href="download.ashx?file=KeyMapper.application">launch</a>
+        the application now. Otherwise, <a id="A1" href="download.ashx?file=setup.exe">click here</a> to run
         setup which will install the framework and run the application.
     </div>
     <div id="framework_installed" style="display: none;">

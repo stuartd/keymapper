@@ -22,7 +22,7 @@ public partial class login : System.Web.UI.Page
 
 	protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
 	{
-		int userlevel = AppController.AuthenticateUser(KMLogin.UserName,
+		int userlevel = Authentication.AuthenticateUser(KMLogin.UserName,
 			System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(KMLogin.Password, "SHA1"));
 
 		if (userlevel < 1)
@@ -39,7 +39,7 @@ public partial class login : System.Web.UI.Page
 		else
 			role = "Demo";
 
-		HttpCookie cookie = AppController.CreateAuthenticationTicket(KMLogin.UserName, role);
+		HttpCookie cookie = Authentication.CreateAuthenticationTicket(KMLogin.UserName, role);
 		Response.Cookies.Add(cookie);
 		// Need to redirect now as otherwise our cookie is overwritten
 		Response.Redirect(FormsAuthentication.GetRedirectUrl(KMLogin.UserName, true));

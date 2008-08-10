@@ -1,4 +1,4 @@
-﻿@import "http://justkeepswimming.net/keymapper/css/keymapper.css";
+﻿@import "../css/keymapper.css";
 
 /* Colours
 
@@ -53,15 +53,12 @@ a
 	color: #06c;
 }
 
-
-
-
-.clearfloats
+#posts
 {
-	clear: both;
+	margin-top: 20px ;
 }
 
-#post, #post_timestamp, #editarea, #controls
+#post_timestamp, #editarea, #controls
 {
 }
 
@@ -122,6 +119,7 @@ div.comment
 {
 	float: right;
 	width: 19.5%;
+	margin-top: 20px ;
 }
 
 

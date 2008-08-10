@@ -74,6 +74,13 @@ public interface IDataAccess
 
     #endregion
 
+    #region Misc
+
+    void LogDownload(string filename, string IP, string referrer, string useragent);
+
+    #endregion
+
+
 }
 
 public class DataAccess

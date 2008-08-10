@@ -25,13 +25,13 @@
             <li><a href="faq.aspx">FAQ</a></li>
             <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/keymapper">Source
                 Code</a></li>
-            <li><a href="blog">Blog</a></li>
+            <li><a href="blog/default.aspx">Blog</a></li>
         </ul>
     </div>
-    <div id="maindiv">
+        <div class="clearfloats">
+    </div>
         <asp:ContentPlaceHolder ID="body" runat="server">
         </asp:ContentPlaceHolder>
-    </div>
     <div id="footer">
         Copyright Stuart Dunkeld 2008. All rights reserved.
     </div>

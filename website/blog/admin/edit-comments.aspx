@@ -38,7 +38,7 @@
                     <%# (((bool)DataBinder.Eval(Container.DataItem, "Published")) ? "Published" : "Draft") %>
                 </td>
                 <td>
-                    <asp:Button runat="server" ID="DeletePost" Text="Delete" Enabled="<%# AppController.IsUserAdmin(Page.User) %>"
+                    <asp:Button runat="server" ID="DeletePost" Text="Delete" Enabled="<%# Authentication.IsUserAdmin(Page.User) %>"
                         OnCommand="DeleteComment" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' />
                 </td>
             </tr>

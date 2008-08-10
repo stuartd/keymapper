@@ -17,7 +17,7 @@ public partial class KMBlogMaster : System.Web.UI.MasterPage
 
 	public void SetTitle(string title)
 	{
-		RecurseControls(this.Controls, title);
+        RecurseControls(this.Controls, title);
 	}
 
 	private void RecurseControls(ControlCollection c, string title)
@@ -25,7 +25,7 @@ public partial class KMBlogMaster : System.Web.UI.MasterPage
 
 		foreach (Control con in c)
 		{
-			if (con.ID == "Header")
+			if (con.ID == "header")
 			{
 				HtmlGenericControl header = con as HtmlGenericControl;
 				if (header != null)

@@ -28,12 +28,6 @@ body
 	cursor: hand;
 }
 
-#maindiv
-{
-	padding-top: 20px;
-	clear: both;
-}
-
 .header
 {
 	margin-top: -5px;
@@ -42,12 +36,12 @@ body
 	letter-spacing: 0.3em;
 	font-variant: small-caps;
 	text-align: left;
-	margin-bottom: 10px;
-	border-bottom: 5px solid #d3d3d3;
+	border-bottom: 3px solid #d3d3d3;
 }
 
-#topdiv
+.clearfloats
 {
+	clear: both;
 }
 
 
@@ -62,6 +56,11 @@ h4
 	font-size: 120%;
 }
 
+
+.topnav
+{
+	margin: 0 -0.15em ;
+}
 
 
 .topnav li

@@ -13,7 +13,7 @@
 <![endif]-->
 </head>
 <body>
-<h1 ID="Header" class="header" runat="server">Placeholder</h1>
+<h1 ID="header" class="header" runat="server">Placeholder</h1>
     <form runat="server" id="masterform">
     <asp:ContentPlaceHolder ID="body" runat="server">
     </asp:ContentPlaceHolder>
