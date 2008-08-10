@@ -31,8 +31,7 @@ namespace KMBlog
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
-            string cookieName = FormsAuthentication.FormsCookieName;
-            HttpCookie cookie = Context.Request.Cookies[cookieName];
+            HttpCookie cookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName];
 
             if (cookie == null)
                 return;

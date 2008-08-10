@@ -69,7 +69,7 @@ public class Category
 
         if (String.IsNullOrEmpty(categorySlug)) // Hmm. Need to check if category slug exists already, like with post
         {
-            categorySlug = AppController.GetSlug(categoryName);
+            categorySlug = CommonMethods.GetSlug(categoryName);
         }
 		return DataAccess.CreateInstance().AddCategory(categoryName, categorySlug);
 	}

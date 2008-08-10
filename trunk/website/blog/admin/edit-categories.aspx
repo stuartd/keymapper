@@ -24,7 +24,7 @@
                 <td>
                     <Asp:Button runat="server" ID="DeleteCategory" Text="Delete" OnCommand="DeleteCategory"
                         CausesValidation="false" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>'
-                        Enabled="<%# AppController.IsUserAdmin(Page.User) %>" OnClientClick="return __doConfirm(this);" />
+                        Enabled="<%# Authentication.IsUserAdmin(Page.User) %>" OnClientClick="return __doConfirm(this);" />
                 </td>
             </tr>
         </ItemTemplate>

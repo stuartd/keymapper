@@ -8,203 +8,203 @@ using System.Configuration;
 public class SQLBlogDataAccess : IDataAccess
 {
 
-	#region IDataAccess Members
+    #region IDataAccess Members
 
-	#region Posts
+    #region Posts
 
-	public Collection<Post> GetAllPosts()
-	{
-		return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, 999);
-	}
+    public Collection<Post> GetAllPosts()
+    {
+        return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, 999);
+    }
 
-	//public Collection<Post> GetAllPosts(int categoryID)
-	//{
-	//    return GetAllPosts(categoryID, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value);
-	//}
+    //public Collection<Post> GetAllPosts(int categoryID)
+    //{
+    //    return GetAllPosts(categoryID, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value);
+    //}
 
-	//public Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate)
-	//{
-	//    return GetAllPosts(0, startDate, endDate);
-	//}
+    //public Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate)
+    //{
+    //    return GetAllPosts(0, startDate, endDate);
+    //}
 
-	public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
-	{
-		return GetAllPosts(categoryID, startDate, endDate, 10);
-	}
+    public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate)
+    {
+        return GetAllPosts(categoryID, startDate, endDate, 10);
+    }
 
-	public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate, int NumberOfPosts)
-	{
+    public Collection<Post> GetAllPosts(int categoryID, DateTime startDate, DateTime endDate, int NumberOfPosts)
+    {
 
-		int numberOfPosts = 10;
-		Collection<Post> posts = new Collection<Post>();
+        int numberOfPosts = 10;
+        Collection<Post> posts = new Collection<Post>();
 
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand();
+            SqlCommand sc = new SqlCommand();
 
-			sc.CommandText = "GetAllPosts";
+            sc.CommandText = "GetAllPosts";
 
-			sc.Parameters.AddWithValue("NumberOfPosts", numberOfPosts);
-			sc.Parameters.AddWithValue("CategoryID", categoryID);
-			sc.Parameters.AddWithValue("DateFrom", startDate);
-			sc.Parameters.AddWithValue("DateTo", endDate);
+            sc.Parameters.AddWithValue("NumberOfPosts", numberOfPosts);
+            sc.Parameters.AddWithValue("CategoryID", categoryID);
+            sc.Parameters.AddWithValue("DateFrom", startDate);
+            sc.Parameters.AddWithValue("DateTo", endDate);
 
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Connection = connection;
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Connection = connection;
 
-			using (SqlDataReader reader = sc.ExecuteReader())
-			{
-				posts = SQLDataMap.CreatePostsFromReader(reader);
-			}
-
-
-		}
+            using (SqlDataReader reader = sc.ExecuteReader())
+            {
+                posts = SQLDataMap.CreatePostsFromReader(reader);
+            }
 
 
-
-		return posts;
-	}
-
-	public Post GetPostByID(int postID)
-	{
-		Collection<Post> posts = new Collection<Post>();
-
-		using (SqlConnection connection = GetConnection())
-		{
-
-			connection.Open();
-
-			SqlCommand sc = new SqlCommand();
-
-			sc.CommandText = "GetPostByID";
-
-			sc.Parameters.AddWithValue("PostID", postID);
-
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Connection = connection;
-
-			using (SqlDataReader reader = sc.ExecuteReader())
-			{
-				posts = SQLDataMap.CreatePostsFromReader(reader);
-			}
-		}
-
-		if (posts.Count > 0)
-			return posts[0];
-		else
-			return null;
-
-	}
-
-	public int SavePost(Post p)
-	{
-		using (SqlConnection connection = GetConnection())
-		{
-
-			connection.Open();
-
-			SqlCommand sc = new SqlCommand();
-
-			if (p.ID == 0)
-			{
-				sc.CommandText = "CreatePost";
-				SqlParameter sp = new SqlParameter("NewPostID", 0);
-				sp.Direction = ParameterDirection.Output;
-				sc.Parameters.Add(sp);
-			}
-			else
-			{
-				sc.CommandText = "EditPost";
-				sc.Parameters.AddWithValue("PostID", p.ID);
-			}
-
-			sc.Parameters.AddWithValue("slug", p.Slug);
-			sc.Parameters.AddWithValue("title", p.Title);
-			sc.Parameters.AddWithValue("body", p.Body);
-			sc.Parameters.AddWithValue("postdate", p.Postdate);
-			sc.Parameters.AddWithValue("published", p.Published);
-
-			sc.Connection = connection;
-			sc.CommandType = CommandType.StoredProcedure;
-
-			int result = sc.ExecuteNonQuery();
-
-			if (p.ID == 0)
-				return Convert.ToInt32(sc.Parameters["NewPostID"].Value);
-			else
-				return p.ID;
+        }
 
 
 
-		}
+        return posts;
+    }
+
+    public Post GetPostByID(int postID)
+    {
+        Collection<Post> posts = new Collection<Post>();
+
+        using (SqlConnection connection = GetConnection())
+        {
+
+            connection.Open();
+
+            SqlCommand sc = new SqlCommand();
+
+            sc.CommandText = "GetPostByID";
+
+            sc.Parameters.AddWithValue("PostID", postID);
+
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Connection = connection;
+
+            using (SqlDataReader reader = sc.ExecuteReader())
+            {
+                posts = SQLDataMap.CreatePostsFromReader(reader);
+            }
+        }
+
+        if (posts.Count > 0)
+            return posts[0];
+        else
+            return null;
+
+    }
+
+    public int SavePost(Post p)
+    {
+        using (SqlConnection connection = GetConnection())
+        {
+
+            connection.Open();
+
+            SqlCommand sc = new SqlCommand();
+
+            if (p.ID == 0)
+            {
+                sc.CommandText = "CreatePost";
+                SqlParameter sp = new SqlParameter("NewPostID", 0);
+                sp.Direction = ParameterDirection.Output;
+                sc.Parameters.Add(sp);
+            }
+            else
+            {
+                sc.CommandText = "EditPost";
+                sc.Parameters.AddWithValue("PostID", p.ID);
+            }
+
+            sc.Parameters.AddWithValue("slug", p.Slug);
+            sc.Parameters.AddWithValue("title", p.Title);
+            sc.Parameters.AddWithValue("body", p.Body);
+            sc.Parameters.AddWithValue("postdate", p.Postdate);
+            sc.Parameters.AddWithValue("published", p.Published);
+
+            sc.Connection = connection;
+            sc.CommandType = CommandType.StoredProcedure;
+
+            int result = sc.ExecuteNonQuery();
+
+            if (p.ID == 0)
+                return Convert.ToInt32(sc.Parameters["NewPostID"].Value);
+            else
+                return p.ID;
 
 
-	}
 
-	public bool DoesSlugExist(string slug)
-	{
+        }
 
-		using (SqlConnection connection = GetConnection())
-		{
 
-			connection.Open();
-			SqlCommand sc = new SqlCommand("DoesSlugExist", connection);
-			sc.Parameters.AddWithValue("Slug", slug);
-			sc.CommandType = CommandType.StoredProcedure;
+    }
 
-			bool exists = ((int)sc.ExecuteScalar() != 0);
+    public bool DoesSlugExist(string slug)
+    {
 
-			return exists;
+        using (SqlConnection connection = GetConnection())
+        {
 
-		}
-	}
+            connection.Open();
+            SqlCommand sc = new SqlCommand("DoesSlugExist", connection);
+            sc.Parameters.AddWithValue("Slug", slug);
+            sc.CommandType = CommandType.StoredProcedure;
 
-	public void DeletePost(int postID)
-	{
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+            bool exists = ((int)sc.ExecuteScalar() != 0);
 
-			SqlCommand sc = new SqlCommand("DeletePost", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("PostID", postID);
+            return exists;
 
-			sc.ExecuteNonQuery();
+        }
+    }
 
-		}
+    public void DeletePost(int postID)
+    {
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-	}
+            SqlCommand sc = new SqlCommand("DeletePost", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("PostID", postID);
 
-	#endregion
+            sc.ExecuteNonQuery();
 
-	#region Categories
+        }
 
-	public Category GetCategoryByID(int categoryID)
-	{
-		Collection<Category> cats;
+    }
 
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
-			SqlCommand sc = new SqlCommand("GetCategoryByID", connection);
+    #endregion
 
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("CategoryID", categoryID);
+    #region Categories
 
-			using (SqlDataReader reader = sc.ExecuteReader())
-			{
-				cats = SQLDataMap.CreateCategoriesFromReader(reader);
-			}
-		}
-		if (cats.Count > 0)
-			return cats[0];
-		else
-			return null;
-	}
+    public Category GetCategoryByID(int categoryID)
+    {
+        Collection<Category> cats;
 
-	public int GetCategoryIDByName(string name)
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
+            SqlCommand sc = new SqlCommand("GetCategoryByID", connection);
+
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("CategoryID", categoryID);
+
+            using (SqlDataReader reader = sc.ExecuteReader())
+            {
+                cats = SQLDataMap.CreateCategoriesFromReader(reader);
+            }
+        }
+        if (cats.Count > 0)
+            return cats[0];
+        else
+            return null;
+    }
+
+    public int GetCategoryIDByName(string name)
     {
         using (SqlConnection connection = GetConnection())
         {
@@ -219,197 +219,217 @@ public class SQLBlogDataAccess : IDataAccess
 
             sc.ExecuteNonQuery();
 
-			return Convert.ToInt32(sc.Parameters["CategoryID"].Value);
-				
+            return Convert.ToInt32(sc.Parameters["CategoryID"].Value);
+
         }
     }
 
-	public void SyncCategories(int postID, Collection<int> categories)
-	{
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+    public void SyncCategories(int postID, Collection<int> categories)
+    {
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("DeleteCategoriesFromPost", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("PostID", postID);
+            SqlCommand sc = new SqlCommand("DeleteCategoriesFromPost", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("PostID", postID);
 
-			sc.ExecuteNonQuery();
+            sc.ExecuteNonQuery();
 
-			sc.CommandText = "AddCategoryToPost";
+            sc.CommandText = "AddCategoryToPost";
 
-			foreach (int catID in categories)
-			{
-				sc.Parameters.Clear();
-				sc.Parameters.AddWithValue("PostID", postID);
-				sc.Parameters.AddWithValue("CategoryID", catID);
-				sc.ExecuteNonQuery();
-			}
-		}
-	}
+            foreach (int catID in categories)
+            {
+                sc.Parameters.Clear();
+                sc.Parameters.AddWithValue("PostID", postID);
+                sc.Parameters.AddWithValue("CategoryID", catID);
+                sc.ExecuteNonQuery();
+            }
+        }
+    }
 
-	public Collection<Category> GetAllCategories()
-	{
-		Collection<Category> cats;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
-			SqlCommand sc = new SqlCommand("GetAllCategories", connection);
+    public Collection<Category> GetAllCategories()
+    {
+        Collection<Category> cats;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
+            SqlCommand sc = new SqlCommand("GetAllCategories", connection);
 
-			sc.CommandType = CommandType.StoredProcedure;
-			using (SqlDataReader reader = sc.ExecuteReader())
-			{
-				cats = SQLDataMap.CreateCategoriesFromReader(reader);
-			}
-		}
-		return cats;
-	}
+            sc.CommandType = CommandType.StoredProcedure;
+            using (SqlDataReader reader = sc.ExecuteReader())
+            {
+                cats = SQLDataMap.CreateCategoriesFromReader(reader);
+            }
+        }
+        return cats;
+    }
 
-	public bool AddCategory(string categoryName, string categorySlug)
-	{
-		int result;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+    public bool AddCategory(string categoryName, string categorySlug)
+    {
+        int result;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("CreateCategory", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("Name", categoryName);
-			sc.Parameters.AddWithValue("Slug", categorySlug);
+            SqlCommand sc = new SqlCommand("CreateCategory", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("Name", categoryName);
+            sc.Parameters.AddWithValue("Slug", categorySlug);
 
-			result = sc.ExecuteNonQuery();
-		}
+            result = sc.ExecuteNonQuery();
+        }
 
-		return (result == 1);
+        return (result == 1);
 
-	}
+    }
 
-	public bool DeleteCategory(int categoryID)
-	{
-		int result;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+    public bool DeleteCategory(int categoryID)
+    {
+        int result;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("DeleteCategory", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("categoryID", categoryID);
+            SqlCommand sc = new SqlCommand("DeleteCategory", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("categoryID", categoryID);
 
-			result = sc.ExecuteNonQuery();
-		}
+            result = sc.ExecuteNonQuery();
+        }
 
-		return (result == 1);
-	}
+        return (result == 1);
+    }
 
-	public bool EditCategory(Category c)
-	{
-		int result;
-		using (SqlConnection connection = GetConnection())
-		{
-			connection.Open();
+    public bool EditCategory(Category c)
+    {
+        int result;
+        using (SqlConnection connection = GetConnection())
+        {
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("EditCategory", connection);
-			sc.CommandType = CommandType.StoredProcedure;
-			sc.Parameters.AddWithValue("CategoryID", c.ID);
-			sc.Parameters.AddWithValue("Name", c.Name);
-			sc.Parameters.AddWithValue("Slug", c.Slug);
-			result = sc.ExecuteNonQuery();
-		}
+            SqlCommand sc = new SqlCommand("EditCategory", connection);
+            sc.CommandType = CommandType.StoredProcedure;
+            sc.Parameters.AddWithValue("CategoryID", c.ID);
+            sc.Parameters.AddWithValue("Name", c.Name);
+            sc.Parameters.AddWithValue("Slug", c.Slug);
+            result = sc.ExecuteNonQuery();
+        }
 
-		return (result == 1);
-	}
+        return (result == 1);
+    }
 
-	#endregion
+    #endregion
 
-	#region Comments
+    #region Comments
 
-	public bool AddCommentToPost(Comment c)
-	{
-		int rowcount = 0;
-		using (SqlConnection connection = GetConnection())
-		{
+    public bool AddCommentToPost(Comment c)
+    {
+        int rowcount = 0;
+        using (SqlConnection connection = GetConnection())
+        {
 
-			connection.Open();
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("AddComment", connection);
-			sc.CommandType = CommandType.StoredProcedure;
+            SqlCommand sc = new SqlCommand("AddComment", connection);
+            sc.CommandType = CommandType.StoredProcedure;
 
-			sc.Parameters.AddWithValue("PostID", c.PostID);
-			sc.Parameters.AddWithValue("Name", c.Name);
-			sc.Parameters.AddWithValue("URL", c.Url);
-			sc.Parameters.AddWithValue("Text", c.Text);
+            sc.Parameters.AddWithValue("PostID", c.PostID);
+            sc.Parameters.AddWithValue("Name", c.Name);
+            sc.Parameters.AddWithValue("URL", c.Url);
+            sc.Parameters.AddWithValue("Text", c.Text);
             sc.Parameters.AddWithValue("Posted", c.Posted);
 
-			rowcount = sc.ExecuteNonQuery();
+            rowcount = sc.ExecuteNonQuery();
 
-		}
-		return (rowcount > 0);
-	}
+        }
+        return (rowcount > 0);
+    }
 
-	public bool DeleteComment(int commentID)
-	{
-		throw new NotImplementedException();
-	}
+    public bool DeleteComment(int commentID)
+    {
+        throw new NotImplementedException();
+    }
 
-	public Collection<Comment> GetCommentsForPost(int postID)
-	{
-		using (SqlConnection connection = GetConnection())
-		{
+    public Collection<Comment> GetCommentsForPost(int postID)
+    {
+        using (SqlConnection connection = GetConnection())
+        {
 
-			connection.Open();
+            connection.Open();
 
-			SqlCommand sc = new SqlCommand("GetCommentsByPost", connection);
-			sc.CommandType = CommandType.StoredProcedure;
+            SqlCommand sc = new SqlCommand("GetCommentsByPost", connection);
+            sc.CommandType = CommandType.StoredProcedure;
 
-			sc.Parameters.AddWithValue("PostID", postID);
+            sc.Parameters.AddWithValue("PostID", postID);
 
-			Collection<Comment> clist = SQLDataMap.CreateCommentsFromReader(sc.ExecuteReader());
+            Collection<Comment> clist = SQLDataMap.CreateCommentsFromReader(sc.ExecuteReader());
 
-			return clist;
-		}
+            return clist;
+        }
 
-	}
+    }
 
-	#endregion
+    #endregion
 
-	#endregion
+    #endregion
 
-	public SqlConnection GetConnection()
-	{
-		SqlConnection sc = new SqlConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString);
-		if (sc == null)
-			throw new Exception("Connection is null");
-		else
-			return sc;
+    public SqlConnection GetConnection()
+    {
+        SqlConnection sc = new SqlConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString);
+        if (sc == null)
+            throw new Exception("Connection is null");
+        else
+            return sc;
 
-	}
+    }
 
-	public int GetUserLevel(string username, string passwordhash)
-	{
+    public void LogDownload(string filename, string IP, string referrer, string useragent)
+    {
+        using (SqlConnection conn = GetConnection())
+        {
+            conn.Open();
+
+            SqlCommand sc = new SqlCommand("LogDownload", conn);
+            sc.CommandType = CommandType.StoredProcedure;
+
+            sc.Parameters.AddWithValue("@downloadfile", filename);
+            sc.Parameters.AddWithValue("@IP", IP);
+            sc.Parameters.AddWithValue("@referrer", referrer ?? String.Empty);
+            sc.Parameters.AddWithValue("@useragent", useragent);
+            
+
+            sc.ExecuteNonQuery();
+        }
+    }
 
 
-		using (SqlConnection conn = GetConnection())
-		{
-			conn.Open();
+    public int GetUserLevel(string username, string passwordhash)
+    {
 
-			SqlCommand sc = new SqlCommand("CheckUser", conn);
-			sc.CommandType = CommandType.StoredProcedure;
 
-			sc.Parameters.AddWithValue("username", username);
-			sc.Parameters.AddWithValue("passwordhash", passwordhash);
-			SqlParameter userlevel = new SqlParameter("userlevel", SqlDbType.Int);
+        using (SqlConnection conn = GetConnection())
+        {
+            conn.Open();
 
-			userlevel.Direction = ParameterDirection.Output;
-			sc.Parameters.Add(userlevel);
+            SqlCommand sc = new SqlCommand("CheckUser", conn);
+            sc.CommandType = CommandType.StoredProcedure;
 
-			sc.ExecuteNonQuery();
+            sc.Parameters.AddWithValue("username", username);
+            sc.Parameters.AddWithValue("passwordhash", passwordhash);
+            SqlParameter userlevel = new SqlParameter("userlevel", SqlDbType.Int);
 
-			string value = Convert.ToString(sc.Parameters["UserLevel"].Value);
+            userlevel.Direction = ParameterDirection.Output;
+            sc.Parameters.Add(userlevel);
 
-			int authUserLevel;
-			Int32.TryParse(value, out authUserLevel);
-			return authUserLevel;
-		}
-	}
+            sc.ExecuteNonQuery();
+
+            string value = Convert.ToString(sc.Parameters["UserLevel"].Value);
+
+            int authUserLevel;
+            Int32.TryParse(value, out authUserLevel);
+            return authUserLevel;
+        }
+    }
 
 }

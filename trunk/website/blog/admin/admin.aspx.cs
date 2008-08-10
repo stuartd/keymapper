@@ -16,7 +16,7 @@ namespace KMBlog
 
 			((KMBlogMaster)Page.Master).SetTitle("Key Mapper Blog Admin");
 
-			if (AppController.IsUserAdmin(User) == false)
+			if (Authentication.IsUserAdmin(User) == false)
 				lblUserLevel.Text = "Demonstration Mode - you won't be able to save any changes";
 			else
 				lblUserLevel.Style.Add("Display", "None");
@@ -43,7 +43,7 @@ namespace KMBlog
         public void DeletePost(object sender, CommandEventArgs e)
         {
 
-			if (AppController.IsUserAdmin(User) == false)
+			if (Authentication.IsUserAdmin(User) == false)
 				return;
 
             int postID;

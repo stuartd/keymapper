@@ -41,7 +41,7 @@ namespace KMBlog
 
 			((KMBlogMaster)Page.Master).SetTitle("Blog Post Editor");
 
-			if (AppController.IsUserAdmin(User) == false)
+			if (Authentication.IsUserAdmin(User) == false)
 			{
 				btnSavePost.Enabled = false;
 				btnPublishPost.Enabled = false;
@@ -179,7 +179,7 @@ namespace KMBlog
         public void SavePost(object sender, CommandEventArgs e)
         {
 
-			if (AppController.IsUserAdmin(User) == false)
+			if (Authentication.IsUserAdmin(User) == false)
 				return;
 
             Page.Validate();
@@ -284,7 +284,7 @@ namespace KMBlog
         string GetSlug(string title)
         {
 
-            string slug = AppController.GetSlug(title);
+            string slug = CommonMethods.GetSlug(title);
 
             int suffix = 1;
             while (String.IsNullOrEmpty(slug) || DoesSlugAlreadyExist(slug) == true)

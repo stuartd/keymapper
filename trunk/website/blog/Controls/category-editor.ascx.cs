@@ -61,7 +61,7 @@ public partial class CategoryEditor : System.Web.UI.UserControl
 
 	public void SaveCategory(object sender, EventArgs e)
 	{
-		if (AppController.IsUserAdmin(Page.User) == false)
+		if (Authentication.IsUserAdmin(Page.User) == false)
 			return;
 
 		if (Page.IsValid == false)

@@ -14,7 +14,7 @@ namespace KMBlog
             newcategory.SetSaveAsDefaultButton();
 
             LoadCategories();
-            if (AppController.IsUserAdmin(User) == false)
+            if (Authentication.IsUserAdmin(User) == false)
                 newcategory.DisableSave();
 
             newcategory.CategorySaved += NewCategorySaved;
@@ -46,7 +46,7 @@ namespace KMBlog
 
         public void DeleteCategory(object sender, CommandEventArgs e)
         {
-            if (AppController.IsUserAdmin(User) == false)
+            if (Authentication.IsUserAdmin(User) == false)
                 return;
 
             int categoryID;

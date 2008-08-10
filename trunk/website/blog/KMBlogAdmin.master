@@ -1,8 +1,10 @@
-﻿<%@ Master Language="C#" MasterPageFile="KMBlog.Master" AutoEventWireup="true" codefile="KMBlogAdmin.master.cs" Inherits="KMBlogAdmin" %>
+﻿<%@ Master Language="C#" MasterPageFile="KMBlog.Master" AutoEventWireup="true" CodeFile="KMBlogAdmin.master.cs"
+    Inherits="KMBlogAdmin" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
-<ul class="topnav">
+    <ul class="topnav">
         <li><a href="admin.aspx">Manage Posts</a></li>
-            <li><a href="post-edit.aspx">New Post</a></li>
+        <li><a href="post-edit.aspx">New Post</a></li>
         <li><a href="../default.aspx" target="_blank">View Blog</a></li>
         <li><a href="edit-categories.aspx">Categories</a></li>
         <li>
@@ -14,6 +16,3 @@
     <asp:ContentPlaceHolder ID="body" runat="server">
     </asp:ContentPlaceHolder>
 </asp:Content>
-
-
-
