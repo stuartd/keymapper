@@ -41,7 +41,7 @@ namespace KMBlog
 
 			((KMBlogMaster)Page.Master).SetTitle("Blog Post Editor");
 
-			if (Authentication.IsUserAdmin(User) == false)
+			if (KMAuthentication.IsUserAdmin(User) == false)
 			{
 				btnSavePost.Enabled = false;
 				btnPublishPost.Enabled = false;
@@ -57,16 +57,16 @@ namespace KMBlog
 
         private void GetPost()
         {
-            int postID = Post.GetPostIDFromQueryString(Request.QueryString);
+            int PostId = Post.GetPostIdFromQueryString(Request.QueryString);
 
             Collection<Category> allCats = Category.GetAllCategories();
 
-            if (postID != 0)
+            if (PostId != 0)
             {
 
-                hiddenPostID.Value = postID.ToString();
+                hiddenPostId.Value = PostId.ToString();
 
-                Post p = Post.GetPostByID(postID);
+                Post p = Post.GetPostById(PostId);
 
                 if (p == null)
                     editarea.Style.Add("display", "none");
@@ -80,7 +80,7 @@ namespace KMBlog
                     postyear.Text = postdate.Year.ToString();
                     postday.Text = postdate.Day.ToString();
                     postmonth.Text = postdate.ToString("MMMM");
-                    hiddenPostID.Value = postID.ToString();
+                    hiddenPostId.Value = PostId.ToString();
 
                     // Select the categories this post belongs to
 
@@ -91,14 +91,14 @@ namespace KMBlog
                         bool postInCategory = false;
                         foreach (Category c in p.Categories)
                         {
-                            if (c.ID == cat.ID && c.Name == cat.Name)
+                            if (c.Id == cat.Id && c.Name == cat.Name)
                             {
                                 postInCategory = true;
                                 break;
                             }
                         }
                         item.Selected = postInCategory;
-                        item.Value = cat.ID.ToString();
+                        item.Value = cat.Id.ToString();
                         CatList.Items.Add(item);
                     }
 
@@ -116,7 +116,7 @@ namespace KMBlog
                 {
                     System.Web.UI.WebControls.ListItem item = new System.Web.UI.WebControls.ListItem();
                     item.Text = cat.Name;
-                    item.Value = cat.ID.ToString();
+                    item.Value = cat.Id.ToString();
                     CatList.Items.Add(item);
                 }
             }
@@ -179,7 +179,7 @@ namespace KMBlog
         public void SavePost(object sender, CommandEventArgs e)
         {
 
-			if (Authentication.IsUserAdmin(User) == false)
+			if (KMAuthentication.IsUserAdmin(User) == false)
 				return;
 
             Page.Validate();
@@ -203,10 +203,10 @@ namespace KMBlog
 
             Post p = new Post();
 
-            int postID;
-            if (Int32.TryParse(hiddenPostID.Value, out postID) == false)
+            int PostId;
+            if (Int32.TryParse(hiddenPostId.Value, out PostId) == false)
             {
-                postID = 0;
+                PostId = 0;
                 p.Slug = GetSlug(posttitle.Text);
             }
             else
@@ -214,7 +214,7 @@ namespace KMBlog
 				p.Slug = postslug.Text;
             }
 
-            p.ID = postID;
+            p.Id = PostId;
 
             p.Title = posttitle.Text;
             p.Body = blogpost.Text;
@@ -224,17 +224,17 @@ namespace KMBlog
 
             if (Post.Save(p))
             {
-                SyncCategories(p.ID);
+                SyncCategories(p.Id);
 
                 if (p.Published)
                     Response.Redirect("admin.aspx");
-                else if (postID == 0)
-                    Response.Redirect("post-edit.aspx?p=" + Convert.ToString(p.ID));
+                else if (PostId == 0)
+                    Response.Redirect("post-edit.aspx?p=" + Convert.ToString(p.Id));
             }
         }
 
 
-        bool SyncCategories(int postID)
+        bool SyncCategories(int PostId)
         {
             Collection<int> categories = new Collection<int>();
 
@@ -242,25 +242,25 @@ namespace KMBlog
             {
                 if (item.Selected)
                 {
-                    int catID;
-                    if (Int32.TryParse(item.Value, out catID))
-                        categories.Add(catID);
+                    int catId;
+                    if (Int32.TryParse(item.Value, out catId))
+                        categories.Add(catId);
 
                 }
             }
 
             Collection<Category> postcats;
-			if (postID == 0)
+			if (PostId == 0)
 				postcats = new Collection<Category>();
 			else
-				postcats = Category.GetCategoriesForPost(postID);
+				postcats = Category.GetCategoriesForPost(PostId);
 
             bool categoriesChanged = false;
             if (postcats.Count == categories.Count)
             {
                 foreach (Category cat in postcats)
                 {
-                    if (categories.Contains(cat.ID) == false)
+                    if (categories.Contains(cat.Id) == false)
                     {
                         categoriesChanged = true;
                         break;
@@ -275,7 +275,7 @@ namespace KMBlog
             if (categoriesChanged == false)
                 return true;
 
-			Category.SyncCategories(postID, categories); 
+			Category.SyncCategories(PostId, categories); 
 			
             return true;
         }

@@ -14,7 +14,7 @@ namespace KMBlog
             newcategory.SetSaveAsDefaultButton();
 
             LoadCategories();
-            if (Authentication.IsUserAdmin(User) == false)
+            if (KMAuthentication.IsUserAdmin(User) == false)
                 newcategory.DisableSave();
 
             newcategory.CategorySaved += NewCategorySaved;
@@ -23,7 +23,7 @@ namespace KMBlog
 			{
 				ClientScript.RegisterClientScriptBlock(this.GetType(),
 			"confirmButtonScript",
-			"function __doConfirm(btn){if (confirm('Are you sure you wish to delete this category?')){return true;}else{return false;}}",
+			"function __doConfirm(){if (confirm('Are you sure you want to delete this category?')){return true;}else{return false;}}",
 			true);
 			}
 
@@ -46,14 +46,14 @@ namespace KMBlog
 
         public void DeleteCategory(object sender, CommandEventArgs e)
         {
-            if (Authentication.IsUserAdmin(User) == false)
+            if (KMAuthentication.IsUserAdmin(User) == false)
                 return;
 
-            int categoryID;
-            if (Int32.TryParse(e.CommandArgument.ToString(), out categoryID) == false)
+            int categoryId;
+            if (Int32.TryParse(e.CommandArgument.ToString(), out categoryId) == false)
                 return;
 
-            Category.Delete(categoryID);
+            Category.Delete(categoryId);
 
             LoadCategories();
 

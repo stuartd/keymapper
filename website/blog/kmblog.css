@@ -53,11 +53,6 @@ a
 	color: #06c;
 }
 
-#posts
-{
-	margin-top: 20px ;
-}
-
 #post_timestamp, #editarea, #controls
 {
 }
@@ -93,6 +88,7 @@ a
 {
 	float: left;
 	width: 80%;
+	margin-top: 20px ;
 }
 
 #posts li

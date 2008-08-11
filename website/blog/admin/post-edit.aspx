@@ -35,7 +35,7 @@
                 <asp:Label ID="date_error" runat="server" CssClass="dateerrortext"></asp:Label>
                 <br />
             </div>
-            <input type="hidden" id="hiddenPostID" runat="server" />
+            <input type="hidden" id="hiddenPostId" runat="server" />
             <asp:Button ID="btnPublishPost" Text="Publish" CommandName="Publish" CausesValidation="true"
                 runat="server" OnCommand="SavePost" TabIndex="3" />
             <asp:Button ID="btnSavePost" CommandName="Draft" Text="Save As Draft" CausesValidation="true"

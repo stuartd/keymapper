@@ -45,10 +45,10 @@ namespace KMBlog
 			bool singlePost = false;
 
 			// A request for a specific post overrides all other parameters
-			int postID = IsQueryForSpecificPost();
-			if (postID != 0)
+			int PostId = IsQueryForSpecificPost();
+			if (PostId != 0)
 			{
-				Post post = Post.GetPostByID(postID);
+				Post post = Post.GetPostById(PostId);
 				posts = new Collection<Post>();
 				posts.Add(post);
 				singlePost = true;
@@ -63,11 +63,11 @@ namespace KMBlog
 			else
 			{
 
-				int categoryID = GetCategoryFromQueryString();
+				int categoryId = GetCategoryFromQueryString();
 				DateTime dateFrom, dateTo;
 				GetDateRangeFromQueryString(out dateFrom, out dateTo);
 
-				posts = Post.GetAllPosts(categoryID, dateFrom, dateTo);
+				posts = Post.GetAllPosts(categoryId, dateFrom, dateTo);
 
 			}
 
@@ -76,7 +76,7 @@ namespace KMBlog
 			else
 				if (posts.Count > 0)
 				{
-					Collection<Comment> clist = Post.GetCommentsForPost(postID);
+					Collection<Comment> clist = Post.GetCommentsForPost(PostId);
 					commentsRepeater.DataSource = clist;
 					commentsRepeater.DataBind();
 				}
@@ -93,7 +93,7 @@ namespace KMBlog
 
 		/// <summary>
 		/// Parse querystring for a specific post request.
-		/// If found, return postID
+		/// If found, return PostId
 		/// </summary>
 		private int IsQueryForSpecificPost()
 		{
@@ -102,26 +102,26 @@ namespace KMBlog
 
 			string[] keys = parameters.AllKeys;
 
-			int postID = 0;
+			int PostId = 0;
 			foreach (string key in keys)
 			{
 				if (key.ToUpperInvariant() == "P")
 				{
 					foreach (string value in parameters.GetValues(key))
 					{
-						if (System.Int32.TryParse(value, out postID))
+						if (System.Int32.TryParse(value, out PostId))
 						{
 							break;
 						}
 					}
 				}
 			}
-			return postID;
+			return PostId;
 		}
 
 		private int GetCategoryFromQueryString()
 		{
-            return Category.GetCategoryIDFromQueryString(Request.QueryString);
+            return Category.GetCategoryIdFromQueryString(Request.QueryString);
 		}
 
 
@@ -197,20 +197,20 @@ namespace KMBlog
 			}
 		}
 
-		public void GetCommentsForPost(int postID)
+		public void GetCommentsForPost(int PostId)
 		{
-			Collection<Comment> commentlist = Post.GetCommentsForPost(postID);
+			Collection<Comment> commentlist = Post.GetCommentsForPost(PostId);
 			commentsRepeater.DataSource = commentlist;
 			commentsRepeater.DataBind();
 		}
 
-		public string GetCategoriesForPost(Collection<Category> catlist)
+		public string GetCategoriesForPost(Collection<Category> catList)
 		{
 
 			StringBuilder categories = new StringBuilder();
 
-			foreach (Category cat in catlist)
-				categories.Append("<a href=\"?c=" + cat.ID + "\">" + cat.Name + "</a> ");
+			foreach (Category cat in catList)
+				categories.Append("<a href=\"?c=" + cat.Id + "\">" + cat.Name + "</a> ");
 
 			return categories.ToString();
 
@@ -227,11 +227,11 @@ namespace KMBlog
 			}
 		}
 
-		public string GetCommentLinkText(int postID, int commentCount)
+		public string GetCommentLinkText(int PostId, int commentCount)
 		{
 
 			// href is ?p=1#comments
-			string href = "\"?p=" + postID.ToString() + "#comments\"";
+			string href = "\"?p=" + PostId.ToString() + "#comments\"";
 			string text;
 
 			if (commentCount == 0)
@@ -261,7 +261,7 @@ namespace KMBlog
 
 			c.Url = editcomment.URL;
 			c.Name = editcomment.Name;
-			c.PostID = Post.GetPostIDFromQueryString(Request.QueryString);
+			c.PostId = Post.GetPostIdFromQueryString(Request.QueryString);
 			c.Text = editcomment.Text;
             c.Posted = DateTime.Now;
 

@@ -2,25 +2,30 @@
 using System.Xml;
 using System;
 
-public partial class blog_postfeed : System.Web.UI.Page
+
+namespace KMBlog
 {
-	protected void Page_Load(object sender, EventArgs e)
+
+	public partial class blog_postfeed : System.Web.UI.Page
 	{
-
-		SyndicationFeed feed = Feeds.GetPostFeed();
-
-		Response.Clear();
-		Response.ContentEncoding = System.Text.Encoding.UTF8;
-		Response.ContentType = "text/xml";
-
-		using (XmlWriter rssWriter = XmlWriter.Create(Response.Output))
+		protected void Page_Load(object sender, EventArgs e)
 		{
-			Rss20FeedFormatter rssFormatter = new Rss20FeedFormatter(feed);
-			rssFormatter.WriteTo(rssWriter);
+
+			SyndicationFeed feed = Feeds.GetPostFeed();
+
+			Response.Clear();
+			Response.ContentEncoding = System.Text.Encoding.UTF8;
+			Response.ContentType = "text/xml";
+
+			using (XmlWriter rssWriter = XmlWriter.Create(Response.Output))
+			{
+				Rss20FeedFormatter rssFormatter = new Rss20FeedFormatter(feed);
+				rssFormatter.WriteTo(rssWriter);
+			}
+
+			Response.End();
 		}
 
-		Response.End();
 	}
 
 }
-
