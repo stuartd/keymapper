@@ -12,8 +12,6 @@ namespace KMBlog
 	public class SqlBlogDataAccess : IDataAccess
 	{
 
-		#region IDataAccess Members
-
 		#region Posts
 
 		public Collection<Post> GetAllPosts()
@@ -396,8 +394,6 @@ namespace KMBlog
 				SqlCommand sc = new SqlCommand("GetAllComments", connection);
 				sc.CommandType = CommandType.StoredProcedure;
 
-				sc.Parameters.AddWithValue("PostId", postId);
-
 				Collection<Comment> clist = SqlDataMap.CreateCommentsFromReader(sc.ExecuteReader());
 
 				return clist;
@@ -405,7 +401,7 @@ namespace KMBlog
 
 		}
 
-		public static bool ApproveComment(int commentId)
+		public bool ApproveComment(int commentId)
 		{
 			int result;
 			using (SqlConnection connection = GetConnection())
@@ -425,8 +421,6 @@ namespace KMBlog
 		return (result == 1);
 			
 		}
-
-
 
 		#endregion
 
@@ -458,7 +452,6 @@ namespace KMBlog
 				sc.ExecuteNonQuery();
 			}
 		}
-
 
 		public int GetUserLevel(string userName, string passwordHash)
 		{

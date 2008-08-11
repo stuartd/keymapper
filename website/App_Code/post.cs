@@ -67,7 +67,7 @@ namespace KMBlog
 		public static Collection<Comment> GetCommentsForPost(int PostId)
 		{
 			// Could be part of comment class?
-			return DataAccess.CreateInstance().GetCommentsForPost(PostId);
+			return DataAccess.CreateInstance().GetCommentsForPost(PostId, CommentType.Approved);
 		}
 
 		public static Collection<Post> GetAllPosts()

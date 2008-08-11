@@ -83,7 +83,7 @@ namespace KMBlog
 
 		public static Collection<Comment> GetComments(int postId)
 		{
-			return DataAccess.CreateInstance().GetCommentsForPost(postId);
+			return DataAccess.CreateInstance().GetCommentsForPost(postId, CommentType.All);
 		}
 
 		public static Collection<Comment> GetAllComments(int pageNo)
