@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.Xml.Linq;
+using KMBlog;
 
 
 	public partial class category_edit : System.Web.UI.Page
@@ -23,11 +24,11 @@ using System.Xml.Linq;
 				return;
 
             editcategory.CategorySaved += new EventHandler<EventArgs>(CategorySaved);
-            int categoryID = Category.GetCategoryIDFromQueryString(Request.QueryString);
+            int categoryId = Category.GetCategoryIdFromQueryString(Request.QueryString);
 
             // Load category
-            Category c = Category.GetCategoryByID(categoryID);
-            if (categoryID == 0 || c == null)
+            Category c = Category.GetCategoryById(categoryId);
+            if (categoryId == 0 || c == null)
             {
                 lblCategoryDoesNotExist.Text = "The requested category does not exist. Perhaps it has been deleted?";
                 editcategory.Visible = false;
@@ -36,7 +37,7 @@ using System.Xml.Linq;
             {
                 editcategory.Name = c.Name;
                 editcategory.Slug = c.Slug;
-                editcategory.CategoryID = c.ID;
+                editcategory.CategoryId = c.Id;
             }
 
 		}

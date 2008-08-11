@@ -1,5 +1,8 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" codefile="category-editor.ascx.cs"
     Inherits="CategoryEditor" %>
+    
+    <%@ Import namespace="KMBlog" %>
+
 <fieldset id="category-editor">
     <ol>
         <li>
@@ -15,6 +18,6 @@
         <li>The category slug will be generated automatically if left blank. It can only contain
             letters, numbers, and hyphens.</li>
     </ol>
-    <input type="hidden" id="fldCategoryID" runat="server" />
-    <asp:Button ID="btnSaveCategory" runat="server" Text="Save" OnClick="SaveCategory" />
+    <input type="hidden" id="fldCategoryId" runat="server" />
+    <asp:Button ID="btnSaveCategory" runat="server" Text="Save" OnClick="SaveCategory" Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>"  />
 </fieldset>

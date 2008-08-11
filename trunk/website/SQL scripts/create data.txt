@@ -56,7 +56,7 @@ class="regkey">HKEY_USERS\.DEFAULT\Keyboard Layout</code> key. These
 apply at the login prompt, but are then removed when logged in.</p>')
 
 
-insert into postcategories (postID, categoryID) values (1, 1)
+insert into postcategories (PostId, categoryId) values (1, 1)
 
 
 insert into posts (title, postdate, slug, published, body) values

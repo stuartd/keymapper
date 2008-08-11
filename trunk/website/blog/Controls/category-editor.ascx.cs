@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using KMBlog;
 
 
 public partial class CategoryEditor : System.Web.UI.UserControl
@@ -18,19 +19,19 @@ public partial class CategoryEditor : System.Web.UI.UserControl
 		Page.Form.DefaultButton = btnSaveCategory.UniqueID;
 	}
 
-	public int CategoryID
+	public int CategoryId
 	{
 		get
 		{
-			int catID;
-			if (Int32.TryParse(fldCategoryID.Value, out catID))
-				return catID;
+			int catId;
+			if (Int32.TryParse(fldCategoryId.Value, out catId))
+				return catId;
 			else
 				return 0;
 		}
 		set
 		{
-			fldCategoryID.Value = value.ToString();
+			fldCategoryId.Value = value.ToString();
 		}
 	}
 
@@ -61,15 +62,15 @@ public partial class CategoryEditor : System.Web.UI.UserControl
 
 	public void SaveCategory(object sender, EventArgs e)
 	{
-		if (Authentication.IsUserAdmin(Page.User) == false)
+		if (KMAuthentication.IsUserAdmin(Page.User) == false)
 			return;
 
 		if (Page.IsValid == false)
 			return;
 
-		if (CategoryID != 0)
+		if (CategoryId != 0)
 		{
-			Category c = new Category(CategoryID, Name, Slug);
+			Category c = new Category(CategoryId, Name, Slug);
 			if (c)
 			{
 				Category.Edit(c);
@@ -87,7 +88,7 @@ public partial class CategoryEditor : System.Web.UI.UserControl
 			CategorySaved(null, null);
 		}
 
-		if (CategoryID != 0)
+		if (CategoryId != 0)
 			Response.Redirect("edit-categories.aspx");
 
 	}
@@ -96,9 +97,9 @@ public partial class CategoryEditor : System.Web.UI.UserControl
 
 	protected void CategoryNameExistsValidator_ServerValidate(object source, ServerValidateEventArgs args)
 	{
-		int catID;
-		catID = Category.GetCategoryIDByName(args.Value);
-		if (catID != 0 && catID != CategoryID)
+		int catId;
+		catId = Category.GetCategoryIdByName(args.Value);
+		if (catId != 0 && catId != CategoryId)
 		{
 			args.IsValid = false;
 		}

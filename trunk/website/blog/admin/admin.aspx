@@ -1,6 +1,9 @@
 ﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
     CodeFile="admin.aspx.cs" EnableEventValidation="false" Inherits="KMBlog.admin"
     Title="Key Mapper Blog Admin" %>
+    
+   <%@ Import namespace="KMBlog" %>
+
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <asp:Label ID="lblUserLevel" Text="" runat="server" /></div>
@@ -37,7 +40,7 @@
                     <%# (((bool)DataBinder.Eval(Container.DataItem, "Published")) ? "Published" : "Draft") %>
                 </td>
                 <td>
-                    <asp:Button runat="server" ID="DeletePost" Text="Delete" Enabled="<%# Authentication.IsUserAdmin(Page.User) %>"
+                    <asp:Button runat="server" ID="DeletePost" Text="Delete" Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>"
                         OnCommand="DeletePost" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>'
                         OnClientClick="return __doConfirm();" />
                 </td>

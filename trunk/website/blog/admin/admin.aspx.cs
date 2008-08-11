@@ -16,7 +16,7 @@ namespace KMBlog
 
 			((KMBlogMaster)Page.Master).SetTitle("Key Mapper Blog Admin");
 
-			if (Authentication.IsUserAdmin(User) == false)
+			if (KMAuthentication.IsUserAdmin(User) == false)
 				lblUserLevel.Text = "Demonstration Mode - you won't be able to save any changes";
 			else
 				lblUserLevel.Style.Add("Display", "None");
@@ -43,19 +43,19 @@ namespace KMBlog
         public void DeletePost(object sender, CommandEventArgs e)
         {
 
-			if (Authentication.IsUserAdmin(User) == false)
+			if (KMAuthentication.IsUserAdmin(User) == false)
 				return;
 
-            int postID;
-            if (Int32.TryParse(e.CommandArgument.ToString(), out postID) == false)
+            int PostId;
+            if (Int32.TryParse(e.CommandArgument.ToString(), out PostId) == false)
                 return;
 
-			Post.Delete(postID);
+			Post.Delete(PostId);
 			GetPostList();
 			
         }
 
-        public string GetCommentLinkText(int postID, int commentCount)
+        public string GetCommentLinkText(int PostId, int commentCount)
         {
 
             if (commentCount == 0)
@@ -66,7 +66,7 @@ namespace KMBlog
             // (TODO: This is the same code as the admin page's GetCommentLinkText
             // - need to refactor when can think of somewhere to put the code - 
             // in the comment class maybe?)
-            string href = "\"edit-comments.aspx?p=" + postID.ToString() + "\"";
+            string href = "\"edit-comments.aspx?p=" + PostId.ToString() + "\"";
             string text;
 
             text = commentCount.ToString() + " comment";
