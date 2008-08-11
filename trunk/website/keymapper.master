@@ -1,6 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="keymapper.master.cs" Inherits="KeyMapperMaster"
     EnableViewState="false" %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="kmhead" runat="server">
@@ -27,11 +26,11 @@
                 Code</a></li>
             <li><a href="blog/default.aspx">Blog</a></li>
         </ul>
-    </div>
         <div class="clearfloats">
+        </div>
     </div>
-        <asp:ContentPlaceHolder ID="body" runat="server">
-        </asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="body" runat="server">
+    </asp:ContentPlaceHolder>
     <div id="footer">
         Copyright Stuart Dunkeld 2008. All rights reserved.
     </div>
