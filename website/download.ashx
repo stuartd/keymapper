@@ -10,8 +10,12 @@ public class download : IHttpHandler
     public void ProcessRequest(HttpContext context)
     {
         string filename = context.Request.QueryString["file"];
+
         if (String.IsNullOrEmpty(filename))
-            return ;
+        {
+            context.Response.Write(" ");
+            return;
+        }
         
         if (filename.ToLower() != "keymapper.application" && filename.ToLower() != "setup.exe")
         {

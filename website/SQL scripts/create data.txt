@@ -140,3 +140,6 @@ Content body
 </pre>
 
 ')
+
+insert into postcategories (PostId, categoryId) values (2, 4)
+

@@ -64,5 +64,5 @@ function CompareVersions(v1, v2)
         <a href="KeyMapper.application">Click here to install and run the program</a>
     </div>
     <br />
-    If you prefer or if you run a 64 bit version of Windows, you can download one of the pre-built versions of Key Mapper by following the Downloads link above. These won't update automatically, but will run slightly faster.
+    If you prefer you can download one of the pre-built versions of Key Mapper by following the Downloads link above. These won't update automatically, but will run slightly faster.
 </asp:Content>
