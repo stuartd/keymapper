@@ -1,21 +1,25 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" codefile="default.aspx.cs" Inherits="KMBlog.DefaultPage"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="default.aspx.cs" Inherits="KMBlog.DefaultPage"
     MasterPageFile="KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
-    
- <%@ Import Namespace="KMBlog" %>
 
+<%@ Import Namespace="KMBlog" %>
 <%@ Import Namespace="System.Collections.ObjectModel" %>
 <%@ Register TagPrefix="comment_edit" TagName="CommentEditor" Src="Controls/comment-editor.ascx" %>
 <asp:Content ID="rss" ContentPlaceHolderID="head" runat="server">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="postfeed.aspx"> 
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="postfeed.aspx">
 </asp:Content>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
-    <ul class="topnav" id="sitenav">
-        <li><a href="../default.aspx">Key Mapper</a></li>
-        <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/blog">Blog
-            Source</a></li>
-        <li><a href="../blog">Blog Home</a></li>
-    </ul>
-    <div class="clearfloats">   </div>
+    <div id="topdivoutertiny">
+        <div id="topdivinner">
+            <ul class="topnav" id="sitenav">
+                <li><a href="../default.aspx">Key Mapper</a></li>
+                <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/blog">Blog
+                    Source</a></li>
+                <li><a href="../blog">Blog Home</a></li>
+            </ul>
+            <div class="clearfloats">
+            </div>
+        </div>
+    </div>
     <div id="blog">
         <div id="sidebar">
             <div class="subheader">

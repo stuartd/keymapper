@@ -10,7 +10,7 @@ body
 {
 	background-position: 100px 10px;
 	background-color: #FFFFFF;
-	background-image: url(  'http://justkeepswimming.net/KeyMapper/images/kmheader800w.png' );
+	background-image: url(   '../images/kmheader800w.png' );
 	background-repeat: no-repeat;
 	width: 80%;
 	padding-left: 100px;
@@ -36,7 +36,6 @@ body
 	letter-spacing: 0.3em;
 	font-variant: small-caps;
 	text-align: left;
-	border-bottom: 3px solid #d3d3d3;
 }
 
 .clearfloats
@@ -55,11 +54,40 @@ h4
 {
 	font-size: 120%;
 }
+#topdivouter, #topdivoutersmall, #topdivoutertiny
+{
+	border: 0.1em solid #d3d3d3;
+	padding: 0.2em;
+	margin-bottom: 20px;
+	background-color: rgb(235,235,235);
+}
+
+#topdivouter
+{
+	width: 48.3em;
+}
+
+#topdivoutersmall
+{
+	width: 34.7em;
+}
+
+#topdivoutertiny
+{
+	width: 21em;
+}
+
+#topdivinner
+{
+	border: 0.1em solid #A44;
+	padding: 0 0.2em;
+	background-color: #aaa;
+}
 
 
 .topnav
 {
-	margin: 0 -0.15em ;
+	margin: 0 -0.15em;
 }
 
 
@@ -70,7 +98,6 @@ h4
 	cursor: default;
 	display: inline;
 	background: none;
-	margin: 0.15em 0.15em;
 }
 
 .topnav li a
@@ -78,27 +105,34 @@ h4
 	height: 2em;
 	line-height: 2em;
 	width: 6.5em;
-	border: 1px solid black;
-	color: #000000;
+	border: 1px solid #a44;
+	color: #06c;
 	text-decoration: none;
 	text-align: center;
 	background-color: rgb(235, 235, 235);
 	display: block;
+	margin: 0.2em 0 0.2em 0.2em;
 }
 
 
-.topnav a:hover
+
+.topnav a:hover, topnav a:visited
 {
-	color: #111111;
 	background-color: rgb(220, 220, 220);
-	color: Blue;
+	color: blue;
+	border: 1px solid #06c;
 }
 
+#subheader
+{
+	margin-bottom: 1em;
+}
 
 ul.basiclist
 {
 	list-style-type: disc;
 }
+
 ul.basiclist li
 {
 	list-style-position: inside;

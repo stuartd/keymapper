@@ -7,7 +7,7 @@ AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="KeyMapperDefault" %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" Runat="Server">
 
-    <h4>Key Mapper lets you to remap and disable keyboard keys using Microsoft Windows 2000, XP or Vista.</h4>
+    <h4 id="subheader">Key Mapper lets you to remap and disable keyboard keys using Microsoft Windows 2000, XP or Vista.</h4>
     Key Mapper's features include:
     <ul class="basiclist">
     <li>Per-user key mappings (on Windows XP or later)</li>

@@ -1,5 +1,6 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="keymapper.master.cs" Inherits="KeyMapperMaster"
     EnableViewState="false" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="kmhead" runat="server">
@@ -15,18 +16,20 @@
 <body id="masterbody" runat="server">
     <h1 id="header" runat="server" class="header">
         Placeholder</h1>
-    <div id="topdiv">
-        <ul class="topnav" id="sitenav">
-            <li><a href="default.aspx">Home</a></li>
-            <li><a href="install.aspx">Install</a></li>
-            <li><a href="http://code.google.com/p/keymapper/downloads/list">Downloads</a></li>
-            <li><a href="support.aspx">Support</a></li>
-            <li><a href="faq.aspx">FAQ</a></li>
-            <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/keymapper">Source
-                Code</a></li>
-            <li><a href="blog/default.aspx">Blog</a></li>
-        </ul>
-        <div class="clearfloats">
+    <div id="topdivouter">
+        <div id="topdivinner">
+            <ul class="topnav" id="sitenav">
+                <li><a href="default.aspx">Home</a></li>
+                <li><a href="install.aspx">Install</a></li>
+                <li><a href="http://code.google.com/p/keymapper/downloads/list">Downloads</a></li>
+                <li><a href="support.aspx">Support</a></li>
+                <li><a href="faq.aspx">FAQ</a></li>
+                <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/keymapper">Source
+                    Code</a></li>
+                <li><a href="blog/default.aspx">Blog</a></li>
+            </ul>
+            <div class="clearfloats">
+            </div>
         </div>
     </div>
     <asp:ContentPlaceHolder ID="body" runat="server">
