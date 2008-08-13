@@ -28,24 +28,6 @@ namespace KMBlog
 				return PostId;
 			else
 				return 0;
-
-			//string[] keys = parameters.AllKeys;
-
-			//int PostId = 0;
-			//foreach (string key in keys)
-			//{
-			//    if (key.ToUpperInvariant() == "P")
-			//    {
-			//        foreach (string value in parameters.GetValues(key))
-			//        {
-			//            if (System.Int32.TryParse(value, out PostId))
-			//            {
-			//                break;
-			//            }
-			//        }
-			//    }
-			//}
-			//return PostId;
 		}
 
 		public static void Delete(int PostId)

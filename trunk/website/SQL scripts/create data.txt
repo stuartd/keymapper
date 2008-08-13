@@ -65,70 +65,70 @@ If you want to nest master pages - i.e. have a master page which inherits from a
 
 This is the base master page:
 <pre><samp>
-&lt;%@ Master Language=&quot;C#&quot; AutoEventWireup=&quot;true&quot; 
-CodeBehind=&quot;base.Master.cs&quot; Inherits=&quot;basemaster&quot; %&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
-&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
-&lt;head runat=&quot;server&quot;&gt;
-    &lt;title&gt;Intentionally Left Blank&lt;/title&gt;
-    &lt;meta content=&quot;base head&quot; /&gt;
-    &lt;asp:ContentPlaceHolder ID=&quot;head&quot; runat=&quot;server&quot;&gt;
-    &lt;/asp:ContentPlaceHolder&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;
-        &lt;div&gt;
+<%@ Master Language="C#" AutoEventWireup="true" 
+CodeBehind="base.Master.cs" Inherits="basemaster" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Intentionally Left Blank</title>
+    <meta content="base head" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
             Base Master body
-            &lt;br /&gt;
-            &lt;asp:ContentPlaceHolder ID=&quot;body&quot; runat=&quot;server&quot;&gt;
-            &lt;/asp:ContentPlaceHolder&gt;
-        &lt;/div&gt;
-    &lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+            <br />
+            <asp:ContentPlaceHolder ID="body" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
 </samp></pre>
 
 This is the subclassing master page: the content sections contain ContentPlaceHolders with the same name as those in the base Master page:
 
 <pre><samp>
-&lt;%@ Master Language=&quot;C#&quot; MasterPageFile=&quot;base.Master&quot; AutoEventWireup=&quot;true&quot; CodeBehind=&quot;subclass.master.cs&quot;
-    Inherits=&quot;subclass&quot; %&gt;
-&lt;asp:Content ID=&quot;Content1&quot; ContentPlaceHolderID=&quot;head&quot; runat=&quot;server&quot;&gt;
-    &lt;meta content=&quot;subclass head&quot; /&gt;
-    &lt;asp:ContentPlaceHolder ID=&quot;head&quot; runat=&quot;server&quot;&gt;
-    &lt;/asp:ContentPlaceHolder&gt;
-&lt;/asp:Content&gt;
-&lt;asp:Content ID=&quot;Content2&quot; ContentPlaceHolderID=&quot;body&quot; runat=&quot;server&quot;&gt;
+<%@ Master Language="C#" MasterPageFile="base.Master" AutoEventWireup="true" CodeBehind="subclass.master.cs"
+    Inherits="subclass" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <meta content="subclass head" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     Subclass Master Body
-    &lt;br /&gt;
-    &lt;asp:ContentPlaceHolder ID=&quot;body&quot; runat=&quot;server&quot;&gt;
-    &lt;/asp:ContentPlaceHolder&gt;
-&lt;/asp:Content&gt;
+    <br />
+    <asp:ContentPlaceHolder ID="body" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
 
-    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;
-        &lt;div&gt;
+    <form id="form1" runat="server">
+        <div>
             Base Master body
-            &lt;br /&gt;
-            &lt;asp:ContentPlaceHolder ID=&quot;body&quot; runat=&quot;server&quot;&gt;
-            &lt;/asp:ContentPlaceHolder&gt;
-        &lt;/div&gt;
-    &lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+            <br />
+            <asp:ContentPlaceHolder ID="body" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
 </samp></pre>
 
 This, then, is an example content page using the subclassed master:
 
 <pre><samp>
-&lt;%@ Page Language=&quot;C#&quot; MasterPageFile=&quot;subclass.master&quot; AutoEventWireup=&quot;true&quot; CodeBehind=&quot;WebForm1.aspx.cs&quot;
-    Inherits=&quot;WebApplication1.WebForm1&quot; Title=&quot;Content Page&quot; %&gt;
+<%@ Page Language="C#" MasterPageFile="subclass.master" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs"
+    Inherits="WebApplication1.WebForm1" Title="Content Page" %>
 
-&lt;asp:Content ID=&quot;Content1&quot; ContentPlaceHolderID=&quot;head&quot; runat=&quot;server&quot;&gt;
-    &lt;meta content=&quot;content header&quot; /&gt;
-&lt;/asp:Content&gt;
-&lt;asp:Content ID=&quot;Content2&quot; ContentPlaceHolderID=&quot;body&quot; runat=&quot;server&quot;&gt;
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <meta content="content header" />
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     Content body
-&lt;/asp:Content&gt;
+</asp:Content>
 </samp></pre>
 
 This produces the following output, with the expected values in the Head section as well.

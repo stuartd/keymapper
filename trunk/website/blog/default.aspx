@@ -30,7 +30,7 @@
                 <ul>
                     <asp:Repeater ID="categoriesRepeater" runat="server">
                         <ItemTemplate>
-                            <li><a href="?c=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
+                            <li class="catlist"><a href="?c=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
                                 <%# DataBinder.Eval(Container.DataItem, "Name") %></a></li>
                         </ItemTemplate>
                     </asp:Repeater>

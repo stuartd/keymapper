@@ -44,7 +44,7 @@ public partial class edit_comments : System.Web.UI.Page
 		Post p = Post.GetPostById(postId);
 		postname.Text = p.Title;
 
-		Collection<Comment> comlist = Comment.GetComments(postId);
+		Collection<Comment> comlist = Comment.GetComments(postId, CommentType.All);
 		comments.DataSource = comlist;
 		comments.DataBind();
 	}
@@ -53,7 +53,15 @@ public partial class edit_comments : System.Web.UI.Page
 
 	public void DeleteComment(object sender, CommandEventArgs e)
 	{
+		if (KMAuthentication.IsUserAdmin(User) == false)
+			return;
 
+		int commentId;
+		if (Int32.TryParse(e.CommandArgument.ToString(), out commentId) == false)
+			return;
+
+		Comment.Delete(commentId);
+		LoadPostComments();
 	}
 
 	public void ApproveComment(object sender, CommandEventArgs e)
