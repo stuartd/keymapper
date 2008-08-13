@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
-using System.Data;
-using System.Data.SqlTypes;
-using System.Configuration;
 using System.Collections.ObjectModel;
 using System.Web.UI.WebControls;
 
