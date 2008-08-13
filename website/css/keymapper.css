@@ -9,8 +9,8 @@ html
 body
 {
 	background-position: 100px 10px;
-	background-color: #FFFFFF;
-	background-image: url(   '../images/kmheader800w.png' );
+	background-color: #FFF1FF;
+	background-image: url('../images/kmheader800w.png' );
 	background-repeat: no-repeat;
 	width: 80%;
 	padding-left: 100px;
@@ -60,27 +60,14 @@ h4
 	padding: 0.2em;
 	margin-bottom: 20px;
 	background-color: rgb(235,235,235);
+	float: left;
 }
 
-#topdivouter
-{
-	width: 48.3em;
-}
-
-#topdivoutersmall
-{
-	width: 34.7em;
-}
-
-#topdivoutertiny
-{
-	width: 21em;
-}
 
 #topdivinner
 {
 	border: 0.1em solid #A44;
-	padding: 0 0.2em;
+	padding: 0 0.4em 0 0.2em;
 	background-color: #aaa;
 }
 

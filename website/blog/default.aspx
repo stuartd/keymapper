@@ -8,7 +8,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="postfeed.aspx">
 </asp:Content>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
-    <div id="topdivoutertiny">
+    <div id="topdivouter">
         <div id="topdivinner">
             <ul class="topnav" id="sitenav">
                 <li><a href="../default.aspx">Key Mapper</a></li>
@@ -20,6 +20,8 @@
             </div>
         </div>
     </div>
+    <div class="clearfloats">
+            </div>
     <div id="blog">
         <div id="sidebar">
             <div class="subheader">
@@ -92,7 +94,7 @@
                 </asp:Repeater>
                 If you want to leave a comment, all fields are optional except the text.<br />
                 <comment_edit:CommentEditor ID="editcomment" runat="server" />
-                <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" />
+                <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" Visible="false" />
                 <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
                 <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />
             </div>
