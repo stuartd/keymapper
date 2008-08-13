@@ -29,8 +29,11 @@
                 <li><a href="blog/default.aspx">Blog</a></li>
             </ul>
             <div class="clearfloats">
+                <!-- clear floats twice - once for the containing div, once for the li -->
             </div>
         </div>
+    </div>
+    <div class="clearfloats">
     </div>
     <asp:ContentPlaceHolder ID="body" runat="server">
     </asp:ContentPlaceHolder>

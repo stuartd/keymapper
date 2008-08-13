@@ -2,7 +2,7 @@
     Inherits="KMBlogAdmin" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
-    <div id="topdivoutersmall">
+    <div id="topdivouter">
         <div id="topdivinner">
             <ul class="topnav">
                 <li><a href="admin.aspx">Manage Posts</a></li>
@@ -16,6 +16,8 @@
             <div class="clearfloats">
             </div>
         </div>
+    </div>
+    <div class="clearfloats">
     </div>
     <asp:ContentPlaceHolder ID="body" runat="server">
     </asp:ContentPlaceHolder>
