@@ -44,8 +44,8 @@
                         <%# (((bool)DataBinder.Eval(Container.DataItem, "Approved")) ? "Approved" : "Not approved") %>
                     </td>
                     <td>
-                    <asp:Button runat="server" ID="ApproveComment" Text="Delete" OnCommand="ApproveComment"
-                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' Enabled='<%# ((bool)DataBinder.Eval(Container.DataItem, "Approved")  && KMAuthentication.IsUserAdmin(Page.User))%>' />
+                    <asp:Button runat="server" ID="ApproveComment" Text="Approve" OnCommand="ApproveComment"
+                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' Enabled='<%# ((bool)DataBinder.Eval(Container.DataItem, "Approved") == false  && KMAuthentication.IsUserAdmin(Page.User))%>' />
                     </td>
                     <td>
                         <asp:Button runat="server" ID="DeleteComment" Text="Delete" Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>"
