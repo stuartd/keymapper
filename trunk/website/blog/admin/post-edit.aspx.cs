@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
 using System.Web.UI;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.Web.UI.WebControls;
-using System.Text.RegularExpressions;
 
 
 namespace KMBlog

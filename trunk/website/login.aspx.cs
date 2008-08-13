@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using System.Configuration;
-using System.Collections.Specialized;
-using System.Text;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web;
-using System.Security.Principal;
 using System.Web.Security;
 using KMBlog;
 

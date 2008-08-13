@@ -36,7 +36,7 @@ namespace KMBlog
 			foreach (Post p in posts)
 			{
 				SyndicationItem item = new SyndicationItem();
-				item.Id = Guid.NewGuid().ToString();
+				item.Id = p.Id.ToString();
 				item.Title = new TextSyndicationContent(p.Title);
 				item.Content = new TextSyndicationContent(p.Body);
 
