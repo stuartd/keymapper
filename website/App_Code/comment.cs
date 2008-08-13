@@ -81,9 +81,9 @@ namespace KMBlog
 			return DataAccess.CreateInstance().DeleteComment(commentId) ;
 		}
 
-		public static Collection<Comment> GetComments(int postId)
+		public static Collection<Comment> GetComments(int postId, CommentType type)
 		{
-			return DataAccess.CreateInstance().GetCommentsForPost(postId, CommentType.All);
+			return DataAccess.CreateInstance().GetCommentsForPost(postId, type);
 		}
 
 		public static Collection<Comment> GetAllComments(int pageNo)
