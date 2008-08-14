@@ -29,6 +29,7 @@ namespace KMBlog
 					com.Name = Convert.ToString(reader["name"]);
 					com.Url = Convert.ToString(reader["url"]);
 					com.Approved = Convert.ToBoolean(reader["Approved"]);
+                    com.Posted = Convert.ToDateTime(reader["Posted"]);
 
 					commentlist.Add(com);
 				}

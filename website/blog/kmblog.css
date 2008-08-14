@@ -7,18 +7,17 @@ Red: #A44
 Anchors: #06c;
 
  */
- 
- .catlist a
- {
- 		display: block;
- }
+
+.catlist a
+{
+	display: block;
+}
 
 .catlist a:hover
 {
 	color: Blue;
 	background-color: #FFFFEE;
 }
-
 
 
 #category-editor, .loginform
@@ -47,22 +46,32 @@ Anchors: #06c;
 	padding: 5px 0;
 }
 
-
-#adminposts, #admincategories
+.admintable tr
 {
-	margin-top: 1em;
-	border-top: 3px solid #d3d3d3;
+	margin-top: 3em;
 }
 
-#adminposts tr, #admincategories tr
+.admintable th
+{
+	border-top: 2px solid #d3d3d3;
+	border-bottom: 2px solid #d3d3d3;
+}
+
+.admintable tr
 {
 	text-align: left;
 }
 
 
-#adminposts a:hover
+.admintable tr a:hover
 {
-	color: Blue ;
+	color: Blue;
+}
+
+.admintable td
+{
+	padding: 1.5em 0 ;
+	border-bottom: 1px solid #d3d3d3;
 }
 
 a
@@ -105,7 +114,7 @@ a
 {
 	float: left;
 	width: 80%;
-	margin-top: 20px ;
+	margin-top: 20px;
 }
 
 #posts li
@@ -132,7 +141,7 @@ div.comment
 {
 	float: right;
 	width: 19.5%;
-	margin-top: 20px ;
+	margin-top: 20px;
 }
 
 
@@ -212,6 +221,12 @@ div.comment
 {
 	width: 50%;
 	height: 100px;
+}
+
+.commentposted
+{
+	float: right;
+	margin-right: 10px;
 }
 
 .postbody

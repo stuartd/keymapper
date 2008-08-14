@@ -9,7 +9,7 @@
     <asp:Label ID="lblUserLevel" Text="" runat="server" /></div>
     <asp:Repeater ID="postsRepeater" runat="server">
         <HeaderTemplate>
-            <table border="0" cellpadding="0" cellspacing="0" width="60%" id="adminposts">
+            <table border="0" cellpadding="0" cellspacing="0" width="60%" class="admintable">
                 <tr>
                     <th>
                         Post

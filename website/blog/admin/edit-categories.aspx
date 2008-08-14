@@ -8,7 +8,7 @@
 		<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
      <asp:Repeater ID="rptCategories" runat="server">
         <HeaderTemplate>
-            <table border="0" cellpadding="0" cellspacing="0" width="30%" id="admincategories">
+            <table border="0" cellpadding="0" cellspacing="0" width="30%" class="admintable">
                 <tr>
                     <th>
                         Edit Category
