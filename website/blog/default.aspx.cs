@@ -63,16 +63,16 @@ namespace KMBlog
 				DateTime dateFrom, dateTo;
 				GetDateRangeFromQueryString(out dateFrom, out dateTo);
 
-				posts = Post.GetAllPosts(categoryId, dateFrom, dateTo);
+				posts = Post.GetAllPosts(categoryId, dateFrom, dateTo, CommentType.Approved);
 
 			}
 
 			if (singlePost == false)
 				comments_inner.Style.Add("Display", "None");
 			else
-				if (posts.Count > 0)
+				if (posts.Count != 0)
 				{
-					Collection<Comment> clist = Post.GetCommentsForPost(PostId);
+					Collection<Comment> clist = Comment.GetComments(PostId, CommentType.Approved);
 					commentsRepeater.DataSource = clist;
 					commentsRepeater.DataBind();
 				}
@@ -193,9 +193,9 @@ namespace KMBlog
 			}
 		}
 
-		public void GetCommentsForPost(int PostId)
+		public void GetCommentsForPost(int postId)
 		{
-			Collection<Comment> commentlist = Post.GetCommentsForPost(PostId);
+			Collection<Comment> commentlist = Comment.GetComments(postId, CommentType.Approved);
 			commentsRepeater.DataSource = commentlist;
 			commentsRepeater.DataBind();
 		}
@@ -283,6 +283,11 @@ namespace KMBlog
 			}
 
             editcomment.ClearValues();
+
+			if (Request.QueryString.ToString().EndsWith("#comments") == false)
+			{
+				Response.Redirect(Request.Url + "#comments");
+			}
 
 			GetPosts();
 

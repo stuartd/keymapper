@@ -30,7 +30,7 @@ namespace KMBlog
 
         void GetPostList()
         {
-			Collection<Post> posts = Post.GetAllPosts();
+			Collection<Post> posts = Post.GetAllPosts(CommentType.All);
             postsRepeater.DataSource = posts;
             postsRepeater.DataBind();
 

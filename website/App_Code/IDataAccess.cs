@@ -18,15 +18,15 @@ namespace KMBlog
 	{
 		#region posts
 
-		Collection<Post> GetAllPosts();
+		Collection<Post> GetAllPosts(CommentType ctype);
 
 		//Collection<Post> GetAllPosts(int categoryId);
 
 		//Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate);
 
-		Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate);
+		Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype);
 
-		Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, int NumberOfPosts);
+		Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype, int NumberOfPosts);
 
 		Post GetPostById(int postId);
 

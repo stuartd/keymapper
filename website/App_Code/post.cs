@@ -5,8 +5,6 @@ using System.Collections.Specialized;
 
 namespace KMBlog
 {
-
-
 	public class Post
 	{
 
@@ -46,23 +44,16 @@ namespace KMBlog
 			return DataAccess.CreateInstance().DoesSlugExist(slug);
 		}
 
-		public static Collection<Comment> GetCommentsForPost(int PostId)
+		public static Collection<Post> GetAllPosts(CommentType ctype)
 		{
-			// Could be part of comment class?
-			return DataAccess.CreateInstance().GetCommentsForPost(PostId, CommentType.Approved);
+			return DataAccess.CreateInstance().GetAllPosts(ctype);
 		}
 
-		public static Collection<Post> GetAllPosts()
+		public static Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype)
 		{
-			return DataAccess.CreateInstance().GetAllPosts();
+			return DataAccess.CreateInstance().GetAllPosts(categoryId, startDate, endDate, ctype);
 		}
-
-		public static Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate)
-		{
-			return DataAccess.CreateInstance().GetAllPosts(categoryId, startDate, endDate);
-		}
-
-
+		
 		public static bool Save(Post p)
 		{
 

@@ -44,9 +44,10 @@
                     <AnonymousTemplate>
                         <a href="admin/admin.aspx">Login</a></AnonymousTemplate>
                     <LoggedInTemplate>
-                        <asp:LoginName ID="LoginName1" runat="server" FormatString="Logged in as {0}" />
-                        <br />
-                        <a href="admin/admin.aspx">Blog Admin</a><br />
+                        <div class="nonanchorsidebarcontent">
+                            <asp:LoginName ID="LoginName1" runat="server" FormatString="Logged in as {0}" />
+                        </div>
+                        <a href="admin/admin.aspx">Blog Admin</a>
                         <asp:LoginStatus runat="server" />
                     </LoggedInTemplate>
                 </asp:LoginView>
@@ -75,32 +76,33 @@
                     </div>
                 </ItemTemplate>
             </asp:Repeater>
-            <div id="comments">
-                <div id="comments_inner" runat="server">
-                    <asp:Repeater ID="commentsRepeater" runat="server">
-                        <HeaderTemplate>
-                            <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label></HeaderTemplate>
-                        <ItemTemplate>
-                            <div class="comment">
-                                <div class="commenthead">
-                                    <span class="commenter">
-                                        <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
+        <div id="comments">
+            <div id="comments_inner" runat="server">
+                <asp:Repeater ID="commentsRepeater" runat="server">
+                    <HeaderTemplate>
+                        <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label></HeaderTemplate>
+                    <ItemTemplate>
+                        <div class="comment">
+                            <div class="commenthead">
+                                <span class="commenter">
+                                    <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
                                       DataBinder.Eval(Container.DataItem, "url").ToString())%></span> <span class="commentposted">
                                           <%#  ((DateTime)DataBinder.Eval(Container.DataItem, "Posted")).ToLongDateString() %></span>
-                                </div>
-                                <div class="commentbody">
-                                    <%# DataBinder.Eval(Container.DataItem, "text")%>
-                                </div>
                             </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
-                    If you want to leave a comment, all fields are optional except the text.<br />
-                    <comment_edit:CommentEditor ID="editcomment" runat="server" />
-                    <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" Visible="false" />
-                    <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
-                    <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />
-                </div>
+                            <div class="commentbody">
+                                <%# DataBinder.Eval(Container.DataItem, "text")%>
+                            </div>
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+                If you want to leave a comment, all fields are optional except the text.<br />
+                Comments are moderated, so won't show up immediately.
+                <comment_edit:CommentEditor ID="editcomment" runat="server" />
+                <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" Visible="false" />
+                <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
+                <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />
             </div>
         </div>
     </div>
+            </div>
 </asp:Content>

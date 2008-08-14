@@ -30,7 +30,7 @@ namespace KMBlog
 			postfeed.Title = new TextSyndicationContent("Key Mapper Developer Blog");
 			postfeed.Description = new TextSyndicationContent("Post feed for the Key Mapper Developer Blog");
 
-			Collection<Post> posts = Post.GetAllPosts();
+			Collection<Post> posts = Post.GetAllPosts(CommentType.Approved);
 			List<SyndicationItem> items = new List<SyndicationItem>();
 
 			foreach (Post p in posts)

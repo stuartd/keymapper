@@ -8,19 +8,7 @@ Anchors: #06c;
 
  */
 
-.catlist a
-{
-	display: block;
-}
-
-.catlist a:hover
-{
-	color: Blue;
-	background-color: #FFFFEE;
-}
-
-
-#category-editor, .loginform
+#category-editor, .loginform, #comment-editor
 {
 	width: auto;
 	padding: 1em 0;
@@ -28,7 +16,7 @@ Anchors: #06c;
 
 /* Firefox 2 doesn't support inline-block */
 
-#category-editor label, .loginform label
+#category-editor label, #comment-editor label, .loginform label
 {
 	width: 5em;
 	margin-right: 0.5em;
@@ -41,7 +29,7 @@ Anchors: #06c;
 	border-color: #d3d3d3;
 }
 
-#category-editor li
+#category-editor li, #comment-editor li
 {
 	padding: 5px 0;
 }
@@ -49,6 +37,7 @@ Anchors: #06c;
 .admintable tr
 {
 	margin-top: 3em;
+	text-align: left;
 }
 
 .admintable th
@@ -57,12 +46,6 @@ Anchors: #06c;
 	border-bottom: 2px solid #d3d3d3;
 }
 
-.admintable tr
-{
-	text-align: left;
-}
-
-
 .admintable tr a:hover
 {
 	color: Blue;
@@ -70,7 +53,7 @@ Anchors: #06c;
 
 .admintable td
 {
-	padding: 1.5em 0 ;
+	padding: 0.5em 0 ;
 	border-bottom: 1px solid #d3d3d3;
 }
 
@@ -88,6 +71,15 @@ a
 	margin-bottom: 2em;
 	border: 1px solid #d4d4d4;
 }
+
+.post li
+{
+	list-style-type: disc;
+	padding-left: 10px;
+	padding-bottom: 3px;
+	list-style-position: inside;
+}
+
 
 #edit_categories
 {
@@ -117,33 +109,12 @@ a
 	margin-top: 20px;
 }
 
-#posts li
-{
-	list-style-type: disc;
-	padding-left: 10px;
-	padding-bottom: 3px;
-	list-style-position: inside;
-}
-
-div.comment
-{
-	border-top: 1px solid black;
-	border-left: 5px solid #A44;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
-	padding: 20px;
-	margin-bottom: 10px;
-	position: relative;
-}
-
-
 #sidebar
 {
 	float: right;
 	width: 19.5%;
 	margin-top: 20px;
 }
-
 
 .subheader
 {
@@ -157,9 +128,20 @@ div.comment
 {
 	margin-bottom: 2em;
 	border: 1px solid #d3d3d3;
+}
+
+.sidebarcontent a, .nonanchorsidebarcontent
+{
+	margin: 1px 0;
+	display: block;
 	padding-left: 10px;
 }
 
+.sidebarcontent a:hover
+{
+	color: Blue;
+	background-color: #d3d3d3;
+}
 
 .postfooter
 {
@@ -194,6 +176,17 @@ div.comment
 	top: 0;
 }
 
+div.comment
+{
+	border-top: 1px solid black;
+	border-left: 5px solid #A44;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	padding: 20px;
+	margin-bottom: 10px;
+	position: relative;
+}
+
 .commentslink
 {
 	position: absolute;
@@ -214,7 +207,7 @@ div.comment
 
 .commentbody
 {
-	background-color: White;
+	background-color: #FFEEFF;
 }
 
 .comment_text

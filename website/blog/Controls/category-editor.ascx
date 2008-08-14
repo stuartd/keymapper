@@ -1,8 +1,6 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" codefile="category-editor.ascx.cs"
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="category-editor.ascx.cs"
     Inherits="CategoryEditor" %>
-    
-    <%@ Import namespace="KMBlog" %>
-
+<%@ Import Namespace="KMBlog" %>
 <fieldset id="category-editor">
     <ol>
         <li>
@@ -19,5 +17,6 @@
             letters, numbers, and hyphens.</li>
     </ol>
     <input type="hidden" id="fldCategoryId" runat="server" />
-    <asp:Button ID="btnSaveCategory" runat="server" Text="Save" OnClick="SaveCategory" Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>"  />
+    <asp:Button ID="btnSaveCategory" runat="server" Text="Save" OnClick="SaveCategory"
+        Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>" />
 </fieldset>
