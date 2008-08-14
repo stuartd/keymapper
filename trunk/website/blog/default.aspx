@@ -5,7 +5,7 @@
 <%@ Import Namespace="System.Collections.ObjectModel" %>
 <%@ Register TagPrefix="comment_edit" TagName="CommentEditor" Src="Controls/comment-editor.ascx" %>
 <asp:Content ID="rss" ContentPlaceHolderID="head" runat="server">
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="postfeed.aspx">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="postfeed.aspx" />
 </asp:Content>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <div id="topdivouter">
@@ -14,14 +14,14 @@
                 <li><a href="../default.aspx">Key Mapper</a></li>
                 <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/blog">Blog
                     Source</a></li>
-                <li><a href="../blog">Blog Home</a></li>
+                <li><a href="../blog/default.aspx">Blog Home</a></li>
             </ul>
             <div class="clearfloats">
             </div>
         </div>
     </div>
     <div class="clearfloats">
-            </div>
+    </div>
     <div id="blog">
         <div id="sidebar">
             <div class="subheader">
@@ -75,28 +75,31 @@
                     </div>
                 </ItemTemplate>
             </asp:Repeater>
-            <div id="comments" runat="server">
-                <asp:Repeater ID="commentsRepeater" runat="server">
-                    <HeaderTemplate>
-                        <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label></HeaderTemplate>
-                    <ItemTemplate>
-                        <div class="comment">
-                            <div class="commenthead">
-                                <span class="commenter">
-                                    <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
-                                      DataBinder.Eval(Container.DataItem, "url").ToString())%></span> </span>
+            <div id="comments">
+                <div id="comments_inner" runat="server">
+                    <asp:Repeater ID="commentsRepeater" runat="server">
+                        <HeaderTemplate>
+                            <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label></HeaderTemplate>
+                        <ItemTemplate>
+                            <div class="comment">
+                                <div class="commenthead">
+                                    <span class="commenter">
+                                        <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
+                                      DataBinder.Eval(Container.DataItem, "url").ToString())%></span> <span class="commentposted">
+                                          <%#  ((DateTime)DataBinder.Eval(Container.DataItem, "Posted")).ToLongDateString() %></span>
+                                </div>
+                                <div class="commentbody">
+                                    <%# DataBinder.Eval(Container.DataItem, "text")%>
+                                </div>
                             </div>
-                            <div class="commentbody">
-                                <%# DataBinder.Eval(Container.DataItem, "text")%>
-                            </div>
-                        </div>
-                    </ItemTemplate>
-                </asp:Repeater>
-                If you want to leave a comment, all fields are optional except the text.<br />
-                <comment_edit:CommentEditor ID="editcomment" runat="server" />
-                <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" Visible="false" />
-                <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
-                <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    If you want to leave a comment, all fields are optional except the text.<br />
+                    <comment_edit:CommentEditor ID="editcomment" runat="server" />
+                    <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" Visible="false" />
+                    <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
+                    <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />
+                </div>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
-    CodeFile="edit-comments.aspx.cs" Inherits="edit_comments" Title="Edit Comments"  EnableEventValidation="false" %>
+    CodeFile="edit-comments.aspx.cs" Inherits="edit_comments" Title="Edit Comments"
+    EnableEventValidation="false" %>
 
 <%@ Import Namespace="KMBlog" %>
 <%@ Register TagPrefix="comment" TagName="CommentEditor" Src="../Controls/comment-editor.ascx" %>
@@ -7,7 +8,13 @@
     <asp:Label>Comments on the post '<asp:Label runat="server" ID="postname">(postname)</asp:Label>'
         <asp:Repeater ID="comments" runat="server">
             <HeaderTemplate>
-                <table border="0" cellpadding="0" cellspacing="0" width="60%" id="adminposts">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="admintable">
+                    <col width="42%"></col>
+                    <col width="14%"></col>
+                    <col width="12%"></col>
+                    <col width="12%"></col>
+                    <col width="10%"></col>
+                    <col width="10%"></col>
                     <tr>
                         <th>
                             Comment
@@ -33,24 +40,23 @@
                 <tr>
                     <td>
                         <a href="comment-edit.aspx?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
-                            <%# DataBinder.Eval(Container.DataItem, "Text") %></a>
-                    </td>
+                            <%# DataBinder.Eval(Container.DataItem, "Text") %></a> </td>
                     <td>
                         <%# DataBinder.Eval(Container.DataItem, "Name") %>
-                    <td>
-                        <%# ((DateTime)DataBinder.Eval(Container.DataItem, "Posted")).ToLongDateString() %>
-                    </td>
-                    <td>
-                        <%# (((bool)DataBinder.Eval(Container.DataItem, "Approved")) ? "Approved" : "Not approved") %>
-                    </td>
-                    <td>
-                    <asp:Button runat="server" ID="ApproveComment" Text="Approve" OnCommand="ApproveComment"
-                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' Enabled='<%# ((bool)DataBinder.Eval(Container.DataItem, "Approved") == false  && KMAuthentication.IsUserAdmin(Page.User))%>' />
-                    </td>
-                    <td>
-                        <asp:Button runat="server" ID="DeleteComment" Text="Delete" Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>"
-                            OnCommand="DeleteComment" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' />
-                    </td>
+                        <td>
+                            <%# ((DateTime)DataBinder.Eval(Container.DataItem, "Posted")).ToLongDateString() %>
+                        </td>
+                        <td>
+                            <%# (((bool)DataBinder.Eval(Container.DataItem, "Approved")) ? "Approved" : "Not approved") %>
+                        </td>
+                        <td>
+                            <asp:Button runat="server" ID="ApproveComment" Text="Approve" OnCommand="ApproveComment"
+                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' Enabled='<%# ((bool)DataBinder.Eval(Container.DataItem, "Approved") == false  && KMAuthentication.IsUserAdmin(Page.User))%>' />
+                        </td>
+                        <td>
+                            <asp:Button runat="server" ID="DeleteComment" Text="Delete" Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>"
+                                OnCommand="DeleteComment" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID")%>' />
+                        </td>
                 </tr>
             </ItemTemplate>
             <FooterTemplate>

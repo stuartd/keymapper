@@ -68,7 +68,7 @@ namespace KMBlog
 			}
 
 			if (singlePost == false)
-				comments.Style.Add("Display", "None");
+				comments_inner.Style.Add("Display", "None");
 			else
 				if (posts.Count > 0)
 				{
@@ -235,7 +235,7 @@ namespace KMBlog
 			else
 			{
 				text = commentCount.ToString() + " comment";
-				if (commentCount > 0)
+				if (commentCount > 1)
 					text += "s";
 			}
 
