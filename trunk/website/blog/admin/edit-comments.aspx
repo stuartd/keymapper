@@ -9,12 +9,12 @@
         <asp:Repeater ID="comments" runat="server">
             <HeaderTemplate>
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="admintable">
-                    <col width="42%"></col>
-                    <col width="14%"></col>
-                    <col width="12%"></col>
+                    <col width="44%"></col>
+                    <col width="18%"></col>
                     <col width="12%"></col>
                     <col width="10%"></col>
-                    <col width="10%"></col>
+                    <col width="8%"></col>
+                    <col width="8%"></col>
                     <tr>
                         <th>
                             Comment

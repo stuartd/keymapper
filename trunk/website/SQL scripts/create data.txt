@@ -33,7 +33,7 @@ overridden by those in <code
 class="regkey">HKEY_CURRENT_USER</code>).</p><br />
 <p>It''s possible that Microsoft kept this quiet because user mappings
 are incompatible with Fast User Switching: when you switch to an
-account that''7s already logged on, the mappings are not reloaded. It''s
+account that''s already logged on, the mappings are not reloaded. It''s
 also possible that because they kept it quiet, the Fast User Switching
 development team didn''t realise that user mappings should be reloaded
 when switching users. Boot mappings persist through Fast User

@@ -14,9 +14,9 @@ namespace KMBlog
 
 		#region Posts
 
-		public Collection<Post> GetAllPosts()
+		public Collection<Post> GetAllPosts(CommentType ctype)
 		{
-			return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, 999);
+			return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, ctype, 999 );
 		}
 
 		//public Collection<Post> GetAllPosts(int categoryId)
@@ -29,12 +29,12 @@ namespace KMBlog
 		//    return GetAllPosts(0, startDate, endDate);
 		//}
 
-		public Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate)
+		public Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype)
 		{
-			return GetAllPosts(categoryId, startDate, endDate, 10);
+			return GetAllPosts(categoryId, startDate, endDate, ctype, 10);
 		}
 
-		public Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, int NumberOfPosts)
+		public Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype, int NumberOfPosts)
 		{
 
 			int numberOfPosts = 10;
@@ -52,6 +52,11 @@ namespace KMBlog
 				sc.Parameters.AddWithValue("CategoryId", categoryId);
 				sc.Parameters.AddWithValue("DateFrom", startDate);
 				sc.Parameters.AddWithValue("DateTo", endDate);
+
+				if (ctype != CommentType.All)
+					sc.Parameters.AddWithValue("@ApprovedCommentsOnly", ctype == CommentType.Approved ? 1 : 0);
+				else
+					sc.Parameters.AddWithValue("@ApprovedCommentsOnly", DBNull.Value);
 
 				sc.CommandType = CommandType.StoredProcedure;
 				sc.Connection = connection;
@@ -377,6 +382,21 @@ namespace KMBlog
 
 				sc.Parameters.AddWithValue("PostId", postId);
 
+
+
+				if (ctype == CommentType.All)
+					sc.Parameters.AddWithValue("Approved", DBNull.Value);
+				else
+				{
+					int bitValue = 0;
+
+					if (ctype == CommentType.Approved)
+						bitValue = 1;
+					else if (ctype == CommentType.UnApproved)
+						bitValue = 0;
+
+					sc.Parameters.AddWithValue("Approved", bitValue);
+				}
 				Collection<Comment> clist = SqlDataMap.CreateCommentsFromReader(sc.ExecuteReader());
 
 				return clist;
