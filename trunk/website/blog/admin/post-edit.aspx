@@ -8,7 +8,7 @@
             <asp:TextBox ID="posttitle" runat="server" Width="30em" TabIndex="1"></asp:TextBox>
             <asp:RequiredFieldValidator ControlToValidate="posttitle" runat="server" ErrorMessage="The title can't be blank" />
         </div>
-        <div id="edit_categories">
+        <div id="edit_post_categories">
             <div class="subheader">
                 Categories</div>
             <asp:CheckBoxList runat="server" ID="CatList">

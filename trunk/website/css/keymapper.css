@@ -21,11 +21,16 @@ body
 	font-family: Trebuchet MS, Verdana, Helvetica, Arial, sans-serif;
 }
 
-#showhidetocanchor
+a
 {
+	color: #06c;
+	text-decoration: none ;
+}
+
+a:hover
+{
+	color: #006;
 	text-decoration: underline;
-	cursor: pointer;
-	cursor: hand;
 }
 
 .header
@@ -54,7 +59,7 @@ h4
 {
 	font-size: 120%;
 }
-#topdivouter, #topdivoutersmall, #topdivoutertiny
+#topdivouter
 {
 	border: 0.1em solid #d3d3d3;
 	padding: 0.2em;
@@ -67,8 +72,9 @@ h4
 #topdivinner
 {
 	border: 0.1em solid #A44;
-	padding: 0 0.4em 0 0.2em;
+	padding: 0.1em;
 	background-color: #aaa;
+	float: left ;
 }
 
 
@@ -93,12 +99,11 @@ h4
 	line-height: 2em;
 	width: 6.5em;
 	border: 1px solid #a44;
-	color: #06c;
 	text-decoration: none;
 	text-align: center;
 	background-color: rgb(235, 235, 235);
 	display: block;
-	margin: 0.2em 0 0.2em 0.2em;
+	margin: 0.1em;
 }
 
 
@@ -108,6 +113,7 @@ h4
 	background-color: rgb(220, 220, 220);
 	color: blue;
 	border: 1px solid #06c;
+	text-decoration: none ;
 }
 
 #subheader
