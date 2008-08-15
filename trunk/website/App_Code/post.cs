@@ -41,7 +41,7 @@ namespace KMBlog
 
 		public static bool DoesSlugExist(string slug)
 		{
-			return DataAccess.CreateInstance().DoesSlugExist(slug);
+            return (DataAccess.CreateInstance().GetPostIdFromSlug(slug) > 0);
 		}
 
 		public static Collection<Post> GetAllPosts(CommentType ctype)

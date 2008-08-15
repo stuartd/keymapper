@@ -8,6 +8,17 @@ Anchors: #06c;
 
  */
 
+
+.archivelist a
+{
+	margin-left: 5px;
+}
+
+.archivelist a:before
+{
+	content: "\00BB \0020";
+}
+
 #category-editor, .loginform, #comment-editor
 {
 	width: auto;
@@ -53,7 +64,7 @@ Anchors: #06c;
 
 .admintable td
 {
-	padding: 0.5em 0 ;
+	padding: 0.5em 0;
 	border-bottom: 1px solid #d3d3d3;
 }
 
