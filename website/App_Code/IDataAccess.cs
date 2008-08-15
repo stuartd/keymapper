@@ -34,9 +34,9 @@ namespace KMBlog
 
 		void DeletePost(int postId);
 
-		bool DoesSlugExist(string slug);
+        int GetPostIdFromSlug(string slug);
 
-		#endregion
+        #endregion
 
 		#region categories
 

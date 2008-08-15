@@ -128,15 +128,15 @@ namespace KMBlog
 					if (currentYear != 0)
 						alist.Append("</ul>");
 
-					alist.Append("<li>" + "<a href='?d=" + year.ToString() + "'>" + year.ToString() + "</a></li><ul>");
+					alist.Append("<li><a href=\"?d=" + year.ToString() + "\">" + year.ToString() + "</a></li><ul>");
 					currentYear = year;
 				}
 
 				string monthname = DateTimeFormatInfo.InvariantInfo.GetMonthName(month);
 
-				alist.Append("<li>" + "<a href='?d=" + year.ToString() 
-					+ String.Format("00.", month) + "'>" + monthname 
-					+ " - " + posts.ToString() + "post" 
+                alist.Append("<li class=\"archivelist\">" + "<a href='?d=" + year.ToString() 
+					+ month.ToString().PadLeft(2, '0') + "'>" + monthname 
+					+ " - " + posts.ToString() + " post" 
 					+ (posts > 1 ? "s" : "") + "</a></li>");
 
 			}
