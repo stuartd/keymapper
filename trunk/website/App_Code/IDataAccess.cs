@@ -80,8 +80,11 @@ namespace KMBlog
 
 		void LogDownload(string fileName, string ip, string referrer, string userAgent);
 
+		DataTable GetArchives();
+
 		#endregion
-		
+
+
 	}
 
 	public class DataAccess

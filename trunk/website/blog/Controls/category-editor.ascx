@@ -17,6 +17,5 @@
             letters, numbers, and hyphens.</li>
     </ol>
     <input type="hidden" id="fldCategoryId" runat="server" />
-    <asp:Button ID="btnSaveCategory" runat="server" Text="Save" OnClick="SaveCategory"
-        Enabled="<%# KMAuthentication.IsUserAdmin(Page.User) %>" />
+    <asp:Button ID="btnSaveCategory" runat="server" Text="Save" OnClick="SaveCategory" />
 </fieldset>

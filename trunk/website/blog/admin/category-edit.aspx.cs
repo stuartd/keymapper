@@ -10,10 +10,13 @@ using KMBlog;
 
 			((KMBlogMaster)Page.Master).SetTitle("Edit A Category");
 
+			if (KMAuthentication.IsUserAdmin(User) == false)
+				editcategory.DisableSave();
+
 			if (Page.IsPostBack)
 				return;
 
-            editcategory.CategorySaved += new EventHandler<EventArgs>(CategorySaved);
+            editcategory.CategorySaved += CategorySaved;
             int categoryId = Category.GetCategoryIdFromQueryString(Request.QueryString);
 
             // Load category

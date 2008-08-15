@@ -16,7 +16,7 @@ namespace KMBlog
 
 		public Collection<Post> GetAllPosts(CommentType ctype)
 		{
-			return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, ctype, 999 );
+			return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, ctype, 999);
 		}
 
 		//public Collection<Post> GetAllPosts(int categoryId)
@@ -74,8 +74,13 @@ namespace KMBlog
 			return posts;
 		}
 
+		/// <summary>
+		/// GetPostByID returns a post with the >approved< comment count.
+		/// </summary>
+
 		public Post GetPostById(int postId)
 		{
+
 			Collection<Post> posts = new Collection<Post>();
 
 			using (SqlConnection connection = GetConnection())
@@ -433,13 +438,13 @@ namespace KMBlog
 				sc.CommandType = CommandType.StoredProcedure;
 
 				sc.Parameters.AddWithValue("commentId", commentId);
-	
-					result = sc.ExecuteNonQuery();
 
-		
+				result = sc.ExecuteNonQuery();
+
+
 			}
-		return (result == 1);
-			
+			return (result == 1);
+
 		}
 
 		#endregion
@@ -501,6 +506,33 @@ namespace KMBlog
 				else
 					return 0;
 			}
+		}
+
+		public DataTable GetArchives()
+		{
+			DataTable archives = null;
+
+			using (SqlConnection conn = GetConnection())
+			{
+				conn.Open();
+
+				SqlCommand sc = new SqlCommand("GetArchives", conn);
+				sc.CommandType = CommandType.StoredProcedure;
+
+				SqlDataReader dr = sc.ExecuteReader();
+
+				if (dr.HasRows)
+				{
+					archives = new DataTable("archives");
+					archives.Columns.Add("Year", typeof(int));
+					archives.Columns.Add("Month", typeof(int));
+					archives.Columns.Add("Posts", typeof(int));
+
+					archives.Load(dr);
+				}
+			}
+			return archives;
+
 		}
 
 	}
