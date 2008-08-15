@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Web;
+using System.Data;
+using System.Globalization;
 
 
 namespace KMBlog
@@ -41,10 +43,11 @@ namespace KMBlog
 			bool singlePost = false;
 
 			// A request for a specific post overrides all other parameters
-			int PostId = IsQueryForSpecificPost();
-			if (PostId != 0)
+			int postId = IsQueryForSpecificPost();
+
+			if (postId != 0)
 			{
-				Post post = Post.GetPostById(PostId);
+				Post post = Post.GetPostById(postId);
 				posts = new Collection<Post>();
 				posts.Add(post);
 				singlePost = true;
@@ -72,10 +75,9 @@ namespace KMBlog
 			else
 				if (posts.Count != 0)
 				{
-					Collection<Comment> clist = Comment.GetComments(PostId, CommentType.Approved);
-					commentsRepeater.DataSource = clist;
-					commentsRepeater.DataBind();
+					GetCommentsForPost(postId);
 				}
+
 
 			Collection<Category> catlist = Category.GetAllCategories();
 
@@ -84,6 +86,64 @@ namespace KMBlog
 
 			postsRepeater.DataSource = posts;
 			postsRepeater.DataBind();
+
+			PopulateArchive();
+
+		}
+
+		private void PopulateArchive()
+		{
+
+			// Get a list of years and months which have posts in from the database
+
+			DataTable archives = DataAccess.CreateInstance().GetArchives();
+
+			if (archives == null || archives.Rows.Count == 0)
+				return;
+
+			StringBuilder alist = new StringBuilder();
+
+			int currentYear = 0;
+
+			// Moving forward:
+			// 1) Use nested repeaters and handle the ItemDataBound method as in
+			// http://www.codeproject.com/KB/aspnet/AspNetNestedRepeaters.aspx
+
+			// 2) Use LInq to get List<T> for years and months
+
+			// 
+
+			// ListDictionary<int> years = from 
+
+			alist.Append("<ul>");
+
+			foreach (DataRow row in archives.Rows)
+			{
+				int year = Convert.ToInt32(row["year"]);
+				int month = Convert.ToInt32(row["month"]);
+				int posts = Convert.ToInt32(row["posts"]);
+
+				if (currentYear != year)
+				{
+					if (currentYear != 0)
+						alist.Append("</ul>");
+
+					alist.Append("<li>" + "<a href='?d=" + year.ToString() + "'>" + year.ToString() + "</a></li><ul>");
+					currentYear = year;
+				}
+
+				string monthname = DateTimeFormatInfo.InvariantInfo.GetMonthName(month);
+
+				alist.Append("<li>" + "<a href='?d=" + year.ToString() 
+					+ String.Format("00.", month) + "'>" + monthname 
+					+ " - " + posts.ToString() + "post" 
+					+ (posts > 1 ? "s" : "") + "</a></li>");
+
+			}
+
+			alist.Append("</ul></ul>");
+
+			archivelist.InnerHtml = alist.ToString();
 
 		}
 
@@ -117,7 +177,7 @@ namespace KMBlog
 
 		private int GetCategoryFromQueryString()
 		{
-            return Category.GetCategoryIdFromQueryString(Request.QueryString);
+			return Category.GetCategoryIdFromQueryString(Request.QueryString);
 		}
 
 
@@ -196,11 +256,17 @@ namespace KMBlog
 		public void GetCommentsForPost(int postId)
 		{
 			Collection<Comment> commentlist = Comment.GetComments(postId, CommentType.Approved);
+			if (commentlist.Count == 0)
+			{
+				commentsheader.Style.Add("Display", "None");
+				return;
+			}
+
 			commentsRepeater.DataSource = commentlist;
 			commentsRepeater.DataBind();
 		}
 
-		public string GetCategoriesForPost(Collection<Category> catList)
+		public string FormatPostCategories(Collection<Category> catList)
 		{
 
 			StringBuilder categories = new StringBuilder();
@@ -259,7 +325,7 @@ namespace KMBlog
 			c.Name = editcomment.Name;
 			c.PostId = Post.GetPostIdFromQueryString(Request.QueryString);
 			c.Text = editcomment.Text;
-            c.Posted = DateTime.Now;
+			c.Posted = DateTime.Now;
 
 			c.Save();
 
@@ -282,7 +348,7 @@ namespace KMBlog
 				}
 			}
 
-            editcomment.ClearValues();
+			editcomment.ClearValues();
 
 			if (Request.QueryString.ToString().EndsWith("#comments") == false)
 			{

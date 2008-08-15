@@ -16,7 +16,7 @@ namespace KMBlog
             LoadCategories();
             if (KMAuthentication.IsUserAdmin(User) == false)
                 newcategory.DisableSave();
-
+			else
             newcategory.CategorySaved += NewCategorySaved;
 
 			if (ClientScript.IsClientScriptBlockRegistered("confirmButtonScript") == false)

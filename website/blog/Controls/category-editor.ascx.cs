@@ -9,6 +9,9 @@ public partial class CategoryEditor : System.Web.UI.UserControl
 
 	public event EventHandler<EventArgs> CategorySaved;
 
+	// KMAuthentication.IsUserAdmin(Page.User)
+	// in the control code doesn't work.
+
 	public void DisableSave()
 	{
 		btnSaveCategory.Enabled = false;

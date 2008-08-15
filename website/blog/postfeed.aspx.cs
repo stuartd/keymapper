@@ -2,7 +2,6 @@
 using System.Xml;
 using System;
 
-
 namespace KMBlog
 {
 
@@ -10,7 +9,6 @@ namespace KMBlog
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-
 			SyndicationFeed feed = Feeds.GetPostFeed();
 
 			Response.Clear();

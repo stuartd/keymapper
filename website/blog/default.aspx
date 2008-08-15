@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="default.aspx.cs" Inherits="KMBlog.DefaultPage"
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="default.aspx.cs" Inherits="KMBlog.DefaultPage"
     MasterPageFile="KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" %>
 
 <%@ Import Namespace="KMBlog" %>
@@ -8,22 +8,15 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="postfeed.aspx" />
 </asp:Content>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
-    <div id="topdivouter">
-        <div id="topdivinner">
-            <ul class="topnav" id="sitenav">
-                <li><a href="../default.aspx">Key Mapper</a></li>
-                <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/blog">Blog
-                    Source</a></li>
-                <li><a href="../blog/default.aspx">Blog Home</a></li>
-            </ul>
-            <div class="clearfloats">
-            </div>
-        </div>
-    </div>
-    <div class="clearfloats">
-    </div>
     <div id="blog">
         <div id="sidebar">
+            <div class="subheader">
+                Navigation</div>
+            <div class="sidebarcontent">
+                <ul>
+                    <li><a href="../default.aspx">Key Mapper home</a></li><li><a href="default.aspx">Blog
+                        home</a></li></ul>
+            </div>
             <div class="subheader">
                 Categories</div>
             <div class="sidebarcontent">
@@ -37,20 +30,64 @@
                 </ul>
             </div>
             <div class="subheader">
+                Archives</div>
+            <div class="sidebarcontent">
+                <div id="archivelist" runat="server">
+                    <asp:Repeater runat="server" ID="yearlistrepeater">
+                        <HeaderTemplate>
+                            <ul>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                          <li><%# DataBinder.Eval(Container.DataItem, "year").ToString() %> </li>
+                            <asp:Repeater runat="server" ID="monthlistrepeater">
+                                <HeaderTemplate>
+                                    <ul>
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                   <li> <%# DataBinder.Eval(Container.DataItem, "month").ToString() %> </li>
+                                </ItemTemplate>
+                                <FooterTemplate>
+                                    </ul></FooterTemplate>
+                            </asp:Repeater>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            </ul></FooterTemplate>
+                    </asp:Repeater>
+                </div>
+            </div>
+            <div class="subheader">
                 Admin
             </div>
             <div class="sidebarcontent">
                 <asp:LoginView runat="server">
                     <AnonymousTemplate>
-                        <a href="admin/admin.aspx">Login</a></AnonymousTemplate>
+                        <ul>
+                            <li><a href="admin/admin.aspx">Login</a></li>
+                        </ul>
+                    </AnonymousTemplate>
                     <LoggedInTemplate>
-                        <div class="nonanchorsidebarcontent">
-                            <asp:LoginName ID="LoginName1" runat="server" FormatString="Logged in as {0}" />
-                        </div>
-                        <a href="admin/admin.aspx">Blog Admin</a>
-                        <asp:LoginStatus runat="server" />
+                        <ul>
+                            <li>
+                                <div class="nonanchorsidebarcontent">
+                                    <asp:LoginName ID="LoginName1" runat="server" FormatString="Logged in as {0}" />
+                                </div>
+                            </li>
+                            <li><a href="admin/admin.aspx">Blog Admin</a></li>
+                            <li>
+                                <asp:LoginStatus runat="server" />
+                            </li>
+                        </ul>
                     </LoggedInTemplate>
                 </asp:LoginView>
+            </div>
+            <div class="subheader">
+                Source Code</div>
+            <div class="sidebarcontent">
+                <ul>
+                    <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/">Website
+                        source code</a></li>
+                    <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/blog">Blog
+                        source code</a></li></ul>
             </div>
         </div>
         <div id="posts">
@@ -68,7 +105,7 @@
                         </div>
                         <div class="postfooter">
                             <span class="categories">Categories:
-                                <%# GetCategoriesForPost((Collection<Category>)DataBinder.Eval(Container.DataItem, "Categories")) %>
+                                <%# FormatPostCategories((Collection<Category>)DataBinder.Eval(Container.DataItem, "Categories")) %>
                             </span><span class="commentslink">
                                 <%# GetCommentLinkText((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
                             <br />
@@ -76,33 +113,32 @@
                     </div>
                 </ItemTemplate>
             </asp:Repeater>
-        <div id="comments">
-            <div id="comments_inner" runat="server">
-                <asp:Repeater ID="commentsRepeater" runat="server">
-                    <HeaderTemplate>
-                        <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label></HeaderTemplate>
-                    <ItemTemplate>
-                        <div class="comment">
-                            <div class="commenthead">
-                                <span class="commenter">
-                                    <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
+            <div id="comments">
+                <div id="comments_inner" runat="server">
+                    <asp:Label ID="commentsheader" runat="server">Comments:</asp:Label>
+                    <asp:Repeater ID="commentsRepeater" runat="server">
+                        <ItemTemplate>
+                            <div class="comment">
+                                <div class="commenthead">
+                                    <span class="commenter">
+                                        <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
                                       DataBinder.Eval(Container.DataItem, "url").ToString())%></span> <span class="commentposted">
                                           <%#  ((DateTime)DataBinder.Eval(Container.DataItem, "Posted")).ToLongDateString() %></span>
+                                </div>
+                                <div class="commentbody">
+                                    <%# DataBinder.Eval(Container.DataItem, "text")%>
+                                </div>
                             </div>
-                            <div class="commentbody">
-                                <%# DataBinder.Eval(Container.DataItem, "text")%>
-                            </div>
-                        </div>
-                    </ItemTemplate>
-                </asp:Repeater>
-                If you want to leave a comment, all fields are optional except the text.<br />
-                Comments are moderated, so won't show up immediately.
-                <comment_edit:CommentEditor ID="editcomment" runat="server" />
-                <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" Visible="false" />
-                <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
-                <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    If you want to leave a comment, all fields are optional except the text.<br />
+                    Comments are moderated, so won't show up immediately.
+                    <comment_edit:CommentEditor ID="editcomment" runat="server" />
+                    <asp:CheckBox ID="chkRememberDetails" runat="server" Text="Remember my details" Visible="false" />
+                    <asp:Button ID="btnSaveComment" runat="server" Text="Save" OnClick="SaveComment" />
+                    <asp:Button ID="btnCancelComment" runat="server" Text="Cancel" OnClick="CancelComment" />
+                </div>
             </div>
         </div>
     </div>
-            </div>
 </asp:Content>
