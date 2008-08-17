@@ -33,6 +33,7 @@
         <FooterTemplate>
             </table></FooterTemplate>
     </asp:Repeater>
+    <br />
     <h4>
         Add A New Category</h4>
     <category:CategoryEditor ID="newcategory" runat="server" />

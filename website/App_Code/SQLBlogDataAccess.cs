@@ -335,6 +335,11 @@ namespace KMBlog
             return (result == 1);
         }
 
+        public int GetCategoryIdFromSlug(string p)
+        {
+            return 0;
+        }
+
         #endregion
 
         #region Comments

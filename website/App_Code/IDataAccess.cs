@@ -54,6 +54,8 @@ namespace KMBlog
 
 		Category GetCategoryById(int categoryId);
 
+        int GetCategoryIdFromSlug(string p);
+
 		#endregion
 
 		#region comments
@@ -83,9 +85,9 @@ namespace KMBlog
 		DataTable GetArchives();
 
 		#endregion
-
-
-	}
+        
+       
+    }
 
 	public class DataAccess
 	{

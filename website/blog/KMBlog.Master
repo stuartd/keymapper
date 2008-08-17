@@ -1,4 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="KMBlog.master.cs" Inherits="KMBlogMaster" %>
+
 <%@ Import Namespace="KMBlog" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,21 +9,21 @@
     </asp:ContentPlaceHolder>
     <title>Key Mapper Placeholder</title>
     <link href="kmblog.css" rel="Stylesheet" type="text/css" />
-    <!--[if gte IE 6]>
-<link href="kmblogIE.css" rel="stylesheet" type="text/css" />
-<![endif]-->
+    <!--[if IE]>
+        <link href="kmblogIE.css" rel="stylesheet" type="text/css" />
+    <![endif]-->
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js">
      
     </script>
-    
+
 </head>
 <body>
     <h1 id="header" class="header" runat="server">
         Placeholder</h1>
     <form runat="server" id="masterform">
-        <asp:ContentPlaceHolder ID="body" runat="server">
-        </asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="body" runat="server">
+    </asp:ContentPlaceHolder>
     </form>
     <div id="footer">
         Copyright Stuart Dunkeld 2008. All rights reserved.
