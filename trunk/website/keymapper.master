@@ -8,14 +8,11 @@
 <link href="css/kmie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
     <meta name="keywords" content="keymapper, key mapper, scancode, scan code, keyboard" />
-    <title>Placeholder</title>
-
-    <asp:ContentPlaceHolder ID="head" runat="server">
+    <title>Placeholder</title><asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body id="masterbody" runat="server">
-    <h1 id="header" runat="server" class="header">
-        Placeholder</h1>
+    <h1 id="header" runat="server" class="header">Placeholder</h1>
     <div id="topdivouter">
         <div id="topdivinner">
             <ul class="topnav" id="sitenav">

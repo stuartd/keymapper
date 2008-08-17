@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Web;
 using System.Data;
 using System.Globalization;
+using System.Web.UI.HtmlControls;
 
 
 namespace KMBlog
@@ -15,6 +16,18 @@ namespace KMBlog
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
+
+            // If URL doesn't contain 'default.aspx' then set style sheet programatically
+            if (Request.RawUrl.ToString().IndexOf("default.aspx") < 0)
+            {
+                HtmlLink newStyleSheet = new HtmlLink();
+                newStyleSheet.Href = KMBlog.Global.GetBlogPath() + "kmblog.css";
+                newStyleSheet.Attributes.Add("type", "text/css");
+                newStyleSheet.Attributes.Add("rel", "stylesheet");
+                Page.Header.Controls.Add(newStyleSheet);
+            }
+
+
 			((KMBlogMaster)Page.Master).SetTitle("Key Mapper Developer Blog");
 			GetPosts();
 		}

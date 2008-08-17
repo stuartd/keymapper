@@ -5,7 +5,7 @@ using System.Web.UI.HtmlControls;
 public partial class KMBlogMaster : System.Web.UI.MasterPage
 {
 
-	public void SetTitle(string title)
+ 	public void SetTitle(string title)
 	{
         RecurseControls(this.Controls, title);
 	}
