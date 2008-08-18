@@ -8,17 +8,6 @@ Anchors: #06c;
 
  */
 
-
-.archivelist a
-{
-	margin-left: 5px;
-}
-
-.archivelist a:before
-{
-	content: "\00BB \0020";
-}
-
 #category-editor, .loginform, #comment-editor
 {
 	width: auto;
@@ -143,6 +132,20 @@ Anchors: #06c;
 	padding-left: 10px;
 }
 
+li.archivelist
+{
+	margin-left: 10px ;
+}
+
+li.archivelist:before
+{
+	content: "\00BB \0020";
+}
+
+li.archivelist a
+{
+	padding-left: 5px ;
+}
 
 
 .postfooter
