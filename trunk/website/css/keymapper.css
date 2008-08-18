@@ -1,5 +1,7 @@
 ﻿@import "cssreset.css";
 
+/* HTML styles */
+
 html
 {
 	height: 100%;
@@ -33,6 +35,24 @@ a:hover
 	text-decoration: underline;
 }
 
+h2
+{
+	font-size: 150% ;
+}
+
+h3
+{
+	font-size: 120%;
+	letter-spacing: 0.1em;
+}
+
+h4
+{
+	font-size: 110%;
+}
+
+/* Page styles */
+
 .header
 {
 	margin-top: -5px;
@@ -43,22 +63,19 @@ a:hover
 	text-align: left;
 }
 
-.clearfloats
+
+#footer
 {
-	clear: both;
+	width: 100%;
+	margin-top: 50px;
+	float: left;
+	border: 1px solid #d3d3d3;
+	background-color: #eeeeee;
+	text-align: center;
 }
 
+/* Navigation */
 
-h3
-{
-	font-size: 120%;
-	letter-spacing: 0.1em;
-}
-
-h4
-{
-	font-size: 120%;
-}
 #topdivouter
 {
 	border: 0.1em solid #d3d3d3;
@@ -68,7 +85,6 @@ h4
 	float: left;
 }
 
-
 #topdivinner
 {
 	border: 0.1em solid #A44;
@@ -77,12 +93,15 @@ h4
 	float: left ;
 }
 
+.clearfloats
+{
+	clear: both;
+}
 
 .topnav
 {
 	margin: 0 -0.15em;
 }
-
 
 .topnav li
 {
@@ -106,19 +125,12 @@ h4
 	margin: 0.1em;
 }
 
-
-
 .topnav a:hover, topnav a:visited
 {
 	background-color: rgb(220, 220, 220);
 	color: blue;
 	border: 1px solid #06c;
 	text-decoration: none ;
-}
-
-#subheader
-{
-	margin-bottom: 1em;
 }
 
 ul.basiclist
@@ -140,13 +152,34 @@ ul.basiclist li
 	color: Black;
 }
 
-#footer
+
+
+/* FAQ */
+
+h3.question
 {
-	width: 100%;
-	margin-top: 50px;
-	float: left;
-	border: 1px solid #d3d3d3;
-	background-color: #eeeeee;
-	text-align: center;
+	padding: 20px 0 5px 0 ;
+	margin-bottom: 5px ;
+	border-bottom: 1px solid #d3d3d3;
+}
+
+.sublist
+{
+	margin-top: 0.5em ;
+}
+
+.sublist li
+{
+	margin-bottom: 0.5em;
+	padding-left: 25px;
+	list-style-type: none;
+	background: transparent url("../images/chevron.gif") no-repeat;
+	background-position: 0 8px;
+}
+
+#contents
+{
+	border-bottom: 1px solid #bbbbbb;
+	margin-bottom: 10px ;
 }
 

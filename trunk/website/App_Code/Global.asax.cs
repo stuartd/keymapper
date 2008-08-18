@@ -28,19 +28,11 @@ namespace KMBlog
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
 
-            // Regex pattern = new Regex(@"(.+)\/");
-            // Match matches = pattern.Match(HttpContext.Current.Request.Path);
-
-            // Much as I love (haha) regular expressions, "Now you have two problems!"
-            // http://regex.info/blog/2006-09-15/247
-
             // If the path isn't a blog request ignore it
             // or if it has a querystring let the default page deal with it
 
             // Also, if this is a request for a CSS file (or indeed any static file type)
             // just let it through.
-
-
 
             string path = HttpContext.Current.Request.Path;
             if (path.Contains("blog") == false

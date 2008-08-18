@@ -1,34 +1,42 @@
-﻿function ShowHidetoc(hide) {
+﻿
+$(document).ready(
+        function()
+        {
+            $("#toggletoc").click(
+            function()
+            {
+                return ShowHidetoc();
+            });
+        });
+
+
+function ShowHidetoc()
+{
+
+    $("#toc_container").toggle("fast");
 
     var toc = document.getElementById("toc_container");
-    if (toc) {
-        if (hide)
-            toc.style.display = "none";
-        else
-            toc.style.display = "";
-    }
-    var tocanchor = document.getElementById("showhidetocanchor");
-    if (tocanchor) {
-        if (hide) {
-            tocanchor.onclick = function() { return (ShowHidetoc(false)); };
-            tocanchor.firstChild.data = "Show";
-        }
-        else {
-            tocanchor.onclick = function() { return (ShowHidetoc(true)); };
+
+    var tocanchor = document.getElementById("toggletoc");
+    if (tocanchor)
+    {
+        if (tocanchor.firstChild.data == "Show")
             tocanchor.firstChild.data = "Hide";
-        }
+        else
+            tocanchor.firstChild.data = "Show"
     }
 
-    //  SetHideShowCookie(hide) ;
     return false;
 
 }
 
-function SetHideShowCookie(hide) {
+function SetHideShowCookie(hide)
+{
     setCookie("showfaqtoc", escape(!hide), 30);
 }
 
-function setCookie(cookiename, value, expiredays) {
+function setCookie(cookiename, value, expiredays)
+{
     var expirydate = new Date();
     expirydate.setDate(expirydate.getDate() + expiredays);
     document.cookie = cookiename + "=" + escape(value) +
@@ -36,7 +44,8 @@ function setCookie(cookiename, value, expiredays) {
 }
 
 
-function getCookie(cookiename) {
+function getCookie(cookiename)
+{
     if (document.cookie.length > 0) {
         c_start = document.cookie.indexOf(cookiename + "=");
         if (c_start != -1) {
@@ -49,7 +58,8 @@ function getCookie(cookiename) {
     return "";
 }
 
-function load() {
+function load()
+{
 
     // ShowHidetoc(getCookie("showfaqtoc")) ;
 

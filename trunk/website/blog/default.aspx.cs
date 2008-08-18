@@ -285,7 +285,7 @@ namespace KMBlog
 			StringBuilder categories = new StringBuilder();
 
 			foreach (Category cat in catList)
-				categories.Append("<a href=\"?c=" + cat.Id + "\">" + cat.Name + "</a> ");
+				categories.Append("<a href=\"" + KMBlog.Global.GetBlogPath() + @"category\" + cat.Slug + "</a>"); 
 
 			return categories.ToString();
 
@@ -363,7 +363,7 @@ namespace KMBlog
 
 			editcomment.ClearValues();
 
-			if (Request.QueryString.ToString().EndsWith("#comments") == false)
+			if (Request.Url.Fragment != "#comments")
 			{
 				Response.Redirect(Request.Url + "#comments");
 			}
