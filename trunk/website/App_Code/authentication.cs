@@ -9,20 +9,25 @@ namespace KMBlog
 	{
 
 		private KMAuthentication() { }
+
+        public static void LogOut()
+        {
+            CreateAuthenticationTicket("", "");
+        }
 		
 		public static int AuthenticateUser(string userName, string passwordHash)
 		{
 			return DataAccess.CreateInstance().GetUserLevel(userName, passwordHash);
 		}
 
-		public static HttpCookie CreateAuthenticationTicket(string userName, string role)
+		public static void CreateAuthenticationTicket(string userName, string role)
 		{
 			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket
 				 (1, userName, DateTime.Now, DateTime.Now.AddMinutes(60), false, role);
 
 			string encryptedTicket = FormsAuthentication.Encrypt(ticket);
 			HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-			return cookie;
+            HttpContext.Current.Response.Cookies.Add(cookie);
 		}
 
 		public static bool IsUserAdmin(IPrincipal user)

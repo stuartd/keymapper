@@ -14,8 +14,8 @@
                 Navigation</div>
             <div class="sidebarcontent">
                 <ul>
-                    <li><a href="../default.aspx">Key Mapper home</a></li><li><a href="default.aspx">Blog
-                        home</a></li></ul>
+                    <li><a href="../default.aspx">Key Mapper home</a></li>
+                    <li><a href="default.aspx">Blog home</a></li></ul>
             </div>
             <div class="subheader">
                 Categories</div>
@@ -23,7 +23,7 @@
                 <ul>
                     <asp:Repeater ID="categoriesRepeater" runat="server">
                         <ItemTemplate>
-                            <li class="catlist"><a href="?c=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
+                            <li><a href="<%# GetCategoryLink(DataBinder.Eval(Container.DataItem, "Slug").ToString())%>">
                                 <%# DataBinder.Eval(Container.DataItem, "Name") %></a></li>
                         </ItemTemplate>
                     </asp:Repeater>
@@ -38,13 +38,17 @@
                             <ul>
                         </HeaderTemplate>
                         <ItemTemplate>
-                          <li><%# DataBinder.Eval(Container.DataItem, "year").ToString() %> </li>
+                            <li>
+                                <%# DataBinder.Eval(Container.DataItem, "year").ToString() %>
+                            </li>
                             <asp:Repeater runat="server" ID="monthlistrepeater">
                                 <HeaderTemplate>
                                     <ul>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                   <li> <%# DataBinder.Eval(Container.DataItem, "month").ToString() %> </li>
+                                    <li>
+                                        <%# DataBinder.Eval(Container.DataItem, "month").ToString() %>
+                                    </li>
                                 </ItemTemplate>
                                 <FooterTemplate>
                                     </ul></FooterTemplate>
@@ -62,7 +66,7 @@
                 <asp:LoginView runat="server">
                     <AnonymousTemplate>
                         <ul>
-                            <li><a href="admin/admin.aspx">Login</a></li>
+                            <li><a href='<%# GetAdminLink() %>'>Login</a></li>
                         </ul>
                     </AnonymousTemplate>
                     <LoggedInTemplate>
@@ -72,7 +76,7 @@
                                     <asp:LoginName ID="LoginName1" runat="server" FormatString="Logged in as {0}" />
                                 </div>
                             </li>
-                            <li><a href="admin/admin.aspx">Blog Admin</a></li>
+                            <li><a href='<%# GetAdminLink() %>'>Blog Admin</a></li>
                             <li>
                                 <asp:LoginStatus runat="server" />
                             </li>
@@ -87,7 +91,10 @@
                     <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/">Website
                         source code</a></li>
                     <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/website/blog">Blog
-                        source code</a></li></ul>
+                        source code</a></li>
+                    <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/keymapper">Key Mapper
+                        source code</a></li>
+                </ul>
             </div>
         </div>
         <div id="posts">
@@ -95,7 +102,7 @@
                 <ItemTemplate>
                     <div class="post">
                         <div class="subheader">
-                            <span class="posttitle"><a href="?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
+                            <span class="posttitle"><a href="<%# GetPostLink(DataBinder.Eval(Container.DataItem, "Slug").ToString())%>">
                                 <%# DataBinder.Eval(Container.DataItem, "Title") %></a> </span><span class="postdate">
                                     Posted:
                                     <%# ((DateTime)DataBinder.Eval(Container.DataItem, "Postdate")).ToLongDateString() %></span>
@@ -104,10 +111,10 @@
                             <%# DataBinder.Eval(Container.DataItem, "Body") %>
                         </div>
                         <div class="postfooter">
-                            <span class="categories">Categories:
+                            <span>Categories:
                                 <%# FormatPostCategories((Collection<Category>)DataBinder.Eval(Container.DataItem, "Categories")) %>
                             </span><span class="commentslink">
-                                <%# GetCommentLinkText((int)DataBinder.Eval(Container.DataItem, "ID"), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
+                                <%# GetCommentLinkText(DataBinder.Eval(Container.DataItem, "Slug").ToString(), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
                             <br />
                         </div>
                     </div>

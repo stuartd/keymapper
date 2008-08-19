@@ -20,11 +20,11 @@ namespace KMBlog
             // If URL doesn't contain 'default.aspx' then set style sheet programatically
             if (Request.RawUrl.ToString().IndexOf("default.aspx") < 0)
             {
-                HtmlLink newStyleSheet = new HtmlLink();
-                newStyleSheet.Href = KMBlog.Global.GetBlogPath() + "kmblog.css";
-                newStyleSheet.Attributes.Add("type", "text/css");
-                newStyleSheet.Attributes.Add("rel", "stylesheet");
-                Page.Header.Controls.Add(newStyleSheet);
+                HtmlLink blogCSS = new HtmlLink();
+                blogCSS.Href = KMBlog.Global.GetBlogPath() + "kmblog.css";
+                blogCSS.Attributes.Add("type", "text/css");
+                blogCSS.Attributes.Add("rel", "stylesheet");
+                Page.Header.Controls.Add(blogCSS);
             }
 
 
@@ -37,17 +37,21 @@ namespace KMBlog
 		// Posts on a specific date: ?d=20080603
 		// Specific month: ?d=200806
 		// Specific year: ?d=2008
-		// anything else: is it a slug? if not, show default page.
-		// eg ?user_mappings
 
-		// Nice to actually expose blog/posts/1
-		// (Google friendly, as G dislikes querystrings?)
-		// blog/category/1 etc
-		// blog/2008/06/01 
+        public string GetCategoryLink(string slug)
+        {
+            return KMBlog.Global.GetBlogPath() + @"category/" + slug;
+        }
 
-		// URLRemapper could be the answer.
-		// Need to figure out how to combine, say, categories and months.
-		// blog/2008/06/01/category/1 maybe?
+        public string GetPostLink(string slug)
+        {
+            return KMBlog.Global.GetBlogPath() + slug;
+        }
+
+        public string GetAdminLink()
+        {
+            return "hello world!!!"; // return KMBlog.Global.GetBlogPath() + @"admin/admin.aspx";
+        }
 
 		private void GetPosts()
 		{
@@ -141,16 +145,16 @@ namespace KMBlog
 					if (currentYear != 0)
 						alist.Append("</ul>");
 
-					alist.Append("<li><a href=\"?d=" + year.ToString() + "\">" + year.ToString() + "</a></li><ul>");
+					alist.Append("<li><a href=\"" + KMBlog.Global.GetBlogPath() + year.ToString() + "\">" + year.ToString() + "</a></li><ul>");
 					currentYear = year;
 				}
 
 				string monthname = DateTimeFormatInfo.InvariantInfo.GetMonthName(month);
 
-                alist.Append("<li class=\"archivelist\">" + "<a href='?d=" + year.ToString() 
-					+ month.ToString().PadLeft(2, '0') + "'>" + monthname 
-					+ " - " + posts.ToString() + " post" 
-					+ (posts > 1 ? "s" : "") + "</a></li>");
+                alist.Append("<li class=\"archivelist\">" + "<a href=\"" + KMBlog.Global.GetBlogPath() + year.ToString() + "/"
+					+ month.ToString().PadLeft(2, '0') + "\">" + monthname 
+					+ " - (" + posts.ToString() + " post" 
+					+ (posts > 1 ? "s" : "") + ")</a></li>");
 
 			}
 
@@ -238,7 +242,7 @@ namespace KMBlog
 				}
 			}
 
-			// Invalid year is a fail, everything else is fixable.
+			// If there's no date specified or the year is invalid..
 			if (year < SqlDateTime.MinValue.Value.Year || year > SqlDateTime.MaxValue.Value.Year)
 			{
 				dateFrom = SqlDateTime.MinValue.Value;
@@ -285,7 +289,7 @@ namespace KMBlog
 			StringBuilder categories = new StringBuilder();
 
 			foreach (Category cat in catList)
-				categories.Append("<a href=\"" + KMBlog.Global.GetBlogPath() + @"category\" + cat.Slug + "</a>"); 
+				categories.Append("<a href=\"" + GetCategoryLink(cat.Slug) + "\">" + cat.Name + "</a>"); 
 
 			return categories.ToString();
 
@@ -298,15 +302,16 @@ namespace KMBlog
 				return name;
 			else
 			{
-				return "<a href='" + URL + "'>" + name + "</a>";
+				return "<a href=\"" + URL + "\">" + name + "</a>";
 			}
 		}
 
-		public string GetCommentLinkText(int PostId, int commentCount)
+       
+
+		public string GetCommentLinkText(string slug, int commentCount)
 		{
 
-			// href is ?p=1#comments
-			string href = "\"?p=" + PostId.ToString() + "#comments\"";
+			string href = GetPostLink(slug) + "#comments";
 			string text;
 
 			if (commentCount == 0)
@@ -318,7 +323,7 @@ namespace KMBlog
 					text += "s";
 			}
 
-			String comment = "<a href=" + href + ">" + text + "</a>";
+			String comment = "<a href=\"" + href + "\">" + text + "</a>";
 
 			return comment;
 

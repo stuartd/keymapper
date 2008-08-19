@@ -32,8 +32,8 @@ public partial class login : System.Web.UI.Page
 		else
 			role = "Demo";
 
-		HttpCookie cookie = KMAuthentication.CreateAuthenticationTicket(KMLogin.UserName, role);
-		Response.Cookies.Add(cookie);
+		KMAuthentication.CreateAuthenticationTicket(KMLogin.UserName, role);
+	
 		// Need to redirect now as otherwise our cookie is overwritten
 		Response.Redirect(FormsAuthentication.GetRedirectUrl(KMLogin.UserName, true));
 

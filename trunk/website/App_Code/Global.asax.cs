@@ -28,20 +28,30 @@ namespace KMBlog
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
 
-            // If the path isn't a blog request ignore it
-            // or if it has a querystring let the default page deal with it
+            string newPath = GetRewrittenUrl(HttpContext.Current);
+
+            if (String.IsNullOrEmpty(newPath) == false)
+                HttpContext.Current.RewritePath(newPath);
+
+        }
+
+        private string GetRewrittenUrl(HttpContext context)
+        {
+
+
+            // If the path isn't a blog request or is for the default page ignore it.
 
             // Also, if this is a request for a CSS file (or indeed any static file type)
             // just let it through.
 
             string path = HttpContext.Current.Request.Path;
             if (path.Contains("blog") == false
-                || HttpContext.Current.Request.QueryString.Count > 0
+                || path.Contains("default.aspx")
                 || path.EndsWith(".css"))
-                return;
+                return String.Empty;
 
             // URL can be one of these formats (optionally excluding final backslash)
-            // blog/user-key-mappings/ (sepecific post slug)
+            // blog/user-key-mappings/ (specific post slug)
             // blog/2008/08/01/ (posts on 1st August 2008)
             // blog/2008/08/ (posts in August 2008)
             // blog/2008/ (posts in 2008)
@@ -53,7 +63,7 @@ namespace KMBlog
             string[] pathWords = path.Substring(path.IndexOf("blog") + 4).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (pathWords.GetLength(0) == 0)
-                return; // Just plain /blog/
+                return String.Empty; // Just plain /blog/
 
             // To detect:
             // 1) Is the word following blog a number? In that case it's a date.
@@ -66,21 +76,18 @@ namespace KMBlog
             {
                 string dateRange;
                 if (GetDateRange(pathWords, out dateRange) == false)
-                    return;
+                    return String.Empty; // Will result in a 404
                 else
-                {
-                    string newpath = Request.ApplicationPath + "/blog/default.aspx?d=" + dateRange;
-                    HttpContext.Current.RewritePath(newpath);
-                    return;
-                }
+                    return Request.ApplicationPath + "/blog/default.aspx?d=" + dateRange;
             }
 
             if (pathWords[0].ToLower() == "category")
             {
                 int catId = DataAccess.CreateInstance().GetCategoryIdFromSlug(pathWords[1]);
-                string newpath = Request.ApplicationPath + "/blog/default.aspx?c=" + catId.ToString();
-                HttpContext.Current.RewritePath(newpath);
-                return;
+                if (catId > 0)
+                    return Request.ApplicationPath + "/blog/default.aspx?c=" + catId.ToString();
+                else
+                    return String.Empty; // TODO: implement some kind of 'category not found'
             }
 
             // Otherwise: post slug.
@@ -91,12 +98,20 @@ namespace KMBlog
             {
                 int postId = DataAccess.CreateInstance().GetPostIdFromSlug(slug.Replace("/", ""));
                 if (postId > 0)
-                {
-                    string newpath = Request.ApplicationPath + "/blog/default.aspx?p=" + postId.ToString();
-                    HttpContext.Current.RewritePath(newpath);
-                }
+                    return Request.ApplicationPath + "/blog/default.aspx?p=" + postId.ToString();
+                else
+                    return String.Empty;
+
             }
+            return String.Empty;
         }
+
+
+
+
+
+
+
 
 
 
