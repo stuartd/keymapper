@@ -4,6 +4,7 @@
 
 <%@ Import Namespace="KMBlog" %>
 <%@ Register TagPrefix="comment" TagName="CommentEditor" Src="../Controls/comment-editor.ascx" %>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <asp:Label>Comments on the post '<asp:Label runat="server" ID="postname">(postname)</asp:Label>'
         <asp:Repeater ID="comments" runat="server">

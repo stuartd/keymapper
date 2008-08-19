@@ -1,7 +1,11 @@
 ﻿<%@ Master Language="C#" MasterPageFile="KMBlog.Master" AutoEventWireup="true" CodeFile="KMBlogAdmin.master.cs"
     Inherits="KMBlogAdmin" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
+    <asp:Content ID="head" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+    </asp:Content>
+
+<asp:Content ID="body" ContentPlaceHolderID="body" runat="server">
     <div id="topdivouter">
         <div id="topdivinner">
             <ul class="topnav">

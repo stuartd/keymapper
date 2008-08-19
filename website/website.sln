@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "website", ".", "{F4E40D32-861D-4C34-BA57-E98D38993591}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "keymapper", ".", "{F4E40D32-861D-4C34-BA57-E98D38993591}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.5"
 		Debug.AspNetCompiler.VirtualPath = "/website"
-		Debug.AspNetCompiler.PhysicalPath = "..\website\"
+		Debug.AspNetCompiler.PhysicalPath = "..\keymapper\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\website\"
 		Debug.AspNetCompiler.Updateable = "false"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/website"
-		Release.AspNetCompiler.PhysicalPath = "..\website\"
+		Release.AspNetCompiler.PhysicalPath = "..\keymapper\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\website\"
 		Release.AspNetCompiler.Updateable = "false"
 		Release.AspNetCompiler.ForceOverwrite = "true"
@@ -25,10 +25,13 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
+		Release|.NET = Release|.NET
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F4E40D32-861D-4C34-BA57-E98D38993591}.Debug|.NET.ActiveCfg = Debug|.NET
 		{F4E40D32-861D-4C34-BA57-E98D38993591}.Debug|.NET.Build.0 = Debug|.NET
+		{F4E40D32-861D-4C34-BA57-E98D38993591}.Release|.NET.ActiveCfg = Debug|Any CPU
+		{F4E40D32-861D-4C34-BA57-E98D38993591}.Release|.NET.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

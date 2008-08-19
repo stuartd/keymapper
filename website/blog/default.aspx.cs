@@ -30,6 +30,9 @@ namespace KMBlog
 
 			((KMBlogMaster)Page.Master).SetTitle("Key Mapper Developer Blog");
 			GetPosts();
+
+		
+			
 		}
 
 		// Specific post: ?p=1 -- overrides all other options.
@@ -48,7 +51,7 @@ namespace KMBlog
             return KMBlog.Global.GetBlogPath() + slug;
         }
 
-        public string GetAdminLink()
+        public string GetAdminPageLink()
         {
             return "hello world!!!"; // return KMBlog.Global.GetBlogPath() + @"admin/admin.aspx";
         }

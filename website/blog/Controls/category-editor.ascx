@@ -9,7 +9,7 @@
             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtCategoryName"
                 ErrorMessage="The Category name can't be blank" Display="Dynamic"></asp:RequiredFieldValidator>
             <asp:CustomValidator runat="server" ID="CategoryNameExistsValidator" ErrorMessage="That category name is already used: please choose another"
-                ControlToValidate="txtCategoryName" OnServerValidate="CategoryNameExistsValidator_ServerValidate"></asp:CustomValidator></li>
+                ControlToValidate="txtCategoryName" OnServerValidate="ValidateName"></asp:CustomValidator></li>
         <li>
             <asp:Label ID="lblCategorySlug" runat="server" Text="Slug" AssociatedControlID="txtCategorySlug"></asp:Label>
             <asp:TextBox ID="txtCategorySlug" runat="server" CssClass="input_textbox"></asp:TextBox></li>
