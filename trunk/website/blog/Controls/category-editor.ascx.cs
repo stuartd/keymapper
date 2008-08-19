@@ -98,7 +98,7 @@ public partial class CategoryEditor : System.Web.UI.UserControl
 
 
 
-	protected void CategoryNameExistsValidator_ServerValidate(object source, ServerValidateEventArgs args)
+	protected void ValidateName(object source, ServerValidateEventArgs args)
 	{
 		int catId;
 		catId = Category.GetCategoryIdByName(args.Value);

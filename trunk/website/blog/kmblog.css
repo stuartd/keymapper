@@ -24,6 +24,23 @@ Anchors: #06c;
 	display: -moz-inline-box;
 }
 
+#edit_post_categories
+{
+	margin-top: 1px ;
+}
+
+#post_timestamp
+{
+	margin: 1em 0 ;
+}
+
+#post_timestamp input, #post_timestamp select 
+{
+	height: 100% ;
+	display: inline-block ;
+	display: -moz-inline-box ;
+}
+
 .input_textbox
 {
 	border-color: #d3d3d3;
@@ -242,6 +259,11 @@ blockquote
 	border-left: 5px solid #A44;
 	padding: 10px;
 	margin: 10px 0;
+}
+
+#slugdiv
+{
+	display: none ;
 }
 
 

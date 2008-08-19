@@ -63,10 +63,10 @@
                 Admin
             </div>
             <div class="sidebarcontent">
-                <asp:LoginView runat="server">
+                <asp:LoginView runat="server" ID="loginView">
                     <AnonymousTemplate>
                         <ul>
-                            <li><a href='<%# GetAdminLink() %>'>Login</a></li>
+                            <li><a href="/keymapper/blog/admin">Login</a></li>
                         </ul>
                     </AnonymousTemplate>
                     <LoggedInTemplate>
@@ -76,7 +76,7 @@
                                     <asp:LoginName ID="LoginName1" runat="server" FormatString="Logged in as {0}" />
                                 </div>
                             </li>
-                            <li><a href='<%# GetAdminLink() %>'>Blog Admin</a></li>
+                            <li><a href="/keymapper/blog/admin">Blog Admin</a></li>
                             <li>
                                 <asp:LoginStatus runat="server" />
                             </li>

@@ -1,11 +1,12 @@
-﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true" codefile="post-edit.aspx.cs"
-    Inherits="KMBlog.post_edit" Title="Post Editor" ValidateRequest="false" %>
+﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
+    CodeFile="post-edit.aspx.cs" Inherits="KMBlog.post_edit" Title="Post Editor"
+    ValidateRequest="false" %>
 
-<asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+<asp:Content ID="editPageBody" ContentPlaceHolderID="body" runat="server">
     <div id="editarea" runat="server">
         <div id="edit_title">
             Title:
-            <asp:TextBox ID="posttitle" runat="server" Width="30em" TabIndex="1"></asp:TextBox>
+            <asp:TextBox ID="posttitle" runat="server" Width="30em" TabIndex="10"></asp:TextBox>
             <asp:RequiredFieldValidator ControlToValidate="posttitle" runat="server" ErrorMessage="The title can't be blank" />
         </div>
         <div id="edit_post_categories">
@@ -16,30 +17,36 @@
         </div>
         <div id="edit_body">
             <asp:TextBox runat="server" TextMode="MultiLine" ID="blogpost" Width="79.5%" Height="150px"
-                TabIndex="2"></asp:TextBox>
+                TabIndex="20"></asp:TextBox>
         </div>
         <div id="controls">
-            <div id="slugdiv" runat="server">
-                <asp:Label AssociatedControlID="postslug" ID="sluglabel" runat="server">Slug</asp:Label>
-                <asp:TextBox runat="server" ID="postslug" ReadOnly="True"></asp:TextBox>
-                <asp:Button ID="btnRegenerateSlug" runat="server" Text="Regenerate" OnClick="RegenerateSlug" />
+            <div id="slugContainer" runat="server">
+                <a id="editslug" href="#">Edit Slug</a>
+                <div id="slugdiv">
+                    <asp:Label AssociatedControlID="postslug" ID="sluglabel" runat="server">Post slug</asp:Label>
+                    <asp:TextBox runat="server" ID="postslug"></asp:TextBox>
+                    <asp:CustomValidator runat="server" ErrorMessage="That slug is already used: slugs must be unique."
+                        ControlToValidate="postslug" OnServerValidate="ValidateSlug" ID="slugValidator"></asp:CustomValidator>
+                    <p>
+                        The post slug will be regenerated automatically from the title if left blank. It
+                        can only contain letters, numbers, and hyphens.</p>
+                </div>
             </div>
             <div id="post_timestamp">
-                Datestamp:
-                <asp:TextBox ID="postday" runat="server" Width="2em" TabIndex="5">
+                Datestamp:<asp:TextBox ID="postday" runat="server" Width="2em" TabIndex="50">
                 </asp:TextBox>
-                <asp:DropDownList ID="postmonth" runat="server" Width="10em" TabIndex="6">
+                <asp:DropDownList ID="postmonth" runat="server" Width="8em" TabIndex="60">
                 </asp:DropDownList>
-                <asp:TextBox ID="postyear" runat="server" Width="4em" TabIndex="7">
+                <asp:TextBox ID="postyear" runat="server" Width="4em" TabIndex="70">
                 </asp:TextBox>
                 <asp:Label ID="date_error" runat="server" CssClass="dateerrortext"></asp:Label>
                 <br />
             </div>
             <input type="hidden" id="hiddenPostId" runat="server" />
             <asp:Button ID="btnPublishPost" Text="Publish" CommandName="Publish" CausesValidation="true"
-                runat="server" OnCommand="SavePost" TabIndex="3" />
+                runat="server" OnCommand="SavePost" TabIndex="30" />
             <asp:Button ID="btnSavePost" CommandName="Draft" Text="Save As Draft" CausesValidation="true"
-                runat="server" OnCommand="SavePost" TabIndex="4" />
+                runat="server" OnCommand="SavePost" TabIndex="40" />
             <asp:Button ID="btnCancelEdit" Text="Cancel" CausesValidation="false" runat="server"
                 OnClick="CancelEdit" />
         </div>

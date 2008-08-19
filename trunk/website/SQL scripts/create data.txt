@@ -7,7 +7,7 @@ insert into users (username, passwordhash, userlevel) values ('stuartd', '4c90a6
 insert into users (username, passwordhash, userlevel) values('demo', '89e495e7941cf9e40e6980d14a16bf023ccd4c91', 2)
 
 insert into posts (title, postdate, slug, published, body) values
-('User Key Mappings', CAST('20080801' as datetime), 'user_key_mappings', 1, '
+('User Key Mappings', CAST('20080801' as datetime), 'user-key-mappings', 1, '
 <p>One thing that distinguishes Key Mapper from other scancode mapping
 programs is that it lets you map or disable keys on a per-user basis:
 when Microsoft <a
@@ -65,70 +65,70 @@ If you want to nest master pages - i.e. have a master page which inherits from a
 
 This is the base master page:
 <pre><samp>
-<%@ Master Language="C#" AutoEventWireup="true" 
-CodeBehind="base.Master.cs" Inherits="basemaster" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>Intentionally Left Blank</title>
-    <meta content="base head" />
-    <asp:ContentPlaceHolder ID="head" runat="server">
-    </asp:ContentPlaceHolder>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
+&lt;%@ Master Language="C#" AutoEventWireup="true" 
+CodeBehind="base.Master.cs" Inherits="basemaster" %&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head runat="server"&gt;
+    &lt;title&gt;Intentionally Left Blank&lt;/title&gt;
+    &lt;meta content="base head" /&gt;
+    &lt;asp:ContentPlaceHolder ID="head" runat="server"&gt;
+    &lt;/asp:ContentPlaceHolder&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form id="form1" runat="server"&gt;
+        &lt;div&gt;
             Base Master body
-            <br />
-            <asp:ContentPlaceHolder ID="body" runat="server">
-            </asp:ContentPlaceHolder>
-        </div>
-    </form>
-</body>
-</html>
+            &lt;br /&gt;
+            &lt;asp:ContentPlaceHolder ID="body" runat="server"&gt;
+            &lt;/asp:ContentPlaceHolder&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </samp></pre>
 
 This is the subclassing master page: the content sections contain ContentPlaceHolders with the same name as those in the base Master page:
 
 <pre><samp>
-<%@ Master Language="C#" MasterPageFile="base.Master" AutoEventWireup="true" CodeBehind="subclass.master.cs"
-    Inherits="subclass" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <meta content="subclass head" />
-    <asp:ContentPlaceHolder ID="head" runat="server">
-    </asp:ContentPlaceHolder>
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+&lt;%@ Master Language="C#" MasterPageFile="base.Master" AutoEventWireup="true" CodeBehind="subclass.master.cs"
+    Inherits="subclass" %&gt;
+&lt;asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"&gt;
+    &lt;meta content="subclass head" /&gt;
+    &lt;asp:ContentPlaceHolder ID="head" runat="server"&gt;
+    &lt;/asp:ContentPlaceHolder&gt;
+&lt;/asp:Content&gt;
+&lt;asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server"&gt;
     Subclass Master Body
-    <br />
-    <asp:ContentPlaceHolder ID="body" runat="server">
-    </asp:ContentPlaceHolder>
-</asp:Content>
+    &lt;br /&gt;
+    &lt;asp:ContentPlaceHolder ID="body" runat="server"&gt;
+    &lt;/asp:ContentPlaceHolder&gt;
+&lt;/asp:Content&gt;
 
-    <form id="form1" runat="server">
-        <div>
+    &lt;form id="form1" runat="server"&gt;
+        &lt;div&gt;
             Base Master body
-            <br />
-            <asp:ContentPlaceHolder ID="body" runat="server">
-            </asp:ContentPlaceHolder>
-        </div>
-    </form>
-</body>
-</html>
+            &lt;br /&gt;
+            &lt;asp:ContentPlaceHolder ID="body" runat="server"&gt;
+            &lt;/asp:ContentPlaceHolder&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </samp></pre>
 
 This, then, is an example content page using the subclassed master:
 
 <pre><samp>
-<%@ Page Language="C#" MasterPageFile="subclass.master" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs"
-    Inherits="WebApplication1.WebForm1" Title="Content Page" %>
+&lt;%@ Page Language="C#" MasterPageFile="subclass.master" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs"
+    Inherits="WebApplication1.WebForm1" Title="Content Page" %&gt;
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <meta content="content header" />
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+&lt;asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"&gt;
+    &lt;meta content="content header" /&gt;
+&lt;/asp:Content&gt;
+&lt;asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server"&gt;
     Content body
-</asp:Content>
+&lt;/asp:Content&gt;
 </samp></pre>
 
 This produces the following output, with the expected values in the Head section as well.

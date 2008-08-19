@@ -21,7 +21,7 @@ namespace KMBlog
 			{
 				ClientScript.RegisterClientScriptBlock(this.GetType(),
 			"confirmButtonScript",
-			"function __doConfirm(){if (confirm('Are you sure you wish to delete this post?')){return true;}else{return false;}}",
+			"function __doConfirm(){if (confirm('Are you sure you want to delete this post?')){return true;}else{return false;}}",
 			true);
 			}
 
