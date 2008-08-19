@@ -335,9 +335,25 @@ namespace KMBlog
             return (result == 1);
         }
 
-        public int GetCategoryIdFromSlug(string p)
+        public int GetCategoryIdFromSlug(string slug)
         {
-            return 0;
+            using (SqlConnection connection = GetConnection())
+            {
+
+                connection.Open();
+                SqlCommand sc = new SqlCommand("GetCategoryIdFromSlug", connection);
+                sc.Parameters.AddWithValue("Slug", slug);
+                sc.CommandType = CommandType.StoredProcedure;
+
+                int catId = 0;
+                SqlDataReader dr = sc.ExecuteReader();
+                if (dr.HasRows && dr.Read())
+                    if (Int32.TryParse(dr["ID"].ToString(), out catId) == false)
+                        catId = 0;
+
+                return catId;
+
+            }
         }
 
         #endregion
