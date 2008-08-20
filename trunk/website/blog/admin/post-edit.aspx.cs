@@ -72,8 +72,8 @@ namespace KMBlog
 					editarea.Style.Add("display", "none");
 				else
 				{
-
-					blogpost.Text = p.Body;
+                    blogpost.Value = p.Body;
+					// blogpost.Text = p.Body;
 					posttitle.Text = p.Title;
 					postslug.Text = p.Slug;
 					DateTime postdate = p.Postdate;
@@ -224,7 +224,8 @@ namespace KMBlog
 			p.Id = PostId;
 
 			p.Title = posttitle.Text;
-			p.Body = blogpost.Text;
+            p.Body = blogpost.Value;
+			// p.Body = blogpost.Text;
 			p.Postdate = dt;
 
 			p.Published = (e.CommandName == "Publish");

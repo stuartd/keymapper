@@ -2,10 +2,11 @@
     CodeFile="post-edit.aspx.cs" Inherits="KMBlog.post_edit" Title="Post Editor"
     ValidateRequest="false" %>
 
+<%@ Register TagPrefix="tinymce" Namespace="Moxiecode.TinyMCE.Web" Assembly="Moxiecode.TinyMCE" %>
 <asp:Content ID="editPageBody" ContentPlaceHolderID="body" runat="server">
     <div id="editarea" runat="server">
         <div id="edit_title">
-            Title:
+            Title
             <asp:TextBox ID="posttitle" runat="server" Width="30em" TabIndex="10"></asp:TextBox>
             <asp:RequiredFieldValidator ControlToValidate="posttitle" runat="server" ErrorMessage="The title can't be blank" />
         </div>
@@ -16,15 +17,20 @@
             </asp:CheckBoxList>
         </div>
         <div id="edit_body">
-            <asp:TextBox runat="server" TextMode="MultiLine" ID="blogpost" Width="79.5%" Height="150px"
-                TabIndex="20"></asp:TextBox>
+            <!-- <asp:TextBox runat="server" TextMode="MultiLine" ID="bloogpost" Width="79.5%" Height="150px"
+                TabIndex="20"></asp:TextBox> -->
+            <tinymce:TextArea ID="blogpost" Width="79.5%" theme="advanced" plugins="safari" theme_advanced_buttons1="bold,italic,underline,fontsizeselect,bullist,numlist,undo,redo,link,unlink,image,cleanup,code,formatselect"
+                theme_advanced_buttons2="" theme_advanced_buttons3="" theme_advanced_buttons4=""
+                theme_advanced_toolbar_location="top" theme_advanced_toolbar_align="left" theme_advanced_path_location="bottom"
+                theme_advanced_resizing="true" theme_advanced_blockformats="blockquote,code,samp"
+                runat="server" InstallPath="/keymapper/tiny_mce" />
         </div>
         <div id="controls">
             <div id="slugContainer" runat="server">
                 <a id="editslug" href="#">Edit Slug</a>
                 <div id="slugdiv">
                     <asp:Label AssociatedControlID="postslug" ID="sluglabel" runat="server">Post slug</asp:Label>
-                    <asp:TextBox runat="server" ID="postslug"></asp:TextBox>
+                    <asp:TextBox runat="server" ID="postslug" Width="50%"></asp:TextBox>
                     <asp:CustomValidator runat="server" ErrorMessage="That slug is already used: slugs must be unique."
                         ControlToValidate="postslug" OnServerValidate="ValidateSlug" ID="slugValidator"></asp:CustomValidator>
                     <p>
