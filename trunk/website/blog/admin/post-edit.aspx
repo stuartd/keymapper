@@ -1,14 +1,15 @@
-﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
+<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
     CodeFile="post-edit.aspx.cs" Inherits="KMBlog.post_edit" Title="Post Editor"
     ValidateRequest="false" %>
 
 <%@ Register TagPrefix="tinymce" Namespace="Moxiecode.TinyMCE.Web" Assembly="Moxiecode.TinyMCE" %>
+
 <asp:Content ID="editPageBody" ContentPlaceHolderID="body" runat="server">
     <div id="editarea" runat="server">
         <div id="edit_title">
             Title
             <asp:TextBox ID="posttitle" runat="server" Width="30em" TabIndex="10"></asp:TextBox>
-            <asp:RequiredFieldValidator ControlToValidate="posttitle" runat="server" ErrorMessage="The title can't be blank" />
+            <asp:RequiredFieldValidator ControlToValidate="posttitle" ID="titleValidator" runat="server" ErrorMessage="The title can't be blank" />
         </div>
         <div id="edit_post_categories">
             <div class="subheader">
@@ -17,13 +18,13 @@
             </asp:CheckBoxList>
         </div>
         <div id="edit_body">
-            <!-- <asp:TextBox runat="server" TextMode="MultiLine" ID="bloogpost" Width="79.5%" Height="150px"
-                TabIndex="20"></asp:TextBox> -->
-            <tinymce:TextArea ID="blogpost" Width="79.5%" theme="advanced" plugins="safari" theme_advanced_buttons1="bold,italic,underline,fontsizeselect,bullist,numlist,undo,redo,link,unlink,image,cleanup,code,formatselect"
+               
+           <tinymce:TextArea ID="blogpost" Width="79.5%" theme="advanced" plugins="safari" theme_advanced_buttons1="bold,italic,underline,fontsizeselect,bullist,numlist,undo,redo,link,unlink,image,cleanup,code,formatselect"
                 theme_advanced_buttons2="" theme_advanced_buttons3="" theme_advanced_buttons4=""
                 theme_advanced_toolbar_location="top" theme_advanced_toolbar_align="left" theme_advanced_path_location="bottom"
-                theme_advanced_resizing="true" theme_advanced_blockformats="blockquote,code,samp"
+                theme_advanced_resizing="true" theme_advanced_blockformats="blockquote,code,samp"  TabIndex=20 
                 runat="server" InstallPath="/keymapper/tiny_mce" />
+                
         </div>
         <div id="controls">
             <div id="slugContainer" runat="server">
