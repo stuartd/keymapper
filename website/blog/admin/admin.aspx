@@ -1,12 +1,10 @@
 ﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
     CodeFile="admin.aspx.cs" EnableEventValidation="false" Inherits="KMBlog.admin"
     Title="Key Mapper Blog Admin" %>
-    
-   <%@ Import namespace="KMBlog" %>
 
-
+<%@ Import Namespace="KMBlog" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <asp:Label ID="lblUserLevel" Text="" runat="server" /></div>
+    <asp:Label ID="lblUserLevel" Text="" runat="server" />
     <asp:Repeater ID="postsRepeater" runat="server">
         <HeaderTemplate>
             <table border="0" cellpadding="0" cellspacing="0" width="80%" class="admintable">

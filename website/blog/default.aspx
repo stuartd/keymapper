@@ -128,13 +128,14 @@
                             <div class="comment">
                                 <div class="commenthead">
                                     <span class="commenter">
-                                        <%# GetCommentLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
+                                        <%# GetCommentNameLink(DataBinder.Eval(Container.DataItem, "name").ToString(),
                                       DataBinder.Eval(Container.DataItem, "url").ToString())%></span> <span class="commentposted">
                                           <%#  ((DateTime)DataBinder.Eval(Container.DataItem, "Posted")).ToLongDateString() %></span>
                                 </div>
                                 <div class="commentbody">
                                     <%# DataBinder.Eval(Container.DataItem, "text")%>
                                 </div>
+                                <a href="" class="commentlink">Link to this comment</a>
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>

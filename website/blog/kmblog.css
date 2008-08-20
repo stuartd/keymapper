@@ -26,19 +26,19 @@ Anchors: #06c;
 
 #edit_post_categories
 {
-	margin-top: 1px ;
+	margin-top: 1px;
 }
 
 #post_timestamp
 {
-	margin: 1em 0 ;
+	margin: 1em 0;
 }
 
-#post_timestamp input, #post_timestamp select 
+#post_timestamp input, #post_timestamp select
 {
-	height: 100% ;
-	display: inline-block ;
-	display: -moz-inline-box ;
+	height: 100%;
+	display: inline-block;
+	display: -moz-inline-box;
 }
 
 .input_textbox
@@ -151,17 +151,17 @@ Anchors: #06c;
 
 li.archivelist
 {
-	margin-left: 10px ;
+	margin-left: 10px;
 }
 
 li.archivelist:before
 {
-	content: "\00BB \0020";
+	content: "\2014 \0020";
 }
 
 li.archivelist a
 {
-	padding-left: 5px ;
+	padding-left: 5px;
 }
 
 
@@ -215,6 +215,13 @@ div.comment
 	right: 10px;
 }
 
+a.commentlink
+{
+	position: absolute;
+	right: 20px;
+	bottom: 0px;
+}
+
 .commenthead
 {
 	border: 2px solid #d3d3d3;
@@ -251,6 +258,19 @@ div.comment
 }
 
 
+input[type="submit"]
+{
+	font-family: inherit;
+	font-size: inherit;
+}
+
+/* Persuade FreeTextBox to not show ugly tolbar images */
+
+td[unselectable="on"] img
+{
+	display: none;
+}
+
 blockquote
 {
 	width: 80%;
@@ -263,7 +283,25 @@ blockquote
 
 #slugdiv
 {
-	display: none ;
+	display: none;
+}
+
+#edit_title
+{
+	margin-bottom: 20px;
+	padding: 0 10px;
+}
+
+#edit_title input
+{
+	border: 1px solid #d3d3d3;
+	background-color: #FEFEFE;
+}
+
+#post_timestamp input, #post_timestamp select
+{
+	border: 1px solid #b3b3b3;
+	margin-left: 5px;
 }
 
 

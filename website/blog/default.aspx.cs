@@ -299,7 +299,7 @@ namespace KMBlog
 
 		}
 
-		public string GetCommentLink(string name, string URL)
+		public string GetCommentNameLink(string name, string URL)
 		{
 			if (String.IsNullOrEmpty(URL))
 				return name;

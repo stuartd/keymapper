@@ -11,7 +11,7 @@ html
 body
 {
 	background-position: 100px 10px;
-	background-color: #FFFEFF;
+	background-color: #FEFEFE;
 	background-image: url('../images/kmheader800w.png' );
 	background-repeat: no-repeat;
 	width: 80%;
@@ -50,6 +50,7 @@ h4
 {
 	font-size: 110%;
 }
+
 
 /* Page styles */
 
