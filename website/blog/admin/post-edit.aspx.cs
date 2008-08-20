@@ -72,6 +72,7 @@ namespace KMBlog
 					editarea.Style.Add("display", "none");
 				else
 				{
+					
                     blogpost.Value = p.Body;
 					// blogpost.Text = p.Body;
 					posttitle.Text = p.Title;
