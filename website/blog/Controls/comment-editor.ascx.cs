@@ -38,18 +38,18 @@ namespace KMBlog
         {
             get
             {
-                return txtText.Text;
+				return comment_text.Value;
             }
             set
             {
-                txtText.Text = value;
+				comment_text.Value = value;
             }
         }
 
         public void ClearValues()
         {
             txtName.Text = String.Empty;
-            txtText.Text = String.Empty;
+			comment_text.Value = String.Empty;
             txtURL.Text = String.Empty;
         }
     }
