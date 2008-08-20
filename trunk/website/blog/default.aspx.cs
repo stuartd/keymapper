@@ -335,11 +335,6 @@ namespace KMBlog
 		public void SaveComment(object sender, EventArgs e)
 		{
 
-			Page.Validate();
-
-			if (Page.IsValid == false)
-				return;
-
 			Comment c = new Comment();
 
 			c.Url = editcomment.URL;
@@ -347,6 +342,9 @@ namespace KMBlog
 			c.PostId = Post.GetPostIdFromQueryString(Request.QueryString);
 			c.Text = editcomment.Text;
 			c.Posted = DateTime.Now;
+
+			if (String.IsNullOrEmpty(c.Text))
+				return ;
 
 			c.Save();
 
