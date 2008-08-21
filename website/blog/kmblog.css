@@ -18,10 +18,17 @@ Anchors: #06c;
 
 #category-editor label, #comment-editor label, .loginform label
 {
-	width: 5em;
+	width: 6em;
 	margin-right: 0.5em;
-	display: inline-block;
-	display: -moz-inline-box;
+	float: left ;
+	text-align: left ;
+}
+
+.loginTitle
+{
+	text-align: center ;
+	background-color: Gray;
+	color: White;
 }
 
 #edit_post_categories
@@ -44,6 +51,11 @@ Anchors: #06c;
 .input_textbox
 {
 	border-color: #d3d3d3;
+}
+
+.loginform.input_textbox
+{
+	width: 11em ;
 }
 
 #category-editor li, #comment-editor li
@@ -262,13 +274,6 @@ input[type="submit"]
 {
 	font-family: inherit;
 	font-size: inherit;
-}
-
-/* Persuade FreeTextBox to not show ugly tolbar images */
-
-td[unselectable="on"] img
-{
-	display: none;
 }
 
 blockquote
