@@ -6,8 +6,12 @@
     be able to save any changes.<br />
     <a href="blog/default.aspx">Back to blog</a>
     <div class="loginform">
-        <asp:Login ID="KMLogin" runat="server" OnAuthenticate="Login1_Authenticate" DestinationPageUrl="~/blog/admin/admin.aspx">
+        <asp:Login ID="KMLogin" runat="server" OnAuthenticate="Login1_Authenticate" 
+            DestinationPageUrl="~/blog/admin/admin.aspx" BackColor="#EEEEEE" 
+            DisplayRememberMe="False" PasswordLabelText="Password" 
+            UserNameLabelText="User Name">
             <TextBoxStyle CssClass="input_textbox" />
+            <TitleTextStyle CssClass="loginTitle" />
         </asp:Login>
     </div>
 </asp:Content>

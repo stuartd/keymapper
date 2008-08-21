@@ -49,7 +49,8 @@ namespace KMBlog
 				ClientScript.RegisterClientScriptBlock(this.GetType(), "jquery_start",
 					@"$(document).ready(function()
 						{
-							$('#editslug').click(function(){$('#slugdiv').fadeIn(100);$('#editslug').remove();return false;});
+							$('#editslug').click(function(){$('#slugdiv').fadeIn(100);$('#editslug').remove();
+                            return false;});
 						});"
 					, true);
 			}

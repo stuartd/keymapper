@@ -19,13 +19,24 @@
         </div>
         <div id="edit_body">
                
-           <tinymce:TextArea ID="blogpost" Width="79.5%" theme="advanced" plugins="safari" theme_advanced_buttons1="bold,italic,underline,fontsizeselect,bullist,numlist,undo,redo,link,unlink,image,cleanup,code,formatselect"
+           <tinymce:TextArea ID="blogpost" Width="79.5%" theme="advanced" 
+           plugins="safari" 
+           theme_advanced_buttons1="bold,italic,underline,fontsizeselect,bullist,numlist,undo,redo,link,unlink,image,cleanup,code,formatselect"
                 theme_advanced_buttons2="" theme_advanced_buttons3="" theme_advanced_buttons4=""
                 theme_advanced_toolbar_location="top" theme_advanced_toolbar_align="left" theme_advanced_path_location="bottom"
-                theme_advanced_resizing="true" theme_advanced_blockformats="blockquote,code,samp"  TabIndex=20 
-                runat="server" InstallPath="/keymapper/tiny_mce" />
+                theme_advanced_resizing="true" theme_advanced_blockformats="blockquote,code,samp"  TabIndex="20" 
+                runat="server" InstallPath="/keymapper/tiny_mce" init_instance_callback="setTabIndex"  />
                 
         </div>
+
+            <script type="text/javascript">
+                function setTabIndex() {
+
+                    $('iframe').attr("tabIndex", "20");
+                    
+            }
+        
+        </script>
         <div id="controls">
             <div id="slugContainer" runat="server">
                 <a id="editslug" href="#">Edit Slug</a>

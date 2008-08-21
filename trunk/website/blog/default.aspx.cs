@@ -17,22 +17,8 @@ namespace KMBlog
 		protected void Page_Load(object sender, EventArgs e)
 		{
 
-            // If URL doesn't contain 'default.aspx' then set style sheet programatically
-            if (Request.RawUrl.ToString().IndexOf("default.aspx") < 0)
-            {
-                HtmlLink blogCSS = new HtmlLink();
-                blogCSS.Href = KMBlog.Global.GetBlogPath() + "kmblog.css";
-                blogCSS.Attributes.Add("type", "text/css");
-                blogCSS.Attributes.Add("rel", "stylesheet");
-                Page.Header.Controls.Add(blogCSS);
-            }
-
-
 			((KMBlogMaster)Page.Master).SetTitle("Key Mapper Developer Blog");
-			GetPosts();
-
-		
-			
+			GetPosts();			
 		}
 
 		// Specific post: ?p=1 -- overrides all other options.

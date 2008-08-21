@@ -27,12 +27,14 @@ namespace KMBlog
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+           // HttpContext.Current.Response.Write(Request.ApplicationPath);
 
             string newPath = GetRewrittenUrl(HttpContext.Current);
 
             if (String.IsNullOrEmpty(newPath) == false)
+            {
                 HttpContext.Current.RewritePath(newPath);
-
+            }
         }
 
         private string GetRewrittenUrl(HttpContext context)
