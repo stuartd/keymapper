@@ -20,8 +20,12 @@ Anchors: #06c;
 {
 	width: 6em;
 	margin-right: 0.5em;
-	float: left ;
 	text-align: left ;
+}
+
+.loginform input[type="text"]
+{
+	width: 10em ;
 }
 
 .loginTitle

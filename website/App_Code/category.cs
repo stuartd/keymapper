@@ -28,7 +28,7 @@ namespace KMBlog
 			int categoryId = 0;
 			foreach (string key in keys)
 			{
-				if (key.ToUpperInvariant() == "C")
+				if (String.IsNullOrEmpty(key) == false && key.ToUpperInvariant() == "C")
 				{
 					foreach (string value in parameters.GetValues(key))
 					{
