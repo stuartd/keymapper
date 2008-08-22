@@ -41,7 +41,7 @@
                 <tr>
                     <td>
                         <a href="comment-edit.aspx?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
-                            <%# DataBinder.Eval(Container.DataItem, "Text") %></a> </td>
+                            <%# Server.HtmlEncode(DataBinder.Eval(Container.DataItem, "Text").ToString()) %></a> </td>
                     <td>
                         <%# DataBinder.Eval(Container.DataItem, "Name") %>
                         <td>

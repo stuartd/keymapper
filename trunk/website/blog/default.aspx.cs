@@ -167,7 +167,7 @@ namespace KMBlog
 			int PostId = 0;
 			foreach (string key in keys)
 			{
-				if (key.ToUpperInvariant() == "P")
+				if (String.IsNullOrEmpty(key) == false && key.ToUpperInvariant() == "P")
 				{
 					foreach (string value in parameters.GetValues(key))
 					{
@@ -203,7 +203,7 @@ namespace KMBlog
 
 			foreach (string key in keys)
 			{
-				if (key.ToUpperInvariant() == "D")
+				if (String.IsNullOrEmpty(key) == false && key.ToUpperInvariant() == "D")
 				{
 					foreach (string value in parameters.GetValues(key))
 					{

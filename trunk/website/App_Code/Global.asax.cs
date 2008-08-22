@@ -26,30 +26,25 @@ namespace KMBlog
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
+      
         {
-           // HttpContext.Current.Response.Write(Request.ApplicationPath);
-
-            string newPath = GetRewrittenUrl(HttpContext.Current);
+            string newPath = GetRewrittenUrl();
 
             if (String.IsNullOrEmpty(newPath) == false)
             {
+                //  Response.Write(newPath);
+                //  Response.Redirect(newPath);
                 HttpContext.Current.RewritePath(newPath);
+
             }
         }
 
-        private string GetRewrittenUrl(HttpContext context)
+
+        private string GetRewrittenUrl()
         {
 
-
-            // If the path isn't a blog request or is for the default page ignore it.
-
-            // Also, if this is a request for a CSS file (or indeed any static file type)
-            // just let it through.
-
-            string path = HttpContext.Current.Request.Path;
-            if (path.Contains("blog") == false
-                || path.Contains("default.aspx")
-                || path.EndsWith(".css"))
+            string path = Request.Url.ToString();
+            if (path.IndexOf("blog") == -1)
                 return String.Empty;
 
             // URL can be one of these formats (optionally excluding final backslash)
@@ -65,7 +60,8 @@ namespace KMBlog
             string[] pathWords = path.Substring(path.IndexOf("blog") + 4).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (pathWords.GetLength(0) == 0)
-                return String.Empty; // Just plain /blog/
+                return String.Empty;
+
 
             // To detect:
             // 1) Is the word following blog a number? In that case it's a date.
@@ -78,7 +74,7 @@ namespace KMBlog
             {
                 string dateRange;
                 if (GetDateRange(pathWords, out dateRange) == false)
-                    return String.Empty; // Will result in a 404
+                    return String.Empty;
                 else
                     return Request.ApplicationPath + "/blog/default.aspx?d=" + dateRange;
             }
@@ -107,14 +103,6 @@ namespace KMBlog
             }
             return String.Empty;
         }
-
-
-
-
-
-
-
-
 
 
         private bool GetDateRange(string[] pathWords, out string dateRange)
