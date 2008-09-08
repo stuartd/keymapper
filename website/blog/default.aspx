@@ -1,5 +1,6 @@
 <%@ Page Language="C#" AutoEventWireup="true" CodeFile="default.aspx.cs" Inherits="KMBlog.DefaultPage"
-    MasterPageFile="KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog" ValidateRequest="false"%>
+    MasterPageFile="KMBlog.Master" EnableViewState="false" Title="Key Mapper Developer Blog"
+    ValidateRequest="false" %>
 
 <%@ Import Namespace="KMBlog" %>
 <%@ Import Namespace="System.Collections.ObjectModel" %>
@@ -23,7 +24,9 @@
                 <ul>
                     <asp:Repeater ID="categoriesRepeater" runat="server">
                         <ItemTemplate>
-                            <li><a href="<%# GetCategoryLink(DataBinder.Eval(Container.DataItem, "Slug").ToString())%>">
+                            <li>
+                            <!-- <a href="<%# GetCategoryLink(DataBinder.Eval(Container.DataItem, "Slug").ToString())%>"> -->
+                            <a href="<%# GetCategoryLinkId(DataBinder.Eval(Container.DataItem, "ID").ToString())%>">
                                 <%# DataBinder.Eval(Container.DataItem, "Name") %></a></li>
                         </ItemTemplate>
                     </asp:Repeater>
@@ -102,7 +105,8 @@
                 <ItemTemplate>
                     <div class="post">
                         <div class="subheader">
-                            <span class="posttitle"><a href="<%# GetPostLink(DataBinder.Eval(Container.DataItem, "Slug").ToString())%>">
+                            <!-- <span class="posttitle"><a href="<%# GetPostLink(DataBinder.Eval(Container.DataItem, "Slug").ToString())%>"> -->
+                            <span class="posttitle"><a href="?p=<%#DataBinder.Eval(Container.DataItem, "ID")%>">
                                 <%# DataBinder.Eval(Container.DataItem, "Title") %></a> </span><span class="postdate">
                                     Posted:
                                     <%# ((DateTime)DataBinder.Eval(Container.DataItem, "Postdate")).ToLongDateString() %></span>
@@ -114,7 +118,8 @@
                             <span>Categories:
                                 <%# FormatPostCategories((Collection<Category>)DataBinder.Eval(Container.DataItem, "Categories")) %>
                             </span><span class="commentslink">
-                                <%# GetCommentLinkText(DataBinder.Eval(Container.DataItem, "Slug").ToString(), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
+                                <!--   <%# GetCommentLinkText(DataBinder.Eval(Container.DataItem, "Slug").ToString(), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span> -->
+                                <%# GetCommentLinkTextID(DataBinder.Eval(Container.DataItem, "ID").ToString(), (int)DataBinder.Eval(Container.DataItem, "commentCount")) %></span>
                             <br />
                         </div>
                     </div>
@@ -135,7 +140,7 @@
                                 <div class="commentbody">
                                     <%# DataBinder.Eval(Container.DataItem, "text")%>
                                 </div>
-                                <a href="" class="commentlink">Link to this comment</a>
+                                <!--   <a href="" class="commentlink">Link to this comment</a> TODO -->
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>

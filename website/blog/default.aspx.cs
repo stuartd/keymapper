@@ -32,6 +32,12 @@ namespace KMBlog
             return KMBlog.Global.GetBlogPath() + @"category/" + slug;
         }
 
+        public string GetCategoryLinkId(string Id)
+        {
+            return "?c=" + Id;
+        }
+
+
         public string GetPostLink(string slug)
         {
             return KMBlog.Global.GetBlogPath() + slug;
@@ -58,12 +64,12 @@ namespace KMBlog
 				posts.Add(post);
 				singlePost = true;
 
-				if (Request.Cookies["userDetails"] != null)
-				{
-					editcomment.Name = Server.HtmlEncode(Request.Cookies["userDetails"]["Name"]);
-					editcomment.URL = Server.HtmlEncode(Request.Cookies["userDetails"]["URL"]);
-					chkRememberDetails.Checked = true;
-				}
+                //if (Request.Cookies["userDetails"] != null)
+                //{
+                //    editcomment.Name = Server.HtmlEncode(Request.Cookies["userDetails"]["Name"]);
+                //    editcomment.URL = Server.HtmlEncode(Request.Cookies["userDetails"]["URL"]);
+                //    chkRememberDetails.Checked = true;
+                //}
 			}
 			else
 			{
@@ -134,16 +140,23 @@ namespace KMBlog
 					if (currentYear != 0)
 						alist.Append("</ul>");
 
-					alist.Append("<li><a href=\"" + KMBlog.Global.GetBlogPath() + year.ToString() + "\">" + year.ToString() + "</a></li><ul>");
-					currentYear = year;
+					// alist.Append("<li><a href=\"" + KMBlog.Global.GetBlogPath() + year.ToString() + "\">" + year.ToString() + "</a></li><ul>");
+                    alist.Append("<li><a href=\"?d=" + year.ToString() + "\">" + year.ToString() + "</a></li><ul>");
+					
+                   
+                    currentYear = year;
 				}
 
 				string monthname = DateTimeFormatInfo.InvariantInfo.GetMonthName(month);
 
-                alist.Append("<li class=\"archivelist\">" + "<a href=\"" + KMBlog.Global.GetBlogPath() + year.ToString() + "/"
-					+ month.ToString().PadLeft(2, '0') + "\">" + monthname 
-					+ " - (" + posts.ToString() + " post" 
-					+ (posts > 1 ? "s" : "") + ")</a></li>");
+                //alist.Append("<li class=\"archivelist\">" + "<a href=\"" + KMBlog.Global.GetBlogPath() + year.ToString() + "/"
+                //    + month.ToString().PadLeft(2, '0') + "\">" + monthname 
+                //    + " - (" + posts.ToString() + " post" 
+                //    + (posts > 1 ? "s" : "") + ")</a></li>");
+
+                alist.Append("<li class=\"archivelist\">" + "<a href=\"?d=" + year.ToString() + month.ToString().PadLeft(2, '0') + "\">" + monthname
+            + " - (" + posts.ToString() + " post"
+            + (posts > 1 ? "s" : "") + ")</a></li>");
 
 			}
 
@@ -167,7 +180,7 @@ namespace KMBlog
 			int PostId = 0;
 			foreach (string key in keys)
 			{
-				if (String.IsNullOrEmpty(key) == false && key.ToUpperInvariant() == "P")
+				if (key.ToUpperInvariant() == "P")
 				{
 					foreach (string value in parameters.GetValues(key))
 					{
@@ -203,7 +216,7 @@ namespace KMBlog
 
 			foreach (string key in keys)
 			{
-				if (String.IsNullOrEmpty(key) == false && key.ToUpperInvariant() == "D")
+				if (key.ToUpperInvariant() == "D")
 				{
 					foreach (string value in parameters.GetValues(key))
 					{
@@ -272,18 +285,31 @@ namespace KMBlog
 			commentsRepeater.DataBind();
 		}
 
-		public string FormatPostCategories(Collection<Category> catList)
-		{
+        //public string FormatPostCategories(Collection<Category> catList)
+        //{
 
-			StringBuilder categories = new StringBuilder();
+        //    StringBuilder categories = new StringBuilder();
 
-			foreach (Category cat in catList)
-				categories.Append("<a href=\"" + GetCategoryLink(cat.Slug) + "\">" + cat.Name + "</a>"); 
+        //    foreach (Category cat in catList)
+        //        categories.Append("<a href=\"" + GetCategoryLink(cat.Slug) + "\">" + cat.Name + "</a>"); 
 
-			return categories.ToString();
+        //    return categories.ToString();
 
 
-		}
+        //}
+
+        public string FormatPostCategories(Collection<Category> catList)
+        {
+
+            StringBuilder categories = new StringBuilder();
+
+            foreach (Category cat in catList)
+                categories.Append("<a href=\"" + GetCategoryLinkId(cat.Id.ToString()) + "\">" + cat.Name + "</a>");
+
+            return categories.ToString();
+
+
+        }
 
 		public string GetCommentNameLink(string name, string URL)
 		{
@@ -295,7 +321,29 @@ namespace KMBlog
 			}
 		}
 
-       
+
+
+        public string GetCommentLinkTextID(string id, int commentCount)
+        {
+
+            string href = "?p=" + id + "#comments";
+            string text;
+
+            if (commentCount == 0)
+                text = "No comments";
+            else
+            {
+                text = commentCount.ToString() + " comment";
+                if (commentCount > 1)
+                    text += "s";
+            }
+
+            String comment = "<a href=\"" + href + "\">" + text + "</a>";
+
+            return comment;
+
+        }
+
 
 		public string GetCommentLinkText(string slug, int commentCount)
 		{
@@ -334,24 +382,24 @@ namespace KMBlog
 
 			c.Save();
 
-			if (chkRememberDetails.Checked)
-			{
+            //if (chkRememberDetails.Checked)
+            //{
 
-				HttpCookie details = new HttpCookie("userDetails");
-				details.Values.Add("Name", c.Name);
-				details.Values.Add("URL", c.Url);
-				Response.Cookies.Add(details);
-			}
-			else
-			{
-				if (Request.Cookies["userDetails"] != null)
-				{
-					HttpCookie details = new HttpCookie("userDetails");
-					details.Values.Add("Name", String.Empty);
-					details.Values.Add("URL", String.Empty);
-					Response.Cookies.Add(details);
-				}
-			}
+            //    HttpCookie details = new HttpCookie("userDetails");
+            //    details.Values.Add("Name", c.Name);
+            //    details.Values.Add("URL", c.Url);
+            //    Response.Cookies.Add(details);
+            //}
+            //else
+            //{
+            //    if (Request.Cookies["userDetails"] != null)
+            //    {
+            //        HttpCookie details = new HttpCookie("userDetails");
+            //        details.Values.Add("Name", String.Empty);
+            //        details.Values.Add("URL", String.Empty);
+            //        Response.Cookies.Add(details);
+            //    }
+            //}
 
 			editcomment.ClearValues();
 

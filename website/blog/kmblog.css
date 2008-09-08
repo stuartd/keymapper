@@ -16,21 +16,29 @@ Anchors: #06c;
 
 /* Firefox 2 doesn't support inline-block */
 
-#category-editor label, #comment-editor label, .loginform label
+#category-editor label, #comment-editor label
 {
-	width: 6em;
+	width: 4em;
 	margin-right: 0.5em;
-	text-align: left ;
+	text-align: left;
+	float: left;
 }
 
-.loginform input[type="text"]
+
+
+.loginform .input_textbox
 {
-	width: 10em ;
+	margin-left: 10px;
+}
+
+.loginLabel label
+{
+	margin-left: 3px;
 }
 
 .loginTitle
 {
-	text-align: center ;
+	text-align: center;
 	background-color: Gray;
 	color: White;
 }
@@ -55,11 +63,6 @@ Anchors: #06c;
 .input_textbox
 {
 	border-color: #d3d3d3;
-}
-
-.loginform.input_textbox
-{
-	width: 11em ;
 }
 
 #category-editor li, #comment-editor li

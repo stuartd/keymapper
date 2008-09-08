@@ -4,19 +4,22 @@
 
 <%@ Import Namespace="KMBlog" %>
 <%@ Register TagPrefix="comment" TagName="CommentEditor" Src="../Controls/comment-editor.ascx" %>
-
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <asp:Label>Comments on the post '<asp:Label runat="server" ID="postname">(postname)</asp:Label>'
         <asp:Repeater ID="comments" runat="server">
             <HeaderTemplate>
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="admintable">
-                    <col width="44%"></col>
-                    <col width="18%"></col>
-                    <col width="12%"></col>
+                    <col width="5%"></col>
+                    <col width="42%"></col>
+                    <col width="16%"></col>
+                    <col width="11%"></col>
                     <col width="10%"></col>
                     <col width="8%"></col>
                     <col width="8%"></col>
                     <tr>
+                        <th>
+                            Edit
+                        </th>
                         <th>
                             Comment
                         </th>
@@ -40,8 +43,10 @@
             <ItemTemplate>
                 <tr>
                     <td>
-                        <a href="comment-edit.aspx?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>">
-                            <%# Server.HtmlEncode(DataBinder.Eval(Container.DataItem, "Text").ToString()) %></a> </td>
+                        <a href="comment-edit.aspx?p=<%# DataBinder.Eval(Container.DataItem, "ID")%>">Edit</a>
+                    </td>
+                    <td>
+                        <%# Server.HtmlEncode(DataBinder.Eval(Container.DataItem, "Text").ToString()) %></td>
                     <td>
                         <%# DataBinder.Eval(Container.DataItem, "Name") %>
                         <td>
