@@ -1,0 +1,41 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="keymapper.master.cs" Inherits="KeyMapperMaster"
+    EnableViewState="false" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="kmhead" runat="server">
+    <link href="css/keymapper.css" rel="stylesheet" type="text/css" />
+    <!--[if gte IE 6]>
+<link href="css/kmie.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+    <meta name="keywords" content="keymapper, key mapper, scancode, scan code, keyboard" />
+    <title>Placeholder</title><asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body id="masterbody" runat="server">
+    <h1 id="header" runat="server" class="header">Placeholder</h1>
+    <div id="topdivouter">
+        <div id="topdivinner">
+            <ul class="topnav" id="sitenav">
+                <li><a href="default.aspx">Home</a></li>
+                <li><a href="install.aspx">Install</a></li>
+                <li><a href="http://code.google.com/p/keymapper/downloads/list">Downloads</a></li>
+                <li><a href="support.aspx">Support</a></li>
+                <li><a href="faq.aspx">FAQ</a></li>
+                <li><a href="http://code.google.com/p/keymapper/source/browse/trunk/keymapper">Source
+                    Code</a></li>
+                <li><a href="blog/default.aspx">Blog</a></li>
+            </ul>
+            <div class="clearfloats">
+                <!-- clear floats twice - once for the containing div, once for the li -->
+            </div>
+        </div>
+    </div>
+    <div class="clearfloats">
+    </div>
+    <asp:ContentPlaceHolder ID="body" runat="server">
+    </asp:ContentPlaceHolder>
+    <div id="footer">
+        Copyright Stuart Dunkeld 2008. All rights reserved.
+    </div>
+</body>
+</html>

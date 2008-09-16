@@ -1,0 +1,145 @@
+insert into categories (Name, Slug) values('Key Mapper', 'keymapper')
+insert into categories (Name, Slug) values('C Sharp', 'c-sharp')
+insert into categories (Name, Slug) values('Keyboards', 'keyboards')
+insert into categories (Name, Slug) values('ASP.Net', 'asp-dot-net')
+
+insert into users (username, passwordhash, userlevel) values ('stuartd', '4c90a67814d193124c37610ef9a7d286e25adbaf', 1)
+insert into users (username, passwordhash, userlevel) values('demo', '89e495e7941cf9e40e6980d14a16bf023ccd4c91', 2)
+
+insert into posts (title, postdate, slug, published, body) values
+('User Key Mappings', CAST('20080801' as datetime), 'user-key-mappings', 1, '
+<p>One thing that distinguishes Key Mapper from other scancode mapping
+programs is that it lets you map or disable keys on a per-user basis:
+when Microsoft <a
+href="http://www.microsoft.com/whdc/archive/w2kscan-map.mspx">originally
+implemented scancode mappings in Windows 2000</a>, they stated in the
+"disadvantages" section:</p>
+<blockquote>The mappings stored in the registry work at system level
+and apply to all users. These mappings cannot be set to work
+differently depending on the current user.</blockquote>
+<p>This is because the mappings are stored in <code
+class="regkey">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard
+Layout</code> which needs Administrative access to change and is only
+loaded at boot time.</p><br /><p>In Windows XP, though, per-user
+mappings were quietly introduced, with no fanfare or documentation:
+scancode mappings set in the <code
+class="regkey">HKEY_CURRENT_USER\Keyboard Layout</code> key are
+recognised, and apply to an individual user profile. This means that
+mappings can be added or removed by logging off and logging back on
+again - still inconvenient, but less so than a full reboot: it also
+means that mappings can be set up users without Administrative rights.
+(Mappings set in <code class="regkey">HKEY_LOCAL_MACHINE</code> are
+overridden by those in <code
+class="regkey">HKEY_CURRENT_USER</code>).</p><br />
+<p>It''s possible that Microsoft kept this quiet because user mappings
+are incompatible with Fast User Switching: when you switch to an
+account that''s already logged on, the mappings are not reloaded. It''s
+also possible that because they kept it quiet, the Fast User Switching
+development team didn''t realise that user mappings should be reloaded
+when switching users. Boot mappings persist through Fast User
+Switching.</p><br />
+<p>While this is a possible disadvantage to using user mappings, most
+people probably don''t use more than one account on their computer
+anyway, and in computers attached to a domain (i.e. corporate PCs)
+which may often be used by different people Fast User Switching isn%27t
+available anyway.</p><br />
+<p>There are some other advantages to user mappings:
+<ul>
+<li>They don''t require Administrative rights to be set or removed.</li>
+<li>Different users can have different mappings - one can have Caps
+Lock disabled but Num Lock enabled, another can have them the other
+way round</li>
+<li>Keys can be mapped on shared computers without affecting all users</li>
+</ul><br />
+There is yet another place scancode mappings can be set - in the <code
+class="regkey">HKEY_USERS\.DEFAULT\Keyboard Layout</code> key. These
+apply at the login prompt, but are then removed when logged in.</p>')
+
+
+insert into postcategories (PostId, categoryId) values (1, 1)
+
+
+insert into posts (title, postdate, slug, published, body) values
+('Nested Master Pages', CAST('20080802' as datetime), 'nested-master-pages', 1, '
+If you want to nest master pages - i.e. have a master page which inherits from another master page and so on - then there''s nothing to stop you from replicating the first master page''s ContentPlaceHolder down the hierarchy:
+
+This is the base master page:
+<pre><samp>
+&lt;%@ Master Language="C#" AutoEventWireup="true" 
+CodeBehind="base.Master.cs" Inherits="basemaster" %&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head runat="server"&gt;
+    &lt;title&gt;Intentionally Left Blank&lt;/title&gt;
+    &lt;meta content="base head" /&gt;
+    &lt;asp:ContentPlaceHolder ID="head" runat="server"&gt;
+    &lt;/asp:ContentPlaceHolder&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form id="form1" runat="server"&gt;
+        &lt;div&gt;
+            Base Master body
+            &lt;br /&gt;
+            &lt;asp:ContentPlaceHolder ID="body" runat="server"&gt;
+            &lt;/asp:ContentPlaceHolder&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</samp></pre>
+
+This is the subclassing master page: the content sections contain ContentPlaceHolders with the same name as those in the base Master page:
+
+<pre><samp>
+&lt;%@ Master Language="C#" MasterPageFile="base.Master" AutoEventWireup="true" CodeBehind="subclass.master.cs"
+    Inherits="subclass" %&gt;
+&lt;asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"&gt;
+    &lt;meta content="subclass head" /&gt;
+    &lt;asp:ContentPlaceHolder ID="head" runat="server"&gt;
+    &lt;/asp:ContentPlaceHolder&gt;
+&lt;/asp:Content&gt;
+&lt;asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server"&gt;
+    Subclass Master Body
+    &lt;br /&gt;
+    &lt;asp:ContentPlaceHolder ID="body" runat="server"&gt;
+    &lt;/asp:ContentPlaceHolder&gt;
+&lt;/asp:Content&gt;
+
+    &lt;form id="form1" runat="server"&gt;
+        &lt;div&gt;
+            Base Master body
+            &lt;br /&gt;
+            &lt;asp:ContentPlaceHolder ID="body" runat="server"&gt;
+            &lt;/asp:ContentPlaceHolder&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</samp></pre>
+
+This, then, is an example content page using the subclassed master:
+
+<pre><samp>
+&lt;%@ Page Language="C#" MasterPageFile="subclass.master" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs"
+    Inherits="WebApplication1.WebForm1" Title="Content Page" %&gt;
+
+&lt;asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"&gt;
+    &lt;meta content="content header" /&gt;
+&lt;/asp:Content&gt;
+&lt;asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server"&gt;
+    Content body
+&lt;/asp:Content&gt;
+</samp></pre>
+
+This produces the following output, with the expected values in the Head section as well.
+
+<pre>
+Base Master body
+Subclass Master Body
+Content body 
+</pre>
+
+')
+
+insert into postcategories (PostId, categoryId) values (2, 4)
+
