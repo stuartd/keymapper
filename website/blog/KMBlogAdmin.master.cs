@@ -1,8 +1,4 @@
-﻿
-
-public partial class KMBlogAdmin : KMBlogMaster
+﻿public partial class KMBlogAdmin : KMBlogMaster
 {
-
-
 }
 

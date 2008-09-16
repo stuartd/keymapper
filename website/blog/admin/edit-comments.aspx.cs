@@ -4,70 +4,70 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using KMBlog;
 
-public partial class edit_comments : System.Web.UI.Page
+public partial class EditComments : System.Web.UI.Page
 {
-	protected void Page_Load(object sender, EventArgs e)
-	{
+    public void DeleteComment(object sender, CommandEventArgs e)
+    {
+        if (KMAuthentication.IsUserAdmin(User) == false)
+        {
+            return;
+        }
 
-		((KMBlogMaster)Page.Master).SetTitle("Edit Comments");
+        int commentId;
+        if (Int32.TryParse(e.CommandArgument.ToString(), out commentId) == false)
+        {
+            return;
+        }
 
-		int postId = Post.GetPostIdFromQueryString(Request.QueryString);
-		if (postId == 0)
-		{
-			LoadAllComments();
-		}
-		else
-		{
-			LoadPostComments();
-		}
-	}
+        Comment.Delete(commentId);
+        this.LoadPostComments();
+    }
 
-	private void LoadAllComments()
-	{
+    public void ApproveComment(object sender, CommandEventArgs e)
+    {
+        if (KMAuthentication.IsUserAdmin(User) == false)
+        {
+            return;
+        }
 
+        int commentId;
+        if (Int32.TryParse(e.CommandArgument.ToString(), out commentId) == false)
+        {
+            return;
+        }
 
-	}
+        Comment.Approve(commentId);
+        this.LoadPostComments();
+    }
 
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        ((KMBlogMaster)Page.Master).SetTitle("Edit Comments");
 
-	private void LoadPostComments()
-	{
-		int postId = Post.GetPostIdFromQueryString(Request.QueryString);
-		Post p = Post.GetPostById(postId);
-		postname.Text = p.Title;
+        int postId = Post.GetPostIdFromQueryString(Request.QueryString);
+        if (postId == 0)
+        {
+            this.LoadAllComments();
+        }
+        else
+        {
+            this.LoadPostComments();
+        }
+    }
 
-		Collection<Comment> comlist = Comment.GetComments(postId, CommentType.All);
-		comments.DataSource = comlist;
-		comments.DataBind();
-	}
+    private void LoadAllComments()
+    {
+    }
 
+    private void LoadPostComments()
+    {
+        int postId = Post.GetPostIdFromQueryString(Request.QueryString);
+        Post p = Post.GetPostById(postId);
+        postname.Text = p.Title;
 
-
-	public void DeleteComment(object sender, CommandEventArgs e)
-	{
-		if (KMAuthentication.IsUserAdmin(User) == false)
-			return;
-
-		int commentId;
-		if (Int32.TryParse(e.CommandArgument.ToString(), out commentId) == false)
-			return;
-
-		Comment.Delete(commentId);
-		LoadPostComments();
-	}
-
-	public void ApproveComment(object sender, CommandEventArgs e)
-	{
-
-		if (KMAuthentication.IsUserAdmin(User) == false)
-			return;
-
-		int commentId;
-		if (Int32.TryParse(e.CommandArgument.ToString(), out commentId) == false)
-			return;
-
-		Comment.Approve(commentId);
-		LoadPostComments();
-
-	}
+        Collection<Comment> comlist = Comment.GetComments(postId, CommentType.All);
+        comments.DataSource = comlist;
+        comments.DataBind();
+    }
 }
 

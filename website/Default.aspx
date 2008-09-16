@@ -10,12 +10,11 @@
         Windows 95 or Windows Me.</h4>
     <br />
     <p>
-        Key Mapper's features include:
-        <ul class="basiclist">
-            <li>Per-user key mappings (on Windows XP or later)</li>
-            <li>Entirely visual interface - you never need to see a scancode</li>
-            <li>A virtual keyboard which shows whatever keyboard you use</li>
-            <li>You can edit and delete your pre-existing mappings as well as add new ones</li>
-        </ul>
-    </p>
+        Key Mapper's features include:</p>
+    <ul class="basiclist">
+        <li>Per-user key mappings (on Windows XP or later)</li>
+        <li>Entirely visual interface - you never need to see a scancode</li>
+        <li>A virtual keyboard which shows whatever keyboard you use</li>
+        <li>You can edit and delete your pre-existing mappings as well as add new ones</li>
+    </ul>
 </asp:Content>

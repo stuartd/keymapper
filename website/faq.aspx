@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="faq.aspx.cs" Inherits="faq"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="faq.aspx.cs" Inherits="Faq"
     MasterPageFile="keymapper.master" Title="Key Mapper FAQ" %>
 
 <asp:Content ID="faqhead" ContentPlaceHolderID="head" runat="server">
@@ -9,7 +9,6 @@
 
     <script type="text/javascript" src="keymapper.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/faq.css" />
 </asp:Content>
 <asp:Content ID="default" ContentPlaceHolderID="body" runat="server">
     <!-- Need a div that can act as the top of the page -->

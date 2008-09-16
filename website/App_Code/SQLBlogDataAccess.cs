@@ -1,46 +1,33 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Globalization;
-
-namespace KMBlog
+﻿namespace KMBlog
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Data.SqlTypes;
+    using System.Globalization;
 
     public class SqlBlogDataAccess : IDataAccess
     {
-
         #region Posts
 
         public Collection<Post> GetAllPosts(CommentType ctype)
         {
-            return GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, ctype, 999);
+            return this.GetAllPosts(0, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, ctype, 999);
         }
-
-        //public Collection<Post> GetAllPosts(int categoryId)
-        //{
-        //    return GetAllPosts(categoryId, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value);
-        //}
-
-        //public Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate)
-        //{
-        //    return GetAllPosts(0, startDate, endDate);
-        //}
 
         public Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype)
         {
-            return GetAllPosts(categoryId, startDate, endDate, ctype, 10);
+            return this.GetAllPosts(categoryId, startDate, endDate, ctype, 10);
         }
 
-        public Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype, int NumberOfPosts)
+        public Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype, int numberOfPosts)
         {
-
-            int numberOfPosts = 10;
+            //// int numberOfPosts = 10;
             Collection<Post> posts = new Collection<Post>();
 
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
 
@@ -54,9 +41,13 @@ namespace KMBlog
                 sc.Parameters.AddWithValue("DateTo", endDate);
 
                 if (ctype != CommentType.All)
+                {
                     sc.Parameters.AddWithValue("@ApprovedCommentsOnly", ctype == CommentType.Approved ? 1 : 0);
+                }
                 else
+                {
                     sc.Parameters.AddWithValue("@ApprovedCommentsOnly", DBNull.Value);
+                }
 
                 sc.CommandType = CommandType.StoredProcedure;
                 sc.Connection = connection;
@@ -65,27 +56,20 @@ namespace KMBlog
                 {
                     posts = SqlDataMap.CreatePostsFromReader(reader);
                 }
-
-
             }
-
-
 
             return posts;
         }
 
         /// <summary>
-        /// GetPostByID returns a post with the >approved< comment count.
+        /// GetPostByID returns a post with the approved comment count.
         /// </summary>
-
         public Post GetPostById(int postId)
         {
-
             Collection<Post> posts = new Collection<Post>();
 
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
 
                 SqlCommand sc = new SqlCommand();
@@ -104,17 +88,19 @@ namespace KMBlog
             }
 
             if (posts.Count > 0)
+            {
                 return posts[0];
+            }
             else
+            {
                 return null;
-
+            }
         }
 
         public int SavePost(Post p)
         {
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
 
                 SqlCommand sc = new SqlCommand();
@@ -144,23 +130,20 @@ namespace KMBlog
                 int result = sc.ExecuteNonQuery();
 
                 if (p.Id == 0)
+                {
                     return Convert.ToInt32(sc.Parameters["NewPostId"].Value, CultureInfo.InvariantCulture);
+                }
                 else
+                {
                     return p.Id;
-
-
-
+                }
             }
-
-
         }
 
         public int GetPostIdFromSlug(string slug)
         {
-
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
                 SqlCommand sc = new SqlCommand("GetPostIdFromSlug", connection);
                 sc.Parameters.AddWithValue("Slug", slug);
@@ -169,17 +152,20 @@ namespace KMBlog
                 int postId = 0;
                 SqlDataReader dr = sc.ExecuteReader();
                 if (dr.HasRows && dr.Read())
+                {
                     if (Int32.TryParse(dr["ID"].ToString(), out postId) == false)
+                    {
                         postId = 0;
+                    }
+                }
 
                 return postId;
-
             }
         }
 
         public void DeletePost(int postId)
         {
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
 
@@ -188,9 +174,7 @@ namespace KMBlog
                 sc.Parameters.AddWithValue("PostId", postId);
 
                 sc.ExecuteNonQuery();
-
             }
-
         }
 
         #endregion
@@ -201,7 +185,7 @@ namespace KMBlog
         {
             Collection<Category> cats;
 
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
                 SqlCommand sc = new SqlCommand("GetCategoryById", connection);
@@ -214,15 +198,20 @@ namespace KMBlog
                     cats = SqlDataMap.CreateCategoriesFromReader(reader);
                 }
             }
+
             if (cats.Count > 0)
+            {
                 return cats[0];
+            }
             else
+            {
                 return null;
+            }
         }
 
         public int GetCategoryIdByName(string name)
         {
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
                 SqlCommand sc = new SqlCommand("GetCategoryByName", connection);
@@ -236,19 +225,18 @@ namespace KMBlog
                 sc.ExecuteNonQuery();
 
                 return Convert.ToInt32(sc.Parameters["CategoryId"].Value, CultureInfo.InvariantCulture);
-
             }
         }
 
-        public void SyncCategories(int PostId, Collection<int> categories)
+        public void SyncCategories(int postId, Collection<int> categories)
         {
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
 
                 SqlCommand sc = new SqlCommand("DeleteCategoriesFromPost", connection);
                 sc.CommandType = CommandType.StoredProcedure;
-                sc.Parameters.AddWithValue("PostId", PostId);
+                sc.Parameters.AddWithValue("PostId", postId);
 
                 sc.ExecuteNonQuery();
 
@@ -257,7 +245,7 @@ namespace KMBlog
                 foreach (int catId in categories)
                 {
                     sc.Parameters.Clear();
-                    sc.Parameters.AddWithValue("PostId", PostId);
+                    sc.Parameters.AddWithValue("PostId", postId);
                     sc.Parameters.AddWithValue("CategoryId", catId);
                     sc.ExecuteNonQuery();
                 }
@@ -267,7 +255,7 @@ namespace KMBlog
         public Collection<Category> GetAllCategories()
         {
             Collection<Category> cats;
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
                 SqlCommand sc = new SqlCommand("GetAllCategories", connection);
@@ -278,13 +266,14 @@ namespace KMBlog
                     cats = SqlDataMap.CreateCategoriesFromReader(reader);
                 }
             }
+
             return cats;
         }
 
         public bool AddCategory(string categoryName, string categorySlug)
         {
             int result;
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
 
@@ -296,14 +285,13 @@ namespace KMBlog
                 result = sc.ExecuteNonQuery();
             }
 
-            return (result == 1);
-
+            return result == 1;
         }
 
         public bool DeleteCategory(int categoryId)
         {
             int result;
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
 
@@ -314,13 +302,13 @@ namespace KMBlog
                 result = sc.ExecuteNonQuery();
             }
 
-            return (result == 1);
+            return result == 1;
         }
 
         public bool EditCategory(Category cat)
         {
             int result;
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
 
@@ -332,14 +320,13 @@ namespace KMBlog
                 result = sc.ExecuteNonQuery();
             }
 
-            return (result == 1);
+            return result == 1;
         }
 
         public int GetCategoryIdFromSlug(string slug)
         {
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
                 SqlCommand sc = new SqlCommand("GetCategoryIdFromSlug", connection);
                 sc.Parameters.AddWithValue("Slug", slug);
@@ -348,11 +335,14 @@ namespace KMBlog
                 int catId = 0;
                 SqlDataReader dr = sc.ExecuteReader();
                 if (dr.HasRows && dr.Read())
+                {
                     if (Int32.TryParse(dr["ID"].ToString(), out catId) == false)
+                    {
                         catId = 0;
+                    }
+                }
 
                 return catId;
-
             }
         }
 
@@ -363,9 +353,8 @@ namespace KMBlog
         public bool AddCommentToPost(Comment com)
         {
             int rowcount = 0;
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
 
                 SqlCommand sc = new SqlCommand("AddComment", connection);
@@ -378,15 +367,15 @@ namespace KMBlog
                 sc.Parameters.AddWithValue("Posted", com.Posted);
 
                 rowcount = sc.ExecuteNonQuery();
-
             }
-            return (rowcount > 0);
+
+            return rowcount > 0;
         }
 
         public bool DeleteComment(int commentId)
         {
             int result;
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
                 connection.Open();
 
@@ -397,14 +386,13 @@ namespace KMBlog
                 result = sc.ExecuteNonQuery();
             }
 
-            return (result == 1);
+            return result == 1;
         }
 
         public Collection<Comment> GetCommentsForPost(int postId, CommentType ctype)
         {
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
 
                 SqlCommand sc = new SqlCommand("GetCommentsByPost", connection);
@@ -412,33 +400,36 @@ namespace KMBlog
 
                 sc.Parameters.AddWithValue("PostId", postId);
 
-
-
                 if (ctype == CommentType.All)
+                {
                     sc.Parameters.AddWithValue("Approved", DBNull.Value);
+                }
                 else
                 {
                     int bitValue = 0;
 
                     if (ctype == CommentType.Approved)
+                    {
                         bitValue = 1;
+                    }
                     else if (ctype == CommentType.UnApproved)
+                    {
                         bitValue = 0;
+                    }
 
                     sc.Parameters.AddWithValue("Approved", bitValue);
                 }
+
                 Collection<Comment> clist = SqlDataMap.CreateCommentsFromReader(sc.ExecuteReader());
 
                 return clist;
             }
-
         }
 
         public Collection<Comment> GetAllComments(CommentType ctype)
         {
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
 
                 SqlCommand sc = new SqlCommand("GetAllComments", connection);
@@ -448,15 +439,13 @@ namespace KMBlog
 
                 return clist;
             }
-
         }
 
         public bool ApproveComment(int commentId)
         {
             int result;
-            using (SqlConnection connection = GetConnection())
+            using (SqlConnection connection = this.GetConnection())
             {
-
                 connection.Open();
 
                 SqlCommand sc = new SqlCommand("ApproveComment", connection);
@@ -465,11 +454,9 @@ namespace KMBlog
                 sc.Parameters.AddWithValue("commentId", commentId);
 
                 result = sc.ExecuteNonQuery();
-
-
             }
-            return (result == 1);
 
+            return result == 1;
         }
 
         #endregion
@@ -478,15 +465,18 @@ namespace KMBlog
         {
             SqlConnection sc = new SqlConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString);
             if (sc == null)
+            {
                 throw new ArgumentException("Connection is null");
+            }
             else
+            {
                 return sc;
-
+            }
         }
 
-        public void LogDownload(string fileName, string IP, string referrer, string useragent)
+        public void LogDownload(string fileName, string ip, string referrer, string useragent)
         {
-            using (SqlConnection conn = GetConnection())
+            using (SqlConnection conn = this.GetConnection())
             {
                 conn.Open();
 
@@ -494,10 +484,9 @@ namespace KMBlog
                 sc.CommandType = CommandType.StoredProcedure;
 
                 sc.Parameters.AddWithValue("@downloadfile", fileName);
-                sc.Parameters.AddWithValue("@IP", IP);
+                sc.Parameters.AddWithValue("@IP", ip);
                 sc.Parameters.AddWithValue("@referrer", referrer ?? String.Empty);
                 sc.Parameters.AddWithValue("@useragent", useragent);
-
 
                 sc.ExecuteNonQuery();
             }
@@ -505,9 +494,7 @@ namespace KMBlog
 
         public int GetUserLevel(string userName, string passwordHash)
         {
-
-
-            using (SqlConnection conn = GetConnection())
+            using (SqlConnection conn = this.GetConnection())
             {
                 conn.Open();
 
@@ -527,9 +514,13 @@ namespace KMBlog
 
                 int authUserLevel;
                 if (Int32.TryParse(value, out authUserLevel))
+                {
                     return authUserLevel;
+                }
                 else
+                {
                     return 0;
+                }
             }
         }
 
@@ -537,7 +528,7 @@ namespace KMBlog
         {
             DataTable archives = null;
 
-            using (SqlConnection conn = GetConnection())
+            using (SqlConnection conn = this.GetConnection())
             {
                 conn.Open();
 
@@ -556,9 +547,8 @@ namespace KMBlog
                     archives.Load(dr);
                 }
             }
+
             return archives;
-
         }
-
     }
 }

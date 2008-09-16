@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
-    CodeFile="edit-comments.aspx.cs" Inherits="edit_comments" Title="Edit Comments"
+    CodeFile="edit-comments.aspx.cs" Inherits="EditComments" Title="Edit Comments"
     EnableEventValidation="false" %>
 
 <%@ Import Namespace="KMBlog" %>
