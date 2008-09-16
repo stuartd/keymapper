@@ -1,5 +1,5 @@
 <%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
-    CodeFile="post-edit.aspx.cs" Inherits="KMBlog.post_edit" Title="Post Editor"
+    CodeFile="post-edit.aspx.cs" Inherits="KMBlog.PostEdit" Title="Post Editor"
     ValidateRequest="false" %>
 
 <%@ Register TagPrefix="tinymce" Namespace="Moxiecode.TinyMCE.Web" Assembly="Moxiecode.TinyMCE" %>

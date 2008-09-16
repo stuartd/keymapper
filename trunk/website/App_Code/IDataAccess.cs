@@ -1,100 +1,83 @@
-﻿using System;
-using System.Data;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-using System.Collections.ObjectModel;
-
-namespace KMBlog
+﻿namespace KMBlog
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Data;
 
-	public interface IDataAccess
-	{
-		#region posts
+    public interface IDataAccess
+    {
+        #region posts
 
-		Collection<Post> GetAllPosts(CommentType ctype);
+        Collection<Post> GetAllPosts(CommentType ctype);
 
-		//Collection<Post> GetAllPosts(int categoryId);
+        Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype);
 
-		//Collection<Post> GetAllPosts(DateTime startDate, DateTime endDate);
+        Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype, int numberOfPosts);
 
-		Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype);
+        Post GetPostById(int postId);
 
-		Collection<Post> GetAllPosts(int categoryId, DateTime startDate, DateTime endDate, CommentType ctype, int NumberOfPosts);
+        int SavePost(Post p);
 
-		Post GetPostById(int postId);
-
-		int SavePost(Post p);
-
-		void DeletePost(int postId);
+        void DeletePost(int postId);
 
         int GetPostIdFromSlug(string slug);
 
         #endregion
 
-		#region categories
+        #region categories
 
-		void SyncCategories(int postId, Collection<int> categories);
+        void SyncCategories(int postId, Collection<int> categories);
 
-		bool AddCategory(string categoryName, string categorySlug);
+        bool AddCategory(string categoryName, string categorySlug);
 
-		bool DeleteCategory(int categoryId);
+        bool DeleteCategory(int categoryId);
 
-		bool EditCategory(Category cat);
+        bool EditCategory(Category cat);
 
-		Collection<Category> GetAllCategories();
+        Collection<Category> GetAllCategories();
 
-		int GetCategoryIdByName(string name);
+        int GetCategoryIdByName(string name);
 
-		Category GetCategoryById(int categoryId);
+        Category GetCategoryById(int categoryId);
 
         int GetCategoryIdFromSlug(string p);
 
-		#endregion
+        #endregion
 
-		#region comments
+        #region comments
 
-		bool AddCommentToPost(Comment com);
+        bool AddCommentToPost(Comment com);
 
-		bool DeleteComment(int commentId);
+        bool DeleteComment(int commentId);
 
-		Collection<Comment> GetCommentsForPost(int postId, CommentType ctype);
+        Collection<Comment> GetCommentsForPost(int postId, CommentType ctype);
 
-		Collection<Comment> GetAllComments(CommentType ctype);
+        Collection<Comment> GetAllComments(CommentType ctype);
 
-		bool ApproveComment(int commentId);
+        bool ApproveComment(int commentId);
 
-		#endregion
+        #endregion
 
-		#region Users
+        #region Users
 
-		int GetUserLevel(string userName, string passwordHash);
+        int GetUserLevel(string userName, string passwordHash);
 
-		#endregion
+        #endregion
 
-		#region Misc
+        #region Misc
 
-		void LogDownload(string fileName, string ip, string referrer, string userAgent);
+        void LogDownload(string fileName, string ip, string referrer, string userAgent);
 
-		DataTable GetArchives();
+        DataTable GetArchives();
 
-		#endregion
-        
-       
+        #endregion
     }
 
-	public class DataAccess
-	{
-		public static IDataAccess CreateInstance()
-		{
-			return new SqlBlogDataAccess();
-		}
-	}
-
+    public class DataAccess
+    {
+        public static IDataAccess CreateInstance()
+        {
+            return new SqlBlogDataAccess();
+        }
+    }
 }

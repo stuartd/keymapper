@@ -1,111 +1,131 @@
-﻿using System;
-using System.Collections.ObjectModel;
-
-namespace KMBlog
+﻿namespace KMBlog
 {
+    using System;
+    using System.Collections.ObjectModel;
 
+    public enum CommentType
+    {
+        /// <summary>
+        /// All comments
+        /// </summary>
+        All,
 
-	public class Comment
-	{
+        /// <summary>
+        /// Approved comments only
+        /// </summary>
+        Approved,
 
-		string _name;
-		string _url;
-		DateTime _posted;
+        /// <summary>
+        /// Unapproved comments only
+        /// </summary>
+        UnApproved
+    }
 
-		public int Id { get; set; }
-		public int PostId { get; set; }
-		public bool Approved { get; set; }
+    public class Comment
+    {
+        private string _name;
+        private string _url;
+        private DateTime _posted;
 
-		public DateTime Posted
-		{
-			get
-			{
-				return _posted;
-			}
-			set
-			{
-				if (value == DateTime.MinValue)
-					_posted = DateTime.Now;
-				else
-					_posted = value;
-			}
-		}
+        public int Id { get; set; }
 
-		public String Name
-		{
-			get
-			{
-				return _name;
-			}
-			set
-			{
-				if (String.IsNullOrEmpty(value))
-					_name = "Anonymous";
-				else
-					_name = value;
-			}
-		}
-		public string Url
-		{
-			get
-			{
-				return _url;
-			}
-			set
-			{
-				if (value.StartsWith(@"http://") == false && String.IsNullOrEmpty(value) == false)
-					_url = @"http://" + value;
-				else
-					_url = value;
+        public int PostId { get; set; }
 
-			}
-		}
+        public bool Approved { get; set; }
 
-		public String Text { get; set; }
+        public DateTime Posted
+        {
+            get
+            {
+                return this._posted;
+            }
 
-		public void Save()
-		{
-			if (this)
-			{
-				DataAccess.CreateInstance().AddCommentToPost(this);
-			}
-		}
+            set
+            {
+                if (value == DateTime.MinValue)
+                {
+                    this._posted = DateTime.Now;
+                }
+                else
+                {
+                    this._posted = value;
+                }
+            }
+        }
 
-		public static bool Approve(int commentId)
-		{
-			return DataAccess.CreateInstance().ApproveComment(commentId);
-		}
+        public string Name
+        {
+            get
+            {
+                return this._name;
+            }
 
-		public static bool Delete(int commentId)
-		{
-			return DataAccess.CreateInstance().DeleteComment(commentId) ;
-		}
+            set
+            {
+                if (String.IsNullOrEmpty(value))
+                {
+                    this._name = "Anonymous";
+                }
+                else
+                {
+                    this._name = value;
+                }
+            }
+        }
 
-		public static Collection<Comment> GetComments(int postId, CommentType type)
-		{
-			return DataAccess.CreateInstance().GetCommentsForPost(postId, type);
-		}
+        public string Url
+        {
+            get
+            {
+                return this._url;
+            }
 
-		public static Collection<Comment> GetAllComments(int pageNo)
-		{
-			return null;
-		}
+            set
+            {
+                if (value.StartsWith(@"http://") == false && String.IsNullOrEmpty(value) == false)
+                {
+                    this._url = @"http://" + value;
+                }
+                else
+                {
+                    this._url = value;
+                }
+            }
+        }
 
-		public static implicit operator bool(Comment com)
-		{
-			return string.IsNullOrEmpty(com.Text) == false && com.PostId > 0;
-		}
+        public string Text { get; set; }
 
+        public static bool Approve(int commentId)
+        {
+            return DataAccess.CreateInstance().ApproveComment(commentId);
+        }
 
+        public static bool Delete(int commentId)
+        {
+            return DataAccess.CreateInstance().DeleteComment(commentId);
+        }
 
-	}
+        public static Collection<Comment> GetComments(int postId, CommentType type)
+        {
+            return DataAccess.CreateInstance().GetCommentsForPost(postId, type);
+        }
 
-	public enum CommentType
-	{
-		All, 
-		Approved, 
-		UnApproved
-	}
+        public static Collection<Comment> GetAllComments(int pageNo)
+        {
+            return null;
+        }
 
+        public static implicit operator bool(Comment com)
+        {
+            return string.IsNullOrEmpty(com.Text) == false && com.PostId > 0;
+        }
 
+        public void Save()
+        {
+            if (this)
+            {
+                DataAccess.CreateInstance().AddCommentToPost(this);
+            }
+        }
+    }
 }

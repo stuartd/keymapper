@@ -3,19 +3,19 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
-public partial class faq : System.Web.UI.Page
+public partial class Faq : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         ((KeyMapperMaster)Page.Master).SetTitle("Key Mapper FAQ");
-        LoadTOC();
+        this.LoadTOC();
     }
 
     private void LoadTOC()
     {
         // All controls belong to the master page: we need to recurse in until we find the questions,
         // then load them into the TOC
-        RecurseControls(Page.Master.Controls);
+        this.RecurseControls(Page.Master.Controls);
     }
 
     private void RecurseControls(ControlCollection c)
@@ -24,11 +24,10 @@ public partial class faq : System.Web.UI.Page
         int i = 0;
         foreach (Control con in c)
         {
-
             HtmlGenericControl hgc = con as HtmlGenericControl;
             if (hgc != null && hgc.TagName.ToUpperInvariant() == "H3")
             {
-				if (hgc.Attributes["class"] == "question")
+                if (hgc.Attributes["class"] == "question")
                 {
                     string id = "q" + i.ToString();
                     hgc.Attributes.Add("id", id);
@@ -36,58 +35,44 @@ public partial class faq : System.Web.UI.Page
                     // Add to TOC
                     HtmlGenericControl tocItem = new HtmlGenericControl("li");
                     HtmlGenericControl anchor = new HtmlGenericControl("a");
-					anchor.Attributes.Add("href", "#" + id);
+                    anchor.Attributes.Add("href", "#" + id);
                     anchor.InnerText = hgc.InnerText;
                     tocItem.Controls.Add(anchor);
                     toc.Controls.Add(tocItem);
 
                     i++;
-               
-					
                 }
             }
 
-            RecurseControls(con.Controls);
-
+            this.RecurseControls(con.Controls);
         }
     }
 
-	//protected void SetContentsLabelText()
-	//{
-	//    bool hidden = false; // GetContentsStatusFromCookie();
-
-	//    string action = (hidden ? "Show" : "Hide");
-
-	//    string text = "Contents (<a href='#' id='showhidetocanchor' onclick=" +
-	//      (char)34 + "return ShowHidetoc(true)" + (char)34 +
-	//      ">" + action + "</a>)";
-
-	//    contents.InnerHtml = text;
-	//}
-
-    protected bool GetContentsStatusFromCookie()
+    private bool GetContentsStatusFromCookie()
     {
-
         HttpCookie kmcookie = Request.Cookies["showfaqtoc"];
         if (kmcookie != null)
         {
             string cookieValue = kmcookie.Value;
-    
+
             if (String.IsNullOrEmpty(cookieValue))
+            {
                 return false;
+            }
             else
             {
                 bool value;
                 if (Boolean.TryParse(cookieValue, out value))
+                {
                     return value;
+                }
                 else
+                {
                     return false;
+                }
             }
         }
 
         return false;
-
     }
-
-
 }

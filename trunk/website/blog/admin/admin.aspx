@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="../KMBlogAdmin.Master" AutoEventWireup="true"
-    CodeFile="admin.aspx.cs" EnableEventValidation="false" Inherits="KMBlog.admin"
+    CodeFile="admin.aspx.cs" EnableEventValidation="false" Inherits="KMBlog.Admin"
     Title="Key Mapper Blog Admin" %>
 
 <%@ Import Namespace="KMBlog" %>
