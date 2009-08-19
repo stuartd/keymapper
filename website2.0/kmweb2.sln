@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kmweb2", "kmweb2.csproj", "{D1399DA1-FD0D-4947-A927-0CB374CF8232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kmweb2.Tests", "..\kmweb2.Tests\kmweb2.Tests.csproj", "{DEE6015F-EFF2-4022-9F04-FD41DDCB8949}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1399DA1-FD0D-4947-A927-0CB374CF8232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1399DA1-FD0D-4947-A927-0CB374CF8232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1399DA1-FD0D-4947-A927-0CB374CF8232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1399DA1-FD0D-4947-A927-0CB374CF8232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE6015F-EFF2-4022-9F04-FD41DDCB8949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE6015F-EFF2-4022-9F04-FD41DDCB8949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE6015F-EFF2-4022-9F04-FD41DDCB8949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE6015F-EFF2-4022-9F04-FD41DDCB8949}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
