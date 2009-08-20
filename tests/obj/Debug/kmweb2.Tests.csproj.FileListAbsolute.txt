@@ -1,8 +1,0 @@
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\bin\Debug\kmweb2.Tests.dll.config
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\bin\Debug\kmweb2.Tests.dll
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\bin\Debug\kmweb2.Tests.pdb
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\bin\Debug\kmweb2.dll
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\bin\Debug\kmweb2.pdb
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\obj\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\obj\Debug\kmweb2.Tests.dll
-C:\Documents and Settings\Administrator\Desktop\kmweb2\kmweb2.Tests\obj\Debug\kmweb2.Tests.pdb
