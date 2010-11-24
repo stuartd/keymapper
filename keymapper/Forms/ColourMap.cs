@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using KeyMapper.Classes;
 using Microsoft.Win32;
 
 namespace KeyMapper
@@ -341,7 +342,7 @@ namespace KeyMapper
 
 			// Now look at the cleared keys.
 
-			Collection<KeyMapping> maps = MappingsManager.ClearedMappings;
+			IEnumerable<KeyMapping> maps = MappingsManager.ClearedMappings;
 
 			foreach (KeyMapping map in maps)
 			{
@@ -381,11 +382,13 @@ namespace KeyMapper
 
 		void AddButton(string text, ButtonEffect effect)
 		{
+            PictureBox pb = new PictureBox
+                                {
+                                    Image = ButtonImages.GetButtonImage
+                                    (BlankButton.MediumWideBlank, _buttonScaleFactor, text, effect)
+                                };
 
-			PictureBox pb = new PictureBox();
-
-			pb.Image = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, _buttonScaleFactor, text, effect);
-			pb.Height = pb.Image.Height;
+		    pb.Height = pb.Image.Height;
 			pb.Width = pb.Image.Width;
 
 			// If there is only one button, contain it in the centre of the form (the minimum size for a form

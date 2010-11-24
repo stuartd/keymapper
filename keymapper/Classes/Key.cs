@@ -1,3 +1,5 @@
+using KeyMapper.Classes;
+
 namespace KeyMapper
 {
     public class Key

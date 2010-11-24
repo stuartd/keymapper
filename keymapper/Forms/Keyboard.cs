@@ -10,6 +10,7 @@ using System.Collections;
 using System.Configuration;
 using System.IO;
 using System.Globalization;
+using KeyMapper.Classes;
 using Microsoft.Win32;
 using System.Drawing.Imaging;
 
@@ -430,29 +431,31 @@ namespace KeyMapper
             int allmaps = MappingsManager.GetMappingCount(MappingFilter.All);
             int bootmaps = MappingsManager.GetMappingCount(MappingFilter.Boot);
             int usermaps = MappingsManager.GetMappingCount(MappingFilter.User);
-            int currentmaps = MappingsManager.GetMappingCount(MappingsManager.Filter);
 
             // TODO: Localizing issue. How to do plurals in other cultures???
 
-            IFormatProvider fp = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
-
-            string mapstatustext = string.Empty;
+            string mapstatustext;
 
             if (allmaps > 0)
             {
                 string bootmaptext = string.Empty;
-                string usermaptext = string.Empty;
                 if (bootmaps != 0)
                 {
-                    if (AppController.OperatingSystemIsWindows2000 == false)
-                        bootmaptext = bootmaps.ToString(fp) + " boot mapping" + (bootmaps != 1 ? "s" : "");
+                    if (AppController.OperatingSystemSupportsUserMappings)
+                    {
+                        // TODO string.Format
+                       bootmaptext = bootmaps.ToString() + " boot mapping" + (bootmaps != 1 ? "s" : "");
+                    }
                     else
-                        bootmaptext = bootmaps.ToString(fp) + " mapping" + (bootmaps != 1 ? "s" : "");
+                    {
+                        bootmaptext = bootmaps.ToString() + " mapping" + (bootmaps != 1 ? "s" : "");
+                    }
                 }
 
                 if (usermaps != 0)
                 {
-                    usermaptext = usermaps.ToString(fp) + " user mapping" + (usermaps != 1 ? "s" : "");
+                    string usermaptext = usermaps.ToString(CultureInfo.InvariantCulture.NumberFormat) + " user mapping" +
+                                         (usermaps != 1 ? "s" : "");
 
                     mapstatustext =
                         bootmaptext +
@@ -460,7 +463,9 @@ namespace KeyMapper
                         usermaptext;
                 }
                 else
+                {
                     mapstatustext = bootmaptext;
+                }
             }
             else
             {
@@ -470,7 +475,6 @@ namespace KeyMapper
             }
 
             StatusLabelMappings.Text = mapstatustext;
-
         }
 
         void SetReadonlyStatusLabelText()
@@ -497,7 +501,7 @@ namespace KeyMapper
         void SetFilterStatusLabelText()
         {
 
-            if (AppController.OperatingSystemIsWindows2000)
+            if (AppController.OperatingSystemSupportsUserMappings == false)
                 StatusLabelMappingDisplayType.Visible = false;
             else
             {
@@ -685,7 +689,7 @@ namespace KeyMapper
         {
 
             // Mappings - view all, user, boot.
-            if (AppController.OperatingSystemIsWindows2000 == false)
+            if (AppController.OperatingSystemSupportsUserMappings)
                 switch (MappingsManager.Filter)
                 {
                     case MappingFilter.All:
@@ -722,7 +726,7 @@ namespace KeyMapper
             onlyShowUserMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.User);
 
             // Whether to allow the option of viewing user mappings (ie not on W2K) 
-            chooseMappingsToolStripMenuItem.Visible = (AppController.OperatingSystemIsWindows2000 == false);
+            chooseMappingsToolStripMenuItem.Visible = (AppController.OperatingSystemSupportsUserMappings);
 
             selectFromCaptureToolStripMenuItem.Enabled = !AppController.UserCannotWriteMappings;
         }
@@ -1040,7 +1044,7 @@ namespace KeyMapper
 
             if (AppController.UserCanWriteBootMappings == false)
             {
-                if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVista("the default toggle keys") == false)
+                if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the default toggle keys") == false)
                     return;
 
                 AppController.WriteRegistryEntryVista(

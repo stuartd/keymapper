@@ -1,172 +1,417 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using Microsoft.Win32;
+using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
-using System.Configuration;
+using System.Runtime.CompilerServices;
+using System.Security;
+using System.Text;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Drawing.Text;
+using KeyMapper.Properties;
+using Microsoft.Win32;
 
-
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
-
     public static class AppController
     {
-
-        #region Fields, Properties
-
         // Always use the provided method to get this
         // as substitutions must be made for some cultures unless Arial Unicode MS in installed
+        private const string ConsoleOutputFilename = "keymapper.log";
         private static string _defaultKeyFont = "Lucida Sans Unicode";
 
         // Keyboard layout and keys
-        private static string _currentLocale;
 
-        private static CultureInfo _currentCultureInfo;
         private static LocalizedKeySet _currentLayout;
-        private static KeyboardLayoutType _keyboardLayout;
 
-        // Base font size for drawing text on keys
-        private static float _baseFontSize;
-
-        // KeyMapper's own reg key in HKCU
-        private const string _appKeyName = @"Software\KeyMapper";
-
-        // Whether current user can write to HKLM
-        private static bool _canWriteBootMappings;
-
-        // User mappings don't work on W2k
-        private static bool _isWindows2000;
-
-        // Trickery needed to write to HKLM on Vista
-        private static bool _isVista;
-
-        // Single instance handle
         private static AppMutex _appMutex;
 
         // Redirect console output
         private static StreamWriter _consoleWriterStream;
-        private static string _consoleOutputFilename = "keymapper.log";
 
-        // Misc
-        private static bool _userCannotWriteToApplicationRegistryKey;
         private static bool? _dotNetFrameworkSPInstalled;
 
-        // Key font name
         private static bool? _arialUnicodeMSInstalled;
 
-        // Custom layout (ie Enter key orientation)
-        private static Hashtable _customKeyboardLayouts = new Hashtable();
+        private static readonly List<string> tempfiles = new List<string>();
 
-        // DPI for extra scaling
-        private static int _dpix;
-        private static int _dpiy;
-
-        private static List<string> _tempfiles = new List<string>();
-
-        // Properties
-
-        public static int DpiX
+        static AppController()
         {
-            get { return AppController._dpix; }
+            CustomKeyboardLayouts = new Hashtable();
+            ApplicationRegistryKeyName = @"Software\KeyMapper";
         }
 
-        public static int DpiY
-        {
-            get { return AppController._dpiy; }
-        }
+        public static int DpiX { get; private set; }
 
+        public static int DpiY { get; private set; }
 
-        public static Hashtable CustomKeyboardLayouts
-        {
-            get { return AppController._customKeyboardLayouts; }
-        }
+        public static Hashtable CustomKeyboardLayouts { get; private set; }
 
-        public static string CurrentLocale
-        {
-            get { return _currentLocale; }
-        }
+        public static string CurrentLocale { get; private set; }
 
-        public static bool UserCannotWriteToApplicationRegistryKey
-        {
-            get { return _userCannotWriteToApplicationRegistryKey; }
-        }
+        public static bool UserCannotWriteToApplicationRegistryKey { get; private set; }
 
         public static bool UserCannotWriteMappings
         {
             get
             {
-                return (
-                    MappingsManager.Filter == MappingFilter.Boot
-                    && !_canWriteBootMappings
-                    && !_isVista);
+                // Can't write mappings if all of these are true:
+                // a) Currently looking at Boot Mappings
+                // b) Earlier than Vista
+                // c) User can't write boot mappings.
+
+                // (XP doesn't allow process elevation, so if you can't then you can't)
+                return (MappingsManager.Filter == MappingFilter.Boot
+                        && !UserCanWriteBootMappings
+                        && !OperatingSystemIsVista
+                        && !OperatingSystemIsWindows7OrLater);
             }
         }
 
-        public static bool UserCanWriteBootMappings
-        {
-            get { return _canWriteBootMappings; }
-        }
+        public static bool UserCanWriteBootMappings { get; private set; }
 
-        public static bool OperatingSystemIsWindows2000
-        {
-            get { return _isWindows2000; }
-        }
+        public static bool OperatingSystemIsWindows2000 { get; private set; }
 
-        public static bool OperatingSystemIsVista
-        {
-            get { return _isVista; }
-        }
+        public static bool OperatingSystemIsVista { get; private set; }
 
-        public static string ApplicationRegistryKeyName
-        {
-            get { return _appKeyName; }
-        }
+        public static bool OperatingSystemIsWindows7OrLater { get; private set; }
 
-        public static KeyboardLayoutType KeyboardLayout
-        {
-            get { return _keyboardLayout; }
-        }
-
-        public static float BaseFontSize
-        {
-            get { return _baseFontSize; }
-        }
-
-        public static CultureInfo CurrentCultureInfo
-        {
-            get { return _currentCultureInfo; }
-        }
-
-        public static string LogFileName
+        public static bool OperatingSystemSupportsUserMappings
         {
             get
             {
-                string path;
+                if (OperatingSystemIsWindows7OrLater || OperatingSystemIsWindows2000)
+                {
+                    return false;
+                }
+
+                // XP, Vista
+                return true;
+            }
+        }
+        
+        public static string ApplicationRegistryKeyName { get; private set; }
+
+        public static KeyboardLayoutType KeyboardLayout { get; private set; }
+
+        public static float BaseFontSize { get; private set; }
+
+        public static CultureInfo CurrentCultureInfo { get; private set; }
+
+        public static string LogFileName { get; private set; }
+
+        private static string KeyMapperFilePath
+        {
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath
+                                        (Environment.SpecialFolder.LocalApplicationData), "KeyMapper");
+            }
+        }
+
+        public static bool DotNetFramework2ServicePackInstalled
+        {
+            get
+            {
+                if (_dotNetFrameworkSPInstalled == null)
+                {
+                    // The key exists in Vista and Windows 2008 Server
+                    // but no need to check it.
+                    if (Environment.OSVersion.Version.Major > 5)
+                        _dotNetFrameworkSPInstalled = true;
+                    else
+                    {
+                        int sp = 0;
+                        RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
+                            @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
+
+                        if (regkey != null)
+                        {
+                            sp = (int)regkey.GetValue("SP", 0);
+                            regkey.Close();
+                        }
+                        _dotNetFrameworkSPInstalled = (sp > 0);
+                    }
+                    if (_dotNetFrameworkSPInstalled == false)
+                        Console.WriteLine(
+                            "There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
+                }
+
+                return (bool)_dotNetFrameworkSPInstalled;
+            }
+        }
+
+        #region Log methods
+
+        public static void CreateAppDirectory()
+        {
+            if (Directory.Exists(KeyMapperFilePath) == false)
+            {
                 try
                 {
-                    path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\KeyMapper";
-                    if (Directory.Exists(path) == false)
-                        Directory.CreateDirectory(path);
-
+                    Directory.CreateDirectory(KeyMapperFilePath);
                 }
-                catch (IOException exc)
+                catch
                 {
-                    Console.WriteLine("Can't get log filename: " + exc.ToString());
-                    return string.Empty;
+                    // Can't log it. Going to cause errors (when app tries to read / write to the directory)
+                    // So.. ?
+                    MessageBox.Show("Creating the Application Directory failed");
                 }
-
-                return path + @"\" + _consoleOutputFilename;
             }
+        }
+
+
+        public static void ClearLogFile()
+        {
+            if (_consoleWriterStream != null)
+            {
+                _consoleWriterStream.BaseStream.SetLength(0);
+                Console.WriteLine("Log file cleared: {0}", DateTime.Now);
+            }
+            else
+                Console.Write("Can't clear log in debug mode.");
+        }
+
+        public static void RedirectConsoleOutput()
+        {
+            string path = LogFileName;
+            string existingLogEntries = String.Empty;
+
+            if (String.IsNullOrEmpty(path))
+                return;
+
+            if (File.Exists(path))
+            {
+                // In order to be able to clear the log, the streamwriter must be opened in create mode.
+                // so read the contents of the log first.
+
+                using (var sr = new StreamReader(path))
+                {
+                    existingLogEntries = sr.ReadToEnd();
+                }
+            }
+
+            _consoleWriterStream = new StreamWriter(path, false, Encoding.UTF8);
+            _consoleWriterStream.AutoFlush = true;
+            _consoleWriterStream.Write(existingLogEntries);
+
+            // Direct standard output to the log file.
+            Console.SetOut(_consoleWriterStream);
+
+            Console.WriteLine("Logging started: {0}", DateTime.Now);
+        }
+
+        public static void CloseConsoleOutput()
+        {
+            if (_consoleWriterStream != null)
+            {
+                _consoleWriterStream.Close();
+            }
+        }
+
+        public static void ViewLogFile()
+        {
+            string logfile = LogFileName;
+            if (string.IsNullOrEmpty(logfile))
+                return;
+
+            Process.Start(logfile);
         }
 
         #endregion
 
-        #region Controller methods
+        #region Key methods
+
+        public static Font GetButtonFont(float size, bool localizable)
+        {
+            if (size == 0)
+            {
+                Console.WriteLine("ERROR: Zero sized font requested");
+                size = 10;
+            }
+
+            var font = new Font(GetKeyFontName(localizable), size);
+            return font;
+        }
+
+
+        public static void SetFontSizes(float scale)
+        {
+            // See what font size fits the scaled-down button 
+            float basefontsize = 36F;
+
+
+            // Not using ButtonImages.GetButtonImage as that is where we were called from..
+            using (Font font = GetButtonFont(basefontsize, false))
+            using (Bitmap bmp = ButtonImages.ResizeBitmap(GetBitmap(BlankButton.Blank), scale, false))
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                // Helps MeasureString. Can also pass StringFormat.GenericTypographic apparently ??
+
+                g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                var CharacterWidth = (int)g.MeasureString(((char)77).ToString(), font).Width;
+                // Only use 90% of the bitmap's size to allow for the edges (especially at small sizes)
+                float ratio = (((0.9F * bmp.Height) / 2)) / CharacterWidth;
+                basefontsize = (basefontsize * ratio);
+            }
+
+            BaseFontSize = basefontsize;
+        }
+
+        public static string GetKeyName(int scancode, int extended)
+        {
+            // Look up the values in the current localized layout.
+            if (scancode == 0 && extended == 0)
+                return "Disabled";
+
+            if (scancode == -1 && extended == -1)
+                return "";
+
+            int hash = GetHashFromKeyData(scancode, extended);
+            if (_currentLayout.ContainsKey(hash))
+            {
+                return _currentLayout.GetKeyName(hash);
+            }
+            else
+            {
+                Console.WriteLine("Unknown key: sc {0} ex {1}", scancode, extended);
+                return "Unknown";
+            }
+        }
+
+        public static Bitmap GetBitmap(BlankButton button)
+        {
+            // Have we already extracted this bmp?
+            // Buttons are stored as lower case.
+            string buttonname = button.ToString().ToLowerInvariant();
+
+            return ButtonImages.GetImage(buttonname, "png");
+        }
+
+        public static bool IsOverlongKey(int hash)
+        {
+            return _currentLayout.IsKeyNameOverlong(hash);
+        }
+
+        public static bool IsLocalizableKey(int hash)
+        {
+            return _currentLayout.IsKeyLocalizable(hash);
+        }
+
+        #endregion
+
+        public static int GetHighestCommonDenominator(int value1, int value2)
+        {
+            // Euclidean algorithm
+            if (value2 == 0) return value1;
+            return GetHighestCommonDenominator(value2, value1 % value2);
+        }
+
+        // This needs to be in a separate method as this property was introduced in .Net Framework 2
+        // Service Pack 1, so JITing a method containing the property raises an exception.
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void EnableVisualUpgrade(FileDialog fd)
+        {
+            fd.AutoUpgradeEnabled = true;
+        }
+
+        public static bool ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater(string innerText)
+        {
+            string text = "In order to write " + innerText + ", Key Mapper needs to add to " +
+                          "the protected section of your computer's registry. You may need to approve this action " +
+                          "which will be performed by your Registry Editor.";
+
+            TaskDialogResult result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
+                                                                  TaskDialogButtons.Yes | TaskDialogButtons.No,
+                                                                  TaskDialogIcon.SecurityShield);
+
+            return result == TaskDialogResult.Yes;
+        }
+
+        public static void WriteRegistryFileVista(string filePath)
+        {
+            tempfiles.Add(filePath);
+
+            string command = " /s " + (char)34 + filePath + (char)34;
+
+            try
+            {
+                var process = new Process();
+                process.StartInfo.FileName = "regedit.exe";
+                process.StartInfo.Arguments = command;
+                process.Start();
+                process.WaitForExit();
+            }
+            catch (Win32Exception)
+            {
+                Console.WriteLine("Writing to protected section of registry was cancelled");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error writing to registry: {0}", ex);
+            }
+        }
+
+        public static void WriteRegistryEntryVista(RegistryHive registryHive, string key, string valueName, string value)
+        {
+            string filename = Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
+
+            using (var sw = new StreamWriter(filename, false, Encoding.Unicode))
+            {
+                sw.WriteLine("Windows Registry Editor Version 5.00");
+                sw.WriteLine();
+
+                string hive;
+                switch (registryHive)
+                {
+                    case RegistryHive.LocalMachine:
+                        hive = "HKEY_LOCAL_MACHINE";
+                        break;
+                    case RegistryHive.Users:
+                        hive = "HKEY_USERS";
+                        break;
+                    default:
+                        throw new InvalidOperationException(registryHive + " not supported");
+                }
+
+                sw.WriteLine(@"[" + hive + @"\" + key + "]");
+                sw.Write("\"" + valueName + "\"=");
+                if (String.IsNullOrEmpty(value))
+                    sw.Write("-");
+                else
+                    sw.WriteLine((char)34 + value + (char)34);
+            }
+
+            WriteRegistryFileVista(filename);
+        }
+
+        #region Key codings
+
+        [SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "scancode*1000")]
+        public static int GetHashFromKeyData(int scancode, int extended)
+        {
+            // Need to preserve the actual extended value as they are all 224 except Pause
+            // which is 225.
+            return (scancode * 1000) + extended;
+        }
+
+        public static int GetScancodeFromHash(int hash)
+        {
+            return (hash / 1000);
+        }
+
+        public static int GetExtendedFromHash(int hash)
+        {
+            // Extended value is 224 when set.
+            return (hash % 1000);
+        }
+
+        #endregion
 
         public static void Start()
         {
@@ -176,21 +421,19 @@ namespace KeyMapper
             LoadCustomKeyboardLayouts();
             SetLocale();
             EstablishSituation();
-
-
+            LogFileName = Path.Combine(KeyMapperFilePath, ConsoleOutputFilename);
         }
 
         private static void LoadCustomKeyboardLayouts()
         {
-            string path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                    + @"\KeyMapper\customlayouts.txt";
+            string path = Path.Combine(KeyMapperFilePath, "customlayouts.txt");
 
             if (File.Exists(path) == false)
                 return;
 
             string customLayouts;
 
-            using (StreamReader sr = new StreamReader(path))
+            using (var sr = new StreamReader(path))
             {
                 customLayouts = sr.ReadToEnd();
             }
@@ -198,7 +441,7 @@ namespace KeyMapper
             // Beware bad data..
             try
             {
-                string[] terminators = new string[] { "\r\n" };
+                var terminators = new[] { "\r\n" };
 
                 string[] layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
@@ -212,45 +455,44 @@ namespace KeyMapper
 
                     string locale = nameValuePair.Substring(0, index);
                     int value;
-                    if (System.Int32.TryParse(nameValuePair.Substring(index + 1), out value) == false)
+                    if (Int32.TryParse(nameValuePair.Substring(index + 1), out value) == false)
                         continue;
 
-                    KeyboardLayoutType keyboardType = (KeyboardLayoutType)value;
+                    var keyboardType = (KeyboardLayoutType)value;
 
-                    _customKeyboardLayouts.Add(locale, keyboardType);
-
+                    CustomKeyboardLayouts.Add(locale, keyboardType);
                 }
             }
-            catch { }
-
+            catch
+            {
+            }
         }
 
         public static void AddCustomLayout()
         {
-            if (_customKeyboardLayouts.Contains(_currentLocale))
-                _customKeyboardLayouts.Remove(_currentLocale);
+            if (CustomKeyboardLayouts.Contains(CurrentLocale))
+                CustomKeyboardLayouts.Remove(CurrentLocale);
 
-            _customKeyboardLayouts.Add(_currentLocale, _keyboardLayout);
+            CustomKeyboardLayouts.Add(CurrentLocale, KeyboardLayout);
         }
 
         private static void SaveCustomLayouts()
         {
-
-            // Always save, but only if layout actuall is custom.
+            // Always save, but only if layout actually is custom.
             // This means next time we only load layouts which are different.
 
-            string path = System.Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-             + @"\KeyMapper\customlayouts.txt";
+            // Always overwrite, in case custom layouts have been cleared.
 
-            KeyDataXml kd = new KeyDataXml();
+            string path = Path.Combine(KeyMapperFilePath, "customlayouts.txt");
 
-            using (StreamWriter sw = new StreamWriter(path, false))
+            var kd = new KeyDataXml();
+
+            using (var sw = new StreamWriter(path, false))
             {
-                foreach (DictionaryEntry de in _customKeyboardLayouts)
+                foreach (DictionaryEntry de in CustomKeyboardLayouts)
                     if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
                         sw.WriteLine(de.Key + "=" + (int)de.Value);
             }
-
         }
 
         public static void Close()
@@ -259,30 +501,31 @@ namespace KeyMapper
 
             KeyboardHelper.UnloadLayout();
 
-            if (AppController.OperatingSystemIsVista
-                && AppController.UserCanWriteBootMappings == false
+            if ((OperatingSystemIsVista || OperatingSystemIsWindows7OrLater)
+                && UserCanWriteBootMappings == false
                 && (MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
 
             CloseConsoleOutput();
 
-            foreach (string filepath in _tempfiles)
+            foreach (string filepath in tempfiles)
             {
                 try
                 {
-                    System.IO.File.Delete(filepath);
+                    File.Delete(filepath);
                 }
-                catch { }
+                catch
+                {
+                }
             }
         }
 
         public static string GetKeyFontName(bool localizable)
         {
-
             if (_arialUnicodeMSInstalled == null)
             {
                 _arialUnicodeMSInstalled = false;
-                InstalledFontCollection installedFonts = new InstalledFontCollection();
+                var installedFonts = new InstalledFontCollection();
                 FontFamily[] fonts = installedFonts.Families;
                 foreach (FontFamily ff in fonts)
                 {
@@ -292,7 +535,6 @@ namespace KeyMapper
                         _defaultKeyFont = "Arial Unicode MS";
                         break;
                     }
-
                 }
             }
 
@@ -309,11 +551,12 @@ namespace KeyMapper
             // It's possible the culture has been installed but the font has been 
             // deleted. WIndows will hopefully then do some font substitution.
 
-            switch (_currentCultureInfo.LCID)
+            switch (CurrentCultureInfo.LCID)
             {
                 case 1081: // Devanagari
                     return "Mangal";
-                case 1093: // Bengali. Raavi would be a choice for Gurmukhi but it doesn't seem to be in the installed list..
+                case 1093:
+                    // Bengali. Raavi would be a choice for Gurmukhi but it doesn't seem to be in the installed list..
                     return "Vrinda";
                 case 1100: // Malayam
                     return "Kartika";
@@ -344,7 +587,6 @@ namespace KeyMapper
 
         private static void EstablishSituation()
         {
-
             // The current mappings in effect are composed of:
             // 1) HKLM mappings which aren't overridden in HKCU
             // 2) Mappings in HKCU
@@ -356,35 +598,33 @@ namespace KeyMapper
             RegistryKey kmregkey = null;
             try
             {
-                kmregkey = Registry.CurrentUser.OpenSubKey(_appKeyName, true);
+                kmregkey = Registry.CurrentUser.OpenSubKey(ApplicationRegistryKeyName, true);
             }
-            catch (System.Security.SecurityException e)
+            catch (SecurityException e)
             {
                 Console.WriteLine("Can't access KeyMapper registry key: {0}", e);
-                _userCannotWriteToApplicationRegistryKey = true;
+                UserCannotWriteToApplicationRegistryKey = true;
             }
 
             bool savedMappingsExist = false;
 
-            if (kmregkey == null && _userCannotWriteToApplicationRegistryKey == false)
+            if (kmregkey == null && UserCannotWriteToApplicationRegistryKey == false)
             {
                 // Key does not exist, or no permissions to write:
                 // Create it. Or at least try..
                 try
                 {
-                    kmregkey = Registry.CurrentUser.CreateSubKey(_appKeyName);
+                    kmregkey = Registry.CurrentUser.CreateSubKey(ApplicationRegistryKeyName);
                 }
-                catch (System.Security.SecurityException e)
+                catch (SecurityException e)
                 {
                     Console.WriteLine("Cannot create KeyMapper registry key: {0}", e);
-                    _userCannotWriteToApplicationRegistryKey = true;
+                    UserCannotWriteToApplicationRegistryKey = true;
                 }
-
             }
 
             if (kmregkey != null)
             {
-
                 string[] values = kmregkey.GetValueNames();
                 for (int i = 0; i < values.Length; i++)
                 {
@@ -408,17 +648,23 @@ namespace KeyMapper
             // Is the current user able to write to the Keyboard Layout key in HKLM??
             // (This key always exists, Windows recreates it if it's deleted)
 
-            _canWriteBootMappings = RegistryHelper.CanUserWriteToKey
-                    (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
+            UserCanWriteBootMappings = RegistryHelper.CanUserWriteToKey
+                (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
-            _isWindows2000 =
-                (System.Environment.OSVersion.Version.Major < 5
-                | (System.Environment.OSVersion.Version.Major == 5 & System.Environment.OSVersion.Version.Minor == 0));
+            OperatingSystemIsWindows2000 =
+                (Environment.OSVersion.Version.Major < 5
+                 | (Environment.OSVersion.Version.Major == 5 & Environment.OSVersion.Version.Minor == 0));
 
-            _isVista = System.Environment.OSVersion.Version.Major > 5;
+            // Including Server 2008 (6.1) as it allows user mappings like Vista does.
+            OperatingSystemIsVista = Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 2;
+
+            OperatingSystemIsWindows7OrLater = Environment.OSVersion.Version.Major > 6
+                                               |
+                                               (Environment.OSVersion.Version.Major == 6 &&
+                                                Environment.OSVersion.Version.Minor > 1);
 
             // When was the system booted? (Milliseconds vs Ticks is correct..)
-            DateTime boottime = DateTime.Now - TimeSpan.FromMilliseconds(System.Environment.TickCount);
+            DateTime boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
 
             // When did the current user log in?
 
@@ -463,14 +709,16 @@ namespace KeyMapper
                 (RegistryHive.CurrentUser, @"Keyboard Layout");
 
             // Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", 
-			// boottime, logontime, HKLMWrite, HKCUWrite);
+            // boottime, logontime, HKLMWrite, HKCUWrite);
 
             // Get the current scancode maps
             MappingsManager.GetMappingsFromRegistry();
 
-            // If user mappings are inappropriate (win2k) default to boot.
-            if (_isWindows2000)
+            // If user mappings are inappropriate (win2k, win 7) default to boot.
+            if (OperatingSystemSupportsUserMappings == false)
+            {
                 MappingsManager.SetFilter(MappingFilter.Boot);
+            }
 
             // If HLKM or HKCU Mappings have not been changed since boot/login 
             // (ie their timestamp is earlier than the boot/login time)
@@ -480,25 +728,21 @@ namespace KeyMapper
             if (HKLMWrite < boottime || savedMappingsExist == false)
             {
                 MappingsManager.SaveBootMappingsToKeyMapperKey();
-
             }
 
             if (HKCUWrite < logontime || savedMappingsExist == false)
             {
                 MappingsManager.SaveUserMappingsToKeyMapperKey();
-
             }
 
             if (savedMappingsExist == false)
                 MappingsManager.StoreUnsavedMappings();
 
-            if (_isVista)
+            if (OperatingSystemIsVista)
                 MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
 
-            _dpix = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
-            _dpiy = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
-
-
+            DpiX = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
+            DpiY = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
         }
 
         private static void DeleteInvalidUserFileFromException(ConfigurationException ex)
@@ -513,52 +757,43 @@ namespace KeyMapper
             }
             else
             {
-                System.Configuration.ConfigurationErrorsException innerException =
-                ex.InnerException as System.Configuration.ConfigurationErrorsException;
+                var innerException =
+                    ex.InnerException as ConfigurationErrorsException;
                 if (innerException != null && !string.IsNullOrEmpty(innerException.Filename))
                 {
                     fileName = innerException.Filename;
                 }
             }
-            if (System.IO.File.Exists(fileName))
+            if (File.Exists(fileName))
             {
-                System.IO.File.Delete(fileName);
+                File.Delete(fileName);
             }
-
-
         }
 
         public static void ValidateUserConfigFile()
         {
-
-			// Even with these checks, occasinally get a "failed to load configuration system" exception.
-			
+            // Even with these checks, occasinally get a "failed to load configuration system" exception.
             try
             {
                 // If file is corrupt this will trigger an exception
                 Configuration config = ConfigurationManager.OpenExeConfiguration
-					(ConfigurationUserLevel.PerUserRoamingAndLocal);
+                    (ConfigurationUserLevel.PerUserRoamingAndLocal);
             }
-
             catch (ConfigurationErrorsException ex)
             {
                 DeleteInvalidUserFileFromException(ex);
                 return;
             }
-
             try
             {
                 // Access a property to find any other error types - invalid XML etc.
-                Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+                var userSettings = new Settings();
                 Point p = userSettings.ColourEditorLocation;
             }
-
-
             catch (ConfigurationErrorsException ex)
             {
                 DeleteInvalidUserFileFromException(ex);
             }
-
         }
 
         private static void SetLocale()
@@ -568,7 +803,6 @@ namespace KeyMapper
 
         public static void SetLocale(string locale)
         {
-
             // Only want to reset locale temporarily so save current value
             string currentkeyboardlocale = KeyboardHelper.GetCurrentKeyboardLocale();
 
@@ -578,14 +812,14 @@ namespace KeyMapper
                 locale = currentkeyboardlocale;
             }
 
-            if ((locale != _currentLocale))
+            if ((locale != CurrentLocale))
             {
-                if (_customKeyboardLayouts != null && _customKeyboardLayouts.ContainsKey(locale))
-                    _keyboardLayout = (KeyboardLayoutType)_customKeyboardLayouts[locale];
+                if (CustomKeyboardLayouts != null && CustomKeyboardLayouts.ContainsKey(locale))
+                    KeyboardLayout = (KeyboardLayoutType)CustomKeyboardLayouts[locale];
                 else
                 {
                     // Ask the keydata interface what kind of layout this locale has - US, Euro etc.
-                    _keyboardLayout = new KeyDataXml().GetKeyboardLayoutType(locale);
+                    KeyboardLayout = new KeyDataXml().GetKeyboardLayoutType(locale);
                 }
 
                 // Load the keyboard layout for the minimum possible time and keep the results:
@@ -596,10 +830,10 @@ namespace KeyMapper
                     // Console.WriteLine("Setting culture to: LCID: {0}", _currentCultureInfo.LCID);
 
                     int culture = KeyboardHelper.SetLocale(locale);
-                    _currentCultureInfo = new CultureInfo(culture);
+                    CurrentCultureInfo = new CultureInfo(culture);
 
                     _currentLayout = new LocalizedKeySet();
-                    _currentLocale = locale;
+                    CurrentLocale = locale;
                 }
 
                 catch (Exception ex)
@@ -610,17 +844,15 @@ namespace KeyMapper
                 finally
                 {
                     // Set it back (if different)
-                    if (_currentLocale != currentkeyboardlocale)
+                    if (CurrentLocale != currentkeyboardlocale)
                         KeyboardHelper.SetLocale(currentkeyboardlocale);
-
                 }
             }
-
         }
 
         public static void SwitchKeyboardLayout(KeyboardLayoutType layout)
         {
-            _keyboardLayout = layout;
+            KeyboardLayout = layout;
         }
 
         public static bool ActivateExistingInstance()
@@ -655,7 +887,6 @@ namespace KeyMapper
             }
 
 
-
             if (hWnd != IntPtr.Zero)
             {
                 // Restore window if minimised. Do not restore if already in
@@ -673,322 +904,7 @@ namespace KeyMapper
 
         public static void RegisterTempFile(string filePath)
         {
-            _tempfiles.Add(filePath);
+            tempfiles.Add(filePath);
         }
-
-
-        public static bool DotNetFramework2ServicePackInstalled
-        {
-            get
-            {
-                if (_dotNetFrameworkSPInstalled == null)
-                {
-                    // The key exists in Vista and Windows 2008 Server
-                    // but no need to check it.
-                    if (System.Environment.OSVersion.Version.Major > 5)
-                        _dotNetFrameworkSPInstalled = true;
-                    else
-                    {
-                        int sp = 0;
-                        RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
-                            @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
-
-                        if (regkey != null)
-                        {
-                            sp = (int)regkey.GetValue("SP", 0);
-                            regkey.Close();
-                        }
-                        _dotNetFrameworkSPInstalled = (sp > 0);
-                    }
-                    if (_dotNetFrameworkSPInstalled == false)
-                        Console.WriteLine("There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
-                }
-
-                return (bool)_dotNetFrameworkSPInstalled;
-            }
-        }
-
-        #endregion
-
-        #region Log methods
-
-        public static void ClearLogFile()
-        {
-            if (_consoleWriterStream != null)
-            {
-                _consoleWriterStream.BaseStream.SetLength(0);
-                Console.WriteLine("Log file cleared: {0}", DateTime.Now);
-            }
-            else
-                Console.Write("Can't clear log in debug mode.");
-        }
-
-        public static void RedirectConsoleOutput()
-        {
-
-            string path = LogFileName;
-            string existingLogEntries = String.Empty;
-
-            if (String.IsNullOrEmpty(path))
-                return;
-
-            if (File.Exists(path))
-            {
-                // In order to be able to clear the log, the streamwriter must be opened in create mode.
-                // so read the contents of the log first.
-
-                using (StreamReader sr = new StreamReader(path))
-                {
-                    existingLogEntries = sr.ReadToEnd();
-                }
-            }
-
-            _consoleWriterStream = new StreamWriter(path, false, System.Text.Encoding.UTF8);
-            _consoleWriterStream.AutoFlush = true;
-            _consoleWriterStream.Write(existingLogEntries);
-
-            // Direct standard output to the log file.
-            Console.SetOut(_consoleWriterStream);
-
-            Console.WriteLine("Logging started: {0}", DateTime.Now);
-        }
-
-        public static void CloseConsoleOutput()
-        {
-            if (_consoleWriterStream != null)
-            {
-                _consoleWriterStream.Close();
-            }
-        }
-
-        public static void ViewLogFile()
-        {
-            string logfile = LogFileName;
-            if (string.IsNullOrEmpty(logfile))
-                return;
-
-            System.Diagnostics.Process.Start(logfile);
-        }
-
-
-        #endregion
-
-        #region Key methods
-
-        public static Font GetButtonFont(float size, bool localizable)
-        {
-
-            if (size == 0)
-            {
-                Console.WriteLine("ERROR: Zero sized font requested");
-                size = 10;
-            }
-
-            Font font = new Font(GetKeyFontName(localizable), size);
-            return font;
-        }
-
-
-        public static void SetFontSizes(float scale)
-        {
-
-
-            // See what font size fits the scaled-down button 
-            float basefontsize = 36F;
-
-
-
-            // Not using ButtonImages.GetButtonImage as that is where we were called from..
-            using (Font font = AppController.GetButtonFont(basefontsize, false))
-            using (Bitmap bmp = ButtonImages.ResizeBitmap(AppController.GetBitmap(BlankButton.Blank), scale, false))
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                // Helps MeasureString. Can also pass StringFormat.GenericTypographic apparently ??
-
-                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                int CharacterWidth = (int)g.MeasureString(((char)77).ToString(), font).Width;
-                // Only use 90% of the bitmap's size to allow for the edges (especially at small sizes)
-                float ratio = ((float)((0.9F * bmp.Height) / 2)) / (float)CharacterWidth;
-                basefontsize = (basefontsize * ratio);
-            }
-
-            _baseFontSize = basefontsize;
-
-        }
-
-        public static string GetKeyName(int scancode, int extended)
-        {
-            // Look up the values in the current localized layout.
-            if (scancode == 0 && extended == 0)
-                return "Disabled";
-
-            if (scancode == -1 && extended == -1)
-                return "";
-
-            int hash = AppController.GetHashFromKeyData(scancode, extended);
-            if (_currentLayout.ContainsKey(hash))
-            {
-                return _currentLayout.GetKeyName(hash);
-            }
-            else
-            {
-                Console.WriteLine("Unknown key: sc {0} ex {1}", scancode, extended);
-                return "Unknown";
-            }
-
-        }
-
-        public static Bitmap GetBitmap(BlankButton button)
-        {
-            // Have we already extracted this bmp?
-            // Buttons are stored as lower case.
-            string buttonname = button.ToString().ToLowerInvariant();
-
-            return ButtonImages.GetImage(buttonname, "png");
-
-
-        }
-
-        public static bool IsOverlongKey(int hash)
-        {
-            return _currentLayout.IsKeyNameOverlong(hash);
-        }
-
-        public static bool IsLocalizableKey(int hash)
-        {
-            return _currentLayout.IsKeyLocalizable(hash);
-        }
-
-        #endregion
-
-        #region Miscellaneous
-
-        public static int GetHighestCommonDenominator(int value1, int value2)
-        {
-            // Euclidean algorithm
-            if (value2 == 0) return value1;
-            return GetHighestCommonDenominator(value2, value1 % value2);
-        }
-
-        // This needs to be in a separate method as this property was introduced in .Net Framework 2
-        // Service Pack 1, so JITing a method containing the property raises an exception.
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
-        public static void EnableVisualUpgrade(FileDialog fd)
-        {
-            fd.AutoUpgradeEnabled = true;
-        }
-
-        #endregion
-
-        #region Write to protected registry sections on Vista
-
-        public static bool ConfirmWriteToProtectedSectionOfRegistryOnVista(string innerText)
-        {
-            string text = "In order to write " + innerText + ", Key Mapper needs to add to " +
-                   "the protected section of your computer's registry. You may need to approve this action " +
-                       "which will be performed by your Registry Editor.";
-
-            TaskDialogResult result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
-                       TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.SecurityShield);
-
-            if (result == TaskDialogResult.Yes)
-                return true;
-            else
-                return false;
-
-        }
-
-        public static void WriteRegistryFileVista(string filePath)
-        {
-            _tempfiles.Add(filePath);
-
-            string command = " /s " + (char)34 + filePath + (char)34;
-
-            try
-            {
-
-                System.Diagnostics.Process process = new Process();
-                process.StartInfo.FileName = "regedit.exe";
-                process.StartInfo.Arguments = command;
-                process.Start();
-                process.WaitForExit();
-            }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                Console.WriteLine("Writing to protected section of registry was cancelled");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error writing to registry: {0}", ex);
-            }
-
-        }
-
-        public static void WriteRegistryEntryVista(RegistryHive registryHive, string key, string valueName, string value)
-        {
-
-            string filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
-
-            using (StreamWriter sw = new StreamWriter(filename, false, System.Text.Encoding.Unicode))
-            {
-                sw.WriteLine("Windows Registry Editor Version 5.00");
-                sw.WriteLine();
-
-                string hive;
-                switch (registryHive)
-                {
-                    case RegistryHive.LocalMachine:
-                        hive = "HKEY_LOCAL_MACHINE";
-                        break;
-                    case RegistryHive.Users:
-                        hive = "HKEY_USERS";
-                        break;
-                    default:
-                        throw new InvalidOperationException(registryHive.ToString() + " not supported");
-                }
-
-                sw.WriteLine(@"[" + hive + @"\" + key + "]");
-                sw.Write("\"" + valueName + "\"=");
-                if (String.IsNullOrEmpty(value))
-                    sw.Write("-");
-                else
-                    sw.WriteLine((char)34 + value + (char)34);
-            }
-
-            AppController.WriteRegistryFileVista(filename);
-
-
-        }
-
-        #endregion
-
-        #region Key codings
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "scancode*1000")]
-        public static int GetHashFromKeyData(int scancode, int extended)
-        {
-            // Need to preserve the actual extended value as they are all 224 except Pause
-            // which is 225.
-            return (scancode * 1000) + extended;
-        }
-
-        public static int GetScancodeFromHash(int hash)
-        {
-            return (hash / 1000);
-        }
-
-        public static int GetExtendedFromHash(int hash)
-        {
-            // Extended value is 224 when set.
-            return (hash % 1000);
-        }
-
-        #endregion
-
     }
-
-
-
-
 }
-

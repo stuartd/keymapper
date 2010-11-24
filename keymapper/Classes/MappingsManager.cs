@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Win32;
 using System.Windows.Forms;
@@ -7,16 +8,15 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
     public static class MappingsManager
     {
         public static event EventHandler<EventArgs> MappingsChanged;
 
-        #region Fields
         // Undo/Redo stacks are implemented as pairs.
-        private static UndoRedoMappingStack _undostack = new UndoRedoMappingStack();
-        private static UndoRedoMappingStack _redostack = new UndoRedoMappingStack();
+        private static readonly UndoRedoMappingStack _undostack = new UndoRedoMappingStack();
+        private static readonly UndoRedoMappingStack _redostack = new UndoRedoMappingStack();
 
         // Saved mapping data
         private static Collection<KeyMapping> _savedBootMappings = new Collection<KeyMapping>();
@@ -28,30 +28,23 @@ namespace KeyMapper
         private static Collection<KeyMapping> _allMappings = new Collection<KeyMapping>();
 
         // Current mappings based on current filter
-        private static Collection<KeyMapping> _currentFilteredMappings = new Collection<KeyMapping>();
+        private static readonly Collection<KeyMapping> _currentFilteredMappings = new Collection<KeyMapping>();
 
         // Need to maintain two collections of mappings which have been cleared
         // (ie which existed at boot or logon but don't exist now)
-        private static Collection<KeyMapping> _clearedUserMappings = new Collection<KeyMapping>();
-        private static Collection<KeyMapping> _clearedBootMappings = new Collection<KeyMapping>();
+        private static readonly Collection<KeyMapping> _clearedUserMappings = new Collection<KeyMapping>();
+        private static readonly Collection<KeyMapping> _clearedBootMappings = new Collection<KeyMapping>();
 
         // If user has existing mappings on first run, store them so 
         // new mappings can be distinguished from them.
         private static Collection<KeyMapping> _unsavedMappings = new Collection<KeyMapping>();
 
-        private static MappingFilter _filter = MappingFilter.All;
-
-        #endregion
-
-        #region Properties
-
-        public static MappingFilter Filter
+        static MappingsManager()
         {
-            get
-            {
-                return _filter;
-            }
+            Filter = MappingFilter.All;
         }
+
+        public static MappingFilter Filter { get; private set; }
 
         public static int UndoStackCount
         {
@@ -63,11 +56,11 @@ namespace KeyMapper
             get { return _redostack.Count; }
         }
 
-        public static Collection<KeyMapping> ClearedMappings
+        public static IEnumerable<KeyMapping> ClearedMappings
         {
             get
             {
-                switch (_filter)
+                switch (Filter)
                 {
                     case MappingFilter.All:
                         Collection<KeyMapping> temp = CopyMappings(_clearedBootMappings);
@@ -88,10 +81,6 @@ namespace KeyMapper
                 }
             }
         }
-
-        #endregion
-
-        #region Private stack methods
 
         private static void PushMappingsOntoUndoStack()
         {
@@ -114,8 +103,6 @@ namespace KeyMapper
             _bootMappings = _redostack.BootStack.Pop();
             _userMappings = _redostack.UserStack.Pop();
         }
-
-        #endregion
 
         #region Mapping utility methods
 
@@ -142,7 +129,7 @@ namespace KeyMapper
 
                 bool _addToFilteredMappings = true;
 
-                switch (_filter)
+                switch (Filter)
                 {
                     case MappingFilter.All:
                         // If filter is All then need to check if this boot mapping is overriden by a user mapping 
@@ -174,7 +161,7 @@ namespace KeyMapper
             {
                 _allMappings.Add(usermap);
 
-                if (_filter == MappingFilter.All || _filter == MappingFilter.User)
+                if (Filter == MappingFilter.All || Filter == MappingFilter.User)
                     _currentFilteredMappings.Add(usermap);
             }
 
@@ -322,7 +309,7 @@ namespace KeyMapper
 
         public static bool IsMapped(KeyMapping map)
         {
-            return IsMapped(map, _filter);
+            return IsMapped(map, Filter);
         }
 
         public static bool IsMapped(KeyMapping map, MappingFilter filter)
@@ -361,7 +348,7 @@ namespace KeyMapper
 
         public static bool IsMappingPending(KeyMapping map)
         {
-            return IsMappingPending(map, _filter);
+            return IsMappingPending(map, Filter);
         }
 
         public static bool IsMappingPending(KeyMapping map, MappingFilter filter)
@@ -400,7 +387,7 @@ namespace KeyMapper
 
         public static KeyMapping GetClearedMapping(int scancode, int extended)
         {
-            return GetClearedMapping(scancode, extended, _filter);
+            return GetClearedMapping(scancode, extended, Filter);
         }
 
         public static KeyMapping GetClearedMapping(int scancode, int extended, MappingFilter filter)
@@ -447,7 +434,7 @@ namespace KeyMapper
             _undostack.Clear();
             _redostack.Clear();
 
-            _filter = filter;
+            Filter = filter;
             RaiseMappingsChangedEvent();
         }
 
@@ -472,7 +459,7 @@ namespace KeyMapper
             // Well, we need to write to HKLM under Vista.
             // Create a registry file and run it, user will have to allow regedit to run.
 
-            if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVista("the changes to your boot mappings") == false)
+            if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the changes to your boot mappings") == false)
                 return;
 
             string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
@@ -861,7 +848,7 @@ namespace KeyMapper
             // Check for any existing mappings for this key
             // if they exist, this mapping needs to replace them.
 
-            if (_filter == MappingFilter.Boot)
+            if (Filter == MappingFilter.Boot)
             {
                 map.SetType(MappingType.Boot);
 
@@ -943,17 +930,17 @@ namespace KeyMapper
 
         public static void DeleteMapping(KeyMapping map)
         {
-            DeleteMapping(map, _filter);
+            DeleteMapping(map, Filter);
         }
 
         public static void ClearMappings()
         {
             PushMappingsOntoUndoStack();
 
-            if (_filter != MappingFilter.User)
+            if (Filter != MappingFilter.User)
                 _bootMappings = new Collection<KeyMapping>();
 
-            if (_filter != MappingFilter.Boot)
+            if (Filter != MappingFilter.Boot)
                 _userMappings = new Collection<KeyMapping>();
 
             RaiseMappingsChangedEvent();

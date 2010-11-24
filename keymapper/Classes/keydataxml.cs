@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.XPath;
 using System.Globalization;
 using System.IO;
+using KeyMapper.Classes;
 
 namespace KeyMapper
 {

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using KeyMapper.Classes;
 
 namespace KeyMapper
 {
