@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Configuration;
+using KeyMapper.Classes;
 using Microsoft.Win32;
 
 namespace KeyMapper

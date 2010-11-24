@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
+using KeyMapper.Classes;
 
 namespace KeyMapper
 {

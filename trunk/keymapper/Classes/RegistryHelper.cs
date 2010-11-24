@@ -29,8 +29,7 @@ namespace KeyMapper
 
 		private static Int64 GetRawRegistryKeyTimestamp(RegistryHive hive, string keyname)
 		{
-
-			if (String.IsNullOrEmpty(keyname))
+            if (String.IsNullOrEmpty(keyname))
 				return (Int64)0; // Otherwise the function opens HKLM (or HKCU) again.
 
 			UIntPtr hkey = OpenKey(hive, keyname, KEY_QUERY_VALUE);

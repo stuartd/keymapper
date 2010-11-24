@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using KeyMapper.Classes;
 using Microsoft.Win32;
 using System.IO;
 

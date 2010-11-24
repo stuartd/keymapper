@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using System.Security.Permissions;
+using KeyMapper.Classes;
 
 [assembly: CLSCompliant(true)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true, UnmanagedCode = true)]
@@ -30,6 +31,7 @@ namespace KeyMapper
 			Application.ThreadException += ApplicationThreadException;
 			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
 
+            AppController.CreateAppDirectory();
 
 #if DEBUG
 #else
