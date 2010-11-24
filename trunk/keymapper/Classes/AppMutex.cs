@@ -1,11 +1,10 @@
 using System;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
 	class AppMutex : IDisposable
 	{
-
-		private bool _disposed = false;
+        private bool _disposed;
 		System.Threading.Mutex _appMutex;
 
 		public bool GetMutex()
@@ -16,9 +15,7 @@ namespace KeyMapper
 			return acquired;
 		}
 
-		#region Finalizer & IDisposable implementation
-
-		~AppMutex()
+	    ~AppMutex()
 		{
 			Dispose(false);
 		}
@@ -42,8 +39,5 @@ namespace KeyMapper
 				_disposed = true;
 			}
 		}
-
-		#endregion
-
 	}
 }

@@ -1,12 +1,12 @@
 using System;
 using System.Windows.Forms;
 using System.Security.Permissions;
-using KeyMapper.Classes;
+using KeyMapper.Forms;
 
 [assembly: CLSCompliant(true)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true, UnmanagedCode = true)]
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
 	class main
 	{

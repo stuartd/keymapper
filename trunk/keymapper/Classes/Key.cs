@@ -1,39 +1,23 @@
-using KeyMapper.Classes;
-
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
     public class Key
     {
+        public string Name { get; private set; }
 
-        private string _name;
-        private int _scancode;
-        private int _extended;
+        public int Scancode { get; private set; }
 
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        public int Scancode
-        {
-            get { return _scancode; }
-        }
-
-        public int Extended
-        {
-            get { return _extended; }
-        }
+        public int Extended { get; private set; }
 
         public Key()
         {
-            _name = string.Empty;
+            Name = string.Empty;
         }
 
         public Key(int scancode, int extended, string name)
         {
-            _name = name;
-            _scancode = scancode;
-            _extended = extended;
+            Name = name;
+            Scancode = scancode;
+            Extended = extended;
         }
 
         public Key(int scancode, int extended)
@@ -43,7 +27,7 @@ namespace KeyMapper
 
         public override string ToString()
         {
-            return AppController.GetKeyName(_scancode, _extended);
+            return AppController.GetKeyName(Scancode, Extended);
         }
 
         public static bool operator ==(Key key1, Key key2)
@@ -54,7 +38,7 @@ namespace KeyMapper
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
                 return false;
 
             return this == (Key)obj;
@@ -70,7 +54,6 @@ namespace KeyMapper
         {
             return !(key1 == key2);
         }
-
     }
 }
 

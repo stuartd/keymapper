@@ -193,10 +193,12 @@
     <Compile Include="Classes\ButtonImages.cs" />
     <Compile Include="Classes\AppController.cs" />
     <Compile Include="Classes\FormsManager.cs" />
+    <Compile Include="Classes\MapLocation.cs" />
+    <Compile Include="Classes\MappingFilter.cs" />
+    <Compile Include="Classes\Mappings.cs" />
     <Compile Include="Classes\MappingsManager.cs" />
     <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\RegistryHelper.cs" />
-    <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\TaskDialogEnums.cs" />
     <Compile Include="Classes\UserColours.cs" />
     <Compile Include="Controls\fader.cs">

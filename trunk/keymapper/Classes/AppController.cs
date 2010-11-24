@@ -46,13 +46,13 @@ namespace KeyMapper.Classes
             ApplicationRegistryKeyName = @"Software\KeyMapper";
         }
 
-        public static int DpiX { get; private set; }
+        private static int DpiX { get; set; }
 
         public static int DpiY { get; private set; }
 
-        public static Hashtable CustomKeyboardLayouts { get; private set; }
+        private static Hashtable CustomKeyboardLayouts { get; set; }
 
-        public static string CurrentLocale { get; private set; }
+        private static string CurrentLocale { get; set; }
 
         public static bool UserCannotWriteToApplicationRegistryKey { get; private set; }
 
@@ -62,24 +62,33 @@ namespace KeyMapper.Classes
             {
                 // Can't write mappings if all of these are true:
                 // a) Currently looking at Boot Mappings
-                // b) Earlier than Vista
+                // b) Earlier than Vista (ie doesn't implement UAC)
                 // c) User can't write boot mappings.
 
                 // (XP doesn't allow process elevation, so if you can't then you can't)
                 return (MappingsManager.Filter == MappingFilter.Boot
                         && !UserCanWriteBootMappings
-                        && !OperatingSystemIsVista
-                        && !OperatingSystemIsWindows7OrLater);
+                        && !OperatingSystemImplementsUAC);
             }
         }
 
         public static bool UserCanWriteBootMappings { get; private set; }
 
-        public static bool OperatingSystemIsWindows2000 { get; private set; }
+        private static bool OperatingSystemIsWindows2000 { get; set; }
 
-        public static bool OperatingSystemIsVista { get; private set; }
+        private static bool OperatingSystemIsVista { get; set; }
 
-        public static bool OperatingSystemIsWindows7OrLater { get; private set; }
+        public static bool OperatingSystemImplementsUAC
+        {
+            get { return (OperatingSystemIsVista || OperatingSystemIsWindows7OrLater); }
+        }
+
+        private static bool OperatingSystemIsWindows7OrLater { get; set; }
+
+        public static bool OperatingSystemImplementsTaskDialog
+        {
+            get { return (OperatingSystemIsVista || OperatingSystemIsWindows7OrLater); }
+        }
 
         public static bool OperatingSystemSupportsUserMappings
         {
@@ -145,6 +154,8 @@ namespace KeyMapper.Classes
                 return (bool)_dotNetFrameworkSPInstalled;
             }
         }
+
+       
 
         #region Log methods
 
@@ -501,7 +512,7 @@ namespace KeyMapper.Classes
 
             KeyboardHelper.UnloadLayout();
 
-            if ((OperatingSystemIsVista || OperatingSystemIsWindows7OrLater)
+            if ((OperatingSystemImplementsUAC)
                 && UserCanWriteBootMappings == false
                 && (MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
@@ -656,12 +667,12 @@ namespace KeyMapper.Classes
                  | (Environment.OSVersion.Version.Major == 5 & Environment.OSVersion.Version.Minor == 0));
 
             // Including Server 2008 (6.1) as it allows user mappings like Vista does.
-            OperatingSystemIsVista = Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 2;
+            OperatingSystemIsVista = Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 1;
 
             OperatingSystemIsWindows7OrLater = Environment.OSVersion.Version.Major > 6
                                                |
                                                (Environment.OSVersion.Version.Major == 6 &&
-                                                Environment.OSVersion.Version.Minor > 1);
+                                                Environment.OSVersion.Version.Minor > 0);
 
             // When was the system booted? (Milliseconds vs Ticks is correct..)
             DateTime boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
@@ -738,7 +749,7 @@ namespace KeyMapper.Classes
             if (savedMappingsExist == false)
                 MappingsManager.StoreUnsavedMappings();
 
-            if (OperatingSystemIsVista)
+            if (OperatingSystemImplementsUAC)
                 MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
 
             DpiX = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);

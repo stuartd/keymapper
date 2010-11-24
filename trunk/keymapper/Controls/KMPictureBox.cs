@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace KeyMapper
+namespace KeyMapper.Controls
 {
     class KMPictureBox : PictureBox
     {
@@ -14,14 +14,12 @@ namespace KeyMapper
 
         internal void ReleaseImage()
         {
-
-            IDisposable cleaner = (IDisposable)(this.Image);
+            IDisposable cleaner = this.Image;
             if (cleaner != null)
             {
                 cleaner.Dispose();
             }
             this.Image = null;
-
         }
     }
 }

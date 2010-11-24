@@ -1,45 +1,33 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using KeyMapper.Classes;
 
-
-namespace KeyMapper
+namespace KeyMapper.Controls
 {
 	class KeyPictureBox : KMPictureBox
 	{
-
-		IntPtr _hicon;
+        IntPtr _hicon;
 		Cursor _dragcursor;
-		float _dragIconScale;
-		bool _outsideForm = false;
-		bool _mapped;
-		BlankButton _button;
-		int _horizontalStretch;
-		int _verticalStretch;
-		float _scale;
+	    readonly float _dragIconScale;
+		bool _outsideForm;
+	    readonly bool _mapped;
+	    readonly BlankButton _button;
+	    readonly int _horizontalStretch;
+	    readonly int _verticalStretch;
+	    readonly float _scale;
 		Rectangle _dragbox;
 
 		bool _escapePressed;
 
 		// These are always the physical values not any mapped ones.
-		int _scancode;
-		int _extended;
+	    readonly int _scancode;
+	    readonly int _extended;
 
-		KeyMapping _map;
+	    public KeyMapping Map { get; private set; }
 
-		public KeyMapping Map
+	    public KeyPictureBox(int scancode, int extended, BlankButton button, float scale, int horizontalStretch, int verticalStretch)
 		{
-			get { return _map; }
-		}
-
-
-		public KeyPictureBox(int scancode, int extended, BlankButton button, float scale, int horizontalStretch, int verticalStretch)
-		{
-
 			_scancode = scancode;
 			_extended = extended;
 			_button = button;
@@ -49,7 +37,7 @@ namespace KeyMapper
 			_dragIconScale = 0.75F;
 			_dragbox = Rectangle.Empty;
 			
-			_map = MappingsManager.GetKeyMapping(_scancode, _extended);
+			Map = MappingsManager.GetKeyMapping(_scancode, _extended);
 
 			_mapped = (Map.To.Scancode != -1);
 
@@ -68,16 +56,11 @@ namespace KeyMapper
 			DrawKey();
 			this.Width = this.Image.Width;
 			this.Height = this.Image.Height;
-
-		}
-
-
+        }
 
 		private void DrawKey()
 		{
-
-			Bitmap keybmp = null;
-			int scancode = _scancode;
+		    int scancode = _scancode;
 			int extended = _extended;
 
 			ButtonEffect effect;
@@ -123,8 +106,8 @@ namespace KeyMapper
 			}
 
 
-			keybmp = ButtonImages.GetButtonImage(
-					scancode, extended, _button, _horizontalStretch, _verticalStretch, _scale, effect);
+			Bitmap keybmp = ButtonImages.GetButtonImage(
+			    scancode, extended, _button, _horizontalStretch, _verticalStretch, _scale, effect);
 
 			this.SetImage(keybmp);
 
@@ -256,12 +239,12 @@ namespace KeyMapper
 			this.ReleaseIconResources();
 		}
 
-		public void DeleteCurrentMapping()
+	    private void DeleteCurrentMapping()
 		{
 			MappingsManager.DeleteMapping(Map);
 		}
 
-		public void DisableKey()
+	    private void DisableKey()
 		{
 			MappingsManager.AddMapping(new KeyMapping(Map.From, new Key(0, 0)));
 		}
@@ -291,18 +274,21 @@ namespace KeyMapper
 		void IsControlOutsideForm(object originator)
 		{
 			Control ctrl = originator as Control;
-			if (ctrl != null)
-			{
-				Form frm = ctrl.FindForm();
-				Point loc = SystemInformation.WorkingArea.Location;
+            if (ctrl != null)
+            {
+                Form frm = ctrl.FindForm();
+                if (frm != null)
+                {
+                    Point loc = SystemInformation.WorkingArea.Location;
 
-				_outsideForm =
-					((Control.MousePosition.X - loc.X) < frm.DesktopBounds.Left) ||
-					((Control.MousePosition.X - loc.X) > frm.DesktopBounds.Right) ||
-					((Control.MousePosition.Y - loc.Y) < frm.DesktopBounds.Top) ||
-					((Control.MousePosition.Y - loc.Y) > frm.DesktopBounds.Bottom);
+                    _outsideForm =
+                        ((MousePosition.X - loc.X) < frm.DesktopBounds.Left) ||
+                        ((MousePosition.X - loc.X) > frm.DesktopBounds.Right) ||
+                        ((MousePosition.Y - loc.Y) < frm.DesktopBounds.Top) ||
+                        ((MousePosition.Y - loc.Y) > frm.DesktopBounds.Bottom);
 
-			}
+                }
+            }
 		}
 
 		void KeyPictureBoxDragLeave(object sender, EventArgs e)
@@ -343,7 +329,7 @@ namespace KeyMapper
 				return;
 			}
 
-			if (dragged_map.From == _map.From)
+			if (dragged_map.From == Map.From)
 				return; // No need to redraw self
 
 			// Console.WriteLine("Dragover: " + _scancode)
@@ -363,8 +349,5 @@ namespace KeyMapper
 			ReleaseIconResources();
 
 		}
-
-
-
 	}
 }
