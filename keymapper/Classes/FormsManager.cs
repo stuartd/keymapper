@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using KeyMapper.Forms;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
     static class FormsManager
     {
-
         static KeyboardForm _mainForm;
         static ColourMap _colourMapForm;
         static MappingListForm _mapListForm;
-        static Dictionary<ButtonEffect, ColourEditor> _editorForms = new Dictionary<ButtonEffect, ColourEditor>();
+        static readonly Dictionary<ButtonEffect, ColourEditor> editorForms = new Dictionary<ButtonEffect, ColourEditor>();
         static HelpForm _helpForm;
 
         public static TaskDialogResult ShowTaskDialog(string text, string instruction, string caption, TaskDialogButtons buttons, TaskDialogIcon icon)
@@ -49,8 +48,8 @@ namespace KeyMapper
             else if (sender is ColourEditor)
             {
                 ColourEditor ce = (ColourEditor)sender ;
-                if (_editorForms.ContainsKey(ce.Effect))
-                    _editorForms.Remove(ce.Effect);
+                if (editorForms.ContainsKey(ce.Effect))
+                    editorForms.Remove(ce.Effect);
             }
             _mainForm.RegenerateMenuExternal();
 
@@ -60,13 +59,13 @@ namespace KeyMapper
         {
             string effectname = message.Substring(0, message.IndexOf(" ", StringComparison.Ordinal));
             string text = message.Substring(message.IndexOf(" ", StringComparison.Ordinal) + 1);
-            ButtonEffect effect = (ButtonEffect)System.Enum.Parse(typeof(ButtonEffect), effectname);
+            ButtonEffect effect = (ButtonEffect)Enum.Parse(typeof(ButtonEffect), effectname);
 
             ColourEditor newForm;
 
-            if (_editorForms.ContainsKey(effect))
+            if (editorForms.ContainsKey(effect))
             {
-                if (_editorForms.TryGetValue(effect, out newForm))
+                if (editorForms.TryGetValue(effect, out newForm))
                 {
                     newForm.BringToFront();
                     return;
@@ -77,30 +76,33 @@ namespace KeyMapper
 
             PositionColourEditorForm(newForm);
 
-            _editorForms.Add(effect, newForm);
+            editorForms.Add(effect, newForm);
             newForm.FormClosed += ChildFormClosed;
-            newForm.Show((IWin32Window)_mainForm);
+            newForm.Show(_mainForm);
 
         }
 
         private static Point GetColourEditorFormStartingPosition(ColourEditor ce)
         {
-            if (_colourMapForm != null) // Start from top right of colour map
+            if (_colourMapForm != null)
+            {
+                // Start from top right of colour map
                 return GetNewLocation(_colourMapForm, ce, ChildFormPosition.TopRight);
-            else // Start from bottom left of main form.
-                return GetNewLocation(_mainForm, ChildFormPosition.BottomLeft);  // Risque as isn't a child, but will work.
+            }
 
+            return GetNewLocation(_mainForm, ChildFormPosition.BottomLeft);  // Risque as isn't a child, but will work.
         }
 
         private static void PositionColourEditorForm(ColourEditor ce)
         {
-
             // Now, where to put it..
+
+            // TODO - Why is this value not being used?
             Point formLocation = GetColourEditorFormStartingPosition(ce);
 
             // If there are no other forms use the last closed position (if there is one)
             // (current form must be new and hasn't been added to collection yet)
-            if (_editorForms.Count == 0)
+            if (editorForms.Count == 0)
             {
 
                 Properties.Settings userSettings = new Properties.Settings();
@@ -117,16 +119,14 @@ namespace KeyMapper
             }
             else
             {
-                Point p;
-
                 // There are 1-many forms open. They could be all over the screen:
                 // pick the bottommost rightmost one and cascade off it
                 // (Using top left means having to find the topleftmost form
                 // that isn't cascaded, 
 
-                p = new Point(-5000, -5000);
+                Point p = new Point(-5000, -5000);
 
-                foreach (ColourEditor openform in _editorForms.Values)
+                foreach (ColourEditor openform in editorForms.Values)
                 {
                     if (openform == null || openform == ce)
                         continue;
@@ -169,7 +169,7 @@ namespace KeyMapper
 
             Point startingPosition = Point.Empty;
 
-            foreach (ColourEditor ce in _editorForms.Values)
+            foreach (ColourEditor ce in editorForms.Values)
             {
                 if (ce != null)
                 {
@@ -198,9 +198,9 @@ namespace KeyMapper
         {
             foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
             {
-                if (_editorForms.ContainsKey(effect))
+                if (editorForms.ContainsKey(effect))
                 {
-                    ColourEditor ce = _editorForms[effect];
+                    ColourEditor ce = editorForms[effect];
                     if (ce != null)
                     {
                         ce.Close();
@@ -304,7 +304,7 @@ namespace KeyMapper
                 else
                     _helpForm.Location = formlocation;
 
-                _helpForm.Show((IWin32Window)_mainForm);
+                _helpForm.Show(_mainForm);
             }
         }
 
@@ -321,7 +321,7 @@ namespace KeyMapper
             else
                 PositionChildForm(mf, ChildFormPosition.MiddleLeft);
 
-            mf.ShowDialog((IWin32Window)_mainForm);
+            mf.ShowDialog(_mainForm);
 
         }
 
@@ -329,7 +329,7 @@ namespace KeyMapper
         {
             AboutForm af = new AboutForm();
             PositionChildForm(af, ChildFormPosition.MiddleCentre);
-            af.ShowDialog((IWin32Window)_mainForm);
+            af.ShowDialog(_mainForm);
 
         }
 
@@ -356,7 +356,7 @@ namespace KeyMapper
 
                 _mapListForm.FormClosed += ChildFormClosed;
 
-                _mapListForm.Show((IWin32Window)_mainForm);
+                _mapListForm.Show(_mainForm);
             }
             else
             {
@@ -389,7 +389,7 @@ namespace KeyMapper
             }
 
             _colourMapForm.FormClosed += ChildFormClosed;
-            _colourMapForm.Show((IWin32Window)_mainForm);
+            _colourMapForm.Show(_mainForm);
 
         }
 

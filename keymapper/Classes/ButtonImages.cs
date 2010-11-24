@@ -1,23 +1,15 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using KeyMapper.Classes;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
-
-	public static class ButtonImages
+    public static class ButtonImages
 	{
-		#region Fields
-
-		private static string _path = "KeyMapper.Images.";
+        private const string Path = "KeyMapper.Images.";
 		private static float _lastScale;
 
-		#endregion
-
-		#region Button Image methods
-
-		// Basic blank button, unscaled, no effects
+        // Basic blank button, unscaled, no effects
 		public static Bitmap GetButtonImage(int scancode, int extended)
 		{
 			return GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, 1F, ButtonEffect.None, String.Empty);
@@ -50,8 +42,7 @@ namespace KeyMapper
 		private static Bitmap GetButtonImage(int scancode, int extended, BlankButton button, int horizontalStretch,
 															int verticalStretch, float scale, ButtonEffect effect, string caption)
 		{
-
-			Bitmap bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect, true);
+            Bitmap bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect, true);
 
 			Color fontColour = GetFontColour(effect);
 
@@ -64,13 +55,11 @@ namespace KeyMapper
 			return bmpWithCaption;
 		}
 
-		#endregion
-
-		#region Other public methods
+        #region Other public methods
 
 		public static Bitmap GetImage(string buttonFileName, string extension)
 		{
-			string filepath = _path + buttonFileName.ToLowerInvariant() + "." + extension;
+			string filepath = Path + buttonFileName.ToLowerInvariant() + "." + extension;
 			return ExtractImage(filepath);
 		}
 
@@ -121,9 +110,8 @@ namespace KeyMapper
 
 			if (horizontalStretch != 0 & verticalStretch != 0)
 			{
-				Bitmap tempbitmap = null;
-				tempbitmap = StretchButtonHorizontal(bmp, horizontalStretch);
-				newbitmap = StretchButtonVertical(tempbitmap, verticalStretch);
+			    Bitmap tempbitmap = StretchButtonHorizontal(bmp, horizontalStretch);
+			    newbitmap = StretchButtonVertical(tempbitmap, verticalStretch);
 			}
 			else
 			{
@@ -153,12 +141,11 @@ namespace KeyMapper
 			{
 				if (stream != null)
 				{
-					bmp = new System.Drawing.Bitmap(stream);
+					bmp = new Bitmap(stream);
 					stream.Close();
 				}
 			}
 			return bmp;
-
 		}
 
 		private static Bitmap GetBitmap(BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect, bool transform)
@@ -166,7 +153,7 @@ namespace KeyMapper
 			if (scale != _lastScale)
 				AppController.SetFontSizes(scale);
 
-			Bitmap bmp = null;
+			Bitmap bmp;
 
 			// Cache bitmap until scale or button changes (as long as no stretch is applied)
 
@@ -207,7 +194,7 @@ namespace KeyMapper
 			int slicewidth = AppController.GetHighestCommonDenominator(horizontalstretch, halfwidth);
 
 			Bitmap newbitmap = new Bitmap(bmp.Width + horizontalstretch, bmp.Height);
-			using (Graphics g = Graphics.FromImage((Image)newbitmap))
+			using (Graphics g = Graphics.FromImage(newbitmap))
 			{
 				g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, halfwidth, bmp.Height), GraphicsUnit.Pixel);
 				for (int i = 0; i < horizontalstretch; i += slicewidth)
@@ -233,7 +220,7 @@ namespace KeyMapper
 
 			Bitmap newbitmap = new Bitmap(bmp.Width, bmp.Height + verticalstretch);
 
-			using (Graphics g = Graphics.FromImage((Image)newbitmap))
+			using (Graphics g = Graphics.FromImage(newbitmap))
 			{
 				g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, bmp.Width, halfheight), GraphicsUnit.Pixel);
 				for (int i = 0; i < verticalstretch; i += sliceheight)
@@ -259,7 +246,7 @@ namespace KeyMapper
 			}
 
 			Bitmap newbitmap = new Bitmap(newWidth, newHeight);
-			using (Graphics g = Graphics.FromImage((Image)newbitmap))
+			using (Graphics g = Graphics.FromImage(newbitmap))
 			{
 				g.DrawImage(bmp, 0, 0, newWidth, newHeight);
 			}
@@ -311,7 +298,7 @@ namespace KeyMapper
 			{
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 				
-				SizeF stringSize = SizeF.Empty;
+				SizeF stringSize;
 				stringSize = g.MeasureString(longestWord, font);
 
 				if (stringSize.Width > (bmp.Width * 0.8F))
@@ -329,8 +316,8 @@ namespace KeyMapper
 		{
 
 			// Set the sizes for 2 and 3 or more letters.
-			float FontSizeDouble = (AppController.BaseFontSize * 0.75F);
-			float FontSizeMulti = (AppController.BaseFontSize * 0.575F);
+			float fontSizeDouble = (AppController.BaseFontSize * 0.75F);
+			float fontSizeMulti = (AppController.BaseFontSize * 0.575F);
 
 			int namelength = caption.Length;
 
@@ -347,9 +334,9 @@ namespace KeyMapper
 
 				case 2: // Two letters - mostly F keys, which need a constant font whether they are 2 or 3 chars long
 					if (caption.Substring(0, 1) == "F" && Char.IsDigit(caption, 1))
-						bmp = DrawCaptionLine(bmp, caption, FontSizeDouble, localizable, fontColour);
+						bmp = DrawCaptionLine(bmp, caption, fontSizeDouble, localizable, fontColour);
 					else
-						bmp = DrawCaptionLine(bmp, caption, FontSizeMulti, localizable, fontColour);
+						bmp = DrawCaptionLine(bmp, caption, fontSizeMulti, localizable, fontColour);
 
 					break;
 
@@ -360,20 +347,20 @@ namespace KeyMapper
 					if (spacepos > 0) // eg "7 &" or 5 %"
 					{
 
-						bmp = DrawCaptionLine(bmp, caption.Substring(0, spacepos), FontSizeDouble, TextPosition.Bottom, localizable, fontColour);
+						bmp = DrawCaptionLine(bmp, caption.Substring(0, spacepos), fontSizeDouble, TextPosition.Bottom, localizable, fontColour);
 						// May not strictly be three characters so send the rest:
-						bmp = DrawCaptionLine(bmp, caption.Substring(spacepos + 1), FontSizeDouble, TextPosition.SymbolTop, localizable, fontColour);
+						bmp = DrawCaptionLine(bmp, caption.Substring(spacepos + 1), fontSizeDouble, TextPosition.SymbolTop, localizable, fontColour);
 					}
 					else // End, F12 etc...
 					{
 						if (caption.Substring(0, 1) == "F" && Char.IsDigit(caption, 1) && Char.IsDigit(caption, 2))
 						{
 							// F11, F12 to be the same size as F1 to F9
-							bmp = DrawCaptionLine(bmp, caption, FontSizeDouble, localizable, fontColour);
+							bmp = DrawCaptionLine(bmp, caption, fontSizeDouble, localizable, fontColour);
 						}
 						else
 						{ // End, Tab, Esc etc
-							bmp = DrawCaptionLine(bmp, caption, FontSizeMulti, localizable, fontColour);
+							bmp = DrawCaptionLine(bmp, caption, fontSizeMulti, localizable, fontColour);
 						}
 					}
 					break;
@@ -382,7 +369,7 @@ namespace KeyMapper
 					// More than 3 letters long
 					string[] words = caption.Split(' ');
 
-					FontSizeMulti = GetMultiLineFontSize(bmp, caption, localizable, FontSizeMulti); 
+					fontSizeMulti = GetMultiLineFontSize(bmp, caption, localizable, fontSizeMulti); 
 
 					// If the last word is a word in brackets, remove it
 					// E.G. Enter (Numberpad) will just be written on the key as Enter.
@@ -392,16 +379,16 @@ namespace KeyMapper
 					switch (words.Length)
 					{
 						case 1:
-							DrawCaptionLine(bmp, words[0], FontSizeMulti, localizable, fontColour);
+							DrawCaptionLine(bmp, words[0], fontSizeMulti, localizable, fontColour);
 							break;
                         case 2: if ((words[1].StartsWith("(", StringComparison.Ordinal) && words[1].EndsWith(")", StringComparison.Ordinal)))
 							{
-								DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.Middle, localizable, fontColour);
+								DrawCaptionLine(bmp, words[0], fontSizeMulti, TextPosition.Middle, localizable, fontColour);
 							}
 							else
 							{
-								DrawCaptionLine(bmp, words[0], FontSizeMulti, TextPosition.TextTop, localizable, fontColour);
-								DrawCaptionLine(bmp, words[1], FontSizeMulti, TextPosition.Bottom, localizable, fontColour);
+								DrawCaptionLine(bmp, words[0], fontSizeMulti, TextPosition.TextTop, localizable, fontColour);
+								DrawCaptionLine(bmp, words[1], fontSizeMulti, TextPosition.Bottom, localizable, fontColour);
 							}
 							break;
 						default:
@@ -416,19 +403,15 @@ namespace KeyMapper
 
 		private static Bitmap WriteCaption(Bitmap bmp, int scancode, int extended, Color fontColour)
 		{
+            string caption = AppController.GetKeyName(scancode, extended) ?? string.Format("SC: {0} EX: {1}", scancode, extended);
 
-			string caption = AppController.GetKeyName(scancode, extended);
+		    // Blank keys.
+            if (String.IsNullOrEmpty(caption))
+            {
+                return bmp;
+            }
 
-			if (caption == null)
-			{
-				caption = "Unknown";
-			}
-
-			// Blank keys.
-			if (String.IsNullOrEmpty(caption))
-				return bmp;
-
-			bool overlong = false;
+		    bool overlong = false;
 			bool localizable = false;
 
 			int hash = AppController.GetHashFromKeyData(scancode, extended);
@@ -459,10 +442,8 @@ namespace KeyMapper
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
 				// Use width of actual string for left placement:
-				SizeF stringSize = SizeF.Empty;
-
-				// This only takes tiny amount of time - 14ms for 10000 iterations..
-				stringSize = g.MeasureString(caption, font);
+			    // This only takes tiny amount of time - 14ms for 10000 iterations..
+				SizeF stringSize = g.MeasureString(caption, font);
 
 				int left = (bmp.Width / 2) - (int)(stringSize.Width / 2);
 				int top = 0;
@@ -471,13 +452,14 @@ namespace KeyMapper
 				switch (where)
 				{
 					case TextPosition.Middle:
-						top = (int)(((bmp.Height - stringSize.Height) / 2) + bmp.Height / 28);
+                        // Remove cast to int, get 'possible loss of fraction'. Oh well..
+						top = (int)(((bmp.Height - stringSize.Height) / 2) + (int)(bmp.Height / 28));
 						break;
 					case TextPosition.TextTop:
 						top = (int)(bmp.Height * 14F / 64F);
 						break;
 					case TextPosition.Bottom:
-						top = (int)(bmp.Height / 2);
+						top = bmp.Height / 2;
 						break;
 					case TextPosition.SymbolTop:
 						top = (int)(bmp.Height * 8F / 64F);
@@ -497,10 +479,7 @@ namespace KeyMapper
 
 		#endregion
 
-
-		#region Effects
-
-		public static ColorMatrix GetMatrix(ButtonEffect effect)
+        public static ColorMatrix GetMatrix(ButtonEffect effect)
 		{
 			return GetMatrix(effect, false);
 		}
@@ -557,97 +536,92 @@ namespace KeyMapper
 		{
 			ColorMatrix cm = GetMatrix(effect);
 
-			if (cm == null)
-				return bmp;
-			else
-				return Transform(bmp, cm);
+            if (cm == null)
+            {
+                return bmp;
+            }
+
+		    return Transform(bmp, cm);
 		}
 
 		private static ColorMatrix Darken(float darkFactor)
 		{
-			return new System.Drawing.Imaging.ColorMatrix(
-				new float[][]
-				 {
+			return new ColorMatrix(
+				new[]
+				    {
 					new float[] {1, 0, 0, 0, 0},
 					new float[] {0, 1, 0, 0, 0},
 					new float[] {0, 0, 1, 0, 0},
 					new float[] {0, 0, 0, 1, 0},
-					new float[] {darkFactor, darkFactor, darkFactor, 0, 1}});
+					new[] {darkFactor, darkFactor, darkFactor, 0, 1}});
 
 		}
 
 		private static ColorMatrix DarkGold()
 		{
-			return new System.Drawing.Imaging.ColorMatrix(
-				new float[][]
-				 {
+			return new ColorMatrix(
+				new[]
+				    {
 					new float[] {1, 0, 0, 0, 0},
 					new float[] {0, 1, 0, 0, 0},
 					new float[] {0, 0, 1, 0, 0},
 					new float[] {0, 0, 0, 1, 0},
-					new float[] {-0.2F, -0.2F, -0.3F, 0, 1}});
+					new[] {-0.2F, -0.2F, -0.3F, 0, 1}});
 
 		}
 
 		private static ColorMatrix GoldenDarken()
 		{
-			return new System.Drawing.Imaging.ColorMatrix(
-				new float[][]
-				 {
-					new float[] {1, 0, 0, 0, 0},
-					new float[] {0, 1, 0, 0, 0},
-					new float[] {0, 0, 1, 0, 0},
-					new float[] {0, 0, 0, 1, 0},
-					new float[] {-0.1F, -0.2F, -0.3F, 0, 1}});
+			return new ColorMatrix(
+				new[]
+				    {
+					new[] {1F, 0, 0, 0, 0},
+					new[] {0, 1F, 0, 0, 0},
+					new[] {0, 0, 1F, 0, 0},
+					new[] {0, 0, 0, 1F, 0},
+					new[] {-0.1F, -0.2F, -0.3F, 0, 1}});
 		}
 
 		private static ColorMatrix GreenyBlue()
 		{
-			return new System.Drawing.Imaging.ColorMatrix(
-							new float[][]
-				{
-				new float[] {0.5F, 0, 0, 0, 0},
-				new float[] {0, 1, 0, 0, 0},
-				new float[] {0, 0.1F, 1, 0, 0},
-				new float[] {0, 0, 0, 1, 0},
-				new float[] {0, 0, 0, 0, 1}});
-
+			return new ColorMatrix(new[] 
+            {
+				new[] {0.5F, 0, 0, 0, 0},
+				new[] {0, 1F, 0, 0, 0},
+				new[] {0, 0.1F, 1, 0, 0},
+				new[] {0, 0, 0, 1F, 0},
+				new[] {0, 0, 0, 0, 1F}
+            });
 		}
 
 		private static ColorMatrix Blue()
 		{
-			return new System.Drawing.Imaging.ColorMatrix(
-				new float[][]
-				{
-				new float[] {1, 0, 0, 0, 0},
-				new float[] {0, 0.9F, 0, 0, 0},
-				new float[] {0, 0, 1, 0, 0},
-				new float[] {0, 0, 0, 1, 0},
-				new float[] {-0.6F, -0.2F, 0.5F, 0, 1}});
+			return new ColorMatrix(
+				new[]
+				    {
+				new[] {1F, 0, 0, 0, 0},
+				new[] {0, 0.9F, 0, 0, 0},
+				new[] {0, 0, 1F, 0, 0},
+				new[] {0, 0, 0, 1F, 0},
+				new[] {-0.6F, -0.2F, 0.5F, 0, 1}});
 
 		}
 
 		private static ColorMatrix Golden()
 		{
 			// ColorMatrix cm = new ColorMatrix();
-			return new System.Drawing.Imaging.ColorMatrix(
-				new float[][]
-				{
-				new float[] {1, 0, 0, 0, 0},
-				new float[] {0, 1, 0, 0, 0},
-				new float[] {0, 0, 1, 0, 0},
-				new float[] {0.5F, 0, 0, 1, 0},
-				new float[] {-0.1F, -0.1F, -1F, 0, 1}});
-
-		}
-
-		#endregion
-
+			return new ColorMatrix(new[] 
+            {
+				new[] {1F, 0, 0, 0, 0},
+				new[] {0, 1F, 0, 0, 0},
+				new[] {0, 0, 1F, 0, 0},
+				new[] {0.5F, 0, 0, 1F, 0},
+				new[] {-0.1F, -0.1F, -1F, 0, 1}
+            });
+            }
 	}
 
-	#region Enums
-
-	public enum ButtonEffect
+    public enum ButtonEffect
 	{
 		None, Mapped, MappedPending, Disabled, UnmappedPending, DisabledPending, EnabledPending
 	}
@@ -667,12 +641,6 @@ namespace KeyMapper
 		TripleWideBlank = 4,
 		QuadrupleWideBlank = 5
 	} ;
-
-	#endregion
-
-
-
-
 }
 
 

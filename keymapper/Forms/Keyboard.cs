@@ -1,33 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Collections;
-using System.Configuration;
-using System.IO;
 using System.Globalization;
 using KeyMapper.Classes;
+using KeyMapper.Controls;
 using Microsoft.Win32;
 using System.Drawing.Imaging;
 
-namespace KeyMapper
+namespace KeyMapper.Forms
 {
     public partial class KeyboardForm : KMBaseForm
     {
-
-
-        #region Fields and properties
-
         float _buttonScale;
         float _keySize;
         int _paddingWidth;
         bool _hasNumberPad;
         bool _keysOnly;
-        KeyMapper.KeySniffer _sniffer;
+        KeySniffer _sniffer;
         bool _cancelSlideshow;
 
         // Because we are intercepting a keypress before it is processed, can't ask
@@ -41,8 +32,6 @@ namespace KeyMapper
         // Different arrangement of ALT and CTRL keys.
         bool _isMacKeyboard;
 
-        ToolTip _tooltip = new ToolTip();
-
         // ContextMenu _contextMenu = new ContextMenu();
         // KeyPictureBox _contextBox;
 
@@ -50,34 +39,29 @@ namespace KeyMapper
 
         int[] _rowTerminators;
 
-        public ToolTip FormToolTip
-        {
-            get { return _tooltip; }
-            set { _tooltip = value; }
-        }
-
-        #endregion
+        private ToolTip FormToolTip;
 
         #region Form Methods
 
         public KeyboardForm()
         {
+            FormToolTip = new ToolTip();
 
             InitializeComponent();
             FormsManager.RegisterMainForm(this);
 
-			int currentDPI = AppController.DpiY ;
+			int currentDpi = AppController.DpiY ;
 
-			if (currentDPI < 96)
-				menu.Height = (int)(menu.Height * (96F / (float)currentDPI)); // Menu will always show even is fonts are set to less than 100%
-			else if (currentDPI > 96)
-                menu.Height = (int)(menu.Height * ((float)currentDPI / 96F));
+			if (currentDpi < 96)
+				menu.Height = (int)(menu.Height * (96F / currentDpi)); // Menu will always show even is fonts are set to less than 100%
+			else if (currentDpi > 96)
+                menu.Height = (int)(menu.Height * (currentDpi / 96F));
 
             LoadUserSettings();
 
             ResizeToAspect();
 
-			if (currentDPI != 96)
+			if (currentDpi != 96)
 				PositionKeyboardCombo();
 
             // This needs to be done after location and size of this form are fully determined.
@@ -156,7 +140,7 @@ namespace KeyMapper
             if (oldFilter == MappingFilter.Boot
                 && MappingsManager.GetMappingCount(MappingFilter.Boot) > 0
                 && MappingsManager.GetMappingCount(MappingFilter.User) == 0
-                && (AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista))
+                && (AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC))
             {
                 MappingsManager.SetFilter(MappingFilter.Boot);
             }
@@ -382,15 +366,12 @@ namespace KeyMapper
             // Set the event handler unless filter is boot mappings and user can't write to boot mappings and this isn't Vista
             if (((MappingsManager.Filter == MappingFilter.Boot
                 && !AppController.UserCanWriteBootMappings
-                && !AppController.OperatingSystemIsVista)) == false)
+                && !AppController.OperatingSystemImplementsUAC)) == false)
             {
-                box.DoubleClick += new EventHandler(KeyDoubleClick);
-                // box.MouseDown += new MouseEventHandler(KeyPictureBoxMouseDown);
-                // box.ContextMenu = _contextMenu;
+                box.DoubleClick += KeyDoubleClick;
             }
 
-            string toolTipText;
-            toolTipText = box.Map.MappingDescription();
+            string toolTipText = box.Map.MappingDescription();
 
             if (String.IsNullOrEmpty(toolTipText) == false)
                 FormToolTip.SetToolTip(box, toolTipText);
@@ -495,7 +476,7 @@ namespace KeyMapper
                 StatusLabelRestartLogoff.Visible = false;
             }
 
-            StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !AppController.OperatingSystemIsVista);
+            StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !AppController.OperatingSystemImplementsUAC);
         }
 
         void SetFilterStatusLabelText()
@@ -513,7 +494,7 @@ namespace KeyMapper
 
                     case MappingFilter.Boot:
                         StatusLabelMappingDisplayType.Text =
-                            (AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista ? "Editing" : "Showing") + " Boot Mappings";
+                            (AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC ? "Editing" : "Showing") + " Boot Mappings";
                         StatusLabelMappingDisplayType.Visible = true;
                         break;
 
@@ -574,7 +555,7 @@ namespace KeyMapper
             tempArr.Sort();
             keyboardComboData = new ArrayList(KeyboardHelper.InstalledKeyboards.Count + 1);
             // Add the current keyboard and a separator:
-            keyboardComboData.Add(new KeyMapper.ComboItemSeparator.SeparatorItem(KeyMapper.KeyboardHelper.GetKeyboardName()));
+            keyboardComboData.Add(new KeyMapper.ComboItemSeparator.SeparatorItem(KeyboardHelper.GetKeyboardName()));
             keyboardComboData.AddRange(tempArr);
 
             KeyboardListCombo.DataSource = keyboardComboData;
@@ -682,7 +663,7 @@ namespace KeyMapper
             capsLockToolStripMenuItem.Checked = _isCapsLockOn;
             numLockToolStripMenuItem.Checked = _isNumLockOn;
             scrollLockToolStripMenuItem.Checked = _isScrollLockOn;
-            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista;
+            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC;
         }
 
         void SetMappingsMenuButtonStates()
@@ -718,7 +699,7 @@ namespace KeyMapper
                 MappingsManager.IsLogOnRequired() != false));
 
             onlyShowBootMappingsToolStripMenuItem.Text = "Boot Mappings" +
-              (AppController.UserCanWriteBootMappings || AppController.OperatingSystemIsVista ? String.Empty : " (Read Only)");
+              (AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC ? String.Empty : " (Read Only)");
 
             // Mappings - check current view
             showAllMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.All);
@@ -1149,9 +1130,6 @@ namespace KeyMapper
             MappingsManager.SaveUserMappingsToKeyMapperKey(true);
         }
 
-     
-
-        #region Stress test
 
         private void keyboardSlideshowToolStripMenuItemClick(object sender, EventArgs e)
         {
@@ -1178,8 +1156,6 @@ namespace KeyMapper
             this.Text = caption;
 
         }
-
-        #endregion
 
         private void resetUserSetingsToolStripMenuItem_Click(object sender, EventArgs e)
         {

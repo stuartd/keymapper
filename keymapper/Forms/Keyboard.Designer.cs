@@ -1,4 +1,6 @@
-namespace KeyMapper
+using KeyMapper.Controls;
+
+namespace KeyMapper.Forms
 {
 	partial class KeyboardForm
 	{
@@ -87,7 +89,7 @@ namespace KeyMapper
             this.StatusLabelRestartLogoff = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelReadOnly = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelMappingDisplayType = new System.Windows.Forms.ToolStripStatusLabel();
-            this.KeyboardListCombo = new KeyMapper.KeyboardListCombo();
+            this.KeyboardListCombo = new KeyboardListCombo();
             this.menu.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();

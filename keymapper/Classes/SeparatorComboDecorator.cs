@@ -8,25 +8,24 @@ namespace KeyMapper
 	/// </summary>
 	public static class ComboItemSeparator
 	{
+	    static ComboItemSeparator()
+	    {
+	        VerticalItemPadding = 4;
+	        SeparatorHeight = 3;
+	    }
 
-		private const int _separatorHeight = 3;
-		private const int _verticalItemPadding = 4;
+	    public static int SeparatorHeight { get; private set; }
 
-		public static int SeparatorHeight
+	    public static int VerticalItemPadding { get; private set; }
+
+	    internal class SeparatorItem
 		{
-			get { return _separatorHeight; }
-		}
-
-		public static int VerticalItemPadding
-		{
-			get { return _verticalItemPadding; }
-		}
-
-		internal class SeparatorItem
-		{
-			private string _name;
-			public SeparatorItem(string name)
-			{ this._name = name; }
+			private readonly string _name;
+			
+            public SeparatorItem(string name)
+			{
+			    _name = name;
+			}
 
 			public override string ToString()
 			{
@@ -39,13 +38,15 @@ namespace KeyMapper
 
 		}
 
-		internal static void MeasureComboItem(object sender, System.Windows.Forms.MeasureItemEventArgs e)
+		internal static void MeasureComboItem(object sender, MeasureItemEventArgs e)
 		{
-			if (e is System.Windows.Forms.MeasureItemEventArgs && e.Index == -1)
-			{ return; }
+			if (e.Index == -1)
+			{
+			    return;
+			}
 
 			ComboBox combo = sender as ComboBox;
-			if (sender != null)
+			if (combo != null)
 			{
 				object comboBoxItem = combo.Items[e.Index];
 
@@ -62,13 +63,13 @@ namespace KeyMapper
 			}
 		}
 
-		internal static void DrawComboItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
+		internal static void DrawComboItem(object sender, DrawItemEventArgs e)
 		{
 			if (e.Index == -1)
 			{ return; }
 
 			ComboBox combo = sender as ComboBox;
-			if (sender != null)
+			if (combo != null)
 			{
 				object comboBoxItem = combo.Items[e.Index];
 

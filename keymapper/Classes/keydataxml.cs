@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Xml.XPath;
 using System.Globalization;
 using System.IO;
-using KeyMapper.Classes;
+using KeyMapper.Interfaces;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
 
     class KeyDataXml : IKeyData
@@ -14,36 +14,27 @@ namespace KeyMapper
         /// This class handles extracting the key data from XML files
         /// via XPath.
 
-        #region Fields
-
         System.Reflection.Assembly _currentassembly = null;
-        string _keyfilename = "keycodes.xml";
-        string _keyboardfilename = "keyboards.xml";
-        XPathNavigator _navigator;
-        string _commonlyUsedKeysGroupName = "Commonly Used";
-        string _allKeysGroupName = "All Keys";
 
-        #endregion
+        const string _keyfilename = "keycodes.xml";
+        const string _keyboardfilename = "keyboards.xml";
+        readonly XPathNavigator _navigator;
+        const string _commonlyUsedKeysGroupName = "Commonly Used";
+        const string AllKeysGroupName = "All Keys";
 
-        #region Constructor
         public KeyDataXml()
         {
-
             _currentassembly = System.Reflection.Assembly.GetExecutingAssembly();
+         
             // Initialise our navigator from the embedded XML keys file.
             using (Stream xmlstream = GetXMLDocumentAsStream(_keyfilename))
             {
                 XPathDocument document = new XPathDocument(xmlstream);
                 _navigator = document.CreateNavigator();
             }
-
         }
 
-        #endregion
-
-        #region XML Methods
-
-        private System.IO.Stream GetXMLDocumentAsStream(string name)
+        private Stream GetXMLDocumentAsStream(string name)
         {
             return _currentassembly.GetManifestResourceStream("KeyMapper.XML." + name);
         }
@@ -60,10 +51,6 @@ namespace KeyMapper
             return String.Empty;
         }
 
-        #endregion
-
-        #region IKeyData Members
-
         public KeyboardLayoutType GetKeyboardLayoutType(string locale)
         {
             if (String.IsNullOrEmpty(locale))
@@ -79,10 +66,8 @@ namespace KeyMapper
                 XPathDocument document = new XPathDocument(xmlstream);
                 XPathNavigator nav = document.CreateNavigator();
 
-                iterator = (XPathNodeIterator)nav.Select(expression);
-
+                iterator = nav.Select(expression);
             }
-
 
             int value = 0; // Default to US 
 
@@ -99,7 +84,7 @@ namespace KeyMapper
             return (KeyboardLayoutType)value;
         }
 
-        public List<string> GetGroupList(int threshold)
+        public IEnumerable<string> GetGroupList(int threshold)
         {
             string expression;
             XPathNodeIterator iterator;
@@ -109,7 +94,7 @@ namespace KeyMapper
             {
                 case -1:
                     // Get all the group names: add an extra one at the top with all the keys in.
-                    groups.Add(_allKeysGroupName);
+                    groups.Add(AllKeysGroupName);
                     expression = "/KeycodeData/keycodes/group[not(.=preceding::*/group)] ";
                     iterator = (XPathNodeIterator)_navigator.Select(expression);
 
@@ -164,19 +149,21 @@ namespace KeyMapper
 
         public List<string> GetSortedGroupList(int threshold)
         {
-            List<string> groups = GetGroupList(threshold);
-            groups.Sort();
-            return groups;
+            IEnumerable<string> groups = GetGroupList(threshold);
+            
+            var sortedGroups = new List<string>(groups);
+            sortedGroups.Sort();
+
+            return sortedGroups;
         }
-
-
+        
         public Dictionary<string, int> GetGroupMembers(string groupname, int threshold)
         {
 
             // Enumerate group.
             string queryExpression;
 
-            if (groupname == _allKeysGroupName)
+            if (groupname == AllKeysGroupName)
                 queryExpression = @"/KeycodeData/keycodes[group!='Unmappable Keys']";
             else if (groupname == _commonlyUsedKeysGroupName)
                 queryExpression = @"/KeycodeData/keycodes[useful>='2'" + "]";
@@ -207,7 +194,7 @@ namespace KeyMapper
             return dir;
         }
 
-        public List<int> LocalizableKeys
+        public IList<int> LocalizableKeys
         {
             get
             {
@@ -215,15 +202,13 @@ namespace KeyMapper
             }
         }
 
-        public List<int> NonLocalizableKeys
+        public IList<int> NonLocalizableKeys
         {
             get
             {
                 return GetKeys(false);
             }
         }
-
-        #endregion
 
         private List<int> GetKeys(bool localizable)
         {

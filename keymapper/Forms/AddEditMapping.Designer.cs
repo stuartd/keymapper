@@ -1,3 +1,5 @@
+using KeyMapper.Controls;
+
 namespace KeyMapper
 {
 	partial class AddEditMapping
@@ -31,8 +33,8 @@ namespace KeyMapper
 		private void InitializeComponent()
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddEditMapping));
-            this.FromKeyPictureBox = new KeyMapper.KMPictureBox();
-            this.ToKeyPictureBox = new KeyMapper.KMPictureBox();
+            this.FromKeyPictureBox = new KMPictureBox();
+            this.ToKeyPictureBox = new KMPictureBox();
             this.MapButton = new System.Windows.Forms.Button();
             this.KeyListsPanel = new System.Windows.Forms.TableLayoutPanel();
             this.KeysByGroupListbox = new System.Windows.Forms.ListBox();
@@ -46,7 +48,7 @@ namespace KeyMapper
             this.CaptureAndCancelButton = new System.Windows.Forms.Button();
             this.DisableButton = new System.Windows.Forms.Button();
             this.EmptyPanel = new System.Windows.Forms.Panel();
-            this.PanelFader = new KeyMapper.PanelFader();
+            this.PanelFader = new PanelFader();
             this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FromKeyPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ToKeyPictureBox)).BeginInit();

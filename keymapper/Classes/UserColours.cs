@@ -1,175 +1,163 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Configuration;
-using KeyMapper.Classes;
 using Microsoft.Win32;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
+    static class UserColourSettingManager
+    {
+        public static event EventHandler<EventArgs> ColoursChanged;
+        static bool _loaded;
 
-	static class UserColourSettingManager
-	{
+        static readonly Dictionary<ButtonEffect, UserColourSetting> settings 
+            = new Dictionary<ButtonEffect, UserColourSetting>();
 
-		public static event EventHandler<EventArgs> ColoursChanged ;
-		static bool _loaded ;
+        static UserColourSettingManager()
+        {
+            ColoursChanged += delegate { LoadColours(); };
+        }
 
-		static Dictionary<ButtonEffect, UserColourSetting> _settings = new Dictionary<ButtonEffect, UserColourSetting>();
+        private static void LoadColours()
+        {
+            settings.Clear();
+            foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
+            {
+                UserColourSetting setting = GetColourSettingFromRegistry(effect);
+                if (setting != null)
+                {
+                    settings.Add(effect, setting);
+                }
+            }
+        }
 
-		static UserColourSettingManager()
-		{
-			ColoursChanged += delegate(object sender, EventArgs e) { LoadColours(); };
-		}
-				
-		private static void LoadColours()
-		{
-			_settings.Clear();
-			foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
-			{
-				UserColourSetting setting = GetColourSettingFromRegistry(effect);
-				if (setting != null)
-					_settings.Add(effect, setting);
-			}
-		}
+        public static void SaveSetting(ButtonEffect effect, ColorMatrix cm, int FontColour)
+        {
+            string key = AppController.ApplicationRegistryKeyName;
+            string subkey = effect.ToString();
 
+            RegistryKey reg = Registry.CurrentUser.CreateSubKey(key + @"\UserColours\" + subkey);
 
-		public static void SaveSetting(ButtonEffect effect, ColorMatrix cm, int FontColour)
-		{
+            if (reg == null)
+                return;
 
-			string key = AppController.ApplicationRegistryKeyName;
-			string subkey = effect.ToString();
+            reg.SetValue("FontColour", FontColour);
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    string name = "Matrix"
+                        + i.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                        + j.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-			RegistryKey reg = Registry.CurrentUser.CreateSubKey(key + @"\UserColours\" + subkey);
+                    object value = cm.GetType().GetProperty(name).GetValue(cm, null);
+                    // Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
+                    reg.SetValue(name, (float)System.Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
+                }
+            }
 
-			if (reg == null)
-				return;
+            RaiseColoursChangedEvent();
+        }
 
-			reg.SetValue("FontColour", FontColour);
-			for (int i = 0; i < 5; i++)
-			{
-				for (int j = 0; j < 5; j++)
-				{
-					string name = "Matrix"
-						+ i.ToString(System.Globalization.CultureInfo.InvariantCulture)
-						+ j.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        public static void RaiseColoursChangedEvent()
+        {
+            if (ColoursChanged != null)
+                ColoursChanged(null, null);
+        }
 
-					object value = cm.GetType().GetProperty(name).GetValue(cm, null);
-					// Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
-					reg.SetValue(name, (float)System.Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
-				}
-			}
+        public static UserColourSetting GetColourSettings(ButtonEffect effect)
+        {
+            if (_loaded == false)
+            {
+                LoadColours();
+                _loaded = true;
+            }
 
-			RaiseColoursChangedEvent();
-
-		}
-
-		public static void RaiseColoursChangedEvent()
-		{
-
-			if (ColoursChanged != null)
-				ColoursChanged(null, null);
-
-		}
-
-		public static UserColourSetting GetColourSettings(ButtonEffect effect)
-		{
-			if (_loaded == false)
-			{
-				LoadColours();
-				_loaded = true;
-			}
-
-			if (_settings.ContainsKey(effect))
-				return _settings[effect];
-			else
-				return null;
-
-		}
+            if (settings.ContainsKey(effect))
+                return settings[effect];
+            
+            return null;
+        }
 
 
-		private static UserColourSetting GetColourSettingFromRegistry(ButtonEffect effect)
-		{
+        private static UserColourSetting GetColourSettingFromRegistry(ButtonEffect effect)
+        {
+            // Need to be defensively minded as user could change, 
+            // delete, or change type of registry settings. 
 
-			// Need to be defensively minded as user could change, 
-			// delete, or change type of registry settings. 
+            string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\" + effect.ToString();
 
-			string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\" + effect.ToString();
-		
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey(subkey);
-			if (reg == null) // No settings have been defined for this effect
-				return null;
-			
-			UserColourSetting setting = new UserColourSetting();
+            RegistryKey reg = Registry.CurrentUser.OpenSubKey(subkey);
+            if (reg == null) // No settings have been defined for this effect
+                return null;
 
-			// User may have changed type of FontColour
-			// Using nullable int as any possible integer value could be a valid 
-			// ToARGB() result (well, I'm assuming it could anyway)
+            UserColourSetting setting = new UserColourSetting();
 
-			int? FontColourArgb = null;
+            // User may have changed type of FontColour
+            // Using nullable int as any possible integer value could be a valid 
+            // ToARGB() result (well, I'm assuming it could anyway)
 
-			object value = reg.GetValue("FontColour");
-			if (value == null || reg.GetValueKind("FontColour") != RegistryValueKind.DWord)
-				FontColourArgb = Color.Black.ToArgb();
-			else
-				FontColourArgb = (int?)value ;
+            int? fontColourArgb;
 
-			setting.FontColour = Color.FromArgb((int)FontColourArgb);
+            object value = reg.GetValue("FontColour");
+            if (value == null || reg.GetValueKind("FontColour") != RegistryValueKind.DWord)
+                fontColourArgb = Color.Black.ToArgb();
+            else
+                fontColourArgb = (int?)value;
 
-			ColorMatrix cm = new ColorMatrix();
+            setting.FontColour = Color.FromArgb((int)fontColourArgb);
 
-			for (int i = 0; i < 5; i++)
-			{
-				for (int j = 0; j < 5; j++)
-				{
-					string name = "Matrix"
-						+ i.ToString(System.Globalization.CultureInfo.InvariantCulture)
-						+ j.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            ColorMatrix cm = new ColorMatrix();
 
-					value = reg.GetValue(name);
-					if (value != null)
-					{
-						Single svalue;
-						if (System.Single.TryParse(value.ToString(), out svalue))
-						{
-							cm.GetType().GetProperty(name).SetValue(cm, svalue, null);
-						}
-					}
-				}
-			}
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    string name = "Matrix"
+                        + i.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                        + j.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-			setting.Matrix = cm;
+                    value = reg.GetValue(name);
+                    if (value != null)
+                    {
+                        Single svalue;
+                        if (System.Single.TryParse(value.ToString(), out svalue))
+                        {
+                            cm.GetType().GetProperty(name).SetValue(cm, svalue, null);
+                        }
+                    }
+                }
+            }
 
-			return setting;
-		}
-	}
+            setting.Matrix = cm;
 
-	public class UserColourSetting
-	{
-		// This is the class that will be stored in the user settings for custom colours
-		ColorMatrix _matrix = new ColorMatrix();
-		int _fontColour = Color.Black.ToArgb();
+            return setting;
+        }
+    }
 
-		public Color FontColour
-		{
-			get
-			{
-				return Color.FromArgb(_fontColour);
-			}
-			set
-			{
-				_fontColour = value.ToArgb(); 
-			}
-		}
+    public class UserColourSetting
+    {
+        // This is the class that will be stored in the user settings for custom colours
+        ColorMatrix _matrix = new ColorMatrix();
+        int _fontColour = Color.Black.ToArgb();
 
-		public ColorMatrix Matrix
-		{
-			get { return _matrix; }
-			set { _matrix = value; }
-		}
+        public Color FontColour
+        {
+            get
+            {
+                return Color.FromArgb(_fontColour);
+            }
+            set
+            {
+                _fontColour = value.ToArgb();
+            }
+        }
 
-		public UserColourSetting() { }
-
-	}
+        public ColorMatrix Matrix
+        {
+            get { return _matrix; }
+            set { _matrix = value; }
+        }
+    }
 }

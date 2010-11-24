@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Text;
 using System.Globalization;
+using KeyMapper.Classes;
 
 namespace KeyMapper
 {
