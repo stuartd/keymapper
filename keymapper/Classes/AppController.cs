@@ -29,6 +29,23 @@ namespace KeyMapper.Classes
 
         private static LocalizedKeySet _currentLayout;
 
+        // Base font size for drawing text on keys
+        private static float _baseFontSize;
+
+        // KeyMapper's own reg key in HKCU
+        private const string _appKeyName = @"Software\KeyMapper";
+
+        // Whether current user can write to HKLM
+        private static bool _canWriteBootMappings;
+
+        // User mappings don't work on W2k or Windows 7
+        private static bool _isWindows2000;
+        private static bool _isWindows7OrLater;
+
+        // Trickery needed to write to HKLM on Vista
+        private static bool _isVista;
+
+        // Single instance handle
         private static AppMutex _appMutex;
 
         // Redirect console output
@@ -177,6 +194,13 @@ namespace KeyMapper.Classes
         }
 
 
+        public static bool OperatingSystemOnlySupportsBootMappings
+        {
+         get
+         {
+           return _isWindows2000 || _isWindows7OrLater; }
+        }
+
         public static void ClearLogFile()
         {
             if (_consoleWriterStream != null)
@@ -185,8 +209,9 @@ namespace KeyMapper.Classes
                 Console.WriteLine("Log file cleared: {0}", DateTime.Now);
             }
             else
+{
                 Console.Write("Can't clear log in debug mode.");
-        }
+}       }
 
         public static void RedirectConsoleOutput()
         {
@@ -666,7 +691,12 @@ namespace KeyMapper.Classes
                 (Environment.OSVersion.Version.Major < 5
                  | (Environment.OSVersion.Version.Major == 5 & Environment.OSVersion.Version.Minor == 0));
 
+            _isWindows7OrLater = System.Environment.OSVersion.Version.Major > 6;
+
+            _isVista = System.Environment.OSVersion.Version.Major > 5;
+
             // Including Server 2008 (6.1) as it allows user mappings like Vista does.
+            // Server 2008 R2 - TODO test upstairs.
             OperatingSystemIsVista = Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 1;
 
             OperatingSystemIsWindows7OrLater = Environment.OSVersion.Version.Major > 6

@@ -41,8 +41,6 @@ namespace KeyMapper.Forms
 
         private ToolTip FormToolTip;
 
-        #region Form Methods
-
         public KeyboardForm()
         {
             FormToolTip = new ToolTip();
@@ -50,19 +48,19 @@ namespace KeyMapper.Forms
             InitializeComponent();
             FormsManager.RegisterMainForm(this);
 
-			int currentDpi = AppController.DpiY ;
+            int currentDpi = AppController.DpiY;
 
-			if (currentDpi < 96)
-				menu.Height = (int)(menu.Height * (96F / currentDpi)); // Menu will always show even is fonts are set to less than 100%
-			else if (currentDpi > 96)
+            if (currentDpi < 96)
+                menu.Height = (int)(menu.Height * (96F / currentDpi)); // Menu will always show even is fonts are set to less than 100%
+            else if (currentDpi > 96)
                 menu.Height = (int)(menu.Height * (currentDpi / 96F));
 
             LoadUserSettings();
 
             ResizeToAspect();
 
-			if (currentDpi != 96)
-				PositionKeyboardCombo();
+            if (currentDpi != 96)
+                PositionKeyboardCombo();
 
             // This needs to be done after location and size of this form are fully determined.
             FormsManager.OpenChildForms();
@@ -87,12 +85,12 @@ namespace KeyMapper.Forms
         }
 
 
-		private void PositionKeyboardCombo()
-		{
-			// Combo needs to go in the middle of the status bar..
-			 KeyboardListCombo.Top = (StatusBar.Top + ((StatusBar.Height - KeyboardListCombo.Height) / 2));
+        private void PositionKeyboardCombo()
+        {
+            // Combo needs to go in the middle of the status bar..
+            KeyboardListCombo.Top = (StatusBar.Top + ((StatusBar.Height - KeyboardListCombo.Height) / 2));
 
-		}
+        }
         private void LoadUserSettings()
         {
 
@@ -184,7 +182,7 @@ namespace KeyMapper.Forms
             FormToolTip.RemoveAll();
             FormToolTip.SetToolTip(KeyboardListCombo, "Change the displayed keyboard");
 
-              // Need to make sure these dispose as they have bitmap resources, so not using Controls.Clear()
+            // Need to make sure these dispose as they have bitmap resources, so not using Controls.Clear()
             // as it didn't release them properly..
             for (int i = this.KeyboardPanel.Controls.Count - 1; i >= 0; i--)
                 this.KeyboardPanel.Controls[i].Dispose();
@@ -422,15 +420,10 @@ namespace KeyMapper.Forms
                 string bootmaptext = string.Empty;
                 if (bootmaps != 0)
                 {
-                    if (AppController.OperatingSystemSupportsUserMappings)
-                    {
-                        // TODO string.Format
-                       bootmaptext = bootmaps.ToString() + " boot mapping" + (bootmaps != 1 ? "s" : "");
-                    }
-                    else
-                    {
-                        bootmaptext = bootmaps.ToString() + " mapping" + (bootmaps != 1 ? "s" : "");
-                    }
+                    bootmaptext =
+                        AppController.OperatingSystemSupportsUserMappings
+                        ? string.Format("{0} boot mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""))
+                        : string.Format("{0} mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""));
                 }
 
                 if (usermaps != 0)
@@ -481,9 +474,10 @@ namespace KeyMapper.Forms
 
         void SetFilterStatusLabelText()
         {
-
             if (AppController.OperatingSystemSupportsUserMappings == false)
+            {
                 StatusLabelMappingDisplayType.Visible = false;
+            }
             else
             {
                 switch (MappingsManager.Filter)
@@ -519,26 +513,21 @@ namespace KeyMapper.Forms
 
         void SaveUserSettings()
         {
+            Properties.Settings userSettings = new Properties.Settings
+                {
+                    KeyboardFormLocation = this.Location,
+                    KeyboardFormWidth = this.Width,
+                    KeyboardFormHasNumberPad = this._hasNumberPad,
+                    KeyboardFormHasMacKeyboard = this._isMacKeyboard,
+                    ColourMapFormOpen = FormsManager.IsColourMapFormOpen(),
+                    MappingListFormOpen = FormsManager.IsMappingListFormOpen(),
+                    LastMappingsFilter = (int)MappingsManager.Filter,
+                    UserHasSavedSettings = true
+                };
 
-            Properties.Settings userSettings = new Properties.Settings();
-            userSettings.KeyboardFormLocation = this.Location;
-            userSettings.KeyboardFormWidth = this.Width;
-
-            userSettings.KeyboardFormHasNumberPad = this._hasNumberPad;
-            userSettings.KeyboardFormHasMacKeyboard = this._isMacKeyboard;
-
-            userSettings.ColourMapFormOpen = FormsManager.IsColourMapFormOpen();
-            userSettings.MappingListFormOpen = FormsManager.IsMappingListFormOpen();
-
-            userSettings.LastMappingsFilter = (int)MappingsManager.Filter;
-
-            userSettings.UserHasSavedSettings = true;
             // userSettings.KeyboardLayout = (int)AppController.KeyboardLayout;
             userSettings.Save();
-
         }
-
-        #endregion
 
         #region Keyboard methods
 
@@ -640,11 +629,11 @@ namespace KeyMapper.Forms
                     break;
                 default:
                     AppController.SwitchKeyboardLayout(KeyboardLayoutType.US);
-					Redraw();
+                    Redraw();
                     break;
             }
-			// In order to remember the choice..
-			AppController.AddCustomLayout();
+            // In order to remember the choice..
+            AppController.AddCustomLayout();
         }
 
         #endregion
@@ -668,9 +657,9 @@ namespace KeyMapper.Forms
 
         void SetMappingsMenuButtonStates()
         {
-
             // Mappings - view all, user, boot.
             if (AppController.OperatingSystemSupportsUserMappings)
+            {
                 switch (MappingsManager.Filter)
                 {
                     case MappingFilter.All:
@@ -685,9 +674,11 @@ namespace KeyMapper.Forms
                         clearAllToolStripMenuItem.Text = "C&lear All User Mappings";
                         break;
                 }
+            }
             else
+            {
                 clearAllToolStripMenuItem.Text = "C&lear All Mappings";
-
+            }
             // Disable "Clear Mappings" and "Revert To Saved Mappings" if user can't write mappings at all
             // and the latter if there haven't been any changes
 
@@ -695,8 +686,7 @@ namespace KeyMapper.Forms
 
             revertToSavedToolStripMenuItem.Enabled = (
                 AppController.UserCannotWriteMappings == false &&
-                (MappingsManager.IsRestartRequired() != false ||
-                MappingsManager.IsLogOnRequired() != false));
+                (MappingsManager.IsRestartRequired() || MappingsManager.IsLogOnRequired()));
 
             onlyShowBootMappingsToolStripMenuItem.Text = "Boot Mappings" +
               (AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC ? String.Empty : " (Read Only)");
@@ -707,7 +697,10 @@ namespace KeyMapper.Forms
             onlyShowUserMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.User);
 
             // Whether to allow the option of viewing user mappings (ie not on W2K) 
+
+            chooseMappingsToolStripMenuItem.Visible = (AppController.OperatingSystemOnlySupportsBootMappings == false);
             chooseMappingsToolStripMenuItem.Visible = (AppController.OperatingSystemSupportsUserMappings);
+
 
             selectFromCaptureToolStripMenuItem.Enabled = !AppController.UserCannotWriteMappings;
         }
@@ -745,9 +738,9 @@ namespace KeyMapper.Forms
         }
 
 
-		//private void SetAdvancedMenuButtonStates()
-		//{
-		//}
+        //private void SetAdvancedMenuButtonStates()
+        //{
+        //}
 
 
         #endregion
@@ -880,7 +873,7 @@ namespace KeyMapper.Forms
         private void changeOrientationMenuItemClick(object sender, EventArgs e)
         {
             ChangeKeyOrientation();
-       }
+        }
 
         private void capsLockMenuItemClick(object sender, EventArgs e)
         {
@@ -1150,7 +1143,7 @@ namespace KeyMapper.Forms
                 KeyboardListCombo.SelectedIndex = i;
                 Application.DoEvents();
                 System.Threading.Thread.Sleep(250);
-                
+
             }
             this.KeyPress -= KeyboardFormKeyPress;
             this.Text = caption;
