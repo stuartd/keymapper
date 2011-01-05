@@ -6,6 +6,7 @@ using System.Collections;
 using System.Globalization;
 using KeyMapper.Classes;
 using KeyMapper.Controls;
+using KeyMapper.Providers;
 using Microsoft.Win32;
 using System.Drawing.Imaging;
 
@@ -138,7 +139,7 @@ namespace KeyMapper.Forms
             if (oldFilter == MappingFilter.Boot
                 && MappingsManager.GetMappingCount(MappingFilter.Boot) > 0
                 && MappingsManager.GetMappingCount(MappingFilter.User) == 0
-                && (AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC))
+                && (AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC))
             {
                 MappingsManager.SetFilter(MappingFilter.Boot);
             }
@@ -364,7 +365,7 @@ namespace KeyMapper.Forms
             // Set the event handler unless filter is boot mappings and user can't write to boot mappings and this isn't Vista
             if (((MappingsManager.Filter == MappingFilter.Boot
                 && !AppController.UserCanWriteBootMappings
-                && !AppController.OperatingSystemImplementsUAC)) == false)
+                && !OperatingSystemVersionProvider.OperatingSystemImplementsUAC)) == false)
             {
                 box.DoubleClick += KeyDoubleClick;
             }
@@ -421,7 +422,7 @@ namespace KeyMapper.Forms
                 if (bootmaps != 0)
                 {
                     bootmaptext =
-                        AppController.OperatingSystemSupportsUserMappings
+                        OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings
                         ? string.Format("{0} boot mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""))
                         : string.Format("{0} mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""));
                 }
@@ -469,12 +470,12 @@ namespace KeyMapper.Forms
                 StatusLabelRestartLogoff.Visible = false;
             }
 
-            StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !AppController.OperatingSystemImplementsUAC);
+            StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !OperatingSystemVersionProvider.OperatingSystemImplementsUAC);
         }
 
         void SetFilterStatusLabelText()
         {
-            if (AppController.OperatingSystemSupportsUserMappings == false)
+            if (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings == false)
             {
                 StatusLabelMappingDisplayType.Visible = false;
             }
@@ -488,7 +489,7 @@ namespace KeyMapper.Forms
 
                     case MappingFilter.Boot:
                         StatusLabelMappingDisplayType.Text =
-                            (AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC ? "Editing" : "Showing") + " Boot Mappings";
+                            (AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC ? "Editing" : "Showing") + " Boot Mappings";
                         StatusLabelMappingDisplayType.Visible = true;
                         break;
 
@@ -652,13 +653,13 @@ namespace KeyMapper.Forms
             capsLockToolStripMenuItem.Checked = _isCapsLockOn;
             numLockToolStripMenuItem.Checked = _isNumLockOn;
             scrollLockToolStripMenuItem.Checked = _isScrollLockOn;
-            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC;
+            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC;
         }
 
         void SetMappingsMenuButtonStates()
         {
             // Mappings - view all, user, boot.
-            if (AppController.OperatingSystemSupportsUserMappings)
+            if (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings)
             {
                 switch (MappingsManager.Filter)
                 {
@@ -689,7 +690,7 @@ namespace KeyMapper.Forms
                 (MappingsManager.IsRestartRequired() || MappingsManager.IsLogOnRequired()));
 
             onlyShowBootMappingsToolStripMenuItem.Text = "Boot Mappings" +
-              (AppController.UserCanWriteBootMappings || AppController.OperatingSystemImplementsUAC ? String.Empty : " (Read Only)");
+              (AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC ? String.Empty : " (Read Only)");
 
             // Mappings - check current view
             showAllMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.All);
@@ -698,10 +699,8 @@ namespace KeyMapper.Forms
 
             // Whether to allow the option of viewing user mappings (ie not on W2K) 
 
-            chooseMappingsToolStripMenuItem.Visible = (AppController.OperatingSystemOnlySupportsBootMappings == false);
-            chooseMappingsToolStripMenuItem.Visible = (AppController.OperatingSystemSupportsUserMappings);
-
-
+            chooseMappingsToolStripMenuItem.Visible = (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings);
+         
             selectFromCaptureToolStripMenuItem.Enabled = !AppController.UserCannotWriteMappings;
         }
 

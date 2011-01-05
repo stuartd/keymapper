@@ -14,6 +14,7 @@ using System.Security;
 using System.Text;
 using System.Windows.Forms;
 using KeyMapper.Properties;
+using KeyMapper.Providers;
 using Microsoft.Win32;
 
 namespace KeyMapper.Classes
@@ -28,22 +29,6 @@ namespace KeyMapper.Classes
         // Keyboard layout and keys
 
         private static LocalizedKeySet _currentLayout;
-
-        // Base font size for drawing text on keys
-        private static float _baseFontSize;
-
-        // KeyMapper's own reg key in HKCU
-        private const string _appKeyName = @"Software\KeyMapper";
-
-        // Whether current user can write to HKLM
-        private static bool _canWriteBootMappings;
-
-        // User mappings don't work on W2k or Windows 7
-        private static bool _isWindows2000;
-        private static bool _isWindows7OrLater;
-
-        // Trickery needed to write to HKLM on Vista
-        private static bool _isVista;
 
         // Single instance handle
         private static AppMutex _appMutex;
@@ -85,42 +70,12 @@ namespace KeyMapper.Classes
                 // (XP doesn't allow process elevation, so if you can't then you can't)
                 return (MappingsManager.Filter == MappingFilter.Boot
                         && !UserCanWriteBootMappings
-                        && !OperatingSystemImplementsUAC);
+                        && !OperatingSystemVersionProvider.OperatingSystemImplementsUAC);
             }
         }
 
         public static bool UserCanWriteBootMappings { get; private set; }
 
-        private static bool OperatingSystemIsWindows2000 { get; set; }
-
-        private static bool OperatingSystemIsVista { get; set; }
-
-        public static bool OperatingSystemImplementsUAC
-        {
-            get { return (OperatingSystemIsVista || OperatingSystemIsWindows7OrLater); }
-        }
-
-        private static bool OperatingSystemIsWindows7OrLater { get; set; }
-
-        public static bool OperatingSystemImplementsTaskDialog
-        {
-            get { return (OperatingSystemIsVista || OperatingSystemIsWindows7OrLater); }
-        }
-
-        public static bool OperatingSystemSupportsUserMappings
-        {
-            get
-            {
-                if (OperatingSystemIsWindows7OrLater || OperatingSystemIsWindows2000)
-                {
-                    return false;
-                }
-
-                // XP, Vista
-                return true;
-            }
-        }
-        
         public static string ApplicationRegistryKeyName { get; private set; }
 
         public static KeyboardLayoutType KeyboardLayout { get; private set; }
@@ -172,7 +127,7 @@ namespace KeyMapper.Classes
             }
         }
 
-       
+
 
         #region Log methods
 
@@ -193,14 +148,6 @@ namespace KeyMapper.Classes
             }
         }
 
-
-        public static bool OperatingSystemOnlySupportsBootMappings
-        {
-         get
-         {
-           return _isWindows2000 || _isWindows7OrLater; }
-        }
-
         public static void ClearLogFile()
         {
             if (_consoleWriterStream != null)
@@ -209,9 +156,10 @@ namespace KeyMapper.Classes
                 Console.WriteLine("Log file cleared: {0}", DateTime.Now);
             }
             else
-{
+            {
                 Console.Write("Can't clear log in debug mode.");
-}       }
+            }
+        }
 
         public static void RedirectConsoleOutput()
         {
@@ -537,7 +485,7 @@ namespace KeyMapper.Classes
 
             KeyboardHelper.UnloadLayout();
 
-            if ((OperatingSystemImplementsUAC)
+            if ((OperatingSystemVersionProvider.OperatingSystemImplementsUAC)
                 && UserCanWriteBootMappings == false
                 && (MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
@@ -687,22 +635,6 @@ namespace KeyMapper.Classes
             UserCanWriteBootMappings = RegistryHelper.CanUserWriteToKey
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
-            OperatingSystemIsWindows2000 =
-                (Environment.OSVersion.Version.Major < 5
-                 | (Environment.OSVersion.Version.Major == 5 & Environment.OSVersion.Version.Minor == 0));
-
-            _isWindows7OrLater = System.Environment.OSVersion.Version.Major > 6;
-
-            _isVista = System.Environment.OSVersion.Version.Major > 5;
-
-            // Including Server 2008 (6.1) as it allows user mappings like Vista does.
-            // Server 2008 R2 - TODO test upstairs.
-            OperatingSystemIsVista = Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 1;
-
-            OperatingSystemIsWindows7OrLater = Environment.OSVersion.Version.Major > 6
-                                               |
-                                               (Environment.OSVersion.Version.Major == 6 &&
-                                                Environment.OSVersion.Version.Minor > 0);
 
             // When was the system booted? (Milliseconds vs Ticks is correct..)
             DateTime boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
@@ -756,7 +688,7 @@ namespace KeyMapper.Classes
             MappingsManager.GetMappingsFromRegistry();
 
             // If user mappings are inappropriate (win2k, win 7) default to boot.
-            if (OperatingSystemSupportsUserMappings == false)
+            if (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings == false)
             {
                 MappingsManager.SetFilter(MappingFilter.Boot);
             }
@@ -779,7 +711,7 @@ namespace KeyMapper.Classes
             if (savedMappingsExist == false)
                 MappingsManager.StoreUnsavedMappings();
 
-            if (OperatingSystemImplementsUAC)
+            if (OperatingSystemVersionProvider.OperatingSystemImplementsUAC)
                 MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
 
             DpiX = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
@@ -813,7 +745,8 @@ namespace KeyMapper.Classes
 
         public static void ValidateUserConfigFile()
         {
-            // Even with these checks, occasinally get a "failed to load configuration system" exception.
+            // Even with these checks, occasionally get a "failed to load configuration system" 
+            // exception.
             try
             {
                 // If file is corrupt this will trigger an exception
