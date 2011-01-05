@@ -9,6 +9,7 @@ using KeyMapper.Controls;
 using KeyMapper.Providers;
 using Microsoft.Win32;
 using System.Drawing.Imaging;
+using KeyMapper.Classes.Interop;
 
 namespace KeyMapper.Forms
 {

@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 using KeyMapper.Classes;
+using KeyMapper.Classes.Interop;
 
 namespace KeyMapper.Controls
 {

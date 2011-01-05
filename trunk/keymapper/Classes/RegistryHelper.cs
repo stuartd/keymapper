@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Win32;
+using KeyMapper.Classes.Interop;
 
 namespace KeyMapper.Classes
 {

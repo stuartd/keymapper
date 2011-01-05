@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.IO;
+using KeyMapper.Classes.Interop;
 
 namespace KeyMapper.Classes
 {

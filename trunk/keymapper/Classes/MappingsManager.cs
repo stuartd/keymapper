@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KeyMapper.Classes.Interop;
 using KeyMapper.Providers;
 using Microsoft.Win32;
 using System.Windows.Forms;
