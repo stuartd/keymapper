@@ -40,7 +40,7 @@ namespace KeyMapper.Classes
 			LogProvider.RedirectConsoleOutput();
 #endif
 
-			AppController.ValidateUserConfigFile();
+            ConfigFileProvider.ValidateUserConfigFile();
 
 			Properties.Settings userSettings = new Properties.Settings();
 			if (userSettings.UpgradeRequired)
