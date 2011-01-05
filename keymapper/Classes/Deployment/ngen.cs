@@ -5,13 +5,11 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
 
-
-namespace KeyMapper
+namespace KeyMapper.Classes.Deployment
 {
 	[RunInstaller(true)]
 	public class Ngen : Installer
 	{
-
 		// From http://dotnetperls.com/Content/Ngen-Installer-Class.aspx
 		public override void Install(IDictionary stateSaver)
 		{
@@ -20,17 +18,21 @@ namespace KeyMapper
 			string runtimeStr = RuntimeEnvironment.GetRuntimeDirectory();
 			string ngenStr = Path.Combine(runtimeStr, "ngen.exe");
 
-			Process process = new Process();
-			process.StartInfo.FileName = ngenStr;
+			Process process = new Process
+			                      {
+			                          StartInfo =
+			                              {
+			                                  FileName = ngenStr
+			                              }
+			                      };
 
-			string assemblyPath = Context.Parameters["assemblypath"];
+		    string assemblyPath = Context.Parameters["assemblypath"];
 
 			process.StartInfo.Arguments = "install \"" + assemblyPath + "\"";
 
 			process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 			process.Start();
 			process.WaitForExit();
-		
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
+using KeyMapper.Classes.Interop;
 using KeyMapper.Forms;
 
 namespace KeyMapper.Classes

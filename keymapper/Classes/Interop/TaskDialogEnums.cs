@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KeyMapper
+namespace KeyMapper.Classes.Interop
 {
     // From http://bartdesmet.net/blogs/bart/archive/2006/09/26/4470.aspx
 

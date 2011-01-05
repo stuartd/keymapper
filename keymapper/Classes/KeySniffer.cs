@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using KeyMapper.Classes;
+using KeyMapper.Classes.Interop;
 
 namespace KeyMapper
 {

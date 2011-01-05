@@ -13,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text;
 using System.Windows.Forms;
+using KeyMapper.Classes.Interop;
 using KeyMapper.Properties;
 using KeyMapper.Providers;
 using Microsoft.Win32;
@@ -261,9 +262,7 @@ namespace KeyMapper.Classes
 
             try
             {
-                var process = new Process();
-                process.StartInfo.FileName = "regedit.exe";
-                process.StartInfo.Arguments = command;
+                var process = new Process {StartInfo = {FileName = "regedit.exe", Arguments = command}};
                 process.Start();
                 process.WaitForExit();
             }
