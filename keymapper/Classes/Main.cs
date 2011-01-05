@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using System.Security.Permissions;
 using KeyMapper.Forms;
+using KeyMapper.Providers;
 
 [assembly: CLSCompliant(true)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true, UnmanagedCode = true)]
@@ -36,7 +37,7 @@ namespace KeyMapper.Classes
 #if DEBUG
 #else
 			Console.Write("Redirecting console output");
-			AppController.RedirectConsoleOutput();
+			LogProvider.RedirectConsoleOutput();
 #endif
 
 			AppController.ValidateUserConfigFile();

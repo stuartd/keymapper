@@ -23,7 +23,6 @@ namespace KeyMapper.Classes
     {
         // Always use the provided method to get this
         // as substitutions must be made for some cultures unless Arial Unicode MS in installed
-        private const string ConsoleOutputFilename = "keymapper.log";
         private static string _defaultKeyFont = "Lucida Sans Unicode";
 
         // Keyboard layout and keys
@@ -32,10 +31,7 @@ namespace KeyMapper.Classes
 
         // Single instance handle
         private static AppMutex _appMutex;
-
-        // Redirect console output
-        private static StreamWriter _consoleWriterStream;
-
+        
         private static bool? _dotNetFrameworkSPInstalled;
 
         private static bool? _arialUnicodeMSInstalled;
@@ -84,9 +80,7 @@ namespace KeyMapper.Classes
 
         public static CultureInfo CurrentCultureInfo { get; private set; }
 
-        public static string LogFileName { get; private set; }
-
-        private static string KeyMapperFilePath
+       public static string KeyMapperFilePath
         {
             get
             {
@@ -99,37 +93,40 @@ namespace KeyMapper.Classes
         {
             get
             {
-                if (_dotNetFrameworkSPInstalled == null)
+                if (_dotNetFrameworkSPInstalled.HasValue == false)
                 {
-                    // The key exists in Vista and Windows 2008 Server
-                    // but no need to check it.
-                    if (Environment.OSVersion.Version.Major > 5)
-                        _dotNetFrameworkSPInstalled = true;
-                    else
-                    {
-                        int sp = 0;
-                        RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
-                            @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
-
-                        if (regkey != null)
-                        {
-                            sp = (int)regkey.GetValue("SP", 0);
-                            regkey.Close();
-                        }
-                        _dotNetFrameworkSPInstalled = (sp > 0);
-                    }
-                    if (_dotNetFrameworkSPInstalled == false)
-                        Console.WriteLine(
-                            "There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
+                    SetDotNetFrameworkSPInstalled();
                 }
 
-                return (bool)_dotNetFrameworkSPInstalled;
+                return _dotNetFrameworkSPInstalled.Value;
             }
         }
 
+        private static void SetDotNetFrameworkSPInstalled()
+        {
+            if (Environment.OSVersion.Version.Major > 5)
+            {
+                _dotNetFrameworkSPInstalled = true;
+            }
+            else
+            {
+                int sp = 0;
+                RegistryKey regkey = 
+                    Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
 
+                if (regkey != null)
+                {
+                    sp = (int)regkey.GetValue("SP", 0);
+                    regkey.Close();
+                }
 
-        #region Log methods
+                _dotNetFrameworkSPInstalled = (sp > 0);
+            }
+            if (_dotNetFrameworkSPInstalled == false)
+            {
+                Console.WriteLine(
+                    "There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");}
+        }
 
         public static void CreateAppDirectory()
         {
@@ -148,68 +145,7 @@ namespace KeyMapper.Classes
             }
         }
 
-        public static void ClearLogFile()
-        {
-            if (_consoleWriterStream != null)
-            {
-                _consoleWriterStream.BaseStream.SetLength(0);
-                Console.WriteLine("Log file cleared: {0}", DateTime.Now);
-            }
-            else
-            {
-                Console.Write("Can't clear log in debug mode.");
-            }
-        }
-
-        public static void RedirectConsoleOutput()
-        {
-            string path = LogFileName;
-            string existingLogEntries = String.Empty;
-
-            if (String.IsNullOrEmpty(path))
-                return;
-
-            if (File.Exists(path))
-            {
-                // In order to be able to clear the log, the streamwriter must be opened in create mode.
-                // so read the contents of the log first.
-
-                using (var sr = new StreamReader(path))
-                {
-                    existingLogEntries = sr.ReadToEnd();
-                }
-            }
-
-            _consoleWriterStream = new StreamWriter(path, false, Encoding.UTF8);
-            _consoleWriterStream.AutoFlush = true;
-            _consoleWriterStream.Write(existingLogEntries);
-
-            // Direct standard output to the log file.
-            Console.SetOut(_consoleWriterStream);
-
-            Console.WriteLine("Logging started: {0}", DateTime.Now);
-        }
-
-        public static void CloseConsoleOutput()
-        {
-            if (_consoleWriterStream != null)
-            {
-                _consoleWriterStream.Close();
-            }
-        }
-
-        public static void ViewLogFile()
-        {
-            string logfile = LogFileName;
-            if (string.IsNullOrEmpty(logfile))
-                return;
-
-            Process.Start(logfile);
-        }
-
-        #endregion
-
-        #region Key methods
+     #region Key methods
 
         public static Font GetButtonFont(float size, bool localizable)
         {
@@ -405,7 +341,6 @@ namespace KeyMapper.Classes
             LoadCustomKeyboardLayouts();
             SetLocale();
             EstablishSituation();
-            LogFileName = Path.Combine(KeyMapperFilePath, ConsoleOutputFilename);
         }
 
         private static void LoadCustomKeyboardLayouts()
@@ -490,7 +425,7 @@ namespace KeyMapper.Classes
                 && (MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
 
-            CloseConsoleOutput();
+            LogProvider.CloseConsoleOutput();
 
             foreach (string filepath in tempfiles)
             {

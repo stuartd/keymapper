@@ -1004,7 +1004,7 @@ namespace KeyMapper.Forms
 
         private void viewLogFileToolStripMenuItemClick(object sender, EventArgs e)
         {
-            AppController.ViewLogFile();
+            LogProvider.ViewLogFile();
         }
 
         private void setCurrentToggleKeysAtBootToolStripMenuItemClick(object sender, EventArgs e)
@@ -1108,11 +1108,10 @@ namespace KeyMapper.Forms
             bmp.Dispose();
 
         }
-
-
+        
         private void clearLogFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppController.ClearLogFile();
+            LogProvider.ClearLogFile();
         }
 
         #endregion
@@ -1121,7 +1120,6 @@ namespace KeyMapper.Forms
         {
             MappingsManager.SaveUserMappingsToKeyMapperKey(true);
         }
-
 
         private void keyboardSlideshowToolStripMenuItemClick(object sender, EventArgs e)
         {
@@ -1142,7 +1140,6 @@ namespace KeyMapper.Forms
                 KeyboardListCombo.SelectedIndex = i;
                 Application.DoEvents();
                 System.Threading.Thread.Sleep(250);
-
             }
             this.KeyPress -= KeyboardFormKeyPress;
             this.Text = caption;
