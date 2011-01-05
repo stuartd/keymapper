@@ -14,7 +14,6 @@ using System.Security;
 using System.Text;
 using System.Windows.Forms;
 using KeyMapper.Classes.Interop;
-using KeyMapper.Properties;
 using KeyMapper.Providers;
 using Microsoft.Win32;
 
