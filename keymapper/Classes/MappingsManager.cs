@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KeyMapper.Providers;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
@@ -761,7 +762,7 @@ namespace KeyMapper.Classes
 
                 string question = "Are you really sure you want to " + action + "this key?";
 
-                if (AppController.OperatingSystemImplementsTaskDialog)
+                if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
                 {
                     TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper", TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.Question);
                     if (dr != TaskDialogResult.Yes)
@@ -818,7 +819,7 @@ namespace KeyMapper.Classes
 
                     const string question = "Do you still want to remap Pause?";
 
-                    if (AppController.OperatingSystemImplementsTaskDialog)
+                    if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
                     {
                         TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper", TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.Question);
                         if (dr != TaskDialogResult.Yes)

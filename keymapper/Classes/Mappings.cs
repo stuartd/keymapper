@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KeyMapper.Classes
+﻿namespace KeyMapper.Classes
 {
     public enum Mappings
     {
