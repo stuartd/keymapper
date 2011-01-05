@@ -105,7 +105,8 @@ namespace KeyMapper.Classes
 
         private static void SetDotNetFrameworkSPInstalled()
         {
-            if (Environment.OSVersion.Version.Major > 5)
+            // Vista and later already have the SP, and all support TaskDialog..
+            if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
             {
                 _dotNetFrameworkSPInstalled = true;
             }

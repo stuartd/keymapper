@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using KeyMapper.Providers;
 using Microsoft.Win32;
 using System.IO;
 using KeyMapper.Classes.Interop;
@@ -226,11 +227,9 @@ namespace KeyMapper.Classes
         public static string GetKeyboardName()
         {
             string locale = GetCurrentKeyboardLocale();
-            if (locale == null)
-            {
-                return "Keyboard name cannot be determined";
-            }
-            return GetKeyboardName(locale);
+            return locale == null 
+                ? "Keyboard name cannot be determined" 
+                : GetKeyboardName(locale);
         }
 
         public static void GetInstalledKeyboardList()
@@ -272,7 +271,9 @@ namespace KeyMapper.Classes
             IEnumerable<string> kblist = GetInstalledKeyboardListInNameOrder();
             StringBuilder keyboards = new StringBuilder();
             foreach (string keyboard in kblist)
-                keyboards.Append(keyboard + (char)13 + (char)10);
+            {
+                keyboards.Append(keyboard + (char) 13 + (char) 10);
+            }
 
             string keyboardListFile = Path.Combine(Path.GetTempPath(), "installed keyboards.txt");
             AppController.RegisterTempFile(keyboardListFile); // Reluctantly register for deletion
@@ -307,10 +308,8 @@ namespace KeyMapper.Classes
 
             keyboardname = registry.GetValue("Layout Text").ToString();
 
-            // 5.1 and upwards are valid
-            if (
-                (Environment.OSVersion.Version.Major == 5 & Environment.OSVersion.Version.Minor > 0)
-                | Environment.OSVersion.Version.Major > 5)
+            // XP and up, then.
+            if (OperatingSystemVersionProvider.IsWindows2000 == false) 
             {
                 // XP or later - can get localised name for keyboard:
                 // (if it exists - pass empty string so that's the return if it doesn't)
