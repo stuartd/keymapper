@@ -32,7 +32,7 @@ namespace KeyMapper.Providers
             _minorVersion = minorVersion;
         }
 
-        private static bool IsWindows2000
+        public static bool IsWindows2000
         {
             get
             {
