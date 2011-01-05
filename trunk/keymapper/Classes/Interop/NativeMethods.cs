@@ -2,7 +2,7 @@
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace KeyMapper.Classes
+namespace KeyMapper.Classes.Interop
 {
 	class NativeMethods
 	{
