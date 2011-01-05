@@ -32,7 +32,7 @@ namespace KeyMapper.Classes
 
         // Single instance handle
         private static AppMutex _appMutex;
-        
+
         private static bool? _dotNetFrameworkSPInstalled;
 
         private static bool? _arialUnicodeMSInstalled;
@@ -81,7 +81,7 @@ namespace KeyMapper.Classes
 
         public static CultureInfo CurrentCultureInfo { get; private set; }
 
-       public static string KeyMapperFilePath
+        public static string KeyMapperFilePath
         {
             get
             {
@@ -112,7 +112,7 @@ namespace KeyMapper.Classes
             else
             {
                 int sp = 0;
-                RegistryKey regkey = 
+                RegistryKey regkey =
                     Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
 
                 if (regkey != null)
@@ -126,7 +126,8 @@ namespace KeyMapper.Classes
             if (_dotNetFrameworkSPInstalled == false)
             {
                 Console.WriteLine(
-                    "There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");}
+                    "There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
+            }
         }
 
         public static void CreateAppDirectory()
@@ -146,8 +147,6 @@ namespace KeyMapper.Classes
             }
         }
 
-     #region Key methods
-
         public static Font GetButtonFont(float size, bool localizable)
         {
             if (size == 0)
@@ -160,12 +159,10 @@ namespace KeyMapper.Classes
             return font;
         }
 
-
         public static void SetFontSizes(float scale)
         {
             // See what font size fits the scaled-down button 
             float basefontsize = 36F;
-
 
             // Not using ButtonImages.GetButtonImage as that is where we were called from..
             using (Font font = GetButtonFont(basefontsize, false))
@@ -188,21 +185,23 @@ namespace KeyMapper.Classes
         {
             // Look up the values in the current localized layout.
             if (scancode == 0 && extended == 0)
+            {
                 return "Disabled";
+            }
 
             if (scancode == -1 && extended == -1)
+            {
                 return "";
+            }
 
             int hash = GetHashFromKeyData(scancode, extended);
             if (_currentLayout.ContainsKey(hash))
             {
                 return _currentLayout.GetKeyName(hash);
             }
-            else
-            {
-                Console.WriteLine("Unknown key: sc {0} ex {1}", scancode, extended);
-                return "Unknown";
-            }
+
+            Console.WriteLine("Unknown key: sc {0} ex {1}", scancode, extended);
+            return "Unknown";
         }
 
         public static Bitmap GetBitmap(BlankButton button)
@@ -223,8 +222,6 @@ namespace KeyMapper.Classes
         {
             return _currentLayout.IsKeyLocalizable(hash);
         }
-
-        #endregion
 
         public static int GetHighestCommonDenominator(int value1, int value2)
         {
@@ -262,7 +259,14 @@ namespace KeyMapper.Classes
 
             try
             {
-                var process = new Process {StartInfo = {FileName = "regedit.exe", Arguments = command}};
+                var process = new Process
+                                  {
+                                      StartInfo =
+                                          {
+                                              FileName = "regedit.exe",
+                                              Arguments = command
+                                          }
+                                  };
                 process.Start();
                 process.WaitForExit();
             }
@@ -300,10 +304,15 @@ namespace KeyMapper.Classes
 
                 sw.WriteLine(@"[" + hive + @"\" + key + "]");
                 sw.Write("\"" + valueName + "\"=");
+
                 if (String.IsNullOrEmpty(value))
+                {
                     sw.Write("-");
+                }
                 else
+                {
                     sw.WriteLine((char)34 + value + (char)34);
+                }
             }
 
             WriteRegistryFileVista(filename);
@@ -650,58 +659,6 @@ namespace KeyMapper.Classes
 
             DpiX = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
             DpiY = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
-        }
-
-        private static void DeleteInvalidUserFileFromException(ConfigurationException ex)
-        {
-            Console.WriteLine("User Config file is invalid - resetting to default");
-
-            string fileName = "";
-
-            if (!string.IsNullOrEmpty(ex.Filename))
-            {
-                fileName = ex.Filename;
-            }
-            else
-            {
-                var innerException =
-                    ex.InnerException as ConfigurationErrorsException;
-                if (innerException != null && !string.IsNullOrEmpty(innerException.Filename))
-                {
-                    fileName = innerException.Filename;
-                }
-            }
-            if (File.Exists(fileName))
-            {
-                File.Delete(fileName);
-            }
-        }
-
-        public static void ValidateUserConfigFile()
-        {
-            // Even with these checks, occasionally get a "failed to load configuration system" 
-            // exception.
-            try
-            {
-                // If file is corrupt this will trigger an exception
-                Configuration config = ConfigurationManager.OpenExeConfiguration
-                    (ConfigurationUserLevel.PerUserRoamingAndLocal);
-            }
-            catch (ConfigurationErrorsException ex)
-            {
-                DeleteInvalidUserFileFromException(ex);
-                return;
-            }
-            try
-            {
-                // Access a property to find any other error types - invalid XML etc.
-                var userSettings = new Settings();
-                Point p = userSettings.ColourEditorLocation;
-            }
-            catch (ConfigurationErrorsException ex)
-            {
-                DeleteInvalidUserFileFromException(ex);
-            }
         }
 
         private static void SetLocale()
