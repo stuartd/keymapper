@@ -1,25 +1,19 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using System.Security;
+using System.Text;
+using System.Windows.Forms;
 using KeyMapper.Classes.Interop;
 using KeyMapper.Providers;
 using Microsoft.Win32;
-using System.Windows.Forms;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
-using System.Globalization;
 
 namespace KeyMapper.Classes
 {
     public static class MappingsManager
     {
-        public static event EventHandler<EventArgs> MappingsChanged;
-
-        // Undo/Redo stacks are implemented as pairs.
-        private static readonly UndoRedoMappingStack undostack = new UndoRedoMappingStack();
-        private static readonly UndoRedoMappingStack redostack = new UndoRedoMappingStack();
-
         // Saved mapping data
         private static Collection<KeyMapping> _savedBootMappings = new Collection<KeyMapping>();
         private static Collection<KeyMapping> _savedUserMappings = new Collection<KeyMapping>();
@@ -27,7 +21,7 @@ namespace KeyMapper.Classes
         // Mapping data
         private static Collection<KeyMapping> _bootMappings = new Collection<KeyMapping>();
         private static Collection<KeyMapping> _userMappings = new Collection<KeyMapping>();
-        private static Collection<KeyMapping> _allMappings = new Collection<KeyMapping>();
+        private static readonly Collection<KeyMapping> _allMappings = new Collection<KeyMapping>();
 
         // Current mappings based on current filter
         private static readonly Collection<KeyMapping> currentFilteredMappings = new Collection<KeyMapping>();
@@ -41,12 +35,14 @@ namespace KeyMapper.Classes
         // new mappings can be distinguished from them.
         private static Collection<KeyMapping> _unsavedMappings = new Collection<KeyMapping>();
 
+        // Undo/Redo stacks are implemented as pairs.
+        private static readonly UndoRedoMappingStack undostack = new UndoRedoMappingStack();
+        private static readonly UndoRedoMappingStack redostack = new UndoRedoMappingStack();
+
         static MappingsManager()
         {
             Filter = MappingFilter.All;
         }
-
-        public static MappingFilter Filter { get; private set; }
 
         public static int UndoStackCount
         {
@@ -57,6 +53,9 @@ namespace KeyMapper.Classes
         {
             get { return redostack.Count; }
         }
+
+        public static MappingFilter Filter { get; private set; }
+
 
         public static IEnumerable<KeyMapping> ClearedMappings
         {
@@ -84,28 +83,6 @@ namespace KeyMapper.Classes
             }
         }
 
-        private static void PushMappingsOntoUndoStack()
-        {
-            undostack.Push(CopyMappings(_userMappings), CopyMappings(_bootMappings));
-        }
-
-        private static void PushMappingsOntoRedoStack()
-        {
-            redostack.Push(CopyMappings(_userMappings), CopyMappings(_bootMappings));
-        }
-
-        private static void PopMappingsOffUndoStack()
-        {
-            _bootMappings = undostack.BootStack.Pop();
-            _userMappings = undostack.UserStack.Pop();
-        }
-
-        private static void PopMappingsOffRedoStack()
-        {
-            _bootMappings = redostack.BootStack.Pop();
-            _userMappings = redostack.UserStack.Pop();
-        }
-
         #region Mapping utility methods
 
         public static void StoreUnsavedMappings()
@@ -129,7 +106,7 @@ namespace KeyMapper.Classes
                 // Add everything to All Mappings
                 _allMappings.Add(bootmap);
 
-                bool _addToFilteredMappings = true;
+                bool addToFilteredMappings = true;
 
                 switch (Filter)
                 {
@@ -141,7 +118,7 @@ namespace KeyMapper.Classes
                         {
                             if (bootmap.From == usermap.From)
                             {
-                                _addToFilteredMappings = false;
+                                addToFilteredMappings = false;
                                 break;
                             }
                         }
@@ -149,14 +126,12 @@ namespace KeyMapper.Classes
                         break;
 
                     case MappingFilter.User:
-                        _addToFilteredMappings = false;
+                        addToFilteredMappings = false;
                         break;
-
                 }
 
-                if (_addToFilteredMappings)
+                if (addToFilteredMappings)
                     currentFilteredMappings.Add(bootmap);
-
             }
 
             foreach (KeyMapping usermap in _userMappings)
@@ -184,7 +159,7 @@ namespace KeyMapper.Classes
 
         private static Collection<KeyMapping> CopyMappings(Collection<KeyMapping> mappings)
         {
-            Collection<KeyMapping> copy = new Collection<KeyMapping>();
+            var copy = new Collection<KeyMapping>();
 
             foreach (KeyMapping map in mappings)
             {
@@ -197,7 +172,6 @@ namespace KeyMapper.Classes
         #endregion
 
         #region Public methods
-
 
         public static Collection<KeyMapping> GetMappings(MappingFilter filter)
         {
@@ -250,12 +224,10 @@ namespace KeyMapper.Classes
                 default:
                     return 0;
             }
-
         }
 
         public static bool IsRestartRequired()
         {
-
             if (clearedBootMappings.Count != 0)
                 return true;
 
@@ -290,7 +262,7 @@ namespace KeyMapper.Classes
             // Check whether the current boot mappings and the proposed boot mappings 
             // are the same: if not, they need saving
 
-            byte[] map = GetScancodeMapFromRegistry(MapLocation.KeyMapperVistaMappingsCache);
+            byte[] map = RegistryProvider.GetScancodeMapFromRegistry(MapLocation.KeyMapperVistaMappingsCache);
 
             if (map == null)
                 return false;
@@ -309,14 +281,8 @@ namespace KeyMapper.Classes
             return false;
         }
 
-        public static bool IsMapped(KeyMapping map)
-        {
-            return IsMapped(map, Filter);
-        }
-
         public static bool IsMapped(KeyMapping map, MappingFilter filter)
         {
-
             Collection<KeyMapping> maps;
 
             switch (filter)
@@ -345,7 +311,6 @@ namespace KeyMapper.Classes
             }
 
             return maps.Contains(map);
-
         }
 
         public static bool IsMappingPending(KeyMapping map)
@@ -373,7 +338,6 @@ namespace KeyMapper.Classes
             }
 
             return true;
-
         }
 
         public static KeyMapping GetKeyMapping(int scancode, int extended)
@@ -384,7 +348,7 @@ namespace KeyMapper.Classes
                     return mapping;
             }
 
-            return MappingsManager.GetEmptyMapping(new Key(scancode, extended));
+            return GetEmptyMapping(new Key(scancode, extended));
         }
 
         public static KeyMapping GetClearedMapping(int scancode, int extended)
@@ -454,7 +418,9 @@ namespace KeyMapper.Classes
             // Well, we need to write to HKLM under Vista.
             // Create a registry file and run it, user will have to allow regedit to run.
 
-            if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the changes to your boot mappings") == false)
+            if (
+                AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the changes to your boot mappings") ==
+                false)
                 return;
 
             string tempfile = ExportMappingsAsRegistryFile(MappingFilter.Boot, true);
@@ -464,14 +430,12 @@ namespace KeyMapper.Classes
 
         public static void SaveBootMappingsToKeyMapperKey()
         {
-
             SaveMappings(Mappings.CurrentBootMappings,
-                MapLocation.KeyMapperLocalMachineKeyboardLayout);
+                         MapLocation.KeyMapperLocalMachineKeyboardLayout);
             // As have overwritten our stored value with a new one, reload it ...
             GetMappingsFromRegistry(MapLocation.KeyMapperLocalMachineKeyboardLayout);
             // ... and recalculate mappings.
             PopulateMappingLists();
-
         }
 
         public static void SaveUserMappingsToKeyMapperKey()
@@ -480,16 +444,14 @@ namespace KeyMapper.Classes
         }
 
 
-
         public static void SaveUserMappingsToKeyMapperKey(bool raiseEvent)
         {
             SaveMappings(Mappings.CurrentUserMappings,
-                MapLocation.KeyMapperCurrentUserKeyboardLayout);
+                         MapLocation.KeyMapperCurrentUserKeyboardLayout);
             GetMappingsFromRegistry(MapLocation.KeyMapperCurrentUserKeyboardLayout);
             PopulateMappingLists();
             if (raiseEvent)
                 RaiseMappingsChangedEvent();
-
         }
 
         private static void SaveMappings()
@@ -501,7 +463,6 @@ namespace KeyMapper.Classes
 
         public static void SaveMappings(Mappings whichMappings, MapLocation whereToSave)
         {
-
             Collection<KeyMapping> maps;
 
             switch (whichMappings)
@@ -525,14 +486,13 @@ namespace KeyMapper.Classes
             RegistryHive hive = 0;
             string keyname = "", valuename = "";
 
-            GetRegistryLocation(whereToSave, ref hive, ref keyname, ref valuename);
+            RegistryProvider.GetRegistryLocation(whereToSave, ref hive, ref keyname, ref valuename);
 
             RegistryKey registry = null;
 
             // Need write access so prepare to fail 
             try
             {
-
                 if (hive == RegistryHive.LocalMachine)
                 {
                     registry = Registry.LocalMachine.OpenSubKey(keyname, true);
@@ -541,15 +501,14 @@ namespace KeyMapper.Classes
                 {
                     registry = Registry.CurrentUser.OpenSubKey(keyname, true);
                 }
-
             }
-            catch (System.Security.SecurityException ex)
+            catch (SecurityException ex)
             {
                 if (hive == RegistryHive.CurrentUser)
                 {
                     // Would expect to be able to write to HKCU
                     Console.WriteLine("Unexpected failure {2} opening {0} on {1} for write access",
-                        keyname, Enum.GetNames(typeof(Mappings))[(int)whichMappings], ex.Message);
+                                      keyname, Enum.GetNames(typeof (Mappings))[(int) whichMappings], ex.Message);
                 }
 
                 return;
@@ -571,48 +530,41 @@ namespace KeyMapper.Classes
             }
         }
 
-        public static byte[] GetMappingsAsByteArray(Collection<KeyMapping> maps)
+        private static byte[] GetMappingsAsByteArray(Collection<KeyMapping> maps)
         {
-
             // Turn mappings into a byte[] 
             int count = maps.Count;
-            int size = (16 + (count * 4));
+            int size = (16 + (count*4));
 
             // Check they are all zero.
 
-            byte[] bytemappings = new byte[size];
+            var bytemappings = new byte[size];
 
             // Allow for the null mapping at the end
-            bytemappings[8] = (byte)(count + 1);
+            bytemappings[8] = (byte) (count + 1);
 
-            int start = 12;
+            const int start = 12;
 
             for (int i = 0; i < count; i++)
             {
                 // Make sure we don't extend beyond array bounds
-                if (size > (start + (i * 4) + 3))
+                if (size <= (start + (i*4) + 3))
                 {
-                    KeyMapping map = maps[i];
-
-                    // First pair is the action - what the mapped key does.
-
-                    int word2 = map.To.Extended;
-
-                    bytemappings[start + (i * 4)] = (byte)map.To.Scancode;
-                    bytemappings[start + (i * 4) + 1] = (byte)map.To.Extended;
-
-                    // Second pair is the physical key which performs the new action
-                    bytemappings[start + (i * 4) + 2] = (byte)map.From.Scancode;
-                    bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
-                }
-                else
                     break;
+                }
+
+                KeyMapping map = maps[i];
+
+                // First pair is the action - what the mapped key does.
+                bytemappings[start + (i*4)] = (byte) map.To.Scancode;
+                bytemappings[start + (i*4) + 1] = (byte) map.To.Extended;
+
+                // Second pair is the physical key which performs the new action
+                bytemappings[start + (i*4) + 2] = (byte) map.From.Scancode;
+                bytemappings[start + (i*4) + 3] = (byte) map.From.Extended;
             }
 
             return bytemappings;
-
-
-
         }
 
         public static string ExportMappingsAsRegistryFile(MappingFilter filter, bool useTempFile)
@@ -633,26 +585,26 @@ namespace KeyMapper.Classes
             string filename;
 
             if (useTempFile)
-                filename = System.IO.Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
+                filename = Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
             else
             {
+                var fd = new SaveFileDialog
+                             {
+                                 AddExtension = true,
+                                 DefaultExt = "reg",
+                                 Filter = "Registry files (*.reg)|*.reg",
+                                 InitialDirectory =
+                                     Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                 OverwritePrompt = true,
+                                 FileName = "Key Mappings"
+                             };
 
-                SaveFileDialog fd = new SaveFileDialog
-                                        {
-                                            AddExtension = true,
-                                            DefaultExt = "reg",
-                                            Filter = "Registry files (*.reg)|*.reg",
-                                            InitialDirectory =
-                                                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                                            OverwritePrompt = true
-                                        };
 
                 if (AppController.DotNetFramework2ServicePackInstalled)
                 {
                     AppController.EnableVisualUpgrade(fd);
                 }
 
-                fd.FileName = "Key Mappings";
                 DialogResult dr = fd.ShowDialog();
 
                 if (dr != DialogResult.OK)
@@ -665,7 +617,7 @@ namespace KeyMapper.Classes
 
             int bootMappingCount = GetMappingCount(MappingFilter.Boot);
 
-            using (StreamWriter sw = new StreamWriter(filename, false, Encoding.Unicode))
+            using (var sw = new StreamWriter(filename, false, Encoding.Unicode))
             {
                 sw.WriteLine("Windows Registry Editor Version 5.00");
                 sw.WriteLine();
@@ -706,7 +658,6 @@ namespace KeyMapper.Classes
 
                     sw.WriteLine();
                 }
-
             }
 
             return filename;
@@ -716,12 +667,11 @@ namespace KeyMapper.Classes
         {
             for (int i = 0; i < bytemappings.GetLength(0); i++)
             {
-                sw.Write(bytemappings[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char)48));
+                sw.Write(bytemappings[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char) 48));
                 if (i < bytemappings.GetLength(0) - 1)
                     sw.Write(",");
             }
         }
-
 
         #endregion
 
@@ -753,26 +703,31 @@ namespace KeyMapper.Classes
             // If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
             // that it could be goodbye to CTRL-ALT-DEL
 
-            if ((scancode == 29 && extended == 0) || (scancode == 56 && extended == 0) || (scancode == 83 && extended == 224))
+            if ((scancode == 29 && extended == 0) || (scancode == 56 && extended == 0) ||
+                (scancode == 83 && extended == 224))
             {
                 string action = IsDisabledMapping(map) ? "disable " : "remap ";
 
                 string warning = "You are attempting to " + action + map.From.Name +
-                    " which is required for CTRL-ALT-DELETE." + (char)13 + "If you continue you may not be able to log on" +
-                " to your PC.";
+                                 " which is required for CTRL-ALT-DELETE." + (char) 13 +
+                                 "If you continue you may not be able to log on" +
+                                 " to your PC.";
 
                 string question = "Are you really sure you want to " + action + "this key?";
 
                 if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
                 {
-                    TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper", TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.Question);
+                    TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
+                                                                      TaskDialogButtons.Yes | TaskDialogButtons.No,
+                                                                      TaskDialogIcon.Question);
                     if (dr != TaskDialogResult.Yes)
                         return false;
                 }
                 else
                 {
-                    DialogResult dr = MessageBox.Show(warning + (char)13 + (char)13 + question, "Key Mapper", MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, 0);
+                    DialogResult dr = MessageBox.Show(warning + (char) 13 + (char) 13 + question, "Key Mapper",
+                                                      MessageBoxButtons.YesNo,
+                                                      MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, 0);
 
                     if (dr != DialogResult.Yes)
                         return false;
@@ -785,7 +740,6 @@ namespace KeyMapper.Classes
 
             if (scancode == 29 && extended == 225 && IsDisabledMapping(map) == false)
             {
-
                 // Is Num Lock already disabled or remapped?
                 bool numLockIsDisabled = false;
                 bool numLockIsMapped = false;
@@ -814,31 +768,32 @@ namespace KeyMapper.Classes
 
                 if (numLockIsDisabled == false)
                 {
-
                     string warning = "If you remap Pause, the Num Lock key will be disabled" +
-                        (numLockIsMapped ? ((char)13 + "and your existing Num Lock mapping will be removed.") : ".");
+                                     (numLockIsMapped
+                                          ? ((char) 13 + "and your existing Num Lock mapping will be removed.")
+                                          : ".");
 
                     const string question = "Do you still want to remap Pause?";
 
                     if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
                     {
-                        TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper", TaskDialogButtons.Yes | TaskDialogButtons.No, TaskDialogIcon.Question);
+                        TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
+                                                                          TaskDialogButtons.Yes | TaskDialogButtons.No,
+                                                                          TaskDialogIcon.Question);
                         if (dr != TaskDialogResult.Yes)
                             return false;
                     }
                     else
                     {
-
-                        DialogResult dr = MessageBox.Show(warning + (char)13 + (char)13 + question, "Key Mapper", MessageBoxButtons.YesNo,
-                                            MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0);
+                        DialogResult dr = MessageBox.Show(warning + (char) 13 + (char) 13 + question, "Key Mapper",
+                                                          MessageBoxButtons.YesNo,
+                                                          MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0);
 
                         if (dr != DialogResult.Yes)
                             return false;
                     }
                     disableNumLock = true;
                 }
-
-
             }
 
             if (noStackNoEventRaised == false)
@@ -856,7 +811,6 @@ namespace KeyMapper.Classes
                     _bootMappings.Remove(existingMap);
 
                 _bootMappings.Add(map);
-
             }
             else
             {
@@ -871,16 +825,14 @@ namespace KeyMapper.Classes
 
             if (disableNumLock)
             {
-                KeyMapping nl = new KeyMapping(new Key(69, 0), new Key(0, 0));
+                var nl = new KeyMapping(new Key(69, 0), new Key(0, 0));
                 AddMapping(nl, true);
-
             }
 
             if (noStackNoEventRaised == false)
                 RaiseMappingsChangedEvent();
 
             return true;
-
         }
 
         public static void DeleteMapping(KeyMapping map, MappingFilter filter)
@@ -924,7 +876,6 @@ namespace KeyMapper.Classes
             }
 
             RaiseMappingsChangedEvent();
-
         }
 
         public static void DeleteMapping(KeyMapping map)
@@ -965,7 +916,6 @@ namespace KeyMapper.Classes
 
         public static void RedoMappingChange()
         {
-
             if (redostack.Count < 1)
                 return;
 
@@ -980,85 +930,11 @@ namespace KeyMapper.Classes
 
         #region Registry methods
 
-        private static bool GetRegistryLocation(MapLocation which, ref RegistryHive hive, ref string keyname, ref string valuename)
-        {
-            hive = RegistryHive.CurrentUser;
-
-            switch (which)
-            {
-                case MapLocation.LocalMachineKeyboardLayout:
-                    hive = RegistryHive.LocalMachine;
-                    keyname = @"SYSTEM\CurrentControlSet\Control\Keyboard Layout";
-                    valuename = "Scancode Map";
-                    break;
-                case MapLocation.CurrentUserKeyboardLayout:
-                    keyname = @"Keyboard Layout";
-                    valuename = "Scancode Map";
-                    break;
-                case MapLocation.KeyMapperLocalMachineKeyboardLayout:
-                    keyname = AppController.ApplicationRegistryKeyName;
-                    valuename = "BootMaps";
-                    break;
-                case MapLocation.KeyMapperCurrentUserKeyboardLayout:
-                    keyname = AppController.ApplicationRegistryKeyName;
-                    valuename = "UserMaps";
-                    break;
-                case MapLocation.KeyMapperVistaMappingsCache:
-                    keyname = AppController.ApplicationRegistryKeyName;
-                    valuename = "VistaBootCache";
-                    break;
-                default:
-                    return false;
-            }
-
-            return true;
-        }
-
-        private static byte[] GetScancodeMapFromRegistry(MapLocation which)
-        {
-
-            RegistryKey registry = null;
-            byte[] bytecodes;
-            RegistryHive hive = RegistryHive.CurrentUser;
-            string keyname = "", valuename = "";
-
-            if (GetRegistryLocation(which, ref hive, ref keyname, ref valuename))
-            {
-                if (hive == RegistryHive.LocalMachine)
-                {
-                    registry = Registry.LocalMachine.OpenSubKey(keyname);
-                }
-                else if (hive == RegistryHive.CurrentUser)
-                {
-                    registry = Registry.CurrentUser.OpenSubKey(keyname);
-                }
-            }
-
-            if (registry == null)
-                return null;
-
-            object keyvalue = registry.GetValue(valuename, null);
-
-            if (keyvalue == null ||
-                registry.GetValueKind(valuename) != RegistryValueKind.Binary ||
-                keyvalue.GetType() != Type.GetType("System.Byte[]"))
-            {
-                // Not there, or not the right type.
-                return null;
-            }
-
-            // Can't see how this cast can fail, shrug, will return null anyway.
-            bytecodes = keyvalue as byte[];
-
-            return bytecodes;
-
-        }
-
         private static Collection<KeyMapping> GetMappingsFromScancodeMap(byte[] map, MappingType type)
         {
             // Transform the byte array into keymappings
 
-            Collection<KeyMapping> maps = new Collection<KeyMapping>();
+            var maps = new Collection<KeyMapping>();
 
             int count = 0;
             int length = map.GetLength(0);
@@ -1079,21 +955,21 @@ namespace KeyMapper.Classes
             for (int i = 0; i < count; i++)
             {
                 // Make sure we don't extend beyond array bounds
-                if (length >= (start + (i * 4) + 3))
+                if (length >= (start + (i*4) + 3))
                 {
                     // First pair is the action - what the mapped key does.
-                    int word1 = map[start + (i * 4)];
-                    int word2 = map[start + (i * 4) + 1];
+                    int word1 = map[start + (i*4)];
+                    int word2 = map[start + (i*4) + 1];
 
-                    Key tokey = new Key(word1, word2);
+                    var tokey = new Key(word1, word2);
 
                     // Second pair is the physical key which performs the new action
-                    word1 = map[start + (i * 4) + 2];
-                    word2 = map[start + (i * 4) + 3];
+                    word1 = map[start + (i*4) + 2];
+                    word2 = map[start + (i*4) + 3];
 
-                    Key fromkey = new Key(word1, word2);
+                    var fromkey = new Key(word1, word2);
 
-                    KeyMapping mapping = new KeyMapping(fromkey, tokey);
+                    var mapping = new KeyMapping(fromkey, tokey);
 
                     if (mapping.IsValid())
                     {
@@ -1101,9 +977,10 @@ namespace KeyMapper.Classes
                         maps.Add(mapping);
                     }
                     else
-                    // Just ignore it and hope it goes away.
-                    // A manually added - or garbled - entry could be invalid.
-                    { }
+                        // Just ignore it and hope it goes away.
+                        // A manually added - or garbled - entry could be invalid.
+                    {
+                    }
                 }
             }
 
@@ -1117,13 +994,11 @@ namespace KeyMapper.Classes
             GetMappingsFromRegistry(MapLocation.KeyMapperLocalMachineKeyboardLayout);
             GetMappingsFromRegistry(MapLocation.KeyMapperCurrentUserKeyboardLayout);
             PopulateMappingLists();
-
         }
 
         private static void GetMappingsFromRegistry(MapLocation location)
         {
-
-            Collection<KeyMapping> mappings = new Collection<KeyMapping>();
+            var mappings = new Collection<KeyMapping>();
 
             MappingType type = MappingType.Null;
             switch (location)
@@ -1139,7 +1014,7 @@ namespace KeyMapper.Classes
             }
 
 
-            byte[] map = GetScancodeMapFromRegistry(location);
+            byte[] map = RegistryProvider.GetScancodeMapFromRegistry(location);
 
             if (map != null)
                 mappings = GetMappingsFromScancodeMap(map, type);
@@ -1161,45 +1036,32 @@ namespace KeyMapper.Classes
                 default:
                     break;
             }
-
         }
 
         #endregion
 
-        private class UndoRedoMappingStack
+        public static event EventHandler<EventArgs> MappingsChanged;
+
+        private static void PushMappingsOntoUndoStack()
         {
-            public UndoRedoMappingStack()
-            {
-                BootStack = new Stack<Collection<KeyMapping>>();
-                UserStack = new Stack<Collection<KeyMapping>>();
-            }
+            undostack.Push(CopyMappings(_userMappings), CopyMappings(_bootMappings));
+        }
 
-            public Stack<Collection<KeyMapping>> UserStack { get; private set; }
+        private static void PushMappingsOntoRedoStack()
+        {
+            redostack.Push(CopyMappings(_userMappings), CopyMappings(_bootMappings));
+        }
 
-            public Stack<Collection<KeyMapping>> BootStack { get; private set; }
+        private static void PopMappingsOffUndoStack()
+        {
+            _bootMappings = undostack.BootStack.Pop();
+            _userMappings = undostack.UserStack.Pop();
+        }
 
-            public void Push(Collection<KeyMapping> usermaps, Collection<KeyMapping> bootmaps)
-            {
-                UserStack.Push(usermaps);
-                BootStack.Push(bootmaps);
-            }
-
-            public int Count
-            {
-                get
-                {
-                    return UserStack.Count;
-                }
-            }
-
-            public void Clear()
-            {
-                UserStack.Clear();
-                BootStack.Clear();
-            }
+        private static void PopMappingsOffRedoStack()
+        {
+            _bootMappings = redostack.BootStack.Pop();
+            _userMappings = redostack.UserStack.Pop();
         }
     }
 }
-
-
-
