@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="OperatingSystemCapabilityProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistryHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KeyMapper.csproj">
