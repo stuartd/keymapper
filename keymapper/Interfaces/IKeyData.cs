@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using KeyMapper.Classes;
 
 namespace KeyMapper.Interfaces
 {

@@ -41,7 +41,9 @@ namespace KeyMapper.Forms
 
         int[] _rowTerminators;
 
-        private ToolTip FormToolTip;
+        private readonly ToolTip FormToolTip;
+
+        private IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
 
         public KeyboardForm()
         {
@@ -140,7 +142,7 @@ namespace KeyMapper.Forms
             if (oldFilter == MappingFilter.Boot
                 && MappingsManager.GetMappingCount(MappingFilter.Boot) > 0
                 && MappingsManager.GetMappingCount(MappingFilter.User) == 0
-                && (AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC))
+                && (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC))
             {
                 MappingsManager.SetFilter(MappingFilter.Boot);
             }
@@ -222,7 +224,7 @@ namespace KeyMapper.Forms
             if (_keysOnly == false)
             {
                 // Function keys.
-                DrawRow(kl.Functions, left, top);
+                DrawRow(kl.FunctionKeys, left, top);
 
                 // Utility Keys
                 if (_hasNumberPad == false || desiredlayout == KeyboardLayoutType.US)
@@ -240,18 +242,18 @@ namespace KeyMapper.Forms
 
             }
 
-            // Typewriter keys
-            DrawRow(kl.Typewriter, left, top);
+            // TypewriterKeys keys
+            DrawRow(kl.TypewriterKeys, left, top);
 
             if (_keysOnly == false)
             {
                 // Navigation - Insert, Home, End etc
-                DrawRow(kl.Navigation, navleft, top);
+                DrawRow(kl.NavigationKeys, navleft, top);
 
                 // Number pad
                 if (_hasNumberPad)
                 {
-                    DrawRow(kl.NumberPad, numpadleft, top);
+                    DrawRow(kl.NumberPadKeys, numpadleft, top);
                 }
 
                 // Skip down and back for arrow keys
@@ -273,7 +275,7 @@ namespace KeyMapper.Forms
 
         }
 
-        void DrawRow(List<KeyboardRow> Rows, int leftstart, int top)
+        void DrawRow(IEnumerable<KeyboardRow> Rows, int leftstart, int top)
         {
             int left = leftstart;
 
@@ -366,7 +368,7 @@ namespace KeyMapper.Forms
             // Set the event handler unless filter is boot mappings and user can't write to boot mappings and this isn't Vista
             if (((MappingsManager.Filter == MappingFilter.Boot
                 && !AppController.UserCanWriteBootMappings
-                && !OperatingSystemVersionProvider.OperatingSystemImplementsUAC)) == false)
+                && !operatingSystemCapability.ImplementsUAC)) == false)
             {
                 box.DoubleClick += KeyDoubleClick;
             }
@@ -423,7 +425,7 @@ namespace KeyMapper.Forms
                 if (bootmaps != 0)
                 {
                     bootmaptext =
-                        OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings
+                        operatingSystemCapability.SupportsUserMappings
                         ? string.Format("{0} boot mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""))
                         : string.Format("{0} mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""));
                 }
@@ -471,12 +473,12 @@ namespace KeyMapper.Forms
                 StatusLabelRestartLogoff.Visible = false;
             }
 
-            StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !OperatingSystemVersionProvider.OperatingSystemImplementsUAC);
+            StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !operatingSystemCapability.ImplementsUAC);
         }
 
         void SetFilterStatusLabelText()
         {
-            if (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings == false)
+            if (operatingSystemCapability.SupportsUserMappings == false)
             {
                 StatusLabelMappingDisplayType.Visible = false;
             }
@@ -490,7 +492,7 @@ namespace KeyMapper.Forms
 
                     case MappingFilter.Boot:
                         StatusLabelMappingDisplayType.Text =
-                            (AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC ? "Editing" : "Showing") + " Boot Mappings";
+                            (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC ? "Editing" : "Showing") + " Boot Mappings";
                         StatusLabelMappingDisplayType.Visible = true;
                         break;
 
@@ -546,7 +548,7 @@ namespace KeyMapper.Forms
             tempArr.Sort();
             keyboardComboData = new ArrayList(KeyboardHelper.InstalledKeyboards.Count + 1);
             // Add the current keyboard and a separator:
-            keyboardComboData.Add(new KeyMapper.ComboItemSeparator.SeparatorItem(KeyboardHelper.GetKeyboardName()));
+            keyboardComboData.Add(new ComboItemSeparator.SeparatorItem(KeyboardHelper.GetKeyboardName()));
             keyboardComboData.AddRange(tempArr);
 
             KeyboardListCombo.DataSource = keyboardComboData;
@@ -654,13 +656,13 @@ namespace KeyMapper.Forms
             capsLockToolStripMenuItem.Checked = _isCapsLockOn;
             numLockToolStripMenuItem.Checked = _isNumLockOn;
             scrollLockToolStripMenuItem.Checked = _isScrollLockOn;
-            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC;
+            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC;
         }
 
         void SetMappingsMenuButtonStates()
         {
             // Mappings - view all, user, boot.
-            if (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings)
+            if (operatingSystemCapability.SupportsUserMappings)
             {
                 switch (MappingsManager.Filter)
                 {
@@ -691,7 +693,7 @@ namespace KeyMapper.Forms
                 (MappingsManager.IsRestartRequired() || MappingsManager.IsLogOnRequired()));
 
             onlyShowBootMappingsToolStripMenuItem.Text = "Boot Mappings" +
-              (AppController.UserCanWriteBootMappings || OperatingSystemVersionProvider.OperatingSystemImplementsUAC ? String.Empty : " (Read Only)");
+              (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC ? String.Empty : " (Read Only)");
 
             // Mappings - check current view
             showAllMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.All);
@@ -700,7 +702,7 @@ namespace KeyMapper.Forms
 
             // Whether to allow the option of viewing user mappings (ie not on W2K) 
 
-            chooseMappingsToolStripMenuItem.Visible = (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings);
+            chooseMappingsToolStripMenuItem.Visible = (operatingSystemCapability.SupportsUserMappings);
          
             selectFromCaptureToolStripMenuItem.Enabled = !AppController.UserCannotWriteMappings;
         }

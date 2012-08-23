@@ -23,6 +23,8 @@ namespace KeyMapper.Classes
 
         public static Hashtable InstalledKeyboards { get; private set; }
 
+        private static readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
+
         static KeyboardHelper()
         {
             InstalledKeyboards = new Hashtable();
@@ -293,8 +295,8 @@ namespace KeyMapper.Classes
 
             string keyboardname = "Unknown";
 
-            RegistryKey registry =
-            Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts\" + locale);
+            RegistryKey key =
+                Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts\" + locale);
 
             // This is the result for Windows 2000 and earlier and a fallback for later
             // as some keyboards (eg the Apple ones installed by Parallels) don't have the
@@ -303,30 +305,27 @@ namespace KeyMapper.Classes
             // It's possible the value doesn't exist locally (when using remote desktop, for example)
             // In this case, won't be able to revert to this keyboard after the layout is changed.
 
-            if (registry == null)
+            if (key == null)
+            {
                 return keyboardname;
+            }
 
-            keyboardname = registry.GetValue("Layout Text").ToString();
+            keyboardname = key.GetValue("Layout Text").ToString();
 
-            // XP and up, then.
-            if (OperatingSystemVersionProvider.IsWindows2000 == false) 
+            if (operatingSystemCapability.SupportsLocalizedKeyboardNames) 
             {
                 // XP or later - can get localised name for keyboard:
                 // (if it exists - pass empty string so that's the return if it doesn't)
 
-                string keyboardShellName = registry.GetValue("Layout Display Name", "").ToString();
+                string keyboardShellName = key.GetValue("Layout Display Name", "").ToString();
                 string localName = string.Empty;
 
                 if (String.IsNullOrEmpty(keyboardShellName) == false)
                 {
                     StringBuilder sbName = new StringBuilder(260);
 
-                    if (NativeMethods.SHLoadIndirectString(
-                        keyboardShellName,
-                        sbName,
-                        (uint)sbName.Capacity,
-                        IntPtr.Zero)
-                        == 0)
+                    if (NativeMethods.SHLoadIndirectString
+                        (keyboardShellName, sbName, (uint)sbName.Capacity, IntPtr.Zero) == 0)
                     {
                         localName = sbName.ToString();
                     }
@@ -340,10 +339,5 @@ namespace KeyMapper.Classes
 
             return keyboardname;
         }
-
-
     }
-
-
-
 }

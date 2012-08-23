@@ -1,11 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyMapper", "KeyMapper.csproj", "{E0C87C26-3239-4F49-964E-91341A5F6BA0}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Deployment", "Deployment\Deployment.vdproj", "{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{0D7B69B6-17A1-4A2E-BB8C-DA9EB7650362}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyMapper.UnitTests", "UnitTests\KeyMapper.UnitTests.csproj", "{0D7B69B6-17A1-4A2E-BB8C-DA9EB7650362}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

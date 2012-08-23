@@ -2,14 +2,10 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
-using System.Xml.Serialization;
-using System.IO;
-using System.Xml;
-using System.Text;
 using System.Globalization;
 using KeyMapper.Classes;
 
-namespace KeyMapper
+namespace KeyMapper.Forms
 {
 	public partial class ColourEditor : KMBaseForm
 	{
@@ -26,8 +22,8 @@ namespace KeyMapper
 
 		public ButtonEffect Effect
 		{
-			get { return _effect; }
-			set { _effect = value; }
+			get { return this._effect; }
+			set { this._effect = value; }
 		}
 
 		Color _fontColour = Color.Black;
@@ -36,8 +32,8 @@ namespace KeyMapper
 		{
 			InitializeComponent();
 
-			_effect = effect;
-			_caption = caption;
+			this._effect = effect;
+			this._caption = caption;
 
 			this.Text = "Editing the " + caption + " button";
 
@@ -54,32 +50,32 @@ namespace KeyMapper
 
 		private void LoadSetting()
 		{
-			UpdateMatrix(ButtonImages.GetMatrix(_effect));
-			_fontColour = ButtonImages.GetFontColour(_effect);
+			UpdateMatrix(ButtonImages.GetMatrix(this._effect));
+			this._fontColour = ButtonImages.GetFontColour(this._effect);
 			DrawKey();
 		}
 
 		private void UpdateMatrix(ColorMatrix cm)
 		{
-			_currentMatrix = cm;
+			this._currentMatrix = cm;
 			SetUpdownValuesFromMatrix();
 		}
 
 		void SetUpdownValuesFromMatrix()
 		{
-			_drawing = false;
+			this._drawing = false;
 
 			foreach (Control con in Controls)
 			{
 				NumericUpDown updown = (con as NumericUpDown);
 				if (updown != null)
 				{
-					if (!_initialised)
+					if (!this._initialised)
 					{
 						updown.DecimalPlaces = 1;
-						updown.Minimum = _lowbound;
-						updown.Maximum = _highbound;
-						updown.Increment = _step;
+						updown.Minimum = this._lowbound;
+						updown.Maximum = this._highbound;
+						updown.Increment = this._step;
 					}
 
 					updown.ValueChanged -= UpdownValueChanged;
@@ -89,15 +85,15 @@ namespace KeyMapper
 
 			}
 
-			_drawing = true;
-			_initialised = true;
+			this._drawing = true;
+			this._initialised = true;
 
 		}
 
 		Decimal GetValue(string name)
 		{
 			// Access the appropriate property of the matrix:
-			object value = _currentMatrix.GetType().GetProperty(name).GetValue(_currentMatrix, null);
+			object value = this._currentMatrix.GetType().GetProperty(name).GetValue(this._currentMatrix, null);
 			Decimal dvalue;
 			if (Decimal.TryParse(value.ToString(), out dvalue))
 				return dvalue;
@@ -109,7 +105,7 @@ namespace KeyMapper
 
 		void UpdownValueChanged(object sender, EventArgs e)
 		{
-			if (_drawing)
+			if (this._drawing)
 			{
 				UpdateMatrixFromControls();
 				SaveSetting();
@@ -118,34 +114,34 @@ namespace KeyMapper
 
 		private void UpdateMatrixFromControls()
 		{
-			_currentMatrix = new ColorMatrix(
+			this._currentMatrix = new ColorMatrix(
 				new float[][]
 				 {
-					new float[] {(float)Matrix00.Value, (float)Matrix01.Value, (float)Matrix02.Value, (float)Matrix03.Value, (float)Matrix04.Value},
-					new float[] {(float)Matrix10.Value, (float)Matrix11.Value, (float)Matrix12.Value, (float)Matrix13.Value, (float)Matrix14.Value},
-					new float[] {(float)Matrix20.Value, (float)Matrix21.Value, (float)Matrix22.Value, (float)Matrix23.Value, (float)Matrix24.Value},
-					new float[] {(float)Matrix30.Value, (float)Matrix31.Value, (float)Matrix32.Value, (float)Matrix33.Value, (float)Matrix34.Value},
-					new float[] {(float)Matrix40.Value, (float)Matrix41.Value, (float)Matrix42.Value, (float)Matrix43.Value, (float)Matrix44.Value}});
+					new float[] {(float)this.Matrix00.Value, (float)this.Matrix01.Value, (float)this.Matrix02.Value, (float)this.Matrix03.Value, (float)this.Matrix04.Value},
+					new float[] {(float)this.Matrix10.Value, (float)this.Matrix11.Value, (float)this.Matrix12.Value, (float)this.Matrix13.Value, (float)this.Matrix14.Value},
+					new float[] {(float)this.Matrix20.Value, (float)this.Matrix21.Value, (float)this.Matrix22.Value, (float)this.Matrix23.Value, (float)this.Matrix24.Value},
+					new float[] {(float)this.Matrix30.Value, (float)this.Matrix31.Value, (float)this.Matrix32.Value, (float)this.Matrix33.Value, (float)this.Matrix34.Value},
+					new float[] {(float)this.Matrix40.Value, (float)this.Matrix41.Value, (float)this.Matrix42.Value, (float)this.Matrix43.Value, (float)this.Matrix44.Value}});
 
 		}
 
 		private void DrawKey()
 		{
 
-			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _fontColour);
+			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, this._caption, this._currentMatrix, this._fontColour);
 
-			if (KeyBox.Image != null)
-				KeyBox.Image.Dispose();
+			if (this.KeyBox.Image != null)
+				this.KeyBox.Image.Dispose();
 
-			KeyBox.Image = bmp;
+			this.KeyBox.Image = bmp;
 
 		}
 
 		private void ResetButtonClick(object sender, EventArgs e)
 		{
 			// Passing true to ignore user colours and fonts.
-			UpdateMatrix(ButtonImages.GetMatrix(_effect, true));
-			_fontColour = ButtonImages.GetFontColour(_effect, true);
+			UpdateMatrix(ButtonImages.GetMatrix(this._effect, true));
+			this._fontColour = ButtonImages.GetFontColour(this._effect, true);
 
 			SaveSetting();
 		}
@@ -154,7 +150,7 @@ namespace KeyMapper
 		private void BlankButtonClick(object sender, EventArgs e)
 		{
 			UpdateMatrix(new ColorMatrix());
-			_fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
+			this._fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
 
 			SaveSetting();
 		}
@@ -173,7 +169,7 @@ namespace KeyMapper
 
 		private void SaveSetting()
 		{
-			UserColourSettingManager.SaveSetting(_effect, _currentMatrix, _fontColour.ToArgb());
+			UserColourSettingManager.SaveSetting(this._effect, this._currentMatrix, this._fontColour.ToArgb());
 		}
 
 		private void TextButtonClick(object sender, EventArgs e)
@@ -181,11 +177,11 @@ namespace KeyMapper
 			ColorDialog colourPicker = new ColorDialog();
 
 			// Sets the initial color select to the current text color.
-			colourPicker.Color = _fontColour;
+			colourPicker.Color = this._fontColour;
 
 			if (colourPicker.ShowDialog() == DialogResult.OK)
 			{
-				_fontColour = colourPicker.Color;
+				this._fontColour = colourPicker.Color;
 				SaveSetting();
 
 			}
@@ -215,7 +211,7 @@ namespace KeyMapper
 				cm.GetType().GetProperty(name).SetValue(cm, val, null);
 			}
 
-			_fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
+			this._fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
 			UpdateMatrix(cm);
 
 			SaveSetting();

@@ -1,4 +1,5 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <PublishUrlHistory>ftp://justkeepswimming.net/httpdocs/keymapper/|ftp://justkeepswimming.net/httpdocs/KeyMapper/|ftp://justkeepswimming.net/httpdocs/KMTest/|ftp://justkeepswimming.net/KeyMapper/|C:\Published Programs\KeyMapper\</PublishUrlHistory>
     <InstallUrlHistory>http://justkeepswimming.net/keymapper/|http://justkeepswimming.net/KeyMapper/|http://justkeepswimming.net/KMTest/|http://localhost/install.html/</InstallUrlHistory>

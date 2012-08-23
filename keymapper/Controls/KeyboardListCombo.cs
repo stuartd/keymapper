@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Security.Permissions;
+using KeyMapper.Classes;
 
 namespace KeyMapper.Controls
 {
