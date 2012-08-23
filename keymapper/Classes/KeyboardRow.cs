@@ -4,16 +4,11 @@ namespace KeyMapper.Classes
 {
     public class KeyboardRow
     {
-        readonly List<KeyboardLayoutElement> _keys;
-
-        public IEnumerable<KeyboardLayoutElement> Keys
-        {
-            get { return _keys; }
-        }
+        public List<KeyboardLayoutElement> Keys { get; private set; }
 
         public KeyboardRow(List<KeyboardLayoutElement> keys)
         {
-            _keys = keys;
+            this.Keys = keys;
         }
 
     }
