@@ -302,7 +302,7 @@ namespace KeyMapper.Controls
 
 			if (e.Data.GetDataPresent("KeyMapper.KeyMapping"))
 			{
-				KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
+				KeyMapping dragged_map = (KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
 
 				if (MappingsManager.AddMapping(new KeyMapping(this.Map.From, dragged_map.From)) == false)
 				{
@@ -321,7 +321,7 @@ namespace KeyMapper.Controls
 				return;
 			}
 
-			KeyMapping dragged_map = (KeyMapper.KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
+			KeyMapping dragged_map = (KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
 
 			if (dragged_map.To.Scancode >= 0)
 			{

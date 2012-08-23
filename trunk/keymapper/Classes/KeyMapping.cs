@@ -1,7 +1,6 @@
 using System;
-using KeyMapper.Classes;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
 
 	public class KeyMapping
@@ -103,7 +102,7 @@ namespace KeyMapper
 		// This will match anything created by New KeyMapping() with no parameters
 		public bool IsEmpty()
 		{
-			return (this.From.Scancode == 0 && this.To.Scancode == 0 && this.From.Extended == 0 && this.To.Extended == 0);
+            return (this.From.Scancode == 0 && this.To.Scancode == 0 && this.From.Extended == 0 && this.To.Extended == 0);
 		}
 
 		public bool IsValid()
@@ -134,7 +133,7 @@ namespace KeyMapper
 			return this == (KeyMapping)obj;
 		}
 
-		// The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
+        // The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
 		public static bool operator !=(KeyMapping map1, KeyMapping map2)
 		{
 			return !(map1 == map2);

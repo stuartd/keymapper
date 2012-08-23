@@ -18,9 +18,7 @@ namespace KeyMapper.Classes
 		[STAThread]
 		static void Main()
 		{
-
-			//Method will look for a running copy and activate it if it exists
-			if (AppController.ActivateExistingInstance() == false)
+			if (AppController.IsOnlyAppInstance() == false)
 			{
 				return;
 			}

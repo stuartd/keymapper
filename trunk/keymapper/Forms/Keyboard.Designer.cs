@@ -296,7 +296,7 @@ namespace KeyMapper.Forms
             // 
             this.showMainKeysOnlyToolStripMenuItem.Name = "showMainKeysOnlyToolStripMenuItem";
             this.showMainKeysOnlyToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.showMainKeysOnlyToolStripMenuItem.Text = "&Typewriter Keys Only";
+            this.showMainKeysOnlyToolStripMenuItem.Text = "&TypewriterKeys Keys Only";
             this.showMainKeysOnlyToolStripMenuItem.Click += new System.EventHandler(this.showMainKeysOnlyMenuItemClick);
             // 
             // useMacKeyboardToolStripMenuItem

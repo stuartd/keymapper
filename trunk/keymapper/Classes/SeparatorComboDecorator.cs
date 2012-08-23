@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace KeyMapper
+namespace KeyMapper.Classes
 {
 	/// <summary>
 	///  <remarks>This decorator class owes a great deal to http://blogs.msdn.com/jfoscoding/articles/456968.aspx</remarks>
@@ -24,14 +24,14 @@ namespace KeyMapper
 			
             public SeparatorItem(string name)
 			{
-			    _name = name;
+			    this._name = name;
 			}
 
 			public override string ToString()
 			{
-				if (_name != null)
+				if (this._name != null)
 				{
-					return _name;
+					return this._name;
 				}
 				return base.ToString();
 			}

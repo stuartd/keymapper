@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -38,6 +37,8 @@ namespace KeyMapper.Classes
 
         private static readonly List<string> tempfiles = new List<string>();
 
+        private static readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
+
         static AppController()
         {
             CustomKeyboardLayouts = new Hashtable();
@@ -58,7 +59,7 @@ namespace KeyMapper.Classes
         {
             get
             {
-                // Can't write mappings if all of these are true:
+                // Can't write mappings if *all* of these are true:
                 // a) Currently looking at Boot Mappings
                 // b) Earlier than Vista (ie doesn't implement UAC)
                 // c) User can't write boot mappings.
@@ -66,7 +67,7 @@ namespace KeyMapper.Classes
                 // (XP doesn't allow process elevation, so if you can't then you can't)
                 return (MappingsManager.Filter == MappingFilter.Boot
                         && !UserCanWriteBootMappings
-                        && !OperatingSystemVersionProvider.OperatingSystemImplementsUAC);
+                        && !operatingSystemCapability.ImplementsUAC);
             }
         }
 
@@ -104,8 +105,8 @@ namespace KeyMapper.Classes
 
         private static void SetDotNetFrameworkSPInstalled()
         {
-            // Vista and later already have the SP, and all support TaskDialog..
-            if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
+            // Vista and later already have the SP, and all support ImplementsTaskDialog..
+            if (operatingSystemCapability.ImplementsTaskDialog)
             {
                 _dotNetFrameworkSPInstalled = true;
             }
@@ -428,7 +429,7 @@ namespace KeyMapper.Classes
 
             KeyboardHelper.UnloadLayout();
 
-            if ((OperatingSystemVersionProvider.OperatingSystemImplementsUAC)
+            if ((operatingSystemCapability.ImplementsUAC)
                 && UserCanWriteBootMappings == false
                 && (MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
@@ -631,7 +632,7 @@ namespace KeyMapper.Classes
             MappingsManager.GetMappingsFromRegistry();
 
             // If user mappings are inappropriate (win2k, win 7) default to boot.
-            if (OperatingSystemVersionProvider.OperatingSystemSupportsUserMappings == false)
+            if (operatingSystemCapability.SupportsUserMappings == false)
             {
                 MappingsManager.SetFilter(MappingFilter.Boot);
             }
@@ -654,7 +655,7 @@ namespace KeyMapper.Classes
             if (savedMappingsExist == false)
                 MappingsManager.StoreUnsavedMappings();
 
-            if (OperatingSystemVersionProvider.OperatingSystemImplementsUAC)
+            if (operatingSystemCapability.ImplementsUAC)
                 MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
 
             DpiX = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
@@ -720,7 +721,7 @@ namespace KeyMapper.Classes
             KeyboardLayout = layout;
         }
 
-        public static bool ActivateExistingInstance()
+        public static bool IsOnlyAppInstance()
         {
             _appMutex = new AppMutex();
             bool gotMutex = _appMutex.GetMutex();

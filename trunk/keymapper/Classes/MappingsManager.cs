@@ -39,6 +39,8 @@ namespace KeyMapper.Classes
         private static readonly UndoRedoMappingStack undostack = new UndoRedoMappingStack();
         private static readonly UndoRedoMappingStack redostack = new UndoRedoMappingStack();
 
+        private static readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
+
         static MappingsManager()
         {
             Filter = MappingFilter.All;
@@ -715,7 +717,7 @@ namespace KeyMapper.Classes
 
                 string question = "Are you really sure you want to " + action + "this key?";
 
-                if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
+                if (operatingSystemCapability.ImplementsTaskDialog)
                 {
                     TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
                                                                       TaskDialogButtons.Yes | TaskDialogButtons.No,
@@ -775,7 +777,7 @@ namespace KeyMapper.Classes
 
                     const string question = "Do you still want to remap Pause?";
 
-                    if (OperatingSystemVersionProvider.OperatingSystemImplementsTaskDialog)
+                    if (operatingSystemCapability.ImplementsTaskDialog)
                     {
                         TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
                                                                           TaskDialogButtons.Yes | TaskDialogButtons.No,

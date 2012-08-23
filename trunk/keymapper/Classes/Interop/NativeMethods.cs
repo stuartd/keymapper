@@ -154,7 +154,7 @@ namespace KeyMapper.Classes.Interop
 
 		#endregion
 
-		[DllImport("comctl32.dll", CharSet = CharSet.Unicode, EntryPoint = "TaskDialog")]
+		[DllImport("comctl32.dll", CharSet = CharSet.Unicode, EntryPoint = "ImplementsTaskDialog")]
 		public static extern int TaskDialog(IntPtr hWndParent, IntPtr hInstance, String pszWindowTitle, String pszMainInstruction, String pszContent, int dwCommonButtons, IntPtr pszIcon, out int pnButton);
 
 

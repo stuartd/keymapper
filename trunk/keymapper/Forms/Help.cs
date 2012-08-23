@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
+﻿using System.Windows.Forms;
 using KeyMapper.Classes;
 
-namespace KeyMapper
+namespace KeyMapper.Forms
 {
     public partial class HelpForm : KMBaseForm
     {
@@ -23,7 +16,7 @@ namespace KeyMapper
         private void LoadUserSettings()
         {
             Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-            chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtStartup;
+            this.chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtStartup;
         }
 
    
@@ -37,7 +30,7 @@ namespace KeyMapper
         private void SaveUserSettings()
         {
             Properties.Settings userSettings = new KeyMapper.Properties.Settings();
-            userSettings.ShowHelpFormAtStartup = chkShowHelpAtStartup.Checked;
+            userSettings.ShowHelpFormAtStartup = this.chkShowHelpAtStartup.Checked;
             userSettings.HelpFormLocation = this.Location;
             userSettings.Save();
         }

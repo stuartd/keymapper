@@ -1,4 +1,4 @@
-namespace KeyMapper
+namespace KeyMapper.Forms
 {
 	partial class ColourEditor
 	{
@@ -13,9 +13,9 @@ namespace KeyMapper
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && (components != null))
+			if (disposing && (this.components != null))
 			{
-				components.Dispose();
+				this.components.Dispose();
 			}
 			base.Dispose(disposing);
 		}
