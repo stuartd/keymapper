@@ -34,16 +34,13 @@ namespace KeyMapper.Forms
         // Different arrangement of ALT and CTRL keys.
         bool _isMacKeyboard;
 
-        // ContextMenu _contextMenu = new ContextMenu();
-        // KeyPictureBox _contextBox;
-
         Size _lastSize;
 
         int[] _rowTerminators;
 
         private readonly ToolTip FormToolTip;
 
-        private IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
+        private readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
 
         public KeyboardForm()
         {
@@ -52,24 +49,24 @@ namespace KeyMapper.Forms
             InitializeComponent();
             FormsManager.RegisterMainForm(this);
 
-            int currentDpi = DpiInfo.Dpi;
-
-            if (currentDpi < 96)
+           if (DpiInfo.Dpi < 96)
             {
-                menu.Height = (int) (menu.Height*(96F/currentDpi));
+                menu.Height = (int) (menu.Height*(96F/DpiInfo.Dpi));
                     // Menu will always show even is fonts are set to less than 100%
             }
-            else if (currentDpi > 96)
+            else if (DpiInfo.Dpi > 96)
             {
-                menu.Height = (int) (menu.Height*(currentDpi/96F));
+                menu.Height = (int) (menu.Height*(DpiInfo.Dpi/96F));
             }
 
             LoadUserSettings();
 
             ResizeToAspect();
 
-            if (currentDpi != 96)
+            if (DpiInfo.Dpi != 96)
+            {
                 PositionKeyboardCombo();
+            }
 
             // This needs to be done after location and size of this form are fully determined.
             FormsManager.OpenChildForms();
@@ -79,7 +76,7 @@ namespace KeyMapper.Forms
             GetKeyboardData();
 
             // Create event handlers 
-            this.ResizeEnd += new System.EventHandler(this.KeyboardFormResizeEnd);
+            this.ResizeEnd += this.KeyboardFormResizeEnd;
             this.KeyboardListCombo.SelectedIndexChanged += KeyboardListSelectedIndexChanged;
 
             MappingsManager.MappingsChanged += OnMappingsChanged;
@@ -102,7 +99,6 @@ namespace KeyMapper.Forms
         }
         private void LoadUserSettings()
         {
-
             Properties.Settings userSettings = new Properties.Settings();
 
             // As user.config is writeable (if you can find it!)
@@ -156,6 +152,7 @@ namespace KeyMapper.Forms
         void CalculateDimensions()
         {
             float keywidth;
+
             if (_keysOnly)
             {
                 keywidth = 15.7F;
@@ -168,17 +165,16 @@ namespace KeyMapper.Forms
             }
 
             // Calculate total width and key size
-            int buttonwidth = 128; // Starting width
+            const int buttonwidth = 128; // Starting width
 
             _buttonScale = ((float)this.ClientSize.Width / (int)(buttonwidth * keywidth)); // How much buttons have to be scaled to fit
             _keySize = (buttonwidth * _buttonScale); // Actual size of buttons
             _paddingWidth = (int)(_keySize / 16); // Gap between rows and columns.
-
         }
 
         void Redraw()
         {
-
+            // Can be errors during slideshow, so if we get one then cancel it.
             try
             {
                 NativeMethods.LockWindowUpdate(this.Handle);
@@ -188,13 +184,16 @@ namespace KeyMapper.Forms
                 _cancelSlideshow = true;
                 return;
             }
+
             FormToolTip.RemoveAll();
             FormToolTip.SetToolTip(KeyboardListCombo, "Change the displayed keyboard");
 
             // Need to make sure these dispose as they have bitmap resources, so not using Controls.Clear()
             // as it didn't release them properly..
             for (int i = this.KeyboardPanel.Controls.Count - 1; i >= 0; i--)
+            {
                 this.KeyboardPanel.Controls[i].Dispose();
+            }
 
             // Start in the top left corner..
             int left = _paddingWidth;
@@ -263,7 +262,7 @@ namespace KeyMapper.Forms
 
                 // Skip down and back for arrow keys
                 top += (int)Math.Round((_keySize + _paddingWidth) * 3, 0);
-                DrawRow(kl.Arrows, navleft, top);
+                DrawRow(kl.ArrowKeys, navleft, top);
 
             }
 
@@ -1055,66 +1054,60 @@ namespace KeyMapper.Forms
 
         private void SaveKeyboardImageAsFile(bool autoSave)
         {
-            Bitmap bmp = new Bitmap(this.Width, this.Height);
-            this.DrawToBitmap(bmp, new Rectangle(Point.Empty, this.Size));
-
-            Size actualSize = new Size(this.ClientSize.Width, this.ClientSize.Height - this.menu.Height - this.StatusBar.Height);
-
-            Bitmap bmp2 = new Bitmap(actualSize.Width, actualSize.Height);
-
-            Point p = this.PointToScreen(Point.Empty);
-
-            int x = p.X - this.Left;
-            int y = p.Y - this.Top + this.menu.Height;
-
-            using (Graphics g = Graphics.FromImage(bmp2))
+            using (Bitmap bmp = new Bitmap(this.Width, this.Height))
             {
-                g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
-            }
+                this.DrawToBitmap(bmp, new Rectangle(Point.Empty, this.Size));
 
-            string filename = this.KeyboardListCombo.Text;
+                Size actualSize = new Size(this.ClientSize.Width, this.ClientSize.Height - this.menu.Height - this.StatusBar.Height);
 
-            if (autoSave)
-            {
-                // bmp2.Save(@"somefolder" + filename + ".png", ImageFormat.Png) ;
-            }
-            else
-            {
-                SaveFileDialog fd = new SaveFileDialog();
-                fd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
-                fd.OverwritePrompt = false;
-
-                // AutoUpgradeEnabled introduced in .NET Framework 2 SP1
-                // Can't trap MissingMethodException
-                // As method is JIT'd, if it even contains the call on a machine without SP1 installed
-                // then it throws the exception. Resolution: move the actual call to a separate method
-                // and don't let compiler inline it.
-
-                if (AppController.DotNetFramework2ServicePackInstalled)
+                using (Bitmap bmp2 = new Bitmap(actualSize.Width, actualSize.Height))
                 {
-                    AppController.EnableVisualUpgrade((FileDialog)fd);
-                }
+                    Point p = this.PointToScreen(Point.Empty);
 
-                fd.FileName = filename + " keyboard layout";
+                    int x = p.X - this.Left;
+                    int y = p.Y - this.Top + this.menu.Height;
 
-                fd.Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp";
-                if (fd.ShowDialog() == DialogResult.OK)
-                {
-                    if (fd.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
-                        fd.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase))
-                        bmp2.Save(fd.FileName, ImageFormat.Jpeg);
+                    using (Graphics g = Graphics.FromImage(bmp2))
+                    {
+                        g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
+                    }
 
-                    if (fd.FileName.EndsWith("bmp", StringComparison.OrdinalIgnoreCase))
-                        bmp2.Save(fd.FileName, ImageFormat.Bmp);
+                    string filename = this.KeyboardListCombo.Text;
 
-                    if (fd.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
-                        bmp2.Save(fd.FileName, ImageFormat.Png);
+                    if (autoSave)
+                    {
+                        // bmp2.Save(@"somefolder" + filename + ".png", ImageFormat.Png) ;
+                    }
+                    else
+                    {
+                        SaveFileDialog fd = new SaveFileDialog
+                            {
+                                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                OverwritePrompt = false,
+                                AutoUpgradeEnabled = true,
+                                FileName = filename + " keyboard layout",
+                                Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp"
+                            };
+
+                        if (fd.ShowDialog() == DialogResult.OK)
+                        {
+                            if (fd.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
+                                fd.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase))
+                            {
+                                bmp2.Save(fd.FileName, ImageFormat.Jpeg);
+                            }
+                            else if (fd.FileName.EndsWith("bmp", StringComparison.OrdinalIgnoreCase))
+                            {
+                                bmp2.Save(fd.FileName, ImageFormat.Bmp);
+                            }
+                            else if (fd.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+                            {
+                                bmp2.Save(fd.FileName, ImageFormat.Png);
+                            }
+                        }
+                    }
                 }
             }
-            bmp2.Dispose();
-            bmp.Dispose();
-
         }
         
         private void clearLogFileToolStripMenuItem_Click(object sender, EventArgs e)

@@ -231,14 +231,6 @@ namespace KeyMapper.Classes
             return GetHighestCommonDenominator(value2, value1 % value2);
         }
 
-        // This needs to be in a separate method as this property was introduced in .Net Framework 2
-        // Service Pack 1, so JITing a method containing the property raises an exception.
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void EnableVisualUpgrade(FileDialog fd)
-        {
-            fd.AutoUpgradeEnabled = true;
-        }
-
         public static bool ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater(string innerText)
         {
             string text = "In order to write " + innerText + ", Key Mapper needs to add to " +
