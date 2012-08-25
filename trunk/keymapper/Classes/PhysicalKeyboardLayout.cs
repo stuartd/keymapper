@@ -61,13 +61,7 @@ namespace KeyMapper.Classes
                     layout = layout, isMacKeyboard = isMacKeyboard
                 };
 
-            // Assign params to new instance.
-            nl.PopulateFunctionKeys();
-            nl.PopulateArrowKeys();
-            nl.PopulateNavigationKeys();
-            nl.PopulateNumberpad();
-            nl.PopulateUtilityKeys();
-            nl.PopulateTypewriterKeys();
+           nl.Populate();
 
             cachedInstances.Add(nl);
 
@@ -83,26 +77,36 @@ namespace KeyMapper.Classes
             {
                 default: // includes case KeyboardLayoutType.US:
                     return new [] { 
-                        AppController.GetHashFromKeyData(14, 0), 
-                        AppController.GetHashFromKeyData(43, 0), 
-                        AppController.GetHashFromKeyData(28, 0), 
-                        AppController.GetHashFromKeyData(54, 224), 
-                        AppController.GetHashFromKeyData(29, 224) };
+                        KeyHasher.GetHashFromKeyData(14, 0), 
+                        KeyHasher.GetHashFromKeyData(43, 0), 
+                        KeyHasher.GetHashFromKeyData(28, 0), 
+                        KeyHasher.GetHashFromKeyData(54, 224), 
+                        KeyHasher.GetHashFromKeyData(29, 224) };
 
                 case KeyboardLayoutType.Punjabi:
                 case KeyboardLayoutType.European:
 
                     return new [] {
-                        AppController.GetHashFromKeyData(14, 0), 
-                        AppController.GetHashFromKeyData(28, 0), 
+                        KeyHasher.GetHashFromKeyData(14, 0), 
+                        KeyHasher.GetHashFromKeyData(28, 0), 
                         99999,  
-                        AppController.GetHashFromKeyData(54, 224), 
-                        AppController.GetHashFromKeyData(29, 224) };
+                        KeyHasher.GetHashFromKeyData(54, 224), 
+                        KeyHasher.GetHashFromKeyData(29, 224) };
                         
                        
 
             }
 
+        }
+
+        private void Populate()
+        {
+            PopulateFunctionKeys();
+            PopulateArrowKeys();
+            PopulateNavigationKeys();
+            PopulateNumberpad();
+            PopulateUtilityKeys();
+            PopulateTypewriterKeys();
         }
 
         private void PopulateFunctionKeys()

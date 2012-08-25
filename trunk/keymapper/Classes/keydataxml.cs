@@ -7,14 +7,11 @@ using KeyMapper.Interfaces;
 
 namespace KeyMapper.Classes
 {
-
     class KeyDataXml : IKeyData
     {
-
         /// This class handles extracting the key data from XML files
         /// via XPath.
-
-        System.Reflection.Assembly _currentassembly = null;
+        readonly System.Reflection.Assembly _currentassembly = null;
 
         const string _keyfilename = "keycodes.xml";
         const string _keyboardfilename = "keyboards.xml";
@@ -188,7 +185,7 @@ namespace KeyMapper.Classes
                 if (dir.ContainsKey(name)) // ArgumentException results when trying to add duplicate key..
                     Console.WriteLine("Duplicate name error: Name {0} Existing Scancode : {1} Scancode: {2}", name, dir[name], scancode);
                 else
-                    dir.Add(name, AppController.GetHashFromKeyData(scancode, extended));
+                    dir.Add(name, KeyHasher.GetHashFromKeyData(scancode, extended));
             }
 
             return dir;
@@ -223,7 +220,7 @@ namespace KeyMapper.Classes
                 iterator.MoveNext();
                 int scancode = Int32.Parse(GetElementValue("sc", iterator.Current), CultureInfo.InvariantCulture.NumberFormat);
                 int extended = Int32.Parse(GetElementValue("ex", iterator.Current), CultureInfo.InvariantCulture.NumberFormat);
-                keys.Add(AppController.GetHashFromKeyData(scancode, extended));
+                keys.Add(KeyHasher.GetHashFromKeyData(scancode, extended));
             }
 
             return keys;
@@ -232,8 +229,8 @@ namespace KeyMapper.Classes
 
         public string GetKeyNameFromCode(int code)
         {
-            int scancode = AppController.GetScancodeFromHash(code);
-            int extended = AppController.GetExtendedFromHash(code);
+            int scancode = KeyHasher.GetScancodeFromHash(code);
+            int extended = KeyHasher.GetExtendedFromHash(code);
 
             string expression = @"/KeycodeData/keycodes[sc = '" + scancode.ToString(CultureInfo.InvariantCulture.NumberFormat) + "' and ex = '" + extended.ToString(CultureInfo.InvariantCulture.NumberFormat) + "'] ";
 

@@ -2,104 +2,108 @@ using System;
 
 namespace KeyMapper.Classes
 {
-
-	public class KeyMapping
+    public class KeyMapping
 	{
-
-		#region fields, properties
-
-		private Key _from;
-		private Key _to;
-		private MappingType _type;
+        private readonly Key @from;
+		private readonly Key to;
+		private MappingType type;
 
 		public Key From
 		{
-			get { return _from; }
+			get { return this.@from; }
 		}
 
 		public Key To
 		{
-			get { return _to; }
+			get { return this.to; }
 		}
 
 		public MappingType MapType
 		{
-			get { return _type; }
+			get { return this.type; }
 		}
-
-		#endregion
-
-		#region methods
 
         public KeyMapping()
         {
-            _from = new Key();
-            _to = new Key(); 
+            this.@from = new Key();
+            this.to = new Key(); 
         }
 
 		public KeyMapping(Key keyFrom, Key keyTo)
 		{
-            if (Object.ReferenceEquals(keyFrom, null) || Object.ReferenceEquals(keyTo, null))
+            if (ReferenceEquals(keyFrom, null) || ReferenceEquals(keyTo, null))
+            {
                 throw new NullReferenceException("Key can't be null");
+            }
 
-			_from = keyFrom;
-			_to = keyTo;
-			_type = MappingType.Null;
+		    this.@from = keyFrom;
+			this.to = keyTo;
+			this.type = MappingType.Null;
 		}
 
 		public override string ToString()
 		{
-			return MappingDescription();
+			return MappingDescription;
 		}
 
-		public void SetType(MappingType type)
+		public void SetType(MappingType newType)
 		{
-			_type = type;
+            this.type = newType;
 		}
 
-		public string MappingDescription()
-		{
-			// A mapping can be:
-			bool _pending ; // Current or pending
-			bool _disabled ; // Is the mapping disabled or to a key?
-			bool _usermapping	= (_type == MappingType.User); // User or Boot mapping? 
-			string description = String.Empty;
+        public string MappingDescription
+        {
+            get
+            {
+                // A mapping can be:
+                bool pending; // Current or pending
+                bool disabled; // Is the mapping disabled or to a key?
+                bool usermapping = (this.type == MappingType.User); // User or Boot mapping? 
+                string description = String.Empty;
 
-			if (MappingsManager.IsMapped(this, MappingFilter.All) == false)
-			{
-				// This 'mapping' is not currently mapped, so it must have been mapped previously and cleared.
-				KeyMapping km = MappingsManager.GetClearedMapping(_from.Scancode, _from.Extended, MappingFilter.All);
-				if (MappingsManager.IsEmptyMapping(km) == false)
-				{
-					_disabled = MappingsManager.IsDisabledMapping(km);
-					
-					description = _from.Name + (_disabled ? " will be enabled" : " will be unmapped");
-					description += _usermapping ? " when you next log on" : " after a restart";
-				}
-			}
-			else
-			{
+                if (MappingsManager.IsMapped(this, MappingFilter.All) == false)
+                {
+                    // This 'mapping' is not currently mapped, so it must have been mapped previously and cleared.
+                    KeyMapping km = MappingsManager.GetClearedMapping(this.@from.Scancode, this.@from.Extended,
+                                                                      MappingFilter.All);
+                    if (MappingsManager.IsEmptyMapping(km) == false)
+                    {
+                        disabled = MappingsManager.IsDisabledMapping(km);
 
-				// So, mapped to something.
-				// Need to also know if it's Current or Pending
+                        description = this.@from.Name + (disabled ? " will be enabled" : " will be unmapped");
+                        description += usermapping ? " when you next log on" : " after a restart";
+                    }
+                }
+                else
+                {
+                    // So, mapped to something.
+                    // Need to also know if it's Current or Pending
 
-				if (_usermapping)
-				_pending = MappingsManager.IsMappingPending(this, MappingFilter.User);
-				else
-					_pending = MappingsManager.IsMappingPending(this, MappingFilter.Boot);
+                    if (usermapping)
+                    {
+                        pending = MappingsManager.IsMappingPending(this, MappingFilter.User);
+                    }
+                    else
+                    {
+                        pending = MappingsManager.IsMappingPending(this, MappingFilter.Boot);
+                    }
 
-				_disabled = MappingsManager.IsDisabledMapping(this);
+                    disabled = MappingsManager.IsDisabledMapping(this);
 
-				description = _from.Name + (_pending ? " will be" : " is");
-				description += _disabled ? " disabled" : " mapped to " + _to.Name;
-				if (_pending)
-					description += _usermapping ? " when you next log on" : " after a restart";
-			}
+                    description = this.@from.Name + (pending ? " will be" : " is");
+                    description += disabled ? " disabled" : " mapped to " + this.to.Name;
 
-			return description;
-		}
+                    if (pending)
+                    {
+                        description += usermapping ? " when you next log on" : " after a restart";
+                    }
+                }
 
-		// This will match anything created by New KeyMapping() with no parameters
+                return description;
+            }
+        }
+
+        // This will match anything created by New KeyMapping() with no parameters
 		public bool IsEmpty()
 		{
             return (this.From.Scancode == 0 && this.To.Scancode == 0 && this.From.Extended == 0 && this.To.Extended == 0);
@@ -112,10 +116,9 @@ namespace KeyMapper.Classes
 
 			// (Key has to able to be mapped to itself so user mappings can override boot mappings)
 
-            return (
-            !IsEmpty()
-            && _from.Scancode > 0
-            && _to.Scancode > -1
+            return (!IsEmpty()
+                  && this.@from.Scancode > 0
+                  && this.to.Scancode > -1
             );
 
         }
@@ -143,9 +146,6 @@ namespace KeyMapper.Classes
 		{
 			return base.GetHashCode();
 		}
-
-		#endregion
-
 	}
 
 	public enum MappingType
