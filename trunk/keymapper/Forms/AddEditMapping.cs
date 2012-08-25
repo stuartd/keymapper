@@ -286,13 +286,12 @@ namespace KeyMapper.Forms
 
 		private void SetButtonImages()
 		{
-
-			// Set the buttons' bitmap as required. Always call SetImage as that 
+            // Set the buttons' bitmap as required. Always call SetImage as that 
 			// handles releasing the existing bitmap if any..
 
 			// From key is straightforward.
 
-			float scale = ((float)AppController.DpiY / 96F);
+			float scale = (DpiInfo.Dpi / 96F);
 
 			if (this.FromKeyPictureBox.Image == null && this._map.IsEmpty())
 			{

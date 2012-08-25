@@ -52,12 +52,17 @@ namespace KeyMapper.Forms
             InitializeComponent();
             FormsManager.RegisterMainForm(this);
 
-            int currentDpi = AppController.DpiY;
+            int currentDpi = DpiInfo.Dpi;
 
             if (currentDpi < 96)
-                menu.Height = (int)(menu.Height * (96F / currentDpi)); // Menu will always show even is fonts are set to less than 100%
+            {
+                menu.Height = (int) (menu.Height*(96F/currentDpi));
+                    // Menu will always show even is fonts are set to less than 100%
+            }
             else if (currentDpi > 96)
-                menu.Height = (int)(menu.Height * (currentDpi / 96F));
+            {
+                menu.Height = (int) (menu.Height*(currentDpi/96F));
+            }
 
             LoadUserSettings();
 

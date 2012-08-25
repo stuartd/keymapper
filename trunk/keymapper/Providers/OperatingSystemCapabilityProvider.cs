@@ -2,6 +2,9 @@
 
 namespace KeyMapper.Providers
 {
+    /// <summary>
+    /// Provide the app with information about what the OS (and .Net framework) support
+    /// </summary>
     public class OperatingSystemCapabilityProvider : IOperatingSystemCapability 
     {
         // 0) < 5 - Pre Win2k - program will not work. Scancode mapping was introduced in Win2k
@@ -65,6 +68,11 @@ namespace KeyMapper.Providers
         {
             get { return isVistaOrLater; }
         }
+
+        /// <remarks>If using .Net </remarks>
+        /// 
+        /// </summary>
+        public bool SupportsEnhancedDialogs { get; }
 
         private bool isWindows2000
         {
