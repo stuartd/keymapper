@@ -207,6 +207,8 @@
     <Compile Include="Classes\AppMutex.cs" />
     <Compile Include="Classes\ButtonImages.cs" />
     <Compile Include="Classes\AppController.cs" />
+    <Compile Include="Classes\DpiInfo.cs" />
+    <Compile Include="Classes\IRegistryTimestampService.cs" />
     <Compile Include="Classes\KeyboardLayoutElement.cs" />
     <Compile Include="Classes\KeyboardLayoutType.cs" />
     <Compile Include="Classes\PhysicalKeyboardLayout.cs" />
@@ -217,7 +219,7 @@
     <Compile Include="Classes\Mappings.cs" />
     <Compile Include="Classes\MappingsManager.cs" />
     <Compile Include="Classes\Interop\NativeMethods.cs" />
-    <Compile Include="Classes\RegistryHelper.cs" />
+    <Compile Include="Classes\RegistryTimestampService.cs" />
     <Compile Include="Classes\Interop\TaskDialogEnums.cs" />
     <Compile Include="Classes\UserColours.cs" />
     <Compile Include="Controls\fader.cs">

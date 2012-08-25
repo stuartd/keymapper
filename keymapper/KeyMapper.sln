@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyMapper", "KeyMapper.csproj", "{E0C87C26-3239-4F49-964E-91341A5F6BA0}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Deployment", "Deployment\Deployment.vdproj", "{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyMapper.UnitTests", "UnitTests\KeyMapper.UnitTests.csproj", "{0D7B69B6-17A1-4A2E-BB8C-DA9EB7650362}"
 EndProject
 Global
@@ -29,16 +27,6 @@ Global
 		{E0C87C26-3239-4F49-964E-91341A5F6BA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E0C87C26-3239-4F49-964E-91341A5F6BA0}.Release|x86.ActiveCfg = Release|x86
 		{E0C87C26-3239-4F49-964E-91341A5F6BA0}.Release|x86.Build.0 = Release|x86
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Debug|Any CPU.ActiveCfg = Debug
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Debug|x86.ActiveCfg = Debug
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Debug|x86.Build.0 = Debug
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release.x64|Any CPU.ActiveCfg = Release.x64
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release.x64|x86.ActiveCfg = Release.x64
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release.x64|x86.Build.0 = Release.x64
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release|Any CPU.ActiveCfg = Release
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release|Any CPU.Build.0 = Release
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release|x86.ActiveCfg = Release.x64
-		{84ABD6A1-D1F8-464C-8FD1-2F25C4A86626}.Release|x86.Build.0 = Release.x64
 		{0D7B69B6-17A1-4A2E-BB8C-DA9EB7650362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0D7B69B6-17A1-4A2E-BB8C-DA9EB7650362}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D7B69B6-17A1-4A2E-BB8C-DA9EB7650362}.Debug|x86.ActiveCfg = Debug|Any CPU

@@ -37,17 +37,11 @@ namespace KeyMapper.Classes
 
         private static readonly List<string> tempfiles = new List<string>();
 
+        // Ready for extraction (home grown ioc of some kind? as long as they don't have dependencies)
+
         private static readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
 
-        static AppController()
-        {
-            CustomKeyboardLayouts = new Hashtable();
-            ApplicationRegistryKeyName = @"Software\KeyMapper";
-        }
-
-        private static int DpiX { get; set; }
-
-        public static int DpiY { get; private set; }
+        private static readonly IRegistryTimestampService registryTimestampService = new RegistryTimestampService();
 
         private static Hashtable CustomKeyboardLayouts { get; set; }
 
@@ -101,6 +95,12 @@ namespace KeyMapper.Classes
 
                 return _dotNetFrameworkSPInstalled.Value;
             }
+        }
+
+        static AppController()
+        {
+            CustomKeyboardLayouts = new Hashtable();
+            ApplicationRegistryKeyName = @"Software\KeyMapper";
         }
 
         private static void SetDotNetFrameworkSPInstalled()
@@ -576,7 +576,7 @@ namespace KeyMapper.Classes
             // Is the current user able to write to the Keyboard Layout key in HKLM??
             // (This key always exists, Windows recreates it if it's deleted)
 
-            UserCanWriteBootMappings = RegistryHelper.CanUserWriteToKey
+            UserCanWriteBootMappings = registryTimestampService.CanUserWriteToKey
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
 
@@ -585,7 +585,7 @@ namespace KeyMapper.Classes
 
             // When did the current user log in?
 
-            DateTime logontime = RegistryHelper.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
+            DateTime logontime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
 
             // Now, the "Volatile Environment" key in RegistryHive.CurrentUser
             // >isn't< always unloaded on logoff.
@@ -618,11 +618,11 @@ namespace KeyMapper.Classes
             }
 
             // When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
-            DateTime HKLMWrite = RegistryHelper.GetRegistryKeyTimestamp
+            DateTime HKLMWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
             // When was HKEY_CURRENT_USER\Keyboard Layout written?
-            DateTime HKCUWrite = RegistryHelper.GetRegistryKeyTimestamp
+            DateTime HKCUWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.CurrentUser, @"Keyboard Layout");
 
             // Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", 
@@ -657,9 +657,6 @@ namespace KeyMapper.Classes
 
             if (operatingSystemCapability.ImplementsUAC)
                 MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
-
-            DpiX = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 88);
-            DpiY = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
         }
 
         private static void SetLocale()

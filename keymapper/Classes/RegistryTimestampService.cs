@@ -4,29 +4,33 @@ using KeyMapper.Classes.Interop;
 
 namespace KeyMapper.Classes
 {
-    public static class RegistryHelper
+    public class RegistryTimestampService : IRegistryTimestampService
     {
         const int KEY_QUERY_VALUE = 0x0001;
         const int KEY_SET_VALUE = 0x0002;
 
-        public static DateTime GetRegistryKeyTimestamp(RegistryHive hive, string keyName)
+        public DateTime GetRegistryKeyTimestamp(RegistryHive hive, string keyName)
         {
             Int64 ts = GetRawRegistryKeyTimestamp(hive, keyName);
 
-            DateTime dt = ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue;
+            DateTime dt = (ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue);
 
             return dt.ToLocalTime();
         }
 
-        private static Int64 GetRawRegistryKeyTimestamp(RegistryHive hive, string keyname)
+        private Int64 GetRawRegistryKeyTimestamp(RegistryHive hive, string keyname)
         {
             if (String.IsNullOrEmpty(keyname))
+            {
                 return 0; // Otherwise the function opens HKLM (or HKCU) again.
+            }
 
             UIntPtr hkey = OpenKey(hive, keyname, KEY_QUERY_VALUE);
 
             if (hkey == UIntPtr.Zero)
+            {
                 return 0; // Didn't open key
+            }
 
             Int64 timestamp;
 
@@ -39,24 +43,28 @@ namespace KeyMapper.Classes
                 IntPtr.Zero, out timestamp);
 
             if (result2 != 0)
+            {
                 timestamp = 0; // Failed, don't return whatever value was supplied.
+            }
 
             NativeMethods.RegCloseKey(hkey);
 
             return timestamp;
         }
 
-        public static bool CanUserWriteToKey(RegistryHive hive, string keyName)
+        public bool CanUserWriteToKey(RegistryHive hive, string keyName)
         {
             UIntPtr hkey = OpenKey(hive, keyName, KEY_SET_VALUE);
             if (hkey == UIntPtr.Zero)
+            {
                 return false;
+            }
 
             NativeMethods.RegCloseKey(hkey);
             return true;
         }
 
-        private static UIntPtr OpenKey(RegistryHive hive, string keyname, int requiredAccess)
+        private UIntPtr OpenKey(RegistryHive hive, string keyname, int requiredAccess)
         {
             UIntPtr hiveptr;
             UIntPtr hkey;
