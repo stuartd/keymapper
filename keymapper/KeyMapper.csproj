@@ -208,9 +208,11 @@
     <Compile Include="Classes\ButtonImages.cs" />
     <Compile Include="Classes\AppController.cs" />
     <Compile Include="Classes\DpiInfo.cs" />
+    <Compile Include="Classes\FontSize.cs" />
     <Compile Include="Classes\IRegistryTimestampService.cs" />
     <Compile Include="Classes\KeyboardLayoutElement.cs" />
     <Compile Include="Classes\KeyboardLayoutType.cs" />
+    <Compile Include="Classes\KeyHasher.cs" />
     <Compile Include="Classes\PhysicalKeyboardLayout.cs" />
     <Compile Include="Classes\UndoRedoMappingStack.cs" />
     <Compile Include="Classes\FormsManager.cs" />

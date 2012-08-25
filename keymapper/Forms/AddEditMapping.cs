@@ -412,9 +412,7 @@ namespace KeyMapper.Forms
 
 		#endregion
 
-		#region Listbox methods
-
-		void KeysByGroupListboxDoubleClick(object sender, EventArgs e)
+	    void KeysByGroupListboxDoubleClick(object sender, EventArgs e)
 		{
 			MapSelected();
 		}
@@ -458,7 +456,7 @@ namespace KeyMapper.Forms
 			// Need to know the scancode and extended of the chosen key.
 			string keyname = this.KeysByGroupListbox.Text;
 
-			int hash = 0, scancode = 0, extended = 0;
+			int hash;
 
 			if (this._currentgroupmembers.ContainsKey(keyname))
 			{
@@ -470,11 +468,7 @@ namespace KeyMapper.Forms
 				return new Key();
 			}
 
-			scancode = AppController.GetScancodeFromHash(hash);
-			extended = AppController.GetExtendedFromHash(hash);
-
-			return new Key(scancode, extended);
-
+			return new Key(KeyHasher.GetScancodeFromHash(hash), KeyHasher.GetExtendedFromHash(hash));
 		}
 
 
@@ -490,11 +484,7 @@ namespace KeyMapper.Forms
 			}
 		}
 
-		#endregion
-
-		#region Button methods
-
-		private void MapButtonClick(object sender, EventArgs e)
+	    private void MapButtonClick(object sender, EventArgs e)
 		{
 			MapSelected();
 		}
@@ -636,9 +626,7 @@ namespace KeyMapper.Forms
 
 		}
 
-		#endregion
-
-		#region Keysniffer methods
+	    #region Keysniffer methods
 
 		private void OnKeyPress(object sender, KeyMapperKeyPressedEventArgs e)
 		{

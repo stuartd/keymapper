@@ -29,11 +29,9 @@ namespace KeyMapper.Classes
         private static LocalizedKeySet _currentLayout;
 
         // Single instance handle
-        private static AppMutex _appMutex;
+        private static AppMutex appMutex;
 
-        private static bool? _dotNetFrameworkSPInstalled;
-
-        private static bool? _arialUnicodeMSInstalled;
+        private static bool? arialUnicodeMSInstalled;
 
         private static readonly List<string> tempfiles = new List<string>();
 
@@ -43,9 +41,9 @@ namespace KeyMapper.Classes
 
         private static readonly IRegistryTimestampService registryTimestampService = new RegistryTimestampService();
 
-        private static Hashtable CustomKeyboardLayouts { get; set; }
+        private static Hashtable customKeyboardLayouts { get; set; }
 
-        private static string CurrentLocale { get; set; }
+        private static string currentLocale { get; set; }
 
         public static bool UserCannotWriteToApplicationRegistryKey { get; private set; }
 
@@ -71,8 +69,6 @@ namespace KeyMapper.Classes
 
         public static KeyboardLayoutType KeyboardLayout { get; private set; }
 
-        public static float BaseFontSize { get; private set; }
-
         public static CultureInfo CurrentCultureInfo { get; private set; }
 
         public static string KeyMapperFilePath
@@ -84,51 +80,10 @@ namespace KeyMapper.Classes
             }
         }
 
-        public static bool DotNetFramework2ServicePackInstalled
-        {
-            get
-            {
-                if (_dotNetFrameworkSPInstalled.HasValue == false)
-                {
-                    SetDotNetFrameworkSPInstalled();
-                }
-
-                return _dotNetFrameworkSPInstalled.Value;
-            }
-        }
-
         static AppController()
         {
-            CustomKeyboardLayouts = new Hashtable();
+            customKeyboardLayouts = new Hashtable();
             ApplicationRegistryKeyName = @"Software\KeyMapper";
-        }
-
-        private static void SetDotNetFrameworkSPInstalled()
-        {
-            // Vista and later already have the SP, and all support ImplementsTaskDialog..
-            if (operatingSystemCapability.ImplementsTaskDialog)
-            {
-                _dotNetFrameworkSPInstalled = true;
-            }
-            else
-            {
-                int sp = 0;
-                RegistryKey regkey =
-                    Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727");
-
-                if (regkey != null)
-                {
-                    sp = (int)regkey.GetValue("SP", 0);
-                    regkey.Close();
-                }
-
-                _dotNetFrameworkSPInstalled = (sp > 0);
-            }
-            if (_dotNetFrameworkSPInstalled == false)
-            {
-                Console.WriteLine(
-                    "There is a Service Pack available for the .NET framework 2 available from http://tinyurl.com/5a47nf");
-            }
         }
 
         public static void CreateAppDirectory()
@@ -141,7 +96,7 @@ namespace KeyMapper.Classes
                 }
                 catch
                 {
-                    // Can't log it. Going to cause errors (when app tries to read / write to the directory)
+                    // Can't log it. Going to cause errors (when app tries to read / write to the directory!)
                     // So.. ?
                     MessageBox.Show("Creating the Application Directory failed");
                 }
@@ -150,7 +105,7 @@ namespace KeyMapper.Classes
 
         public static Font GetButtonFont(float size, bool localizable)
         {
-            if (size == 0)
+            if (Math.Abs(size - 0) < float.Epsilon)
             {
                 Console.WriteLine("ERROR: Zero sized font requested");
                 size = 10;
@@ -158,28 +113,6 @@ namespace KeyMapper.Classes
 
             var font = new Font(GetKeyFontName(localizable), size);
             return font;
-        }
-
-        public static void SetFontSizes(float scale)
-        {
-            // See what font size fits the scaled-down button 
-            float basefontsize = 36F;
-
-            // Not using ButtonImages.GetButtonImage as that is where we were called from..
-            using (Font font = GetButtonFont(basefontsize, false))
-            using (Bitmap bmp = ButtonImages.ResizeBitmap(GetBitmap(BlankButton.Blank), scale, false))
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                // Helps MeasureString. Can also pass StringFormat.GenericTypographic apparently ??
-
-                g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                var CharacterWidth = (int)g.MeasureString(((char)77).ToString(), font).Width;
-                // Only use 90% of the bitmap's size to allow for the edges (especially at small sizes)
-                float ratio = (((0.9F * bmp.Height) / 2)) / CharacterWidth;
-                basefontsize = (basefontsize * ratio);
-            }
-
-            BaseFontSize = basefontsize;
         }
 
         public static string GetKeyName(int scancode, int extended)
@@ -195,7 +128,7 @@ namespace KeyMapper.Classes
                 return "";
             }
 
-            int hash = GetHashFromKeyData(scancode, extended);
+            int hash = KeyHasher.GetHashFromKeyData(scancode, extended);
             if (_currentLayout.ContainsKey(hash))
             {
                 return _currentLayout.GetKeyName(hash);
@@ -205,16 +138,7 @@ namespace KeyMapper.Classes
             return "Unknown";
         }
 
-        public static Bitmap GetBitmap(BlankButton button)
-        {
-            // Have we already extracted this bmp?
-            // Buttons are stored as lower case.
-            string buttonname = button.ToString().ToLowerInvariant();
-
-            return ButtonImages.GetImage(buttonname, "png");
-        }
-
-        public static bool IsOverlongKey(int hash)
+       public static bool IsOverlongKey(int hash)
         {
             return _currentLayout.IsKeyNameOverlong(hash);
         }
@@ -311,29 +235,6 @@ namespace KeyMapper.Classes
             WriteRegistryFileVista(filename);
         }
 
-        #region Key codings
-
-        [SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "scancode*1000")]
-        public static int GetHashFromKeyData(int scancode, int extended)
-        {
-            // Need to preserve the actual extended value as they are all 224 except Pause
-            // which is 225.
-            return (scancode * 1000) + extended;
-        }
-
-        public static int GetScancodeFromHash(int hash)
-        {
-            return (hash / 1000);
-        }
-
-        public static int GetExtendedFromHash(int hash)
-        {
-            // Extended value is 224 when set.
-            return (hash % 1000);
-        }
-
-        #endregion
-
         public static void Start()
         {
             // Need to have everything complete 
@@ -349,7 +250,9 @@ namespace KeyMapper.Classes
             string path = Path.Combine(KeyMapperFilePath, "customlayouts.txt");
 
             if (File.Exists(path) == false)
+            {
                 return;
+            }
 
             string customLayouts;
 
@@ -380,7 +283,7 @@ namespace KeyMapper.Classes
 
                     var keyboardType = (KeyboardLayoutType)value;
 
-                    CustomKeyboardLayouts.Add(locale, keyboardType);
+                    customKeyboardLayouts.Add(locale, keyboardType);
                 }
             }
             catch
@@ -390,10 +293,12 @@ namespace KeyMapper.Classes
 
         public static void AddCustomLayout()
         {
-            if (CustomKeyboardLayouts.Contains(CurrentLocale))
-                CustomKeyboardLayouts.Remove(CurrentLocale);
+            if (customKeyboardLayouts.Contains(currentLocale))
+            {
+                customKeyboardLayouts.Remove(currentLocale);
+            }
 
-            CustomKeyboardLayouts.Add(CurrentLocale, KeyboardLayout);
+            customKeyboardLayouts.Add(currentLocale, KeyboardLayout);
         }
 
         private static void SaveCustomLayouts()
@@ -409,7 +314,7 @@ namespace KeyMapper.Classes
 
             using (var sw = new StreamWriter(path, false))
             {
-                foreach (DictionaryEntry de in CustomKeyboardLayouts)
+                foreach (DictionaryEntry de in customKeyboardLayouts)
                     if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
                         sw.WriteLine(de.Key + "=" + (int)de.Value);
             }
@@ -442,16 +347,16 @@ namespace KeyMapper.Classes
 
         public static string GetKeyFontName(bool localizable)
         {
-            if (_arialUnicodeMSInstalled == null)
+            if (arialUnicodeMSInstalled == null)
             {
-                _arialUnicodeMSInstalled = false;
+                arialUnicodeMSInstalled = false;
                 var installedFonts = new InstalledFontCollection();
                 FontFamily[] fonts = installedFonts.Families;
                 foreach (FontFamily ff in fonts)
                 {
                     if (ff.Name == "Arial Unicode MS")
                     {
-                        _arialUnicodeMSInstalled = true;
+                        arialUnicodeMSInstalled = true;
                         _defaultKeyFont = "Arial Unicode MS";
                         break;
                     }
@@ -459,7 +364,7 @@ namespace KeyMapper.Classes
             }
 
 
-            if (localizable == false || (bool)_arialUnicodeMSInstalled)
+            if (localizable == false || (bool)arialUnicodeMSInstalled)
                 return _defaultKeyFont; // Don't want the static keys to change font.
 
             // Default font for keys is Lucida Sans Unicode as it's on every version of Windows
@@ -645,18 +550,17 @@ namespace KeyMapper.Classes
             }
 
             if (savedMappingsExist == false)
+            {
                 MappingsManager.StoreUnsavedMappings();
+            }
 
             if (operatingSystemCapability.ImplementsUAC)
+            {
                 MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
+            }
         }
 
-        private static void SetLocale()
-        {
-            SetLocale(null);
-        }
-
-        public static void SetLocale(string locale)
+        public static void SetLocale(string locale = null)
         {
             // Only want to reset locale temporarily so save current value
             string currentkeyboardlocale = KeyboardHelper.GetCurrentKeyboardLocale();
@@ -667,10 +571,10 @@ namespace KeyMapper.Classes
                 locale = currentkeyboardlocale;
             }
 
-            if ((locale != CurrentLocale))
+            if ((locale != currentLocale))
             {
-                if (CustomKeyboardLayouts != null && CustomKeyboardLayouts.ContainsKey(locale))
-                    KeyboardLayout = (KeyboardLayoutType)CustomKeyboardLayouts[locale];
+                if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale))
+                    KeyboardLayout = (KeyboardLayoutType)customKeyboardLayouts[locale];
                 else
                 {
                     // Ask the keydata interface what kind of layout this locale has - US, Euro etc.
@@ -688,7 +592,7 @@ namespace KeyMapper.Classes
                     CurrentCultureInfo = new CultureInfo(culture);
 
                     _currentLayout = new LocalizedKeySet();
-                    CurrentLocale = locale;
+                    currentLocale = locale;
                 }
 
                 catch (Exception ex)
@@ -699,7 +603,7 @@ namespace KeyMapper.Classes
                 finally
                 {
                     // Set it back (if different)
-                    if (CurrentLocale != currentkeyboardlocale)
+                    if (currentLocale != currentkeyboardlocale)
                         KeyboardHelper.SetLocale(currentkeyboardlocale);
                 }
             }
@@ -712,8 +616,8 @@ namespace KeyMapper.Classes
 
         public static bool IsOnlyAppInstance()
         {
-            _appMutex = new AppMutex();
-            bool gotMutex = _appMutex.GetMutex();
+            appMutex = new AppMutex();
+            bool gotMutex = appMutex.GetMutex();
             if (gotMutex == false)
                 SwitchToExistingInstance();
 

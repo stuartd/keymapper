@@ -302,7 +302,7 @@ namespace KeyMapper.Forms
                         // The last key in the row must be stretched appropriately.
                         // Which one's that, then?
 
-                        int index = Array.IndexOf(_rowTerminators, AppController.GetHashFromKeyData(key.Scancode, key.Extended));
+                        int index = Array.IndexOf(_rowTerminators, KeyHasher.GetHashFromKeyData(key.Scancode, key.Extended));
 
                         if (index < 0)
                         {
@@ -377,7 +377,7 @@ namespace KeyMapper.Forms
                 box.DoubleClick += KeyDoubleClick;
             }
 
-            string toolTipText = box.Map.MappingDescription();
+            string toolTipText = box.Map.MappingDescription;
 
             if (String.IsNullOrEmpty(toolTipText) == false)
                 FormToolTip.SetToolTip(box, toolTipText);

@@ -295,7 +295,7 @@ namespace KeyMapper.Classes
 		// override object.GetHashCode
 		public override int GetHashCode()
 		{
-			return AppController.GetHashFromKeyData(this.Scancode, this.Extended);
+			return KeyHasher.GetHashFromKeyData(this.Scancode, this.Extended);
 		}
 
 		// The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.

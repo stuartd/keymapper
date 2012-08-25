@@ -71,7 +71,7 @@ namespace KeyMapper.Classes
             foreach (int hash in _localizableKeys)
             {
                 // None of the localizable names need the extended bit.
-                int scancode = AppController.GetScancodeFromHash(hash);
+                int scancode = KeyHasher.GetScancodeFromHash(hash);
 
                 // Need to track if a localizable key is a symbol - shifter-symbol
                 // combination but it's length is not 3 - i.e. instead of 1 and ! 
