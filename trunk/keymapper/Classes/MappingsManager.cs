@@ -598,14 +598,9 @@ namespace KeyMapper.Classes
                                  InitialDirectory =
                                      Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
                                  OverwritePrompt = true,
-                                 FileName = "Key Mappings"
+                                 FileName = "Key Mappings",
+                                 AutoUpgradeEnabled = true
                              };
-
-
-                if (AppController.DotNetFramework2ServicePackInstalled)
-                {
-                    AppController.EnableVisualUpgrade(fd);
-                }
 
                 DialogResult dr = fd.ShowDialog();
 

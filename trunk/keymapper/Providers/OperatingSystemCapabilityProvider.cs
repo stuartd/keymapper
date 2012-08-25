@@ -69,11 +69,6 @@ namespace KeyMapper.Providers
             get { return isVistaOrLater; }
         }
 
-        /// <remarks>If using .Net </remarks>
-        /// 
-        /// </summary>
-        public bool SupportsEnhancedDialogs { get; }
-
         private bool isWindows2000
         {
             get
