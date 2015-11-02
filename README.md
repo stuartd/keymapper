@@ -1,20 +1,24 @@
 # keymapper
 
-Exported from code.google.com/p/keymapper
+Exported from code.google.com/p/keymapper - [[
 
 ![](http://justkeepswimming.net/keymapper/images/kmheader.png)
 
-# <a name="Key_Mapper"></a>Key Mapper[](#Key_Mapper)
+# Key Mapper
 
-## <a name="Make_your_keyboard_work_the_way_you_want_it_to"></a>Make your keyboard work the way you want it to[](#Make_your_keyboard_work_the_way_you_want_it_to)
+## Make your keyboard work the way you want it to
 
-### <a name="Remap_and_disable_keyboard_keys_using_a_virtual_keyboard"></a>Remap and disable keyboard keys using a virtual keyboard[](#Remap_and_disable_keyboard_keys_using_a_virtual_keyboard)
+### Remap and disable keyboard keys using a virtual keyboard
 
 * * *
 
-# <a name="Important_note_for_Windows_7_Users"></a>Important note for Windows 7 Users[](#Important_note_for_Windows_7_Users)
+[Downloads still available](https://code.google.com/p/keymapper/downloads/list)
 
-Windows 7 does not support per-user key mappings. Until the next release of Key Mapper, you will have to manually switch to 'Boot' mappings from the Mappings menu, reboot to change the mappings, and you will need to have Administrative access to your computer to set key mappings that will work in Windows 7\.
+To use KeyMapper in modern versions of Windows, you will have to manually switch to 'Boot' mappings from the Mappings menu, reboot to change the mappings, and you will need to have Administrative access to your computer.
+
+This is because both Windows XP and Vista supported per-user key mappings written to . Until the next release of Key Mapper, .
+
+
 
 ## <a name="Windows_XP_and_Windows_Vista"></a>Windows XP and Windows Vista[](#Windows_XP_and_Windows_Vista)
 
