@@ -14,9 +14,9 @@ Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
 [Downloads still available](https://code.google.com/p/keymapper/downloads/list)
 
-**To use KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.
+**To use KeyMapper in modern versions of Windows (i.e. 7 or later) from the downloads, you will have to initially switch to 'Boot' mappings from the Mappings menu.**
 
-If you don't do this, your mappings won't work **
+**f you don't do this, your mappings won't work**
 
 You will also need to have Administrative access to your computer.
 
@@ -24,7 +24,9 @@ This is because both Windows XP and Vista supported per-user key mappings writte
 
 Then Windows 7 came along and dropped the unofficial or accidental support, and it doesn't look like it's coming back.
 
-If you're interested, my original blog post in 2008 on per-user scancode mappings is reproduced below.
+If you're interested, my original blog post from 2008 on per-user scancode mappings is reproduced below.
+
+I did the work required to port it in 2012 and that's what the current master branch represents.
 
 ### Features
 
@@ -42,7 +44,7 @@ Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
 
 Discussions, Suggestions and Bug Reports: [http://keymapper.uservoice.com](http://keymapper.uservoice.com)
 
-#### Per-User Scancode Mappings
+#### Per-User Scancode Mappings [From 2008, Windows 7 was released in 2009]
 
 One thing that distinguishes Key Mapper from other scancode mapping programs is that it lets you map or disable keys on a per-user basis: when Microsoft [originally implemented scancode mappings in Windows 2000](http://www.microsoft.com/whdc/archive/w2kscan-map.mspx), they stated in the "disadvantages" section:
 
