@@ -14,15 +14,35 @@ Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
 [Downloads still available](https://code.google.com/p/keymapper/downloads/list)
 
-To use KeyMapper in modern versions of Windows, you will have to manually switch to 'Boot' mappings from the Mappings menu, reboot to change the mappings, and you will need to have Administrative access to your computer.
+**To use KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.
 
-This is because both Windows XP and Vista supported per-user key mappings written to : and when KeyMapper was released, that was all there was.
+If you don't do this, your mappings won't work **
+
+You will also need to have Administrative access to your computer.
+
+This is because both Windows XP and Vista supported per-user key mappings written to `HKEY_CURRENT_USER\Keyboard Layout` and when KeyMapper was released, those were the latest versions.
 
 Then Windows 7 came along and dropped the unofficial or accidental support, and it doesn't look like it's coming back.
 
-This was my original blog post in XYZ:
+If you're interested, my original blog post in 2008 on per-user scancode mappings is reproduced below.
 
+### Features
 
+Key Mapper uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard the user currently has active. You can browse the keyboards installed on your PC if you like.
+
+As a convenience for people who have disabled the Caps Lock, Num Lock or Scroll Lock keys, Key Mapper has a facility to toggle the value of these keys, in case - for example - an application sets Caps Lock on but the key is disabled.
+
+### [Available downloads](https://code.google.com/p/keymapper/downloads/list)
+
+Key Mapper is a Windows Form application written in C#, targeting the .NET Framework 2.0\. Most people download the MSI installer, but there's also a Setup package (these use [NGEN](http://msdn.microsoft.com/en-us/library/6t9t5wcf(VS.80).aspx) to optimise the application at install) but there's a plain .exe version as well.
+
+Project home page: [https://github.com/stuartd/keymapper](https://github.com/stuartd/keymapper)
+
+Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
+
+Discussions, Suggestions and Bug Reports: [http://keymapper.uservoice.com](http://keymapper.uservoice.com)
+
+#### Per-User Scancode Mappings
 
 One thing that distinguishes Key Mapper from other scancode mapping programs is that it lets you map or disable keys on a per-user basis: when Microsoft [originally implemented scancode mappings in Windows 2000](http://www.microsoft.com/whdc/archive/w2kscan-map.mspx), they stated in the "disadvantages" section:
 
@@ -43,19 +63,3 @@ There are some other advantages to user mappings:
 *   Keys can be mapped on shared computers without affecting all users
 
 There is yet another place scancode mappings can be set - in the `HKEY_USERS\.DEFAULT\Keyboard Layout` key. These apply at the login prompt, but are then removed when logged in.
-
-### <a name="Features"></a>Features[](#Features)
-
-Key Mapper uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard the user currently has active. You can browse the keyboards installed on your PC if you like.
-
-As a convenience for people who have disabled the Caps Lock, Num Lock or Scroll Lock keys, Key Mapper has a facility to toggle the value of these keys, in case - for example - an application sets Caps Lock on but the key is disabled.
-
-### <a name="Available_downloads"></a>Available downloads[](#Available_downloads)
-
-Key Mapper is a Windows Form application written in C#, targeting the .NET Framework 2.0\. Most people download the MSI installer or the Setup package (which use the Native Image Generator ([NGEN](http://msdn.microsoft.com/en-us/library/6t9t5wcf(VS.80).aspx)) to optimise the application at install) but there's a plain .exe version as well.
-
-Project home page: [https://github.com/stuartd/keymapper](https://github.com/stuartd/keymapper)
-
-Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
-
-Discussions, Suggestions and Bug Reports: [http://keymapper.uservoice.com](http://keymapper.uservoice.com)
