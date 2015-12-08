@@ -8,7 +8,7 @@ namespace KeyMapper.Classes
 
         public KeyboardRow(List<KeyboardLayoutElement> keys)
         {
-            this.Keys = keys;
+            Keys = keys;
         }
 
     }

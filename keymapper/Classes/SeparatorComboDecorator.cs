@@ -14,9 +14,9 @@ namespace KeyMapper.Classes
 	        SeparatorHeight = 3;
 	    }
 
-	    public static int SeparatorHeight { get; private set; }
+	    public static int SeparatorHeight { get; }
 
-	    public static int VerticalItemPadding { get; private set; }
+	    public static int VerticalItemPadding { get; }
 
 	    internal class SeparatorItem
 		{
@@ -24,14 +24,14 @@ namespace KeyMapper.Classes
 			
             public SeparatorItem(string name)
 			{
-			    this._name = name;
+                _name = name;
 			}
 
 			public override string ToString()
 			{
-				if (this._name != null)
+				if (_name != null)
 				{
-					return this._name;
+					return _name;
 				}
 				return base.ToString();
 			}

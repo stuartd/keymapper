@@ -4,9 +4,9 @@ namespace KeyMapper.Classes
     {
         public string Name { get; private set; }
 
-        public int Scancode { get; private set; }
+        public int Scancode { get; }
 
-        public int Extended { get; private set; }
+        public int Extended { get; }
 
         public Key()
         {

@@ -15,32 +15,30 @@ namespace KeyMapper.Forms
 {
     public partial class KeyboardForm : KMBaseForm
     {
-        float _buttonScale;
-        float _keySize;
-        int _paddingWidth;
-        bool _hasNumberPad;
-        bool _keysOnly;
-        KeySniffer _sniffer;
-        bool _cancelSlideshow;
+        private float buttonScale;
+        private float keySize;
+        private int paddingWidth;
+        private bool hasNumberPad;
+        private bool keysOnly;
+        private KeySniffer sniffer;
+        private bool cancelSlideshow;
 
         // Because we are intercepting a keypress before it is processed, can't ask
         // what state the keyboard is in using Form.IsKeySet or WIN32API funcs like
         // GetKeyState. So, using fields for the state of each key.
 
-        bool _isCapsLockOn;
-        bool _isNumLockOn;
-        bool _isScrollLockOn;
+        private bool isCapsLockOn;
+        private bool isNumLockOn;
+        private bool isScrollLockOn;
 
         // Different arrangement of ALT and CTRL keys.
-        bool _isMacKeyboard;
+        private bool isMacKeyboard;
 
-        Size _lastSize;
+        private Size lastSize;
 
-        int[] _rowTerminators;
+        private int[] rowTerminators;
 
         private readonly ToolTip FormToolTip;
-
-        private readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
 
         public KeyboardForm()
         {
@@ -49,14 +47,14 @@ namespace KeyMapper.Forms
             InitializeComponent();
             FormsManager.RegisterMainForm(this);
 
-           if (DpiInfo.Dpi < 96)
+            if (DpiInfo.Dpi < 96)
             {
-                menu.Height = (int) (menu.Height*(96F/DpiInfo.Dpi));
-                    // Menu will always show even is fonts are set to less than 100%
+                menu.Height = (int)(menu.Height * (96F / DpiInfo.Dpi));
+                // Menu will always show even is fonts are set to less than 100%
             }
             else if (DpiInfo.Dpi > 96)
             {
-                menu.Height = (int) (menu.Height*(DpiInfo.Dpi/96F));
+                menu.Height = (int)(menu.Height * (DpiInfo.Dpi / 96F));
             }
 
             LoadUserSettings();
@@ -71,23 +69,23 @@ namespace KeyMapper.Forms
             // This needs to be done after location and size of this form are fully determined.
             FormsManager.OpenChildForms();
 
-            _lastSize = Size;
+            lastSize = Size;
 
             GetKeyboardData();
 
             // Create event handlers 
-            this.ResizeEnd += this.KeyboardFormResizeEnd;
-            this.KeyboardListCombo.SelectedIndexChanged += KeyboardListSelectedIndexChanged;
+            ResizeEnd += KeyboardFormResizeEnd;
+            KeyboardListCombo.SelectedIndexChanged += KeyboardListSelectedIndexChanged;
 
             MappingsManager.MappingsChanged += OnMappingsChanged;
             UserColourSettingManager.ColoursChanged += OnColoursChanged;
 
             // Sniff for Caps/Num/Scroll lock keys being pressed while app doesn't have focus
-            _sniffer = new KeySniffer();
-            _sniffer.KeyPressed += ReceiveKeyPress;
-            _sniffer.ActivateHook();
+            sniffer = new KeySniffer();
+            sniffer.KeyPressed += ReceiveKeyPress;
+            sniffer.ActivateHook();
 
-            this.Redraw();
+            Redraw();
         }
 
 
@@ -104,56 +102,37 @@ namespace KeyMapper.Forms
             // As user.config is writeable (if you can find it!)
             // don't want to trust the settings.
 
-            bool firstrun = true;
-            Point savedPosition = Point.Empty;
-            int savedWidth = 0;
-            MappingFilter oldFilter = MappingFilter.All;
+            var firstrun = (userSettings.UserHasSavedSettings == false);
+            var savedPosition = userSettings.KeyboardFormLocation;
+            var savedWidth = userSettings.KeyboardFormWidth;
 
-            firstrun = (userSettings.UserHasSavedSettings == false);
-            savedPosition = userSettings.KeyboardFormLocation;
-            savedWidth = userSettings.KeyboardFormWidth;
-
-            _hasNumberPad = userSettings.KeyboardFormHasNumberPad;
-            _isMacKeyboard = userSettings.KeyboardFormHasMacKeyboard;
-            oldFilter = (MappingFilter)userSettings.LastMappingsFilter;
-
-            //if (firstrun == false)
-            //{
-            //    // AppController.SwitchKeyboardLayout((KeyboardLayoutType)userSettings.KeyboardLayout);
-            //}
+            hasNumberPad = userSettings.KeyboardFormHasNumberPad;
+            isMacKeyboard = userSettings.KeyboardFormHasMacKeyboard;
 
             if (firstrun || savedPosition.IsEmpty || savedPosition.X == -32000)
+            {
                 FormsManager.PositionMainForm();
+            }
             else
-                this.Location = savedPosition;
+            {
+                Location = savedPosition;
+            }
 
-            if (firstrun || savedWidth < this.MinimumSize.Width)
+            if (firstrun || savedWidth < MinimumSize.Width)
             {
                 FormsManager.SizeMainForm();
             }
             else
             {
-                this.Width = savedWidth;
-            }
-
-
-            // If there are boot mappings and no user mappings and the last view mode was boot, then
-            // start in boot mode - as long as user has the rights to change them (or is running Vista)
-
-            if (oldFilter == MappingFilter.Boot
-                && MappingsManager.GetMappingCount(MappingFilter.Boot) > 0
-                && MappingsManager.GetMappingCount(MappingFilter.User) == 0
-                && (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC))
-            {
-                MappingsManager.SetFilter(MappingFilter.Boot);
+                Width = savedWidth;
             }
         }
 
-        void CalculateDimensions()
+        private void CalculateDimensions()
         {
             float keywidth;
 
-            if (_keysOnly)
+            if (keysOnly)
             {
                 keywidth = 15.7F;
             }
@@ -161,27 +140,27 @@ namespace KeyMapper.Forms
             {
                 // These two numbers correspond more-or less to the number of keys wide 
                 // a keyboard is, with or without number pad, plus a bit extra for the padding between keys.
-                keywidth = _hasNumberPad ? 23.75F : 20F;
+                keywidth = hasNumberPad ? 23.75F : 20F;
             }
 
             // Calculate total width and key size
             const int buttonwidth = 128; // Starting width
 
-            _buttonScale = ((float)this.ClientSize.Width / (int)(buttonwidth * keywidth)); // How much buttons have to be scaled to fit
-            _keySize = (buttonwidth * _buttonScale); // Actual size of buttons
-            _paddingWidth = (int)(_keySize / 16); // Gap between rows and columns.
+            buttonScale = ((float)ClientSize.Width / (int)(buttonwidth * keywidth)); // How much buttons have to be scaled to fit
+            keySize = (buttonwidth * buttonScale); // Actual size of buttons
+            paddingWidth = (int)(keySize / 16); // Gap between rows and columns.
         }
 
-        void Redraw()
+        private void Redraw()
         {
             // Can be errors during slideshow, so if we get one then cancel it.
             try
             {
-                NativeMethods.LockWindowUpdate(this.Handle);
+                NativeMethods.LockWindowUpdate(Handle);
             }
             catch (ObjectDisposedException)
             {
-                _cancelSlideshow = true;
+                cancelSlideshow = true;
                 return;
             }
 
@@ -190,25 +169,25 @@ namespace KeyMapper.Forms
 
             // Need to make sure these dispose as they have bitmap resources, so not using Controls.Clear()
             // as it didn't release them properly..
-            for (int i = this.KeyboardPanel.Controls.Count - 1; i >= 0; i--)
+            for (int i = KeyboardPanel.Controls.Count - 1; i >= 0; i--)
             {
-                this.KeyboardPanel.Controls[i].Dispose();
+                KeyboardPanel.Controls[i].Dispose();
             }
 
             // Start in the top left corner..
-            int left = _paddingWidth;
-            int top = _paddingWidth + this.menu.Height;
+            int left = paddingWidth;
+            int top = paddingWidth + menu.Height;
 
             int numpadleft = 0;
             int navleft = 0;
 
-            float mainkeywidth = (14.5F * (_keySize + _paddingWidth)) + (_paddingWidth * 2);
-            float navwidth = ((_keySize + _paddingWidth) * 3);
+            float mainkeywidth = (14.5F * (keySize + paddingWidth)) + (paddingWidth * 2);
+            float navwidth = ((keySize + paddingWidth) * 3);
 
             // Work out how far back the number pad extends 
-            if (_hasNumberPad)
+            if (hasNumberPad)
             {
-                numpadleft = (int)Math.Round(this.ClientSize.Width - (((_keySize + _paddingWidth) * 4.2)), 0);
+                numpadleft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 4.2)), 0);
                 // Nav controls are three wide and they have to fit midway in the
                 // gap between the end of the main body and the numberpad.
                 navleft = (int)Math.Round((mainkeywidth + ((numpadleft - mainkeywidth - navwidth) / 2)), 0);
@@ -216,61 +195,61 @@ namespace KeyMapper.Forms
             else
             {
                 // Work out how far back the navkeys extend instead:
-                navleft = (int)Math.Round(this.ClientSize.Width - (((_keySize + _paddingWidth) * 3.2)), 0);
+                navleft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 3.2)), 0);
             }
 
             KeyboardLayoutType desiredlayout = AppController.KeyboardLayout;
 
-            PhysicalKeyboardLayout kl = PhysicalKeyboardLayout.GetPhysicalLayout(desiredlayout, _isMacKeyboard);
+            PhysicalKeyboardLayout kl = PhysicalKeyboardLayout.GetPhysicalLayout(desiredlayout, isMacKeyboard);
 
-            _rowTerminators = PhysicalKeyboardLayout.GetRowTerminators(desiredlayout);
+            rowTerminators = PhysicalKeyboardLayout.GetRowTerminators(desiredlayout);
 
-            if (_keysOnly == false)
+            if (keysOnly == false)
             {
                 // Function keys.
                 DrawRow(kl.FunctionKeys, left, top);
 
                 // Utility Keys
-                if (_hasNumberPad == false || desiredlayout == KeyboardLayoutType.US)
+                if (hasNumberPad == false || desiredlayout == KeyboardLayoutType.US)
                 {
                     DrawRow(kl.UtilityKeys, navleft, top);
                 }
                 else
                 {
                     // Shunt keys along one key-width (plus padding) for UK layout so they right-justify
-                    DrawRow(kl.UtilityKeys, numpadleft + (int)Math.Round(_keySize, 0) + _paddingWidth, top);
+                    DrawRow(kl.UtilityKeys, numpadleft + (int)Math.Round(keySize, 0) + paddingWidth, top);
                 }
 
                 // To get a spacer row between the F keys: add double padding
-                top += (int)Math.Round(_keySize + (_paddingWidth * 2), 0);
+                top += (int)Math.Round(keySize + (paddingWidth * 2), 0);
 
             }
 
             // TypewriterKeys keys
             DrawRow(kl.TypewriterKeys, left, top);
 
-            if (_keysOnly == false)
+            if (keysOnly == false)
             {
                 // Navigation - Insert, Home, End etc
                 DrawRow(kl.NavigationKeys, navleft, top);
 
                 // Number pad
-                if (_hasNumberPad)
+                if (hasNumberPad)
                 {
                     DrawRow(kl.NumberPadKeys, numpadleft, top);
                 }
 
                 // Skip down and back for arrow keys
-                top += (int)Math.Round((_keySize + _paddingWidth) * 3, 0);
+                top += (int)Math.Round((keySize + paddingWidth) * 3, 0);
                 DrawRow(kl.ArrowKeys, navleft, top);
 
             }
 
             // Need to establish what the keys really are.. should know but it doesn't hurt to check,
             // especially as it went out of kilter at least once in development. 
-            _isCapsLockOn = Form.IsKeyLocked(Keys.CapsLock); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.CapsLock);
-            _isNumLockOn = Form.IsKeyLocked(Keys.NumLock); // .IsKKeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.NumLock);
-            _isScrollLockOn = Form.IsKeyLocked(Keys.Scroll); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.ScrollLock);
+            isCapsLockOn = Form.IsKeyLocked(Keys.CapsLock); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.CapsLock);
+            isNumLockOn = Form.IsKeyLocked(Keys.NumLock); // .IsKKeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.NumLock);
+            isScrollLockOn = Form.IsKeyLocked(Keys.Scroll); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.ScrollLock);
 
             SetStatusLabelsText();
             SetMenuButtonStates();
@@ -279,12 +258,12 @@ namespace KeyMapper.Forms
 
         }
 
-        void DrawRow(IEnumerable<KeyboardRow> Rows, int leftstart, int top)
+        private void DrawRow(IEnumerable<KeyboardRow> Rows, int leftstart, int top)
         {
             int left = leftstart;
 
             // Need to set the exact width of the row.
-            int width = (int)(14.7F * (_keySize + _paddingWidth));
+            int width = (int)(14.7F * (keySize + paddingWidth));
             if (width % 2 != 0)
                 width += 1;
 
@@ -295,19 +274,19 @@ namespace KeyMapper.Forms
                     if (key == null)
                     {
                         // Spacer - eg to centre the up arrow key 
-                        left += (int)Math.Round((decimal)_keySize, 0) + _paddingWidth;
+                        left += (int)Math.Round((decimal)keySize, 0) + paddingWidth;
                     }
                     else
                     {
                         // The last key in the row must be stretched appropriately.
                         // Which one's that, then?
 
-                        int index = Array.IndexOf(_rowTerminators, KeyHasher.GetHashFromKeyData(key.Scancode, key.Extended));
+                        int index = Array.IndexOf(rowTerminators, KeyHasher.GetHashFromKeyData(key.Scancode, key.Extended));
 
                         if (index < 0)
                         {
                             DrawKey(key.Scancode, key.Extended, ref left, top, key.Button,
-                                key.HorizontalStretch * _paddingWidth, key.VerticalStretch * _paddingWidth);
+                                key.HorizontalStretch * paddingWidth, key.VerticalStretch * paddingWidth);
                         }
                         else
                         {
@@ -342,52 +321,45 @@ namespace KeyMapper.Forms
                                     break;
                             }
 
-                            int stretch = (int)(keywidth - (buttonwidth * _buttonScale));
+                            int stretch = (int)(keywidth - (buttonwidth * buttonScale));
 
                             DrawKey(key.Scancode, key.Extended, ref left, top, key.Button,
-                               stretch, key.VerticalStretch * _paddingWidth);
+                               stretch, key.VerticalStretch * paddingWidth);
                         }
 
-                        left += key.RightPadding * _paddingWidth;
+                        left += key.RightPadding * paddingWidth;
                     }
 
                 }
 
-                top += _paddingWidth + (int)Math.Round((decimal)_keySize, 0);
+                top += paddingWidth + (int)Math.Round((decimal)keySize, 0);
                 left = leftstart;
             }
 
         }
 
-        void DrawKey(int scancode, int extended, ref int left, int top, BlankButton button, int horizontalStretch, int verticalStretch)
+        private void DrawKey(int scancode, int extended, ref int left, int top, BlankButton button, int horizontalStretch, int verticalStretch)
         {
 
-            KeyPictureBox box = new KeyPictureBox(scancode, extended, button, this._buttonScale, horizontalStretch, verticalStretch);
+            KeyPictureBox box = new KeyPictureBox(scancode, extended, button, buttonScale, horizontalStretch, verticalStretch);
 
             box.Left = left;
             box.Top = top;
 
-            this.KeyboardPanel.Controls.Add(box);
+            KeyboardPanel.Controls.Add(box);
 
-            // Set the event handler unless filter is boot mappings and user can't write to boot mappings and this isn't Vista
-            if (((MappingsManager.Filter == MappingFilter.Boot
-                && !AppController.UserCanWriteBootMappings
-                && !operatingSystemCapability.ImplementsUAC)) == false)
-            {
-                box.DoubleClick += KeyDoubleClick;
-            }
+            box.DoubleClick += KeyDoubleClick;
 
             string toolTipText = box.Map.MappingDescription;
 
-            if (String.IsNullOrEmpty(toolTipText) == false)
+            if (string.IsNullOrEmpty(toolTipText) == false)
                 FormToolTip.SetToolTip(box, toolTipText);
 
             // left is a ref parameter.
-            left += box.Image.Width + _paddingWidth; // Width varies eg for double-width blanks
-
+            left += box.Image.Width + paddingWidth; // Width varies eg for double-width blanks
         }
 
-        void ResizeToAspect()
+        private void ResizeToAspect()
         {
             // Need to keep the aspect ratio in the shape of a keyboard. 
 
@@ -395,59 +367,32 @@ namespace KeyMapper.Forms
                 return;
 
             float factor;
-            if (_keysOnly)
+            if (keysOnly)
                 factor = 34.5F;
             else
-                factor = _hasNumberPad ? 43F : 36F;
+                factor = hasNumberPad ? 43F : 36F;
 
-            this.SetClientSizeCore(this.ClientSize.Width, StatusBar.Height + this.menu.Height +
-                (int)(this.ClientSize.Width * (12F / (factor))));
+            SetClientSizeCore(ClientSize.Width, StatusBar.Height + menu.Height +
+                (int)(ClientSize.Width * (12F / (factor))));
 
-            menu.Width = this.ClientSize.Width;
+            menu.Width = ClientSize.Width;
 
-            KeyboardPanel.Height = this.ClientSize.Height - StatusBar.Height + this.menu.Height;
-            KeyboardPanel.Width = this.ClientSize.Width;
+            KeyboardPanel.Height = ClientSize.Height - StatusBar.Height + menu.Height;
+            KeyboardPanel.Width = ClientSize.Width;
 
             CalculateDimensions();
 
         }
 
-        void SetMappingStatusLabelText()
+        private void SetMappingStatusLabelText()
         {
-
-            int allmaps = MappingsManager.GetMappingCount(MappingFilter.All);
             int bootmaps = MappingsManager.GetMappingCount(MappingFilter.Boot);
-            int usermaps = MappingsManager.GetMappingCount(MappingFilter.User);
-
-            // TODO: Localizing issue. How to do plurals in other cultures???
 
             string mapstatustext;
 
-            if (allmaps > 0)
+            if (bootmaps != 0)
             {
-                string bootmaptext = string.Empty;
-                if (bootmaps != 0)
-                {
-                    bootmaptext =
-                        operatingSystemCapability.SupportsUserMappings
-                        ? string.Format("{0} boot mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""))
-                        : string.Format("{0} mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""));
-                }
-
-                if (usermaps != 0)
-                {
-                    string usermaptext = usermaps.ToString(CultureInfo.InvariantCulture.NumberFormat) + " user mapping" +
-                                         (usermaps != 1 ? "s" : "");
-
-                    mapstatustext =
-                        bootmaptext +
-                        (String.IsNullOrEmpty(bootmaptext) ? "" : ", ") +
-                        usermaptext;
-                }
-                else
-                {
-                    mapstatustext = bootmaptext;
-                }
+                mapstatustext = string.Format("{0} mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""));
             }
             else
             {
@@ -459,85 +404,50 @@ namespace KeyMapper.Forms
             StatusLabelMappings.Text = mapstatustext;
         }
 
-        void SetReadonlyStatusLabelText()
+        private void SetReadonlyStatusLabelText()
         {
             if (MappingsManager.IsRestartRequired())
             {
                 StatusLabelRestartLogoff.Text = "Restart to complete the mappings";
                 StatusLabelRestartLogoff.Visible = true;
             }
-            else if (MappingsManager.IsLogOnRequired())
-            {
-                StatusLabelRestartLogoff.Text = "Log on again to complete the mappings";
-                StatusLabelRestartLogoff.Visible = true;
-            }
             else
             {
-                StatusLabelRestartLogoff.Text = String.Empty;
+                StatusLabelRestartLogoff.Text = string.Empty;
                 StatusLabelRestartLogoff.Visible = false;
             }
-
-            StatusLabelReadOnly.Visible = (AppController.UserCannotWriteMappings && !operatingSystemCapability.ImplementsUAC);
         }
 
-        void SetFilterStatusLabelText()
+        private void SetFilterStatusLabelText()
         {
-            if (operatingSystemCapability.SupportsUserMappings == false)
-            {
-                StatusLabelMappingDisplayType.Visible = false;
-            }
-            else
-            {
-                switch (MappingsManager.Filter)
-                {
-                    case MappingFilter.All:
-                        StatusLabelMappingDisplayType.Visible = false;
-                        break;
-
-                    case MappingFilter.Boot:
-                        StatusLabelMappingDisplayType.Text =
-                            (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC ? "Editing" : "Showing") + " Boot Mappings";
-                        StatusLabelMappingDisplayType.Visible = true;
-                        break;
-
-                    case MappingFilter.User:
-                        StatusLabelMappingDisplayType.Text = "Editing User Mappings";
-                        StatusLabelMappingDisplayType.Visible = true;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
+            StatusLabelMappingDisplayType.Text =
+                "Editing Boot Mappings";
+            StatusLabelMappingDisplayType.Visible = true;
         }
 
-        void SetStatusLabelsText()
+
+        private void SetStatusLabelsText()
         {
             SetMappingStatusLabelText();
             SetReadonlyStatusLabelText();
-            SetFilterStatusLabelText();
         }
 
-        void SaveUserSettings()
+        private void SaveUserSettings()
         {
             Properties.Settings userSettings = new Properties.Settings
-                {
-                    KeyboardFormLocation = this.Location,
-                    KeyboardFormWidth = this.Width,
-                    KeyboardFormHasNumberPad = this._hasNumberPad,
-                    KeyboardFormHasMacKeyboard = this._isMacKeyboard,
-                    ColourMapFormOpen = FormsManager.IsColourMapFormOpen(),
-                    MappingListFormOpen = FormsManager.IsMappingListFormOpen(),
-                    LastMappingsFilter = (int)MappingsManager.Filter,
-                    UserHasSavedSettings = true
-                };
+            {
+                KeyboardFormLocation = Location,
+                KeyboardFormWidth = Width,
+                KeyboardFormHasNumberPad = hasNumberPad,
+                KeyboardFormHasMacKeyboard = isMacKeyboard,
+                ColourMapFormOpen = FormsManager.IsColourMapFormOpen(),
+                MappingListFormOpen = FormsManager.IsMappingListFormOpen(),
+                UserHasSavedSettings = true
+            };
 
             // userSettings.KeyboardLayout = (int)AppController.KeyboardLayout;
             userSettings.Save();
         }
-
-        #region Keyboard methods
 
         private void GetKeyboardData()
         {
@@ -570,20 +480,20 @@ namespace KeyMapper.Forms
         }
 
 
-        void ToggleNumberpad()
+        private void ToggleNumberpad()
         {
-            _hasNumberPad = !_hasNumberPad;
+            hasNumberPad = !hasNumberPad;
             ResizeToAspect();
             Redraw();
         }
 
-        void ChangeKeyboard(string name)
+        private void ChangeKeyboard(string name)
         {
             ChangeKeyboard(name, false);
         }
 
 
-        void ChangeKeyboard(string name, bool calledFromCombo)
+        private void ChangeKeyboard(string name, bool calledFromCombo)
         {
 
             if (KeyboardHelper.InstalledKeyboards.Contains(name))
@@ -595,35 +505,35 @@ namespace KeyMapper.Forms
                     KeyboardListCombo.SelectedItem = name;
                     KeyboardListCombo.SelectedIndexChanged += KeyboardListSelectedIndexChanged;
                 }
-                this.Redraw();
+                Redraw();
             }
         }
 
-        void SimulateToggleKeyKeypress(KeyboardHelper.ToggleKey key)
+        private void SimulateToggleKeyKeypress(KeyboardHelper.ToggleKey key)
         {
-            _sniffer.DeactivateHook();
+            sniffer.DeactivateHook();
             KeyboardHelper.PressKey(key);
 
             switch (key)
             {
                 case KeyboardHelper.ToggleKey.NumLock:
-                    _isNumLockOn = !_isNumLockOn;
+                    isNumLockOn = !isNumLockOn;
                     break;
                 case KeyboardHelper.ToggleKey.CapsLock:
-                    _isCapsLockOn = !_isCapsLockOn;
+                    isCapsLockOn = !isCapsLockOn;
                     break;
                 case KeyboardHelper.ToggleKey.ScrollLock:
-                    _isScrollLockOn = !_isScrollLockOn;
+                    isScrollLockOn = !isScrollLockOn;
                     break;
                 default:
                     break;
             }
 
-            _sniffer.ActivateHook();
+            sniffer.ActivateHook();
             SetToggleMenuButtonStates();
         }
 
-        void ChangeKeyOrientation()
+        private void ChangeKeyOrientation()
         {
             switch (AppController.KeyboardLayout)
             {
@@ -644,96 +554,48 @@ namespace KeyMapper.Forms
             AppController.AddCustomLayout();
         }
 
-        #endregion
-
-        #region Menu Buttons
-
         // Called by FormsManager when a form closes.
         public void RegenerateMenuExternal()
         {
             SetWindowMenuButtonStates();
         }
 
-        void SetToggleMenuButtonStates()
+        private void SetToggleMenuButtonStates()
         {
             // Toggle Keys
-            capsLockToolStripMenuItem.Checked = _isCapsLockOn;
-            numLockToolStripMenuItem.Checked = _isNumLockOn;
-            scrollLockToolStripMenuItem.Checked = _isScrollLockOn;
-            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC;
+            capsLockToolStripMenuItem.Checked = isCapsLockOn;
+            numLockToolStripMenuItem.Checked = isNumLockOn;
+            scrollLockToolStripMenuItem.Checked = isScrollLockOn;
+            setCurrentToggleKeysAtBootToolStripMenuItem.Enabled = true;
         }
 
-        void SetMappingsMenuButtonStates()
+        private void SetMappingsMenuButtonStates()
         {
-            // Mappings - view all, user, boot.
-            if (operatingSystemCapability.SupportsUserMappings)
-            {
-                switch (MappingsManager.Filter)
-                {
-                    case MappingFilter.All:
-                        clearAllToolStripMenuItem.Text = "C&lear All Mappings";
-                        break;
-
-                    case MappingFilter.Boot:
-                        clearAllToolStripMenuItem.Text = "C&lear All Boot Mappings";
-                        break;
-
-                    case MappingFilter.User:
-                        clearAllToolStripMenuItem.Text = "C&lear All User Mappings";
-                        break;
-                }
-            }
-            else
-            {
-                clearAllToolStripMenuItem.Text = "C&lear All Mappings";
-            }
-            // Disable "Clear Mappings" and "Revert To Saved Mappings" if user can't write mappings at all
-            // and the latter if there haven't been any changes
-
-            clearAllToolStripMenuItem.Enabled = !AppController.UserCannotWriteMappings;
-
-            revertToSavedToolStripMenuItem.Enabled = (
-                AppController.UserCannotWriteMappings == false &&
-                (MappingsManager.IsRestartRequired() || MappingsManager.IsLogOnRequired()));
-
-            onlyShowBootMappingsToolStripMenuItem.Text = "Boot Mappings" +
-              (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC ? String.Empty : " (Read Only)");
-
-            // Mappings - check current view
-            showAllMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.All);
-            onlyShowBootMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.Boot);
-            onlyShowUserMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.User);
-
-            // Whether to allow the option of viewing user mappings (ie not on W2K) 
-
-            chooseMappingsToolStripMenuItem.Visible = (operatingSystemCapability.SupportsUserMappings);
-         
-            selectFromCaptureToolStripMenuItem.Enabled = !AppController.UserCannotWriteMappings;
+            clearAllToolStripMenuItem.Text = "C&lear All Mappings";
         }
 
-        void SetWindowMenuButtonStates()
+        private void SetWindowMenuButtonStates()
         {
             colourMapFormToolStripMenuItem.Checked = FormsManager.IsColourMapFormOpen();
             mappingListFormToolStripMenuItem.Checked = FormsManager.IsMappingListFormOpen();
-
         }
 
-        void SetEditMenuButtonStates()
+        private void SetEditMenuButtonStates()
         {
             undoToolStripMenuItem.Enabled = (MappingsManager.UndoStackCount > 0);
             redoToolStripMenuItem.Enabled = (MappingsManager.RedoStackCount > 0);
         }
 
-        void SetKeyboardLayoutMenuButtonStates()
+        private void SetKeyboardLayoutMenuButtonStates()
         {
-            toggleNumberPadToolStripMenuItem.Enabled = !_keysOnly;
-            showMainKeysOnlyToolStripMenuItem.Checked = _keysOnly;
+            toggleNumberPadToolStripMenuItem.Enabled = !keysOnly;
+            showMainKeysOnlyToolStripMenuItem.Checked = keysOnly;
 
-            toggleNumberPadToolStripMenuItem.Checked = _hasNumberPad;
-            useMacKeyboardToolStripMenuItem.Checked = _isMacKeyboard;
+            toggleNumberPadToolStripMenuItem.Checked = hasNumberPad;
+            useMacKeyboardToolStripMenuItem.Checked = isMacKeyboard;
         }
 
-        void SetMenuButtonStates()
+        private void SetMenuButtonStates()
         {
             SetToggleMenuButtonStates();
             SetMappingsMenuButtonStates();
@@ -748,14 +610,9 @@ namespace KeyMapper.Forms
         //{
         //}
 
-
-        #endregion
-
-        #region Event Methods
-
         private void KeyboardListSelectedIndexChanged(object sender, EventArgs e)
         {
-            this.ChangeKeyboard(KeyboardListCombo.Text, true);
+            ChangeKeyboard(KeyboardListCombo.Text, true);
         }
 
         private void KeyDoubleClick(object sender, EventArgs e)
@@ -768,11 +625,11 @@ namespace KeyMapper.Forms
 
         private void KeyboardFormClosed(object sender, FormClosedEventArgs e)
         {
-            if (_sniffer != null)
+            if (sniffer != null)
             {
-                _sniffer.KeyPressed -= ReceiveKeyPress;
-                _sniffer.DeactivateHook();
-                _sniffer = null;
+                sniffer.KeyPressed -= ReceiveKeyPress;
+                sniffer.DeactivateHook();
+                sniffer = null;
             }
             KeyboardHelper.UnloadLayout();
         }
@@ -783,29 +640,29 @@ namespace KeyMapper.Forms
             SaveUserSettings();
         }
 
-        void KeyboardFormKeyPress(object sender, KeyPressEventArgs e)
+        private void KeyboardFormKeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
-                _cancelSlideshow = true;
+                cancelSlideshow = true;
 
         }
 
         private void OnMappingsChanged(object sender, EventArgs e)
         {
-            this.Redraw();
+            Redraw();
         }
 
-        void OnColoursChanged(object sender, EventArgs e)
+        private void OnColoursChanged(object sender, EventArgs e)
         {
-            this.Redraw();
+            Redraw();
         }
 
 
         private void KeyboardFormResizeEnd(object sender, EventArgs e)
         {
-            if (Size != _lastSize) // Not just a move (which fires this too)
+            if (Size != lastSize) // Not just a move (which fires this too)
             {
-                _lastSize = Size;
+                lastSize = Size;
                 ResizeToAspect();
                 Redraw();
             }
@@ -827,16 +684,16 @@ namespace KeyMapper.Forms
                 switch (key.VirtualKeyCode)
                 {
                     case (int)KeyboardHelper.ToggleKey.CapsLock:
-                        _isCapsLockOn = !_isCapsLockOn;
+                        isCapsLockOn = !isCapsLockOn;
                         SetToggleMenuButtonStates();
                         break;
                     case (int)KeyboardHelper.ToggleKey.NumLock:
-                        _isNumLockOn = !_isNumLockOn;
+                        isNumLockOn = !isNumLockOn;
                         SetToggleMenuButtonStates();
                         break;
                     case (int)KeyboardHelper.ToggleKey.ScrollLock:
-                        _isScrollLockOn = !_isScrollLockOn;
-                        if (_isScrollLockOn != Form.IsKeyLocked(Keys.Scroll))
+                        isScrollLockOn = !isScrollLockOn;
+                        if (isScrollLockOn != Form.IsKeyLocked(Keys.Scroll))
                             SetToggleMenuButtonStates();
                         break;
                 }
@@ -849,17 +706,13 @@ namespace KeyMapper.Forms
         //{
         //    if (e.Button == MouseButtons.Right)
         //    {
-        //        _contextBox = (sender as KeyPictureBox);
-        //        if (_contextBox != null)
+        //        contextBox = (sender as KeyPictureBox);
+        //        if (contextBox != null)
         //        {
         //            PopulateContextMenu();
         //        }
         //    }
         //}
-
-        #endregion
-
-        #region Main Menu click methods
 
         private void exitMenuItemClick(object sender, EventArgs e)
         {
@@ -903,7 +756,7 @@ namespace KeyMapper.Forms
 
         private void selectLayoutToolStripItemClick(object sender, EventArgs e)
         {
-            this.ChangeKeyboard(sender.ToString());
+            ChangeKeyboard(sender.ToString());
         }
 
         private void selectFromCaptureMenuItemClick(object sender, EventArgs e)
@@ -925,26 +778,8 @@ namespace KeyMapper.Forms
 
         private void showMainKeysOnlyMenuItemClick(object sender, EventArgs e)
         {
-            _keysOnly = !_keysOnly;
+            keysOnly = !keysOnly;
             ResizeToAspect();
-            Redraw();
-        }
-
-        private void onlyShowBootMappingsMenuItemClick(object sender, EventArgs e)
-        {
-            MappingsManager.SetFilter(MappingFilter.Boot);
-            Redraw();
-        }
-
-        private void onlyShowUserMappingsMenuItemClick(object sender, EventArgs e)
-        {
-            MappingsManager.SetFilter(MappingFilter.User);
-            Redraw();
-        }
-
-        private void showAllMappingsMenuItemClick(object sender, EventArgs e)
-        {
-            MappingsManager.SetFilter(MappingFilter.All);
             Redraw();
         }
 
@@ -963,20 +798,20 @@ namespace KeyMapper.Forms
 
         private void useMacKeyboardMenuItemClick(object sender, EventArgs e)
         {
-            _isMacKeyboard = !_isMacKeyboard;
+            isMacKeyboard = !isMacKeyboard;
             Redraw();
         }
 
         private void revertToDefaultKeyboardLayoutMenuItemClick(object sender, EventArgs e)
         {
             // Revert to default keyboard layout 
-            this.ChangeKeyboard(KeyboardHelper.GetKeyboardName());
-            this.Redraw();
+            ChangeKeyboard(KeyboardHelper.GetKeyboardName());
+            Redraw();
         }
 
         private void exportAsRegistryFileMenuItemClick(object sender, EventArgs e)
         {
-            MappingsManager.ExportMappingsAsRegistryFile(MappingFilter.All, false);
+            MappingsManager.ExportMappingsAsRegistryFile(false);
         }
 
         private void selectFromListsMenuItemClick(object sender, EventArgs e)
@@ -1016,11 +851,11 @@ namespace KeyMapper.Forms
 
         private void setCurrentToggleKeysAtBootToolStripMenuItemClick(object sender, EventArgs e)
         {
-            // The HKEY_CURRENT_USER version of this setting is set at logoff.
+            // The HKEYCURRENTUSER version of this setting is set at logoff.
             // This sets the value which applies before any user has logged on.
 
             string value =
-                    ((_isCapsLockOn ? 1 : 0) + (_isNumLockOn ? 2 : 0) + (_isScrollLockOn ? 4 : 0)).ToString(CultureInfo.InvariantCulture);
+                    ((isCapsLockOn ? 1 : 0) + (isNumLockOn ? 2 : 0) + (isScrollLockOn ? 4 : 0)).ToString(CultureInfo.InvariantCulture);
 
             if (AppController.UserCanWriteBootMappings == false)
             {
@@ -1047,32 +882,32 @@ namespace KeyMapper.Forms
 
         }
 
-        private void printScreenToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void printScreenToFileToolStripMenuItemClick(object sender, EventArgs e)
         {
             SaveKeyboardImageAsFile(false);
         }
 
         private void SaveKeyboardImageAsFile(bool autoSave)
         {
-            using (Bitmap bmp = new Bitmap(this.Width, this.Height))
+            using (Bitmap bmp = new Bitmap(Width, Height))
             {
-                this.DrawToBitmap(bmp, new Rectangle(Point.Empty, this.Size));
+                DrawToBitmap(bmp, new Rectangle(Point.Empty, Size));
 
-                Size actualSize = new Size(this.ClientSize.Width, this.ClientSize.Height - this.menu.Height - this.StatusBar.Height);
+                Size actualSize = new Size(ClientSize.Width, ClientSize.Height - menu.Height - StatusBar.Height);
 
                 using (Bitmap bmp2 = new Bitmap(actualSize.Width, actualSize.Height))
                 {
-                    Point p = this.PointToScreen(Point.Empty);
+                    Point p = PointToScreen(Point.Empty);
 
-                    int x = p.X - this.Left;
-                    int y = p.Y - this.Top + this.menu.Height;
+                    int x = p.X - Left;
+                    int y = p.Y - Top + menu.Height;
 
                     using (Graphics g = Graphics.FromImage(bmp2))
                     {
                         g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
                     }
 
-                    string filename = this.KeyboardListCombo.Text;
+                    string filename = KeyboardListCombo.Text;
 
                     if (autoSave)
                     {
@@ -1081,13 +916,13 @@ namespace KeyMapper.Forms
                     else
                     {
                         SaveFileDialog fd = new SaveFileDialog
-                            {
-                                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                                OverwritePrompt = false,
-                                AutoUpgradeEnabled = true,
-                                FileName = filename + " keyboard layout",
-                                Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp"
-                            };
+                        {
+                            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                            OverwritePrompt = false,
+                            AutoUpgradeEnabled = true,
+                            FileName = filename + " keyboard layout",
+                            Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp"
+                        };
 
                         if (fd.ShowDialog() == DialogResult.OK)
                         {
@@ -1109,29 +944,22 @@ namespace KeyMapper.Forms
                 }
             }
         }
-        
+
         private void clearLogFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LogProvider.ClearLogFile();
         }
 
-        #endregion
-
-        private void forceUserMappingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MappingsManager.SaveUserMappingsToKeyMapperKey(true);
-        }
-
         private void keyboardSlideshowToolStripMenuItemClick(object sender, EventArgs e)
         {
-            string caption = this.Text;
+            string caption = Text;
             int currentKeyboard = KeyboardListCombo.SelectedIndex;
-            this.Text += " (press Escape to stop slideshow)";
-            _cancelSlideshow = false;
-            this.KeyPress += KeyboardFormKeyPress;
+            Text += " (press Escape to stop slideshow)";
+            cancelSlideshow = false;
+            KeyPress += KeyboardFormKeyPress;
             for (int i = 0; i < KeyboardListCombo.Items.Count; i++)
             {
-                if (_cancelSlideshow)
+                if (cancelSlideshow)
                 {
                     KeyboardListCombo.SelectedIndex = currentKeyboard;
                     Application.DoEvents();
@@ -1142,12 +970,12 @@ namespace KeyMapper.Forms
                 Application.DoEvents();
                 System.Threading.Thread.Sleep(250);
             }
-            this.KeyPress -= KeyboardFormKeyPress;
-            this.Text = caption;
+            KeyPress -= KeyboardFormKeyPress;
+            Text = caption;
 
         }
 
-        private void resetUserSetingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void resetUserSettingsToolStripMenuItemClick(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reset();
         }

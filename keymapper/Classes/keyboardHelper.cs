@@ -13,17 +13,15 @@ namespace KeyMapper.Classes
     /// <summary>
     ///  Static class providing Keyboard helper methods
     /// </summary>
-    static class KeyboardHelper
+    internal static class KeyboardHelper
     {
         // The don't need to be IntPtrs as they aren't actually system resources 
-        static List<int> _systemInputLocaleIdentifiers;
+        private static List<int> _systemInputLocaleIdentifiers;
 
-        // It's just easier to have this as in IntPtr
-        static IntPtr _currentInputLocaleIdentifier;
+        // It's just easier to have this as an IntPtr
+        private static IntPtr _currentInputLocaleIdentifier;
 
-        public static Hashtable InstalledKeyboards { get; private set; }
-
-        private static readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
+        public static Hashtable InstalledKeyboards { get; }
 
         static KeyboardHelper()
         {
@@ -47,7 +45,7 @@ namespace KeyMapper.Classes
                 return _systemInputLocaleIdentifiers;
             }
         }
-        
+
         public static int SetLocale(string locale)
         {
             UnloadLayout();
@@ -182,7 +180,7 @@ namespace KeyMapper.Classes
 
             // If this shifted state the same as the unshifted.ToUpper
             // (e.g. e and E) then don't add it.
-            if (rc > 0 & (String.Compare(sbShifted.ToString(), sbUnshifted.ToString(), true, AppController.CurrentCultureInfo) != 0))
+            if (rc > 0 & (string.Compare(sbShifted.ToString(), sbUnshifted.ToString(), true, AppController.CurrentCultureInfo) != 0))
             {
                 // Not wanting to do this for letters and the like..
                 result.Append(" " + sbShifted);
@@ -197,7 +195,7 @@ namespace KeyMapper.Classes
             NumLock = Keys.NumLock,
             CapsLock = Keys.CapsLock,
             ScrollLock = Keys.Scroll
-        } ;
+        };
 
 
         public static void PressKey(ToggleKey keycode)
@@ -229,8 +227,8 @@ namespace KeyMapper.Classes
         public static string GetKeyboardName()
         {
             string locale = GetCurrentKeyboardLocale();
-            return locale == null 
-                ? "Keyboard name cannot be determined" 
+            return locale == null
+                ? "Keyboard name cannot be determined"
                 : GetKeyboardName(locale);
         }
 
@@ -274,7 +272,7 @@ namespace KeyMapper.Classes
             StringBuilder keyboards = new StringBuilder();
             foreach (string keyboard in kblist)
             {
-                keyboards.Append(keyboard + (char) 13 + (char) 10);
+                keyboards.Append(keyboard + (char)13 + (char)10);
             }
 
             string keyboardListFile = Path.Combine(Path.GetTempPath(), "installed keyboards.txt");
@@ -289,8 +287,7 @@ namespace KeyMapper.Classes
             System.Diagnostics.Process.Start(keyboardListFile);
         }
 
-
-        public static string GetKeyboardName(string locale)
+        private static string GetKeyboardName(string locale)
         {
 
             string keyboardname = "Unknown";
@@ -312,29 +309,26 @@ namespace KeyMapper.Classes
 
             keyboardname = key.GetValue("Layout Text").ToString();
 
-            if (operatingSystemCapability.SupportsLocalizedKeyboardNames) 
+            // XP or later - can get localised name for keyboard:
+            // (if it exists - pass empty string so that's the return if it doesn't)
+
+            string keyboardShellName = key.GetValue("Layout Display Name", "").ToString();
+            string localName = string.Empty;
+
+            if (string.IsNullOrEmpty(keyboardShellName) == false)
             {
-                // XP or later - can get localised name for keyboard:
-                // (if it exists - pass empty string so that's the return if it doesn't)
+                StringBuilder sbName = new StringBuilder(260);
 
-                string keyboardShellName = key.GetValue("Layout Display Name", "").ToString();
-                string localName = string.Empty;
-
-                if (String.IsNullOrEmpty(keyboardShellName) == false)
+                if (NativeMethods.SHLoadIndirectString
+                    (keyboardShellName, sbName, (uint)sbName.Capacity, IntPtr.Zero) == 0)
                 {
-                    StringBuilder sbName = new StringBuilder(260);
-
-                    if (NativeMethods.SHLoadIndirectString
-                        (keyboardShellName, sbName, (uint)sbName.Capacity, IntPtr.Zero) == 0)
-                    {
-                        localName = sbName.ToString();
-                    }
+                    localName = sbName.ToString();
                 }
+            }
 
-                if (String.IsNullOrEmpty(localName) == false)
-                {
-                    keyboardname = localName;
-                }
+            if (string.IsNullOrEmpty(localName) == false)
+            {
+                keyboardname = localName;
             }
 
             return keyboardname;

@@ -8,12 +8,12 @@ namespace KeyMapper.Controls
 public class PanelFader : Control
 	{
 		public event EventHandler<EventArgs> FadeComplete;
-		
-		Bitmap _startimage;
-		Bitmap _endimage;
-		int _fade;
 
-    readonly Timer _tmr = new Timer();
+    private Bitmap _startimage;
+    private Bitmap _endimage;
+    private int _fade;
+
+    private readonly Timer _tmr = new Timer();
     
 		public PanelFader()
 		{
@@ -31,7 +31,7 @@ public class PanelFader : Control
 			    return;
 			}
 
-			e.Graphics.DrawImage(_startimage, this.ClientRectangle, 0, 0, _startimage.Width, _startimage.
+			e.Graphics.DrawImage(_startimage, ClientRectangle, 0, 0, _startimage.Width, _startimage.
 			Height, GraphicsUnit.Pixel);
 
 			ImageAttributes ia = new ImageAttributes();
@@ -59,13 +59,13 @@ public class PanelFader : Control
 			panel1.DrawToBitmap(_startimage, panel1.ClientRectangle);
 			panel2.DrawToBitmap(_endimage, panel2.ClientRectangle);
 
-			this.Location = panel1.Location;
-			this.Size = panel1.Size;
+            Location = panel1.Location;
+            Size = panel1.Size;
 
 			_fade = 1;
 
-			this._tmr.Interval = 1;
-			this._tmr.Enabled = true;
+            _tmr.Interval = 1;
+            _tmr.Enabled = true;
 
 		}
 

@@ -37,9 +37,9 @@ namespace KeyMapper.Providers
         public static void RedirectConsoleOutput()
         {
             string path = _logFileName;
-            string existingLogEntries = String.Empty;
+            string existingLogEntries = string.Empty;
 
-            if (String.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 return;
 
             if (File.Exists(path))

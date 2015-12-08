@@ -2,6 +2,6 @@
 {
     public enum Mappings
     {
-        CurrentBootMappings, CurrentUserMappings, SavedBootMappings, SavedUserMappings
+        CurrentBootMappings, SavedBootMappings
     }
 }

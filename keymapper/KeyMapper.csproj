@@ -10,8 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KeyMapper</RootNamespace>
     <AssemblyName>KeyMapper</AssemblyName>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>KeyMapper.Classes.main</StartupObject>
     <SignAssembly>false</SignAssembly>
     <ManifestCertificateThumbprint>C82F5AD128815950084E4EA1756D4C5D7F63D089</ManifestCertificateThumbprint>
     <ManifestKeyFile>Project\KeyMapper.pfx</ManifestKeyFile>
@@ -26,7 +25,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <PublishUrl>ftp://justkeepswimming.net/httpdocs/keymapper/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -49,12 +48,13 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -315,9 +315,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Providers\ConfigFileProvider.cs" />
-    <Compile Include="Providers\IOperatingSystemCapability.cs" />
     <Compile Include="Providers\LogProvider.cs" />
-    <Compile Include="Providers\OperatingSystemCapabilityProvider.cs" />
     <Compile Include="Providers\RegistryProvider.cs" />
     <Compile Include="Providers\UndoRedoStackProvider.cs" />
   </ItemGroup>

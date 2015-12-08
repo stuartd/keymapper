@@ -18,15 +18,13 @@ namespace KeyMapper.Forms
 			if (disposing && (this.components != null))
 			{
 				this.components.Dispose();
-				if (this._sniffer != null)
-					this._sniffer.Dispose();
+				if (this.sniffer != null)
+					this.sniffer.Dispose();
 			}
 			base.Dispose(disposing);
 		}
 
-		#region Windows Form Designer generated code
-
-		/// <summary>
+	    /// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
@@ -276,9 +274,7 @@ namespace KeyMapper.Forms
 
 		}
 
-		#endregion
-
-		private KMPictureBox FromKeyPictureBox;
+	    private KMPictureBox FromKeyPictureBox;
         private KMPictureBox ToKeyPictureBox;
 		private System.Windows.Forms.Button MapButton;
 		private System.Windows.Forms.TableLayoutPanel KeyListsPanel;

@@ -20,9 +20,7 @@ namespace KeyMapper.Forms
 			base.Dispose(disposing);
 		}
 
-		#region Windows Form Designer generated code
-
-		/// <summary>
+	    /// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
@@ -570,9 +568,7 @@ namespace KeyMapper.Forms
 
 		}
 
-		#endregion
-
-		private System.Windows.Forms.NumericUpDown Matrix44;
+	    private System.Windows.Forms.NumericUpDown Matrix44;
 		private System.Windows.Forms.NumericUpDown Matrix34;
 		private System.Windows.Forms.NumericUpDown Matrix24;
 		private System.Windows.Forms.NumericUpDown Matrix14;

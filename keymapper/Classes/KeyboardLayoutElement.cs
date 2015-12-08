@@ -2,53 +2,53 @@ namespace KeyMapper.Classes
 {
     public class KeyboardLayoutElement
     {
-        int _scancode;
-        int _extended;
-        BlankButton _button;
-        int _horizontalstretch;
-        int _verticalstretch;
-        int _rightpadding;
+        private int _scancode;
+        private int _extended;
+        private BlankButton _button;
+        private int _horizontalstretch;
+        private int _verticalstretch;
+        private int _rightpadding;
 
         public int Scancode
         {
-            get { return this._scancode; }
+            get { return _scancode; }
         }
 
         public int Extended
         {
-            get { return this._extended; }
+            get { return _extended; }
         }
 
         public BlankButton Button
         {
-            get { return this._button; }
+            get { return _button; }
         }
 
         public int HorizontalStretch
         {
-            get { return this._horizontalstretch; }
+            get { return _horizontalstretch; }
         }
 
         public int VerticalStretch
         {
-            get { return this._verticalstretch; }
+            get { return _verticalstretch; }
         }
 
         public int RightPadding
         {
-            get { return this._rightpadding; }
+            get { return _rightpadding; }
         }
 
 
         public KeyboardLayoutElement(int scancode, int extended, BlankButton button,
                                      int horizontalStretch, int verticalStretch, int rightPadding)
         {
-            this._scancode = scancode;
-            this._extended = extended;
-            this._button = button;
-            this._horizontalstretch = horizontalStretch;
-            this._verticalstretch = verticalStretch;
-            this._rightpadding = rightPadding;
+            _scancode = scancode;
+            _extended = extended;
+            _button = button;
+            _horizontalstretch = horizontalStretch;
+            _verticalstretch = verticalStretch;
+            _rightpadding = rightPadding;
         }
 
     }

@@ -5,18 +5,12 @@ using KeyMapper.Forms;
 using KeyMapper.Providers;
 
 [assembly: CLSCompliant(true)]
-[assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true, UnmanagedCode = true)]
-
 namespace KeyMapper.Classes
 {
-	class main
+    internal class main
 	{
-
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main()
+        [STAThread]
+		private static void Main()
 		{
 			if (AppController.IsOnlyAppInstance() == false)
 			{
@@ -57,10 +51,9 @@ namespace KeyMapper.Classes
 			// Release static events or else leak.
 			Application.ThreadException -= ApplicationThreadException;
 			AppDomain.CurrentDomain.UnhandledException -= UnhandledExceptionHandler;
-
 		}
 
-		static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
 		{
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
@@ -69,7 +62,7 @@ namespace KeyMapper.Classes
 			}
 		}
 
-		static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        private static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
 		{
 			ArgumentException aex = e.Exception as ArgumentException;
 			if (aex != null)

@@ -4,22 +4,22 @@ using System.Drawing;
 
 namespace KeyMapper.Controls
 {
-    class KMPictureBox : PictureBox
+    internal class KMPictureBox : PictureBox
     {
         public void SetImage(Bitmap bmp)
         {
-            this.ReleaseImage();
-            this.Image = bmp;
+            ReleaseImage();
+            Image = bmp;
         }
 
         internal void ReleaseImage()
         {
-            IDisposable cleaner = this.Image;
+            IDisposable cleaner = Image;
             if (cleaner != null)
             {
                 cleaner.Dispose();
             }
-            this.Image = null;
+            Image = null;
         }
     }
 }

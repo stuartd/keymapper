@@ -6,12 +6,12 @@ using Microsoft.Win32;
 
 namespace KeyMapper.Classes
 {
-    static class UserColourSettingManager
+    internal static class UserColourSettingManager
     {
         public static event EventHandler<EventArgs> ColoursChanged;
-        static bool _loaded;
+        private static bool _loaded;
 
-        static readonly Dictionary<ButtonEffect, UserColourSetting> settings 
+        private static readonly Dictionary<ButtonEffect, UserColourSetting> settings 
             = new Dictionary<ButtonEffect, UserColourSetting>();
 
         static UserColourSettingManager()
@@ -53,7 +53,7 @@ namespace KeyMapper.Classes
 
                     object value = cm.GetType().GetProperty(name).GetValue(cm, null);
                     // Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
-                    reg.SetValue(name, (float)System.Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
+                    reg.SetValue(name, (float)decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
                 }
             }
 
@@ -121,8 +121,8 @@ namespace KeyMapper.Classes
                     value = reg.GetValue(name);
                     if (value != null)
                     {
-                        Single svalue;
-                        if (System.Single.TryParse(value.ToString(), out svalue))
+                        float svalue;
+                        if (float.TryParse(value.ToString(), out svalue))
                         {
                             cm.GetType().GetProperty(name).SetValue(cm, svalue, null);
                         }
@@ -139,8 +139,8 @@ namespace KeyMapper.Classes
     public class UserColourSetting
     {
         // This is the class that will be stored in the user settings for custom colours
-        ColorMatrix _matrix = new ColorMatrix();
-        int _fontColour = Color.Black.ToArgb();
+        private ColorMatrix _matrix = new ColorMatrix();
+        private int _fontColour = Color.Black.ToArgb();
 
         public Color FontColour
         {

@@ -15,7 +15,7 @@ namespace KeyMapper.Classes
         // Basic blank button, unscaled, no effects
 		public static Bitmap GetButtonImage(int scancode, int extended)
 		{
-			return GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, 1F, ButtonEffect.None, String.Empty);
+			return GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, 1F, ButtonEffect.None, string.Empty);
 		}
 
 		// Specific scaled button with custom caption
@@ -38,7 +38,7 @@ namespace KeyMapper.Classes
 			(int scancode, int extended, BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect)
 		{
 			return GetButtonImage
-				(scancode, extended, button, horizontalStretch, verticalStretch, scale, effect, String.Empty);
+				(scancode, extended, button, horizontalStretch, verticalStretch, scale, effect, string.Empty);
 		}
 
 		// This (private) method does the work. 
@@ -50,7 +50,7 @@ namespace KeyMapper.Classes
 			Color fontColour = GetFontColour(effect);
 
 			Bitmap bmpWithCaption;
-            if (String.IsNullOrEmpty(caption))
+            if (string.IsNullOrEmpty(caption))
             {
                 bmpWithCaption = WriteCaption(bmp, scancode, extended, fontColour);
             }
@@ -165,7 +165,7 @@ namespace KeyMapper.Classes
 
         private static Bitmap GetBitmap(BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect, bool transform)
 		{
-            if (Math.Abs(scale - lastScale) > Single.Epsilon)
+            if (Math.Abs(scale - lastScale) > float.Epsilon)
             {
                 FontSize.SetFontSizes(scale);
             }
@@ -345,7 +345,7 @@ namespace KeyMapper.Classes
 					break;
 
 				case 2: // Two letters - mostly F keys, which need a constant font whether they are 2 or 3 chars long
-					if (caption.Substring(0, 1) == "F" && Char.IsDigit(caption, 1))
+					if (caption.Substring(0, 1) == "F" && char.IsDigit(caption, 1))
 						bmp = DrawCaptionLine(bmp, caption, fontSizeDouble, localizable, fontColour);
 					else
 						bmp = DrawCaptionLine(bmp, caption, fontSizeMulti, localizable, fontColour);
@@ -365,7 +365,7 @@ namespace KeyMapper.Classes
 					}
 					else // End, F12 etc...
 					{
-						if (caption.Substring(0, 1) == "F" && Char.IsDigit(caption, 1) && Char.IsDigit(caption, 2))
+						if (caption.Substring(0, 1) == "F" && char.IsDigit(caption, 1) && char.IsDigit(caption, 2))
 						{
 							// F11, F12 to be the same size as F1 to F9
 							bmp = DrawCaptionLine(bmp, caption, fontSizeDouble, localizable, fontColour);
@@ -413,10 +413,10 @@ namespace KeyMapper.Classes
 
 		private static Bitmap WriteCaption(Bitmap bmp, int scancode, int extended, Color fontColour)
 		{
-            string caption = AppController.GetKeyName(scancode, extended) ?? String.Format("SC: {0} EX: {1}", scancode, extended);
+            string caption = AppController.GetKeyName(scancode, extended) ?? string.Format("SC: {0} EX: {1}", scancode, extended);
 
 		    // Blank keys.
-            if (String.IsNullOrEmpty(caption))
+            if (string.IsNullOrEmpty(caption))
             {
                 return bmp;
             }

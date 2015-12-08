@@ -6,21 +6,21 @@ namespace KeyMapper.Classes
 {
     public class RegistryTimestampService : IRegistryTimestampService
     {
-        const int KEY_QUERY_VALUE = 0x0001;
-        const int KEY_SET_VALUE = 0x0002;
+        private const int KEY_QUERY_VALUE = 0x0001;
+        private const int KEY_SET_VALUE = 0x0002;
 
         public DateTime GetRegistryKeyTimestamp(RegistryHive hive, string keyName)
         {
-            Int64 ts = GetRawRegistryKeyTimestamp(hive, keyName);
+            long ts = GetRawRegistryKeyTimestamp(hive, keyName);
 
             DateTime dt = (ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue);
 
             return dt.ToLocalTime();
         }
 
-        private Int64 GetRawRegistryKeyTimestamp(RegistryHive hive, string keyname)
+        private long GetRawRegistryKeyTimestamp(RegistryHive hive, string keyname)
         {
-            if (String.IsNullOrEmpty(keyname))
+            if (string.IsNullOrEmpty(keyname))
             {
                 return 0; // Otherwise the function opens HKLM (or HKCU) again.
             }
@@ -32,7 +32,7 @@ namespace KeyMapper.Classes
                 return 0; // Didn't open key
             }
 
-            Int64 timestamp;
+            long timestamp;
 
             uint result2 = NativeMethods.RegQueryInfoKey(
                 hkey, IntPtr.Zero,

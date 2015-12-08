@@ -2,10 +2,10 @@ using System;
 
 namespace KeyMapper.Classes
 {
-	class AppMutex : IDisposable
+    internal class AppMutex : IDisposable
 	{
         private bool _disposed;
-		System.Threading.Mutex _appMutex;
+	    private System.Threading.Mutex _appMutex;
 
 		public bool GetMutex()
 		{

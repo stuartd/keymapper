@@ -8,10 +8,7 @@ namespace KeyMapper.Forms
 {
 	public partial class AddEditMapping : KMBaseForm
 	{
-
-		#region Fields, Enum
-
-		// Direction of fade: 
+	    // Direction of fade: 
 		// 0 is from group list to button (ie unmapped to mapped)
 		// 1 is from button to group list (ie mapped to unmapped)
 		// 2 is from blank to button (capturing from key)
@@ -23,37 +20,32 @@ namespace KeyMapper.Forms
 
 		// Form states
 
-		FadeDirection _direction = 0;
-		bool _mapped;
-		bool _disabled;
-		bool _capturingToKey;
-		bool _capturingFromKey;
-		bool _selectingFromKeyFromLists;
-		Point _savedPanelLocation;
+	    private FadeDirection direction = 0;
+	    private readonly bool mapped;
+	    private readonly bool disabled;
+	    private bool capturingToKey;
+	    private bool capturingFromKey;
+	    private bool selectingFromKeyFromLists;
+	    private readonly Point savedPanelLocation;
 
 		// Is this a new mapping, or are we editing an existing one..
-		bool _newMapping;
+	    private readonly bool newMapping;
 
 		// Which set of keys to show in the lists
-		int _keyThreshold = 1;
+	    private int keyThreshold = 1;
 
 		// Current map
-		KeyMapping _map;
+	    private KeyMapping map;
 
 		// For looking up the hash from the name
-		Dictionary<string, int> _currentgroupmembers;
+	    private Dictionary<string, int> currentgroupmembers;
 
 		// For capturing
-		KeySniffer _sniffer;
+	    private KeySniffer sniffer;
 
-		ToolTip _tooltip = new ToolTip();
+	    private readonly ToolTip tooltip = new ToolTip();
 
-
-		#endregion
-
-		#region Form methods
-
-		public AddEditMapping(KeyMapping map, bool useCapture)
+	    public AddEditMapping(KeyMapping map, bool useCapture)
 		{
 			InitializeComponent();
 
@@ -69,83 +61,83 @@ namespace KeyMapper.Forms
 			{
 				if (useCapture)
 				{
-					// We are capturing the 'from' key.
-					this._capturingFromKey = true;
+                    // We are capturing the 'from' key.
+                    capturingFromKey = true;
 				}
 				else
 				{
-					this._selectingFromKeyFromLists = true;
+                    selectingFromKeyFromLists = true;
 				}
 			}
 			else
 			{
-				this._mapped = (map.To.Scancode > 0);
-				this._disabled = (map.To.Scancode == 0);
+                mapped = (map.To.Scancode > 0);
+                disabled = (map.To.Scancode == 0);
 			}
 
-			this._newMapping = !map.IsValid();
+            newMapping = !map.IsValid();
 
-			this._map = map;
+            this.map = map;
 
 			// Default has the KeyLists panel in the frame. 
-			if (this._mapped | this._disabled)
+			if (mapped | disabled)
 			{
-				SwopPanelPositions(this.KeyListsPanel, this.MappingPanel);
+				SwopPanelPositions(KeyListsPanel, MappingPanel);
 			}
-			else if (this._capturingFromKey)
+			else if (capturingFromKey)
 			{
-				SwopPanelPositions(this.EmptyPanel, this.KeyListsPanel);
+				SwopPanelPositions(EmptyPanel, KeyListsPanel);
 			}
 
-			if (this._selectingFromKeyFromLists)
+			if (selectingFromKeyFromLists)
 			{
-				// Need to move the lists to the left where the box while remembering where it was
-				this._savedPanelLocation = this.KeyListsPanel.Location;
-				this.KeyListsPanel.Left = this.FromKeyPictureBox.Left;
-				this._keyThreshold = -1; // Show all keys as possible map-ees
+                // Need to move the lists to the left where the box while remembering where it was
+                savedPanelLocation = KeyListsPanel.Location;
+                KeyListsPanel.Left = FromKeyPictureBox.Left;
+                keyThreshold = -1; // Show all keys as possible map-ees
 			}
 			else
-				this._keyThreshold = 1;
+                keyThreshold = 1;
 
 			SetListOptionsComboIndex();
 
 			PopulateKeyLists();
 
-			// Add event handlers now values have been assigned
-			this.GroupsListbox.SelectedIndexChanged += GroupsListboxSelectedIndexChanged;
-			this.KeysByGroupListbox.SelectedIndexChanged += KeysByGroupListboxSelectedIndexChanged;
-			this.ListOptionsCombo.SelectedIndexChanged += ListOptionsComboSelectedIndexChanged;
-			this.KeysByGroupListbox.DoubleClick += KeysByGroupListboxDoubleClick;
+            // Add event handlers now values have been assigned
+            GroupsListbox.SelectedIndexChanged += GroupsListboxSelectedIndexChanged;
+            KeysByGroupListbox.SelectedIndexChanged += KeysByGroupListboxSelectedIndexChanged;
+            ListOptionsCombo.SelectedIndexChanged += ListOptionsComboSelectedIndexChanged;
+            KeysByGroupListbox.DoubleClick += KeysByGroupListboxDoubleClick;
 
 			SetupForm();
 		}
 
 		private void SetListOptionsComboIndex()
 		{
-			this.ListOptionsCombo.SelectedIndex = 1 - this._keyThreshold;
+            ListOptionsCombo.SelectedIndex = 1 - keyThreshold;
 		}
 
 		private void SaveSettings()
 		{
 			Properties.Settings userSettings = new Properties.Settings();
-			userSettings.EditMappingFormLocation = this.Location;
+			userSettings.EditMappingFormLocation = Location;
 			userSettings.Save();
 		}
 
-		void PopulateKeyLists()
+	    private void PopulateKeyLists()
 		{
-			this.GroupsListbox.DataSource = new KeyDataXml().GetSortedGroupList(this._keyThreshold);
+            GroupsListbox.DataSource = new KeyDataXml().GetSortedGroupList(keyThreshold);
 			UpdateGroupMembers();
 		}
 
 		private void SetMapToBlankMapping()
 		{
-			this._map = MappingsManager.GetEmptyMapping(this._map.From);
+            map = MappingsManager.GetEmptyMapping(map.From);
 		}
 
 		private void SetMapToBlankMapping(int scancode, int extended)
 		{
-			this._map = MappingsManager.GetEmptyMapping(new Key(scancode, extended));
+            map = MappingsManager.GetEmptyMapping(new Key(scancode, extended));
 		}
 
 		private void SetupForm()
@@ -160,87 +152,87 @@ namespace KeyMapper.Forms
 		private void SetToolTips()
 		{
 
-			this._tooltip.RemoveAll();
+            tooltip.RemoveAll();
 
-			if (this._mapped)
-				this._tooltip.SetToolTip(this.MapButton, "Delete this key mapping");
+			if (mapped)
+                tooltip.SetToolTip(MapButton, "Delete this key mapping");
 			else
 			{
-				if (this._capturingFromKey)
-					this._tooltip.SetToolTip(this.MapButton, "Choose this key to map");
+				if (capturingFromKey)
+                    tooltip.SetToolTip(MapButton, "Choose this key to map");
 				else
-					this._tooltip.SetToolTip(this.MapButton, "Add this key mapping");
+                    tooltip.SetToolTip(MapButton, "Add this key mapping");
 			}
-			if (this._capturingToKey)
-				this._tooltip.SetToolTip(this.CaptureAndCancelButton, "Stop capturing");
+			if (capturingToKey)
+                tooltip.SetToolTip(CaptureAndCancelButton, "Stop capturing");
 			else
-				this._tooltip.SetToolTip(this.CaptureAndCancelButton, "Capture a target key by pressing it");
+                tooltip.SetToolTip(CaptureAndCancelButton, "Capture a target key by pressing it");
 
-			if (this._disabled)
-				this._tooltip.SetToolTip(this.DisableButton, "Enable this key");
+			if (disabled)
+                tooltip.SetToolTip(DisableButton, "Enable this key");
 			else
-				this._tooltip.SetToolTip(this.DisableButton, "Disable this key");
+                tooltip.SetToolTip(DisableButton, "Disable this key");
 
-			this._tooltip.SetToolTip(this.KeysByGroupListbox, "Keys are collected into groups");
+            tooltip.SetToolTip(KeysByGroupListbox, "Keys are collected into groups");
 
 
 		}
 
 		private void SetCaption(string caption)
 		{
-			if (this._newMapping)
-				this.Text = "Create a mapping" + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
+			if (newMapping)
+                Text = "Create a mapping" + (string.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 			else
-				this.Text = "Edit mapping" + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
+                Text = "Edit mapping" + (string.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 		}
 
 		private void SetButtonStates()
 		{
-			// Which buttons should be enabled:
+            // Which buttons should be enabled:
 
-			// Map button (aka UnMap, aka Set (for capture))
+            // Map button (aka UnMap, aka Set (for capture))
 
-			this.MapButton.Enabled =
-				(this._capturingFromKey && !this._map.IsEmpty())
-				|| this._mapped
-				|| (this._capturingFromKey && this._map.IsValid())
-				|| (this._selectingFromKeyFromLists && this.KeysByGroupListbox.SelectedIndex >= 0)
-				|| (this._capturingToKey && this._map.IsValid())
-				|| (!this._disabled && !this._capturingToKey && this.KeysByGroupListbox.SelectedIndex >= 0);
+            MapButton.Enabled =
+				(capturingFromKey && !map.IsEmpty())
+				|| mapped
+                || (capturingFromKey && map.IsValid())
+				|| (selectingFromKeyFromLists && KeysByGroupListbox.SelectedIndex >= 0)
+				|| (capturingToKey && map.IsValid())
+				|| (!disabled && !capturingToKey && KeysByGroupListbox.SelectedIndex >= 0);
 
-			// Capture buttons should only be enabled when form is not in mapped mode and not disabled
-			// and not capturing..
-			this.CaptureAndCancelButton.Enabled = (!this._mapped && !this._disabled && !this._capturingFromKey && !this._selectingFromKeyFromLists);
+            // Capture buttons should only be enabled when form is not in mapped mode and not disabled
+            // and not capturing..
+            CaptureAndCancelButton.Enabled = (!mapped && !disabled && !capturingFromKey && !selectingFromKeyFromLists);
 
-			// Disabled button enabled when not mapped and not capturing.
-			this.DisableButton.Enabled = (!this._mapped && !this._capturingToKey && !this._capturingFromKey && !this._selectingFromKeyFromLists);
+            // Disabled button enabled when not mapped and not capturing.
+            DisableButton.Enabled = (!mapped && !capturingToKey && !capturingFromKey && !selectingFromKeyFromLists);
 
 		}
 
 		private void SetButtonCaptions()
 		{
 
-			if (this._capturingFromKey == false && this._selectingFromKeyFromLists == false)
+			if (capturingFromKey == false && selectingFromKeyFromLists == false)
 			{
 				// Don't assign shortcut keys when they can't be used (ie capturing)
-				if (this._mapped)
-					this.MapButton.Text = "Un&map";
-				else if (this._capturingToKey)
-					this.MapButton.Text = "Map";
+				if (mapped)
+                    MapButton.Text = "Un&map";
+				else if (capturingToKey)
+                    MapButton.Text = "Map";
 				else
-					this.MapButton.Text = "&Map";
+                    MapButton.Text = "&Map";
 
-				this.DisableButton.Visible = true;
-				this.DisableButton.Text = this._disabled ? "Ena&ble" : "Disa&ble";
-				this.CaptureAndCancelButton.Visible = true;
-				this.CaptureAndCancelButton.Text = this._capturingToKey ? "Stop" : "Cap&ture";
+                DisableButton.Visible = true;
+                DisableButton.Text = disabled ? "Ena&ble" : "Disa&ble";
+                CaptureAndCancelButton.Visible = true;
+                CaptureAndCancelButton.Text = capturingToKey ? "Stop" : "Cap&ture";
 
 			}
 			else
 			{
-				this.MapButton.Text = "Set";
-				this.CaptureAndCancelButton.Visible = false;
-				this.DisableButton.Visible = false;
+                MapButton.Text = "Set";
+                CaptureAndCancelButton.Visible = false;
+                DisableButton.Visible = false;
 			}
 
 
@@ -248,24 +240,24 @@ namespace KeyMapper.Forms
 
 		private void SetCaption()
 		{
-			string formCaption = String.Empty;
+			string formCaption = string.Empty;
 
-			if (!this._mapped && !this._disabled)
+			if (!mapped && !disabled)
 			{
-				if (this._capturingToKey)
+				if (capturingToKey)
 				{
 					formCaption = "Press what you want the key to do";
 				}
-				else if (this._capturingFromKey)
+				else if (capturingFromKey)
 				{
-					// if (_map.IsEmpty())
+					// if (map.IsEmpty())
 					{
 						formCaption = "Press the key you want to map";
 					}
 				}
-				else if (this._selectingFromKeyFromLists)
+				else if (selectingFromKeyFromLists)
 				{
-					if (this._map.IsEmpty())
+					if (map.IsEmpty())
 					{
 						formCaption = "Choose the key you want to map";
 					}
@@ -293,15 +285,15 @@ namespace KeyMapper.Forms
 
 			float scale = (DpiInfo.Dpi / 96F);
 
-			if (this.FromKeyPictureBox.Image == null && this._map.IsEmpty())
+			if (FromKeyPictureBox.Image == null && map.IsEmpty())
 			{
-				this.FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage
+                FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage
 					(-1, -1, BlankButton.Blank, 0, 0, scale, ButtonEffect.None));
 			}
 			else
 			{
-				this.FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage
-					(this._map.From.Scancode, this._map.From.Extended, BlankButton.Blank, 0, 0, scale, ButtonEffect.None));
+                FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage
+					(map.From.Scancode, map.From.Extended, BlankButton.Blank, 0, 0, scale, ButtonEffect.None));
 			}
 
 			// To Key depends more on state
@@ -310,21 +302,21 @@ namespace KeyMapper.Forms
 			ButtonEffect effect = ButtonEffect.None;
 
 			//  'Disabled' is a special case of 'Mapped'
-			if (this._disabled)
+			if (disabled)
 			{
-				effect = MappingsManager.IsMappingPending(this._map) ? ButtonEffect.DisabledPending : ButtonEffect.Disabled;
+				effect = MappingsManager.IsMappingPending(map) ? ButtonEffect.DisabledPending : ButtonEffect.Disabled;
 			}
 			else
 			{
-				if (!this._mapped)
+				if (!mapped)
 				{
 					// Not mapped. What are we doing then??
-					if (this._capturingToKey)
+					if (capturingToKey)
 					{
-						scancode = this._map.To.Scancode;
-						extended = this._map.To.Extended;
+						scancode = map.To.Scancode;
+						extended = map.To.Extended;
 
-						if (this._map.To.Scancode == 0)
+						if (map.To.Scancode == 0)
 						{
 							// Can't map to a disabled key - show button as disabled..
 							effect = ButtonEffect.Disabled;
@@ -334,9 +326,9 @@ namespace KeyMapper.Forms
 							effect = ButtonEffect.MappedPending;
 						}
 					}
-					else if (this._capturingFromKey)
+					else if (capturingFromKey)
 					{
-						if (this._map.IsEmpty())
+						if (map.IsEmpty())
 						{
 							// Show a blank key.
 							scancode = -1;
@@ -347,14 +339,14 @@ namespace KeyMapper.Forms
 				else
 				{
 					// Mapped to a specific key
-					scancode = this._map.To.Scancode;
-					extended = this._map.To.Extended;
-					effect = MappingsManager.IsMappingPending(this._map) ? ButtonEffect.MappedPending : ButtonEffect.Mapped;
+					scancode = map.To.Scancode;
+					extended = map.To.Extended;
+					effect = MappingsManager.IsMappingPending(map) ? ButtonEffect.MappedPending : ButtonEffect.Mapped;
 
 				}
 			}
 
-			this.ToKeyPictureBox.SetImage(ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, scale, effect));
+            ToKeyPictureBox.SetImage(ButtonImages.GetButtonImage(scancode, extended, BlankButton.Blank, 0, 0, scale, effect));
 
 		}
 
@@ -363,66 +355,60 @@ namespace KeyMapper.Forms
 			SaveSettings();
 		}
 
-		#endregion
-
-		#region Panel moving and fading methods
-
-		private void Transition()
+	    private void Transition()
 		{
 
 			Panel panelFrom, panelTo;
 
-			switch (this._direction)
+			switch (direction)
 			{
 				case FadeDirection.FromUnmappedToMapped:
-					panelFrom = this.KeyListsPanel;
-					panelTo = this.MappingPanel;
+					panelFrom = KeyListsPanel;
+					panelTo = MappingPanel;
 					break;
 				case FadeDirection.FromMappedToUnmapped:
-					panelFrom = this.MappingPanel;
-					panelTo = this.KeyListsPanel;
+					panelFrom = MappingPanel;
+					panelTo = KeyListsPanel;
 					break;
 				case FadeDirection.FromBlankToUnmapped:
-					panelFrom = this.EmptyPanel;
-					panelTo = this.KeyListsPanel;
+					panelFrom = EmptyPanel;
+					panelTo = KeyListsPanel;
 					break;
 				default:
 					return;
 			}
 
-			this.PanelFader.FadeComplete += PanelFaderFadeComplete;
-			this.PanelFader.BringToFront();
-			this.PanelFader.DoFade(panelFrom, panelTo);
+            PanelFader.FadeComplete += PanelFaderFadeComplete;
+            PanelFader.BringToFront();
+            PanelFader.DoFade(panelFrom, panelTo);
 			SwopPanelPositions(panelFrom, panelTo);
 
 		}
 
-		static void SwopPanelPositions(Panel p1, Panel p2)
+	    private static void SwopPanelPositions(Panel p1, Panel p2)
 		{
 			Point pt = p2.Location;
 			p2.Location = p1.Location;
 			p1.Location = pt;
 		}
 
-		void PanelFaderFadeComplete(object sender, EventArgs e)
+	    private void PanelFaderFadeComplete(object sender, EventArgs e)
 		{
-			this.PanelFader.SendToBack();
-			this.PanelFader.FadeComplete -= PanelFaderFadeComplete;
+            PanelFader.SendToBack();
+            PanelFader.FadeComplete -= PanelFaderFadeComplete;
 		}
 
-		#endregion
-
-	    void KeysByGroupListboxDoubleClick(object sender, EventArgs e)
+	    private void KeysByGroupListboxDoubleClick(object sender, EventArgs e)
 		{
 			MapSelected();
 		}
 
-		void ListOptionsComboSelectedIndexChanged(object sender, EventArgs e)
+	    private void ListOptionsComboSelectedIndexChanged(object sender, EventArgs e)
 		{
 			ComboBox cb = sender as ComboBox;
 			if (cb != null)
 			{
-				this._keyThreshold = 1 - cb.SelectedIndex; // 0 -> 1, 1 -> 0, 2 -> -1
+                keyThreshold = 1 - cb.SelectedIndex; // 0 -> 1, 1 -> 0, 2 -> -1
 				PopulateKeyLists();
 			}
 
@@ -431,7 +417,7 @@ namespace KeyMapper.Forms
 		private void GroupsListboxSelectedIndexChanged(object sender, EventArgs e)
 		{
 			UpdateGroupMembers();
-			this.KeysByGroupListbox.SelectedItem = 0;
+            KeysByGroupListbox.SelectedItem = 0;
 			SetupForm();
 		}
 
@@ -442,25 +428,25 @@ namespace KeyMapper.Forms
 
 		private bool CreateMappingFromListboxValue()
 		{
-			this._map = new KeyMapping(this._map.From, GetKeyFromListboxValue());
+            map = new KeyMapping(map.From, GetKeyFromListboxValue());
 			return true;
 		}
 
 		private Key GetKeyFromListboxValue()
 		{
-			if (this.KeysByGroupListbox.SelectedIndex < 0)
+			if (KeysByGroupListbox.SelectedIndex < 0)
 			{
 				return new Key();
 			}
 
 			// Need to know the scancode and extended of the chosen key.
-			string keyname = this.KeysByGroupListbox.Text;
+			string keyname = KeysByGroupListbox.Text;
 
 			int hash;
 
-			if (this._currentgroupmembers.ContainsKey(keyname))
+			if (currentgroupmembers.ContainsKey(keyname))
 			{
-				hash = this._currentgroupmembers[keyname];
+				hash = currentgroupmembers[keyname];
 			}
 			else
 			{
@@ -474,13 +460,13 @@ namespace KeyMapper.Forms
 
 		private void UpdateGroupMembers()
 		{
-			this._currentgroupmembers = new KeyDataXml().GetGroupMembers(this.GroupsListbox.Text, this._keyThreshold);
+            currentgroupmembers = new KeyDataXml().GetGroupMembers(GroupsListbox.Text, keyThreshold);
 
-			this.KeysByGroupListbox.Items.Clear();
+            KeysByGroupListbox.Items.Clear();
 
-			foreach (KeyValuePair<string, int> entry in this._currentgroupmembers)
+			foreach (KeyValuePair<string, int> entry in currentgroupmembers)
 			{
-				this.KeysByGroupListbox.Items.Add(entry.Key);
+                KeysByGroupListbox.Items.Add(entry.Key);
 			}
 		}
 
@@ -492,33 +478,33 @@ namespace KeyMapper.Forms
 		private void MapSelected()
 		{
 
-			if (this._disabled)
+			if (disabled)
 				// Nono - Can't map while disabled. Shouldn't be here anyway!
 				return;
 
-			if (this._mapped)
+			if (mapped)
 			{
 				// Unmap.
-				MappingsManager.DeleteMapping(this._map);
+				MappingsManager.DeleteMapping(map);
 				SetMapToBlankMapping();
-				this.Close();
+                Close();
 				return;
 			}
 
-			if (this._capturingToKey)
+			if (capturingToKey)
 			{
 				// Ah, but have we caught a "to" key yet?
-				if (!this._map.IsValid())
+				if (!map.IsValid())
 					return;
 
-				this._capturingToKey = false;
+                capturingToKey = false;
 				StopCapture();
-				MappingsManager.AddMapping(this._map);
-				this.Close();
+				MappingsManager.AddMapping(map);
+                Close();
 				return;
 			}
 
-			if (this._selectingFromKeyFromLists)
+			if (selectingFromKeyFromLists)
 			{
 
 				Key selectedKey = GetKeyFromListboxValue();
@@ -526,18 +512,18 @@ namespace KeyMapper.Forms
 				// Have we been sent a dud??
 				if (selectedKey.Scancode == 0)
 				{
-					// Something went wrong. 
-					this._map = new KeyMapping();
+                    // Something went wrong. 
+                    map = new KeyMapping();
 				}
 				else
 				{
 					SetMapToBlankMapping(selectedKey.Scancode, selectedKey.Extended);
-					// Need to move panel back to where it was and set the image in the picturebox
-					this.KeyListsPanel.Location = this._savedPanelLocation;
+                    // Need to move panel back to where it was and set the image in the picturebox
+                    KeyListsPanel.Location = savedPanelLocation;
 
-					this.FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage(this._map.From.Scancode, this._map.From.Extended));
-					this._selectingFromKeyFromLists = false;
-					this._keyThreshold = 1;
+                    FromKeyPictureBox.SetImage(ButtonImages.GetButtonImage(map.From.Scancode, map.From.Extended));
+                    selectingFromKeyFromLists = false;
+                    keyThreshold = 1;
 					SetListOptionsComboIndex();
 					SetupForm();
 					return;
@@ -547,23 +533,23 @@ namespace KeyMapper.Forms
 
 			}
 
-			if (this._capturingFromKey == false)
+			if (capturingFromKey == false)
 			{
 				// Not mapped, not capturing From or To keys, so this is mapping from list.
 				// Need to call method to create map from name.
 				if (CreateMappingFromListboxValue())
 				{
-					MappingsManager.AddMapping(this._map);
-					this.Close();
+					MappingsManager.AddMapping(map);
+                    Close();
 				}
 				return;
 			}
 			else
 			{
-				// Setting the From key. Map has already been created from keypress
-				this._capturingFromKey = false;
+                // Setting the From key. Map has already been created from keypress
+                capturingFromKey = false;
 				StopCapture();
-				this._direction = FadeDirection.FromBlankToUnmapped;
+                direction = FadeDirection.FromBlankToUnmapped;
 				SetupForm();
 				Transition();
 			}
@@ -574,23 +560,23 @@ namespace KeyMapper.Forms
 
 			// If we are capturing, stop. If we're not, start. If capturing the From key, this is the cancel button.
 
-			if (this._disabled || this._mapped)
+			if (disabled || mapped)
 				return;
 
-			if (this._capturingFromKey)
+			if (capturingFromKey)
 			{
-				// Cancel
-				this._capturingFromKey = false;
+                // Cancel
+                capturingFromKey = false;
 				StopCapture();
-				this.Close();
+                Close();
 				return;
 			}
 
-			if (this._capturingToKey)
+			if (capturingToKey)
 			{
-				// Cancelling capture - return display to lists.
-				this._capturingToKey = false;
-				this._direction = FadeDirection.FromMappedToUnmapped;
+                // Cancelling capture - return display to lists.
+                capturingToKey = false;
+                direction = FadeDirection.FromMappedToUnmapped;
 				StopCapture();
 			}
 			else
@@ -599,8 +585,8 @@ namespace KeyMapper.Forms
 				// New capture each time:
 				SetMapToBlankMapping();
 				StartCapture();
-				this._capturingToKey = true;
-				this._direction = FadeDirection.FromUnmappedToMapped;
+                capturingToKey = true;
+                direction = FadeDirection.FromUnmappedToMapped;
 			}
 
 			SetupForm();
@@ -610,37 +596,34 @@ namespace KeyMapper.Forms
 		private void DisableButtonClick(object sender, EventArgs e)
 		{
 			// Disable or enable, close form anyway.
-			if (this._disabled)
+			if (disabled)
 			{
 				// Enable
-				MappingsManager.DeleteMapping(this._map);
+				MappingsManager.DeleteMapping(map);
 			}
 			else
 			{
-				// Disable
-				this._map = new KeyMapping(this._map.From, new Key(0, 0));
-				MappingsManager.AddMapping(this._map);
+                // Disable
+                map = new KeyMapping(map.From, new Key(0, 0));
+				MappingsManager.AddMapping(map);
 			}
 
-			this.Close();
-
+            Close();
 		}
 
-	    #region Keysniffer methods
-
-		private void OnKeyPress(object sender, KeyMapperKeyPressedEventArgs e)
+	    private void OnKeyPress(object sender, KeyMapperKeyPressedEventArgs e)
 		{
 
             int scancode = e.Key.Scancode;
             int extended = e.Key.Extended;
             
-  			if (this._capturingFromKey)
+  			if (capturingFromKey)
 			{
 				// Have we been sent a dud??
 				if (scancode == 0)
 				{
-					// Can't use a disabled key as From
-					this._map = new KeyMapping();
+                    // Can't use a disabled key as From
+                    map = new KeyMapping();
 				}
 				else
 				{
@@ -649,50 +632,47 @@ namespace KeyMapper.Forms
 			}
 			else
 			{
-				// Can't tell from the passed key whether it's mapped or not as 
-				// if it is, we get the mapped scancode and have no way of telling 
-				// what the original key was (it's possible 2 keys could be mapped to the 
-				// same key, meaning can't just do a reverse lookup.)
+                // Can't tell from the passed key whether it's mapped or not as 
+                // if it is, we get the mapped scancode and have no way of telling 
+                // what the original key was (it's possible 2 keys could be mapped to the 
+                // same key, meaning can't just do a reverse lookup.)
 
-				// So, mapping to a mapped key is de facto allowed.
+                // So, mapping to a mapped key is de facto allowed.
 
-				this._map = new KeyMapping(this._map.From, new Key(scancode, extended));
+                map = new KeyMapping(map.From, new Key(scancode, extended));
 			}
 
-			this.SetupForm();
+            SetupForm();
 		}
 
 		private void FormActivated(object sender, EventArgs e)
 		{
-			if (this._capturingToKey | this._capturingFromKey)
+			if (capturingToKey | capturingFromKey)
 				StartCapture();
 		}
 
 		private void FormDeactivate(object sender, EventArgs e)
 		{
-			if (this._capturingToKey | this._capturingFromKey)
+			if (capturingToKey | capturingFromKey)
 				StopCapture();
 		}
 
 		private void StartCapture()
 		{
 
-			if (this._sniffer == null)
+			if (sniffer == null)
 			{
-				this._sniffer = new KeySniffer(true);
-				this._sniffer.KeyPressed += OnKeyPress;
+                sniffer = new KeySniffer(true);
+                sniffer.KeyPressed += OnKeyPress;
 			}
 
-			this._sniffer.ActivateHook();
+            sniffer.ActivateHook();
 
 		}
 
 		private void StopCapture()
 		{
-			this._sniffer.DeactivateHook();
+            sniffer.DeactivateHook();
 		}
-
-		#endregion
-
 	}
 }

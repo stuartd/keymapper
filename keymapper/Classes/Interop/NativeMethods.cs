@@ -4,27 +4,20 @@ using System.Runtime.InteropServices;
 
 namespace KeyMapper.Classes.Interop
 {
-	class NativeMethods
+    internal class NativeMethods
 	{
 		private NativeMethods() { }
 
-		#region Forms
-
-		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+	    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		internal extern static void LockWindowUpdate(IntPtr hWnd);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		internal extern static IntPtr GetDC(IntPtr hwnd);
 
 		[DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
-		internal static extern Int32 GetDeviceCaps(IntPtr hdc, Int32 capindex);
+		internal static extern int GetDeviceCaps(IntPtr hdc, int capindex);
 
-
-		#endregion
-
-		#region AppMutex
-
-		public const int SW_RESTORE = 9;
+	    public const int SW_RESTORE = 9;
 
 		[DllImport("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
@@ -37,11 +30,7 @@ namespace KeyMapper.Classes.Interop
 		[DllImport("user32.dll")]
 		internal static extern int IsIconic(IntPtr hWnd);
 
-		#endregion
-
-		#region Keyboard
-
-		[DllImport("user32.dll", CharSet = CharSet.Unicode,
+	    [DllImport("user32.dll", CharSet = CharSet.Unicode,
 			EntryPoint = "MapVirtualKeyExW", ExactSpelling = true)]
 		internal static extern uint MapVirtualKeyEx(
 			uint uCode,
@@ -91,12 +80,8 @@ namespace KeyMapper.Classes.Interop
 		public const uint KLF_NOTELLSHELL = 0x00000080;
 		public const uint KLF_SUBSTITUTE_OK = 0x00000002;
 
-		#endregion
 
-		#region KeySniffer
-
-
-		// Marshal the delegate otherwise it get's GCd.
+	    // Marshal the delegate otherwise it get's GCd.
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
 		internal static extern IntPtr SetWindowsHookEx(int idHook, [MarshalAs(UnmanagedType.FunctionPtr)] LowLevelKeyboardProc lpfn, IntPtr hMod, int dwThreadId);
 
@@ -114,11 +99,7 @@ namespace KeyMapper.Classes.Interop
 		//[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
 		//internal static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
 
-		#endregion
-
-		#region Registry
-
-		[DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
+	    [DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
 		public static extern int RegOpenKeyEx
 			(UIntPtr hKey,
 			string lpSubKey,
@@ -139,23 +120,17 @@ namespace KeyMapper.Classes.Interop
 			IntPtr lpcbMaxValueNameLen,
 			IntPtr lpcbMaxValueLen,
 			IntPtr lpcbSecurityDescriptor,
-			out Int64 lpftLastWriteTime);
+			out long lpftLastWriteTime);
 
 		[DllImport("Advapi32.dll")]
 		public static extern uint RegCloseKey(UIntPtr hKey);
 
-		#endregion
-
-		#region KeyPictureBox
-
-		[DllImport("user32.dll", SetLastError = true)]
+	    [DllImport("user32.dll", SetLastError = true)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool DestroyIcon(IntPtr hIcon);
 
-		#endregion
-
-		[DllImport("comctl32.dll", CharSet = CharSet.Unicode, EntryPoint = "ImplementsTaskDialog")]
-		public static extern int TaskDialog(IntPtr hWndParent, IntPtr hInstance, String pszWindowTitle, String pszMainInstruction, String pszContent, int dwCommonButtons, IntPtr pszIcon, out int pnButton);
+	    [DllImport("comctl32.dll", CharSet = CharSet.Unicode, EntryPoint = "ImplementsTaskDialog")]
+		public static extern int TaskDialog(IntPtr hWndParent, IntPtr hInstance, string pszWindowTitle, string pszMainInstruction, string pszContent, int dwCommonButtons, IntPtr pszIcon, out int pnButton);
 
 
 	}

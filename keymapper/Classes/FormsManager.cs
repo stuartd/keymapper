@@ -7,13 +7,13 @@ using KeyMapper.Forms;
 
 namespace KeyMapper.Classes
 {
-    static class FormsManager
+    internal static class FormsManager
     {
-        static KeyboardForm _mainForm;
-        static ColourMap _colourMapForm;
-        static MappingListForm _mapListForm;
-        static readonly Dictionary<ButtonEffect, ColourEditor> editorForms = new Dictionary<ButtonEffect, ColourEditor>();
-        static HelpForm _helpForm;
+        private static KeyboardForm _mainForm;
+        private static ColourMap _colourMapForm;
+        private static MappingListForm _mapListForm;
+        private static readonly Dictionary<ButtonEffect, ColourEditor> editorForms = new Dictionary<ButtonEffect, ColourEditor>();
+        private static HelpForm _helpForm;
 
         public static TaskDialogResult ShowTaskDialog(string text, string instruction, string caption, TaskDialogButtons buttons, TaskDialogIcon icon)
         {

@@ -12,37 +12,37 @@ namespace KeyMapper.Classes
         // and a US style left shift key 
 
         // Instance cache. Don't want to run through all that code every time.
-        static readonly List<PhysicalKeyboardLayout> cachedInstances = new List<PhysicalKeyboardLayout>(0);
+        private static readonly List<PhysicalKeyboardLayout> cachedInstances = new List<PhysicalKeyboardLayout>(0);
 
         // As we know the number of rows required, use them for initialisation.
-        readonly List<KeyboardRow> functionKeys = new List<KeyboardRow>(1);
-        readonly List<KeyboardRow> typewriterKeys = new List<KeyboardRow>(5);
-        readonly List<KeyboardRow> numberpadKeys = new List<KeyboardRow>(5);
-        readonly List<KeyboardRow> utilityKeys = new List<KeyboardRow>(1);
-        readonly List<KeyboardRow> navigationKeys = new List<KeyboardRow>(2);
-        readonly List<KeyboardRow> arrowKeys = new List<KeyboardRow>(2);
+        private readonly List<KeyboardRow> functionKeys = new List<KeyboardRow>(1);
+        private readonly List<KeyboardRow> typewriterKeys = new List<KeyboardRow>(5);
+        private readonly List<KeyboardRow> numberpadKeys = new List<KeyboardRow>(5);
+        private readonly List<KeyboardRow> utilityKeys = new List<KeyboardRow>(1);
+        private readonly List<KeyboardRow> navigationKeys = new List<KeyboardRow>(2);
+        private readonly List<KeyboardRow> arrowKeys = new List<KeyboardRow>(2);
 
-        KeyboardLayoutType layout;
+        private KeyboardLayoutType layout;
 
-        Boolean isMacKeyboard;
+        private bool isMacKeyboard;
 
         public IEnumerable<KeyboardRow> FunctionKeys
-        { get { return this.functionKeys; } }
+        { get { return functionKeys; } }
 
         public IEnumerable<KeyboardRow> TypewriterKeys
-        { get { return this.typewriterKeys; } }
+        { get { return typewriterKeys; } }
 
         public IEnumerable<KeyboardRow> NumberPadKeys
-        { get { return this.numberpadKeys; } }
+        { get { return numberpadKeys; } }
 
         public IEnumerable<KeyboardRow> UtilityKeys
-        { get { return this.utilityKeys; } }
+        { get { return utilityKeys; } }
 
         public IEnumerable<KeyboardRow> NavigationKeys
-        { get { return this.navigationKeys; } }
+        { get { return navigationKeys; } }
 
         public IEnumerable<KeyboardRow> ArrowKeys
-        { get { return this.arrowKeys; } }
+        { get { return arrowKeys; } }
 
         private PhysicalKeyboardLayout() { }
 
@@ -114,9 +114,9 @@ namespace KeyMapper.Classes
             // Structure: 
             // KeyboardLayoutElement(scancode, extended, button, horizontalstretch, verticalstretch, rightpadding)
 
-            if (this.isMacKeyboard)
+            if (isMacKeyboard)
             {
-                this.functionKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                functionKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                            new[]{
                                                                new KeyboardLayoutElement(1, 0, BlankButton.Blank, 0, 0, 4),  
                                                                new KeyboardLayoutElement(59, 0, BlankButton.Blank, 0, 0, 0), 
@@ -138,7 +138,7 @@ namespace KeyMapper.Classes
 
             else
             {
-                this.functionKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                functionKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                            new[]{
                                                                new KeyboardLayoutElement(1, 0, BlankButton.Blank, 0, 0, 4),  
                                                                new KeyboardLayoutElement(59, 0, BlankButton.Blank, 0, 0, 0), 
@@ -159,12 +159,12 @@ namespace KeyMapper.Classes
         private void PopulateUtilityKeys()
         {
 
-            if (this.isMacKeyboard)
-                this.utilityKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(new KeyboardLayoutElement[] { null })));
+            if (isMacKeyboard)
+                utilityKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(new KeyboardLayoutElement[] { null })));
             else
             {
                 // PrtSc, Scroll Lock, Pause/Break
-                this.utilityKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                utilityKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                           new[]{
                                                               new KeyboardLayoutElement(55, 224, BlankButton.Blank, 0, 0, 0), 
                                                               new KeyboardLayoutElement(70, 0, BlankButton.Blank, 0, 0, 0), 
@@ -175,13 +175,13 @@ namespace KeyMapper.Classes
         private void PopulateArrowKeys()
         {
             // Up
-            this.arrowKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            arrowKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                             new[]{
                                                 null, 
                                                 new KeyboardLayoutElement(72, 224, BlankButton.Blank, 0, 0, 0)})));
 
             // Left, down, right
-            this.arrowKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            arrowKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                             new[]{
                                                 new KeyboardLayoutElement(75, 224, BlankButton.Blank, 0, 0, 0),
                                                 new KeyboardLayoutElement(80, 224, BlankButton.Blank, 0, 0, 0), 
@@ -191,13 +191,13 @@ namespace KeyMapper.Classes
         private void PopulateNavigationKeys()
         {
             // Insert, Home, Page Up..
-            this.navigationKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            navigationKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                          new[]{
                                                              new KeyboardLayoutElement(82, 224, BlankButton.Blank, 0, 0, 0), 
                                                              new KeyboardLayoutElement(71, 224, BlankButton.Blank, 0, 0, 0), 
                                                              new KeyboardLayoutElement(73, 224, BlankButton.Blank, 0, 0, 0)})));
             // .. Delete, End, Page Down
-            this.navigationKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            navigationKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                          new[]{
                                                              new KeyboardLayoutElement(83, 224, BlankButton.Blank, 0, 0, 0), 
                                                              new KeyboardLayoutElement(79, 224, BlankButton.Blank, 0, 0, 0), 
@@ -212,7 +212,7 @@ namespace KeyMapper.Classes
             // The first row is common to both layouts.
             // Top left key (OEM3), 1! to =+, and Backspace.
 
-            this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                          new[]{
                                                              new KeyboardLayoutElement(41, 0, BlankButton.Blank, 0, 0, 0),  
                                                              new KeyboardLayoutElement(2, 0, BlankButton.Blank, 0, 0, 0), 
@@ -236,9 +236,9 @@ namespace KeyMapper.Classes
 
             // Final row is same for all layouts except Macs
 
-            if (this.isMacKeyboard)
+            if (isMacKeyboard)
             {
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(29, 0, BlankButton.MediumWideBlank, 0, 0, 0), 
                                                                  new KeyboardLayoutElement(56, 0, BlankButton.MediumWideBlank, 0, 0, 0), 
@@ -251,7 +251,7 @@ namespace KeyMapper.Classes
             }
             else
             {
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(29, 0, BlankButton.MediumWideBlank, 0, 0, 1),
                                                                  new KeyboardLayoutElement(91, 224, BlankButton.MediumWideBlank, 0, 0, 1), 
@@ -267,10 +267,10 @@ namespace KeyMapper.Classes
 
         private void GetSecondRow()
         {
-            if (this.layout == KeyboardLayoutType.US)
+            if (layout == KeyboardLayoutType.US)
             {
                 // Tab, Q to ]}
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(15, 0, BlankButton.MediumWideBlank, 0, 0, 0), 
                                                                  new KeyboardLayoutElement(16, 0, BlankButton.Blank, 0, 0, 0), 
@@ -291,7 +291,7 @@ namespace KeyMapper.Classes
             else
             {
                 // Tab, Q to ]}, Enter - includes Punjabi layout.
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(15, 0, BlankButton.MediumWideBlank, 0, 0, 0), 
                                                                  new KeyboardLayoutElement(16, 0, BlankButton.Blank, 0, 0, 0), 
@@ -313,10 +313,10 @@ namespace KeyMapper.Classes
 
         private void GetThirdRow()
         {
-            if (this.layout == KeyboardLayoutType.US)
+            if (layout == KeyboardLayoutType.US)
             {
                 // Caps Lock, gap, A to '", double-wide enter.
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(58, 0, BlankButton.MediumWideBlank, 1, 0, 1), 
                                                                  new KeyboardLayoutElement(30, 0, BlankButton.Blank, 0, 0, 0), 
@@ -335,7 +335,7 @@ namespace KeyMapper.Classes
             else
             {
                 // Caps Lock, gap, A to '@, key 43.
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(58, 0, BlankButton.MediumWideBlank, 1, 0, 1), 
                                                                  new KeyboardLayoutElement(30, 0, BlankButton.Blank, 0, 0, 0), 
@@ -356,11 +356,11 @@ namespace KeyMapper.Classes
 
         private void GetFourthRow()
         {
-            if ((this.layout == KeyboardLayoutType.US) | (this.layout == KeyboardLayoutType.Punjabi))
+            if ((layout == KeyboardLayoutType.US) | (layout == KeyboardLayoutType.Punjabi))
             {
 
                 // Left Shift, Z to /?, right shift
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(42, 0, BlankButton.DoubleWideBlank, 1, 0, 0), 
                                                                  new KeyboardLayoutElement(44, 0, BlankButton.Blank, 0, 0, 0), 
@@ -378,7 +378,7 @@ namespace KeyMapper.Classes
             else
             {
                 // Left Shift, key 43, Z to /?, right shift
-                this.typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+                typewriterKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                              new[]{
                                                                  new KeyboardLayoutElement(42, 0, BlankButton.Blank, 0, 0, 0),
                                                                  new KeyboardLayoutElement(86, 0, BlankButton.Blank, 0, 0, 0), 
@@ -403,7 +403,7 @@ namespace KeyMapper.Classes
 
             // Now for the Numberpad: 
             // First row: NumLock / * and -
-            this.numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                         new[]{
                                                             new KeyboardLayoutElement(69, 0, BlankButton.Blank, 0, 0, 0),
                                                             new KeyboardLayoutElement(53, 224, BlankButton.Blank, 0, 0, 0), 
@@ -411,7 +411,7 @@ namespace KeyMapper.Classes
                                                             new KeyboardLayoutElement(74, 0, BlankButton.Blank, 0, 0, 0)})));
 
             // Second Row: 7 8 9 +
-            this.numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                         new[]{
                                                             new KeyboardLayoutElement(71, 0, BlankButton.Blank, 0, 0, 0),
                                                             new KeyboardLayoutElement(72, 0, BlankButton.Blank, 0, 0, 0), 
@@ -419,14 +419,14 @@ namespace KeyMapper.Classes
                                                             new KeyboardLayoutElement(78, 0, BlankButton.TallBlank, 0, 1, 0)})));
 
             // Third Row: 4 5 6
-            this.numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                         new[]{
                                                             new KeyboardLayoutElement(75, 0, BlankButton.Blank, 0, 0, 0),
                                                             new KeyboardLayoutElement(76, 0, BlankButton.Blank, 0, 0, 0), 
                                                             new KeyboardLayoutElement(77, 0, BlankButton.Blank, 0, 0, 0)})));
 
             // Fourth Row: 1 2 3 Enter
-            this.numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                         new[]{
                                                             new KeyboardLayoutElement(79, 0, BlankButton.Blank, 0, 0, 0),
                                                             new KeyboardLayoutElement(80, 0, BlankButton.Blank, 0, 0, 0), 
@@ -434,7 +434,7 @@ namespace KeyMapper.Classes
                                                             new KeyboardLayoutElement(28, 224, BlankButton.TallBlank, 0, 1, 0)})));
 
             // Finally, 0 .
-            this.numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                                                         new[]{
                                                             new KeyboardLayoutElement(82, 0, BlankButton.DoubleWideBlank, 0, 0, 0),
                                                             new KeyboardLayoutElement(83, 0, BlankButton.Blank, 0, 0, 0)})));

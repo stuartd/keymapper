@@ -12,51 +12,46 @@ namespace KeyMapper.Forms
 
 	public partial class ColourMap : KMBaseForm
 	{
+	    private int _buttonCount;
+	    private int _currentButton;
+	    private int _padding = 2;
+	    private int _buttonHeight;
+	    private int _buttonWidth;
+	    private int _buttonsPerLine;
+	    private int _numberOfLines;
+	    private float _buttonScaleFactor;
 
-		#region fields
-
-		int _buttonCount;
-		int _currentButton;
-		int _padding = 2;
-		int _buttonHeight;
-		int _buttonWidth;
-		int _buttonsPerLine;
-		int _numberOfLines;
-		float _buttonScaleFactor;
-
-		bool _showAllButtons;
+	    private bool _showAllButtons;
 
 		// Are any keys actually mapped?
-		bool _mappedkeys;
-		bool _disabledkeys;
+	    private bool _mappedkeys;
+	    private bool _disabledkeys;
 
 		// What about keys that will be mapped after next reboot/logon?
-		bool _pendingdisabled;
-		bool _pendingmapped;
+	    private bool _pendingdisabled;
+	    private bool _pendingmapped;
 
 		// Are there keys which were mapped but have now been cleared?
-		bool _pendingenabled;
-		bool _pendingunmapped;
+	    private bool _pendingenabled;
+	    private bool _pendingunmapped;
 
-		ContextMenu _contextMenu;
+	    private ContextMenu _contextMenu;
 
-		ToolTip _toolTip = new ToolTip();
+	    private ToolTip _toolTip = new ToolTip();
 
-		string _toolTipText;
+	    private string _toolTipText;
 
-		#endregion
-
-		public ColourMap()
+	    public ColourMap()
 		{
 			if (AppController.UserCannotWriteToApplicationRegistryKey)
-				this._toolTipText = "Right-click to change which buttons are shown";
+                _toolTipText = "Right-click to change which buttons are shown";
 			else
-				this._toolTipText = "Double-click a button to edit the colour: right click for more options";
+                _toolTipText = "Double-click a button to edit the colour: right click for more options";
 
 			InitializeComponent();
 
 			Properties.Settings userSettings = new Properties.Settings();
-			this._showAllButtons = userSettings.ColourMapShowAllButtons;
+            _showAllButtons = userSettings.ColourMapShowAllButtons;
 
 			CreateContextMenu();
 			Redraw();
@@ -68,24 +63,24 @@ namespace KeyMapper.Forms
 
 		private void CreateContextMenu()
 		{
-			this._contextMenu = new ContextMenu();
+            _contextMenu = new ContextMenu();
 			int newItemIndex;
 
-			newItemIndex = this._contextMenu.MenuItems.Add(new MenuItem("Show All Buttons", ShowAllButtons));
-			if (this._showAllButtons)
-				this._contextMenu.MenuItems[newItemIndex].Checked = true;
+			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show All Buttons", ShowAllButtons));
+			if (_showAllButtons)
+                _contextMenu.MenuItems[newItemIndex].Checked = true;
 
-			newItemIndex = this._contextMenu.MenuItems.Add(new MenuItem("Show Currently Active Buttons Only", ShowCurrentButtons));
-			if (this._showAllButtons == false)
-				this._contextMenu.MenuItems[newItemIndex].Checked = true;
+			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show Currently Active Buttons Only", ShowCurrentButtons));
+			if (_showAllButtons == false)
+                _contextMenu.MenuItems[newItemIndex].Checked = true;
 
 			if (AppController.UserCannotWriteToApplicationRegistryKey == false)
 			{
-				this._contextMenu.MenuItems.Add(new MenuItem("Reset All Colours", ResetAllColours));
-				this._contextMenu.MenuItems.Add(new MenuItem("Close All Editor Forms", CloseAllEditorForms));
+                _contextMenu.MenuItems.Add(new MenuItem("Reset All Colours", ResetAllColours));
+                _contextMenu.MenuItems.Add(new MenuItem("Close All Editor Forms", CloseAllEditorForms));
 			}
 
-			this.ContextMenu = this._contextMenu;
+            ContextMenu = _contextMenu;
 
 
 		}
@@ -120,29 +115,29 @@ namespace KeyMapper.Forms
 
 		private void ShowAllButtons(object sender, EventArgs e)
 		{
-			this._showAllButtons = true;
+            _showAllButtons = true;
 			CreateContextMenu();
 			Redraw();
 		}
 
 		private void ShowCurrentButtons(object sender, EventArgs e)
 		{
-			this._showAllButtons = false;
+            _showAllButtons = false;
 			CreateContextMenu();
 			Redraw();
 		}
 
 
-		void ResetFields()
+	    private void ResetFields()
 		{
-			this._mappedkeys = false;
-			this._disabledkeys = false;
+            _mappedkeys = false;
+            _disabledkeys = false;
 
-			this._pendingdisabled = false;
-			this._pendingmapped = false;
+            _pendingdisabled = false;
+            _pendingmapped = false;
 
-			this._pendingenabled = false;
-			this._pendingunmapped = false;
+            _pendingenabled = false;
+            _pendingunmapped = false;
 		}
 
 		private void ConstrainForm()
@@ -153,27 +148,27 @@ namespace KeyMapper.Forms
 			// Four buttons, five buttons, six buttons - show in two rows of three
 			// Seven buttons, eight buttons - show in two rows of four.
 
-			switch (this._buttonCount)
+			switch (_buttonCount)
 			{
 				case 1:
 				case 2:
 				case 3:
-					this._buttonsPerLine = this._buttonCount;
-					this._numberOfLines = 1;
+                    _buttonsPerLine = _buttonCount;
+                    _numberOfLines = 1;
 					break;
 				case 4:
-					this._buttonsPerLine = 2;
-					this._numberOfLines = 2;
+                    _buttonsPerLine = 2;
+                    _numberOfLines = 2;
 					break;
 				case 5:
 				case 6:
-					this._buttonsPerLine = 3;
-					this._numberOfLines = 2;
+                    _buttonsPerLine = 3;
+                    _numberOfLines = 2;
 					break;
 				case 7:
 				case 8:
-					this._buttonsPerLine = 4;
-					this._numberOfLines = 2;
+                    _buttonsPerLine = 4;
+                    _numberOfLines = 2;
 					break;
 			}
 
@@ -183,24 +178,24 @@ namespace KeyMapper.Forms
 			int screenWidth = SystemInformation.PrimaryMonitorSize.Width;
 
 			if (screenWidth < 801)
-				this._buttonScaleFactor = 0.35F;
+                _buttonScaleFactor = 0.35F;
 			else if (screenWidth < 1025)
-				this._buttonScaleFactor = 0.4F;
+                _buttonScaleFactor = 0.4F;
 			else if (screenWidth < 1281)
-				this._buttonScaleFactor = 0.5F;
+                _buttonScaleFactor = 0.5F;
 			else
-				this._buttonScaleFactor = 0.5F;
+                _buttonScaleFactor = 0.5F;
 
-			this._buttonWidth = (int)(192 * this._buttonScaleFactor);
-			this._buttonHeight = (int)(128 * this._buttonScaleFactor);
+            _buttonWidth = (int)(192 * _buttonScaleFactor);
+            _buttonHeight = (int)(128 * _buttonScaleFactor);
 
 			// Now work out how big the form should be.
 			// Width: Number of buttons per line * buttonsize + (buttons + 1 * padding)
-			int width = (this._buttonsPerLine * this._buttonWidth) + ((this._buttonsPerLine + 1) * this._padding);
+			int width = (_buttonsPerLine * _buttonWidth) + ((_buttonsPerLine + 1) * _padding);
 			// Height: Number of lines * buttonhight + (number of lines +1 * padding)
-			int height = (this._numberOfLines * this._buttonHeight) + ((this._numberOfLines + 1) * this._padding);
+			int height = (_numberOfLines * _buttonHeight) + ((_numberOfLines + 1) * _padding);
 
-			this.ClientSize = new Size(width, height);
+            ClientSize = new Size(width, height);
 
 		}
 
@@ -211,10 +206,10 @@ namespace KeyMapper.Forms
 
 		private void Redraw(bool reloadMappings)
 		{
-			this.SuspendLayout();
+            SuspendLayout();
 
-			this._toolTip.RemoveAll();
-			this._toolTip.SetToolTip(this, this._toolTipText);
+            _toolTip.RemoveAll();
+            _toolTip.SetToolTip(this, _toolTipText);
 
 			if (reloadMappings)
 			{
@@ -222,56 +217,56 @@ namespace KeyMapper.Forms
 				GetButtons();
 			}
 
-			for (int i = this.Controls.Count - 1; i >= 0; i--)
-				this.Controls[i].Dispose();
+			for (int i = Controls.Count - 1; i >= 0; i--)
+                Controls[i].Dispose();
 
 			// In order to fix a problem where the form is resized to smaller then the enforced minimum
 			// size where the bits of the form which aren then still visible aren't repainted, if the button count is one then
 			// constrain twice - once with a count of two then a refresh to clear the background, and then with the count reset to one.
 
-			if (this._buttonCount == 1)
+			if (_buttonCount == 1)
 			{
-				this._buttonCount = 2;
+                _buttonCount = 2;
 				ConstrainForm();
-				this.Refresh();
-				this._buttonCount = 1;
+                Refresh();
+                _buttonCount = 1;
 			}
 
 			ConstrainForm();
 
 			AddButtons();
 
-			if (this._buttonCount > 1)
-				this.Text = "KeyMapper Colour Map";
+			if (_buttonCount > 1)
+                Text = "KeyMapper Colour Map";
 			else
-				this.Text = "Colour Map";
+                Text = "Colour Map";
 
-			this.ResumeLayout();
+            ResumeLayout();
 		}
 
 		private void AddButtons()
 		{
 
-			this._currentButton = 1;
+            _currentButton = 1;
 
 			AddButton("Normal", ButtonEffect.None);
 
-			if (this._showAllButtons || this._mappedkeys)
+			if (_showAllButtons || _mappedkeys)
 				AddButton("Mapped", ButtonEffect.Mapped);
 
-			if (this._showAllButtons || this._pendingmapped)
+			if (_showAllButtons || _pendingmapped)
 				AddButton("Pending Mapped", ButtonEffect.MappedPending);
 
-			if (this._showAllButtons || this._pendingunmapped)
+			if (_showAllButtons || _pendingunmapped)
 				AddButton("Pending Unmapped", ButtonEffect.UnmappedPending);
 
-			if (this._showAllButtons || this._disabledkeys)
+			if (_showAllButtons || _disabledkeys)
 				AddButton("Disabled", ButtonEffect.Disabled);
 
-			if (this._showAllButtons || this._pendingdisabled)
+			if (_showAllButtons || _pendingdisabled)
 				AddButton("Pending Disabled", ButtonEffect.DisabledPending);
 
-			if (this._showAllButtons || this._pendingenabled)
+			if (_showAllButtons || _pendingenabled)
 				AddButton("Pending Enabled", ButtonEffect.EnabledPending);
 
 		}
@@ -279,14 +274,14 @@ namespace KeyMapper.Forms
 		private void GetButtons()
 		{
 
-			if (this._showAllButtons)
+			if (_showAllButtons)
 			{
-				this._buttonCount = 8;
+                _buttonCount = 8;
 				return;
 			}
 
-			// Assume there are some normal unmapped keys!
-			this._buttonCount = 1;
+            // Assume there are some normal unmapped keys!
+            _buttonCount = 1;
 
 			// See what's currently mapped by looking at the current mapping list
 			Collection<KeyMapping> currentMaps = MappingsManager.GetMappings(MappingFilter.Current);
@@ -294,23 +289,23 @@ namespace KeyMapper.Forms
 			foreach (KeyMapping map in currentMaps)
 			{
 
-				if (MappingsManager.IsMappingPending(map, MappingFilter.All))
+				if (MappingsManager.IsMappingPending(map, MappingFilter.Boot))
 				{
 					// Pending
 					if (MappingsManager.IsDisabledMapping(map))
 					{
-						if (!this._pendingdisabled)
+						if (!_pendingdisabled)
 						{
-							this._pendingdisabled = true;
-							this._buttonCount++;
+                            _pendingdisabled = true;
+                            _buttonCount++;
 						}
 					}
 					else
 					{
-						if (!this._pendingmapped)
+						if (!_pendingmapped)
 						{
-							this._pendingmapped = true;
-							this._buttonCount++;
+                            _pendingmapped = true;
+                            _buttonCount++;
 						}
 					}
 				}
@@ -319,18 +314,18 @@ namespace KeyMapper.Forms
 					// Actual 
 					if (MappingsManager.IsDisabledMapping(map))
 					{
-						if (!this._disabledkeys)
+						if (!_disabledkeys)
 						{
-							this._disabledkeys = true;
-							this._buttonCount++;
+                            _disabledkeys = true;
+                            _buttonCount++;
 						}
 					}
 					else
 					{
-						if (!this._mappedkeys)
+						if (!_mappedkeys)
 						{
-							this._mappedkeys = true;
-							this._buttonCount++;
+                            _mappedkeys = true;
+                            _buttonCount++;
 						}
 					}
 				}
@@ -358,30 +353,30 @@ namespace KeyMapper.Forms
 
 				if (MappingsManager.IsDisabledMapping(map))
 				{
-					if (!this._pendingenabled)
+					if (!_pendingenabled)
 					{
-						this._pendingenabled = true;
-						this._buttonCount++;
+                        _pendingenabled = true;
+                        _buttonCount++;
 					}
 				}
 				else
 				{
-					if (!this._pendingunmapped)
+					if (!_pendingunmapped)
 					{
-						this._pendingunmapped = true;
-						this._buttonCount++;
+                        _pendingunmapped = true;
+                        _buttonCount++;
 					}
 				}
 			}
 		}
 
 
-		void AddButton(string text, ButtonEffect effect)
+	    private void AddButton(string text, ButtonEffect effect)
 		{
             PictureBox pb = new PictureBox
                                 {
                                     Image = ButtonImages.GetButtonImage
-                                    (BlankButton.MediumWideBlank, this._buttonScaleFactor, text, effect)
+                                    (BlankButton.MediumWideBlank, _buttonScaleFactor, text, effect)
                                 };
 
 		    pb.Height = pb.Image.Height;
@@ -390,11 +385,11 @@ namespace KeyMapper.Forms
 			// If there is only one button, contain it in the centre of the form (the minimum size for a form
 			// is bigger than a button until button scale gets to 0.6 or so which is too big for small resolutions)
 
-			if (this._buttonCount == 1)
+			if (_buttonCount == 1)
 			{
 				// Forms have a minimum size of 123. Applying a slight kludge factor too.
-				pb.Left = (((123 - SystemInformation.BorderSize.Width - this._buttonWidth) / 2) - 5);
-				pb.Top = this._padding;
+				pb.Left = (((123 - SystemInformation.BorderSize.Width - _buttonWidth) / 2) - 5);
+				pb.Top = _padding;
 			}
 			else
 			{
@@ -402,19 +397,19 @@ namespace KeyMapper.Forms
 				int line;
 
 				// First, see which line the button is in and what position in the line it occupies.
-				if (this._numberOfLines == 1 || this._currentButton <= this._buttonsPerLine)
+				if (_numberOfLines == 1 || _currentButton <= _buttonsPerLine)
 				{
-					position = this._currentButton;
+					position = _currentButton;
 					line = 1;
 				}
 				else
 				{
-					position = this._currentButton - this._buttonsPerLine;
+					position = _currentButton - _buttonsPerLine;
 					line = 2;
 				}
 
-				pb.Left = ((position - 1) * this._buttonWidth) + (position * this._padding);
-				pb.Top = ((line - 1) * this._buttonHeight) + (line * this._padding);
+				pb.Left = ((position - 1) * _buttonWidth) + (position * _padding);
+				pb.Top = ((line - 1) * _buttonHeight) + (line * _padding);
 
 			}
 
@@ -423,16 +418,16 @@ namespace KeyMapper.Forms
 			if (AppController.UserCannotWriteToApplicationRegistryKey == false)
 				pb.DoubleClick += PictureBoxDoubleClick;
 
-			this.Controls.Add(pb);
-			this._toolTip.SetToolTip(pb, this._toolTipText);
+            Controls.Add(pb);
+            _toolTip.SetToolTip(pb, _toolTipText);
 
-			this._currentButton++;
+            _currentButton++;
 
 
 		}
 
 
-		void PictureBoxDoubleClick(object sender, EventArgs e)
+	    private void PictureBoxDoubleClick(object sender, EventArgs e)
 		{
 			PictureBox pb = sender as PictureBox;
 			if (pb != null && pb.Tag != null)
@@ -447,8 +442,8 @@ namespace KeyMapper.Forms
 		private void SaveSettings()
 		{
 			Properties.Settings userSettings = new Properties.Settings();
-			userSettings.ColourListFormLocation = this.Location;
-			userSettings.ColourMapShowAllButtons = this._showAllButtons;
+			userSettings.ColourListFormLocation = Location;
+			userSettings.ColourMapShowAllButtons = _showAllButtons;
 			userSettings.Save();
 		}
 

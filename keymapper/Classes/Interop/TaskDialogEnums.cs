@@ -19,16 +19,16 @@ namespace KeyMapper.Classes.Interop
 
     public enum TaskDialogIcon
     {
-        Information = UInt16.MaxValue - 2,
-        Warning = UInt16.MaxValue,
-        Stop = UInt16.MaxValue - 1,
+        Information = ushort.MaxValue - 2,
+        Warning = ushort.MaxValue,
+        Stop = ushort.MaxValue - 1,
         Question = 0,
-        SecurityWarning = UInt16.MaxValue - 5,
-        SecurityError = UInt16.MaxValue - 6,
-        SecuritySuccess = UInt16.MaxValue - 7,
-        SecurityShield = UInt16.MaxValue - 3,
-        SecurityShieldBlue = UInt16.MaxValue - 4,
-        SecurityShieldGray = UInt16.MaxValue - 8
+        SecurityWarning = ushort.MaxValue - 5,
+        SecurityError = ushort.MaxValue - 6,
+        SecuritySuccess = ushort.MaxValue - 7,
+        SecurityShield = ushort.MaxValue - 3,
+        SecurityShieldBlue = ushort.MaxValue - 4,
+        SecurityShieldGray = ushort.MaxValue - 8
     }
 
     public enum TaskDialogResult

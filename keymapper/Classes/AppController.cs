@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Security;
 using System.Text;
 using System.Windows.Forms;
@@ -35,37 +34,17 @@ namespace KeyMapper.Classes
 
         private static readonly List<string> tempfiles = new List<string>();
 
-        // Ready for extraction (home grown ioc of some kind? as long as they don't have dependencies)
-
-        private static readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
-
         private static readonly IRegistryTimestampService registryTimestampService = new RegistryTimestampService();
 
-        private static Hashtable customKeyboardLayouts { get; set; }
+        private static Hashtable customKeyboardLayouts { get; }
 
         private static string currentLocale { get; set; }
 
         public static bool UserCannotWriteToApplicationRegistryKey { get; private set; }
 
-        public static bool UserCannotWriteMappings
-        {
-            get
-            {
-                // Can't write mappings if *all* of these are true:
-                // a) Currently looking at Boot Mappings
-                // b) Earlier than Vista (ie doesn't implement UAC)
-                // c) User can't write boot mappings.
-
-                // (XP doesn't allow process elevation, so if you can't then you can't)
-                return (MappingsManager.Filter == MappingFilter.Boot
-                        && !UserCanWriteBootMappings
-                        && !operatingSystemCapability.ImplementsUAC);
-            }
-        }
-
         public static bool UserCanWriteBootMappings { get; private set; }
 
-        public static string ApplicationRegistryKeyName { get; private set; }
+        public static string ApplicationRegistryKeyName { get; }
 
         public static KeyboardLayoutType KeyboardLayout { get; private set; }
 
@@ -138,7 +117,7 @@ namespace KeyMapper.Classes
             return "Unknown";
         }
 
-       public static bool IsOverlongKey(int hash)
+        public static bool IsOverlongKey(int hash)
         {
             return _currentLayout.IsKeyNameOverlong(hash);
         }
@@ -150,9 +129,14 @@ namespace KeyMapper.Classes
 
         public static int GetHighestCommonDenominator(int value1, int value2)
         {
-            // Euclidean algorithm
-            if (value2 == 0) return value1;
-            return GetHighestCommonDenominator(value2, value1 % value2);
+            while (true)
+            {
+                // Euclidean algorithm
+                if (value2 == 0) return value1;
+                var value3 = value1;
+                value1 = value2;
+                value2 = value3 % value2;
+            }
         }
 
         public static bool ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater(string innerText)
@@ -177,13 +161,13 @@ namespace KeyMapper.Classes
             try
             {
                 var process = new Process
-                                  {
-                                      StartInfo =
+                {
+                    StartInfo =
                                           {
                                               FileName = "regedit.exe",
                                               Arguments = command
                                           }
-                                  };
+                };
                 process.Start();
                 process.WaitForExit();
             }
@@ -222,7 +206,7 @@ namespace KeyMapper.Classes
                 sw.WriteLine(@"[" + hive + @"\" + key + "]");
                 sw.Write("\"" + valueName + "\"=");
 
-                if (String.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     sw.Write("-");
                 }
@@ -269,7 +253,7 @@ namespace KeyMapper.Classes
                 string[] layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
                 {
-                    if (String.IsNullOrEmpty(nameValuePair))
+                    if (string.IsNullOrEmpty(nameValuePair))
                         continue;
 
                     int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
@@ -278,7 +262,7 @@ namespace KeyMapper.Classes
 
                     string locale = nameValuePair.Substring(0, index);
                     int value;
-                    if (Int32.TryParse(nameValuePair.Substring(index + 1), out value) == false)
+                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false)
                         continue;
 
                     var keyboardType = (KeyboardLayoutType)value;
@@ -326,8 +310,7 @@ namespace KeyMapper.Classes
 
             KeyboardHelper.UnloadLayout();
 
-            if ((operatingSystemCapability.ImplementsUAC)
-                && UserCanWriteBootMappings == false
+            if (UserCanWriteBootMappings == false
                 && (MappingsManager.VistaMappingsNeedSaving()))
                 MappingsManager.SaveBootMappingsVista();
 
@@ -345,24 +328,20 @@ namespace KeyMapper.Classes
             }
         }
 
-        public static string GetKeyFontName(bool localizable)
+        private static string GetKeyFontName(bool localizable)
         {
             if (arialUnicodeMSInstalled == null)
             {
                 arialUnicodeMSInstalled = false;
                 var installedFonts = new InstalledFontCollection();
                 FontFamily[] fonts = installedFonts.Families;
-                foreach (FontFamily ff in fonts)
+
+                if (fonts.Any(ff => ff.Name == "Arial Unicode MS"))
                 {
-                    if (ff.Name == "Arial Unicode MS")
-                    {
-                        arialUnicodeMSInstalled = true;
-                        _defaultKeyFont = "Arial Unicode MS";
-                        break;
-                    }
+                    arialUnicodeMSInstalled = true;
+                    _defaultKeyFont = "Arial Unicode MS";
                 }
             }
-
 
             if (localizable == false || (bool)arialUnicodeMSInstalled)
                 return _defaultKeyFont; // Don't want the static keys to change font.
@@ -528,12 +507,6 @@ namespace KeyMapper.Classes
             // Get the current scancode maps
             MappingsManager.GetMappingsFromRegistry();
 
-            // If user mappings are inappropriate (win2k, win 7) default to boot.
-            if (operatingSystemCapability.SupportsUserMappings == false)
-            {
-                MappingsManager.SetFilter(MappingFilter.Boot);
-            }
-
             // If HLKM or HKCU Mappings have not been changed since boot/login 
             // (ie their timestamp is earlier than the boot/login time)
             // then save them to our own reg key. This means we can determine whether a 
@@ -544,20 +517,12 @@ namespace KeyMapper.Classes
                 MappingsManager.SaveBootMappingsToKeyMapperKey();
             }
 
-            if (HKCUWrite < logontime || savedMappingsExist == false)
-            {
-                MappingsManager.SaveUserMappingsToKeyMapperKey();
-            }
-
             if (savedMappingsExist == false)
             {
                 MappingsManager.StoreUnsavedMappings();
             }
 
-            if (operatingSystemCapability.ImplementsUAC)
-            {
-                MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
-            }
+            MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
         }
 
         public static void SetLocale(string locale = null)
@@ -565,7 +530,7 @@ namespace KeyMapper.Classes
             // Only want to reset locale temporarily so save current value
             string currentkeyboardlocale = KeyboardHelper.GetCurrentKeyboardLocale();
 
-            if (String.IsNullOrEmpty(locale))
+            if (string.IsNullOrEmpty(locale))
             {
                 // At startup we need to load the current locale.
                 locale = currentkeyboardlocale;

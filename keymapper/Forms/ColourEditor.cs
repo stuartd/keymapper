@@ -9,33 +9,33 @@ namespace KeyMapper.Forms
 {
 	public partial class ColourEditor : KMBaseForm
 	{
-		decimal _lowbound = -1M;
-		decimal _highbound = 1M;
-		decimal _step = 0.1M;
+	    private decimal _lowbound = -1M;
+	    private decimal _highbound = 1M;
+	    private decimal _step = 0.1M;
 
-		bool _drawing;
-		bool _initialised;
-		string _caption;
+	    private bool _drawing;
+	    private bool _initialised;
+	    private string _caption;
 
-		ColorMatrix _currentMatrix;
-		ButtonEffect _effect;
+	    private ColorMatrix _currentMatrix;
+	    private ButtonEffect _effect;
 
 		public ButtonEffect Effect
 		{
-			get { return this._effect; }
-			set { this._effect = value; }
+			get { return _effect; }
+			set { _effect = value; }
 		}
 
-		Color _fontColour = Color.Black;
+	    private Color _fontColour = Color.Black;
 
 		public ColourEditor(ButtonEffect effect, string caption)
 		{
 			InitializeComponent();
 
-			this._effect = effect;
-			this._caption = caption;
+            _effect = effect;
+            _caption = caption;
 
-			this.Text = "Editing the " + caption + " button";
+            Text = "Editing the " + caption + " button";
 
 			LoadSetting();
 
@@ -50,32 +50,32 @@ namespace KeyMapper.Forms
 
 		private void LoadSetting()
 		{
-			UpdateMatrix(ButtonImages.GetMatrix(this._effect));
-			this._fontColour = ButtonImages.GetFontColour(this._effect);
+			UpdateMatrix(ButtonImages.GetMatrix(_effect));
+            _fontColour = ButtonImages.GetFontColour(_effect);
 			DrawKey();
 		}
 
 		private void UpdateMatrix(ColorMatrix cm)
 		{
-			this._currentMatrix = cm;
+            _currentMatrix = cm;
 			SetUpdownValuesFromMatrix();
 		}
 
-		void SetUpdownValuesFromMatrix()
+	    private void SetUpdownValuesFromMatrix()
 		{
-			this._drawing = false;
+            _drawing = false;
 
 			foreach (Control con in Controls)
 			{
 				NumericUpDown updown = (con as NumericUpDown);
 				if (updown != null)
 				{
-					if (!this._initialised)
+					if (!_initialised)
 					{
 						updown.DecimalPlaces = 1;
-						updown.Minimum = this._lowbound;
-						updown.Maximum = this._highbound;
-						updown.Increment = this._step;
+						updown.Minimum = _lowbound;
+						updown.Maximum = _highbound;
+						updown.Increment = _step;
 					}
 
 					updown.ValueChanged -= UpdownValueChanged;
@@ -85,27 +85,27 @@ namespace KeyMapper.Forms
 
 			}
 
-			this._drawing = true;
-			this._initialised = true;
+            _drawing = true;
+            _initialised = true;
 
 		}
 
-		Decimal GetValue(string name)
+	    private decimal GetValue(string name)
 		{
 			// Access the appropriate property of the matrix:
-			object value = this._currentMatrix.GetType().GetProperty(name).GetValue(this._currentMatrix, null);
-			Decimal dvalue;
-			if (Decimal.TryParse(value.ToString(), out dvalue))
+			object value = _currentMatrix.GetType().GetProperty(name).GetValue(_currentMatrix, null);
+			decimal dvalue;
+			if (decimal.TryParse(value.ToString(), out dvalue))
 				return dvalue;
 			else
-				return Decimal.Zero;
+				return decimal.Zero;
 
 		}
 
 
-		void UpdownValueChanged(object sender, EventArgs e)
+	    private void UpdownValueChanged(object sender, EventArgs e)
 		{
-			if (this._drawing)
+			if (_drawing)
 			{
 				UpdateMatrixFromControls();
 				SaveSetting();
@@ -114,34 +114,34 @@ namespace KeyMapper.Forms
 
 		private void UpdateMatrixFromControls()
 		{
-			this._currentMatrix = new ColorMatrix(
+            _currentMatrix = new ColorMatrix(
 				new float[][]
 				 {
-					new float[] {(float)this.Matrix00.Value, (float)this.Matrix01.Value, (float)this.Matrix02.Value, (float)this.Matrix03.Value, (float)this.Matrix04.Value},
-					new float[] {(float)this.Matrix10.Value, (float)this.Matrix11.Value, (float)this.Matrix12.Value, (float)this.Matrix13.Value, (float)this.Matrix14.Value},
-					new float[] {(float)this.Matrix20.Value, (float)this.Matrix21.Value, (float)this.Matrix22.Value, (float)this.Matrix23.Value, (float)this.Matrix24.Value},
-					new float[] {(float)this.Matrix30.Value, (float)this.Matrix31.Value, (float)this.Matrix32.Value, (float)this.Matrix33.Value, (float)this.Matrix34.Value},
-					new float[] {(float)this.Matrix40.Value, (float)this.Matrix41.Value, (float)this.Matrix42.Value, (float)this.Matrix43.Value, (float)this.Matrix44.Value}});
+					new float[] {(float)Matrix00.Value, (float)Matrix01.Value, (float)Matrix02.Value, (float)Matrix03.Value, (float)Matrix04.Value},
+					new float[] {(float)Matrix10.Value, (float)Matrix11.Value, (float)Matrix12.Value, (float)Matrix13.Value, (float)Matrix14.Value},
+					new float[] {(float)Matrix20.Value, (float)Matrix21.Value, (float)Matrix22.Value, (float)Matrix23.Value, (float)Matrix24.Value},
+					new float[] {(float)Matrix30.Value, (float)Matrix31.Value, (float)Matrix32.Value, (float)Matrix33.Value, (float)Matrix34.Value},
+					new float[] {(float)Matrix40.Value, (float)Matrix41.Value, (float)Matrix42.Value, (float)Matrix43.Value, (float)Matrix44.Value}});
 
 		}
 
 		private void DrawKey()
 		{
 
-			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, this._caption, this._currentMatrix, this._fontColour);
+			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _fontColour);
 
-			if (this.KeyBox.Image != null)
-				this.KeyBox.Image.Dispose();
+			if (KeyBox.Image != null)
+                KeyBox.Image.Dispose();
 
-			this.KeyBox.Image = bmp;
+            KeyBox.Image = bmp;
 
 		}
 
 		private void ResetButtonClick(object sender, EventArgs e)
 		{
 			// Passing true to ignore user colours and fonts.
-			UpdateMatrix(ButtonImages.GetMatrix(this._effect, true));
-			this._fontColour = ButtonImages.GetFontColour(this._effect, true);
+			UpdateMatrix(ButtonImages.GetMatrix(_effect, true));
+            _fontColour = ButtonImages.GetFontColour(_effect, true);
 
 			SaveSetting();
 		}
@@ -150,7 +150,7 @@ namespace KeyMapper.Forms
 		private void BlankButtonClick(object sender, EventArgs e)
 		{
 			UpdateMatrix(new ColorMatrix());
-			this._fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
+            _fontColour = ButtonImages.GetFontColour(ButtonEffect.None, true);
 
 			SaveSetting();
 		}
@@ -163,13 +163,13 @@ namespace KeyMapper.Forms
 		private void SaveUserSettings()
 		{
 			Properties.Settings userSettings = new Properties.Settings();
-			userSettings.ColourEditorLocation = this.Location;
+			userSettings.ColourEditorLocation = Location;
 			userSettings.Save();
 		}
 
 		private void SaveSetting()
 		{
-			UserColourSettingManager.SaveSetting(this._effect, this._currentMatrix, this._fontColour.ToArgb());
+			UserColourSettingManager.SaveSetting(_effect, _currentMatrix, _fontColour.ToArgb());
 		}
 
 		private void TextButtonClick(object sender, EventArgs e)
@@ -177,11 +177,11 @@ namespace KeyMapper.Forms
 			ColorDialog colourPicker = new ColorDialog();
 
 			// Sets the initial color select to the current text color.
-			colourPicker.Color = this._fontColour;
+			colourPicker.Color = _fontColour;
 
 			if (colourPicker.ShowDialog() == DialogResult.OK)
 			{
-				this._fontColour = colourPicker.Color;
+                _fontColour = colourPicker.Color;
 				SaveSetting();
 
 			}
@@ -211,7 +211,7 @@ namespace KeyMapper.Forms
 				cm.GetType().GetProperty(name).SetValue(cm, val, null);
 			}
 
-			this._fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
+            _fontColour = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), r.Next(0, 256));
 			UpdateMatrix(cm);
 
 			SaveSetting();
