@@ -85,9 +85,7 @@ namespace KeyMapper.Classes
             }
         }
 
-        #region Mapping utility methods
-
-        public static void StoreUnsavedMappings()
+	    public static void StoreUnsavedMappings()
         {
             _unsavedMappings = CopyMappings(_bootMappings);
             foreach (KeyMapping km in _userMappings)
@@ -171,11 +169,7 @@ namespace KeyMapper.Classes
             return copy;
         }
 
-        #endregion
-
-        #region Public methods
-
-        public static Collection<KeyMapping> GetMappings(MappingFilter filter)
+	    public static Collection<KeyMapping> GetMappings(MappingFilter filter)
         {
             switch (filter)
             {
@@ -670,11 +664,7 @@ namespace KeyMapper.Classes
             }
         }
 
-        #endregion
-
-        #region Mappings Add/Edit/Delete/Undo/Redo
-
-        private static void RaiseMappingsChangedEvent()
+	    private static void RaiseMappingsChangedEvent()
         {
             PopulateMappingLists();
             SaveMappings();
@@ -923,11 +913,7 @@ namespace KeyMapper.Classes
             RaiseMappingsChangedEvent();
         }
 
-        #endregion
-
-        #region Registry methods
-
-        private static Collection<KeyMapping> GetMappingsFromScancodeMap(byte[] map, MappingType type)
+	    private static Collection<KeyMapping> GetMappingsFromScancodeMap(byte[] map, MappingType type)
         {
             // Transform the byte array into keymappings
 
@@ -1035,9 +1021,7 @@ namespace KeyMapper.Classes
             }
         }
 
-        #endregion
-
-        public static event EventHandler<EventArgs> MappingsChanged;
+	    public static event EventHandler<EventArgs> MappingsChanged;
 
         private static void PushMappingsOntoUndoStack()
         {

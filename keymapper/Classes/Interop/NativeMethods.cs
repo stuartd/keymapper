@@ -8,21 +8,14 @@ namespace KeyMapper.Classes.Interop
 	{
 		private NativeMethods() { }
 
-		#region Forms
+		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+		internal static extern void LockWindowUpdate(IntPtr hWnd);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
-		internal extern static void LockWindowUpdate(IntPtr hWnd);
-
-		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
-		internal extern static IntPtr GetDC(IntPtr hwnd);
+		internal static extern IntPtr GetDC(IntPtr hwnd);
 
 		[DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
 		internal static extern Int32 GetDeviceCaps(IntPtr hdc, Int32 capindex);
-
-
-		#endregion
-
-		#region AppMutex
 
 		public const int SW_RESTORE = 9;
 
@@ -36,10 +29,6 @@ namespace KeyMapper.Classes.Interop
 
 		[DllImport("user32.dll")]
 		internal static extern int IsIconic(IntPtr hWnd);
-
-		#endregion
-
-		#region Keyboard
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode,
 			EntryPoint = "MapVirtualKeyExW", ExactSpelling = true)]
@@ -91,10 +80,6 @@ namespace KeyMapper.Classes.Interop
 		public const uint KLF_NOTELLSHELL = 0x00000080;
 		public const uint KLF_SUBSTITUTE_OK = 0x00000002;
 
-		#endregion
-
-		#region KeySniffer
-
 
 		// Marshal the delegate otherwise it get's GCd.
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -114,10 +99,6 @@ namespace KeyMapper.Classes.Interop
 		//[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
 		//internal static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
 
-		#endregion
-
-		#region Registry
-
 		[DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
 		public static extern int RegOpenKeyEx
 			(UIntPtr hKey,
@@ -127,7 +108,7 @@ namespace KeyMapper.Classes.Interop
 			out UIntPtr phkResult);
 
 		[DllImport("advapi32.dll")]
-		public extern static uint RegQueryInfoKey
+		public static extern uint RegQueryInfoKey
 			(UIntPtr hkey,
 			IntPtr lpClass,
 			IntPtr lpcbClass,
@@ -144,15 +125,9 @@ namespace KeyMapper.Classes.Interop
 		[DllImport("Advapi32.dll")]
 		public static extern uint RegCloseKey(UIntPtr hKey);
 
-		#endregion
-
-		#region KeyPictureBox
-
 		[DllImport("user32.dll", SetLastError = true)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool DestroyIcon(IntPtr hIcon);
-
-		#endregion
 
 		[DllImport("comctl32.dll", CharSet = CharSet.Unicode, EntryPoint = "ImplementsTaskDialog")]
 		public static extern int TaskDialog(IntPtr hWndParent, IntPtr hInstance, String pszWindowTitle, String pszMainInstruction, String pszContent, int dwCommonButtons, IntPtr pszIcon, out int pnButton);

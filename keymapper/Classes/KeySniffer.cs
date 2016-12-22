@@ -11,8 +11,6 @@ namespace KeyMapper.Classes
 
 	class KeySniffer : IDisposable
 	{
-		#region Fields, properties, constants
-
 		private const int WH_KEYBOARD_LL = 13;
 		private const int WM_KEYDOWN = 0x100;
 		private const int WM_SYSKEYDOWN = 0x104;
@@ -30,11 +28,6 @@ namespace KeyMapper.Classes
 		private bool disposed = false;
 
 		public event EventHandler<KeyMapperKeyPressedEventArgs> KeyPressed;
-		
-
-		#endregion
-
-		#region Public methods
 
 		public KeySniffer(bool suppress)
 		{
@@ -102,10 +95,6 @@ namespace KeyMapper.Classes
 
 			Unhook();
 		}
-
-		#endregion
-
-		#region Private methods
 
 		[SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
 		private void Hook()
@@ -214,12 +203,7 @@ namespace KeyMapper.Classes
 			}
 			return NativeMethods.CallNextHookEx(this._hookID, nCode, wParam, lParam);
 		}
-
-		#endregion
-
 	}
-
-	#region KeyPress struct
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct KBHookStruct
@@ -306,10 +290,6 @@ namespace KeyMapper.Classes
 
 	}
 
-	#endregion
-
-	#region Event class
-
 	public class KeyMapperKeyPressedEventArgs : EventArgs
 	{
 		KBHookStruct _key;
@@ -326,8 +306,5 @@ namespace KeyMapper.Classes
 		}
 
 	}
-
-	#endregion
-
 }
 

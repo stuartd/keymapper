@@ -8,9 +8,6 @@ namespace KeyMapper.Forms
 {
 	public partial class AddEditMapping : KMBaseForm
 	{
-
-		#region Fields, Enum
-
 		// Direction of fade: 
 		// 0 is from group list to button (ie unmapped to mapped)
 		// 1 is from button to group list (ie mapped to unmapped)
@@ -47,11 +44,6 @@ namespace KeyMapper.Forms
 		KeySniffer _sniffer;
 
 		ToolTip _tooltip = new ToolTip();
-
-
-		#endregion
-
-		#region Form methods
 
 		public AddEditMapping(KeyMapping map, bool useCapture)
 		{
@@ -363,10 +355,6 @@ namespace KeyMapper.Forms
 			SaveSettings();
 		}
 
-		#endregion
-
-		#region Panel moving and fading methods
-
 		private void Transition()
 		{
 
@@ -410,9 +398,7 @@ namespace KeyMapper.Forms
 			this.PanelFader.FadeComplete -= PanelFaderFadeComplete;
 		}
 
-		#endregion
-
-	    void KeysByGroupListboxDoubleClick(object sender, EventArgs e)
+		void KeysByGroupListboxDoubleClick(object sender, EventArgs e)
 		{
 			MapSelected();
 		}
@@ -626,8 +612,6 @@ namespace KeyMapper.Forms
 
 		}
 
-	    #region Keysniffer methods
-
 		private void OnKeyPress(object sender, KeyMapperKeyPressedEventArgs e)
 		{
 
@@ -691,8 +675,5 @@ namespace KeyMapper.Forms
 		{
 			this._sniffer.DeactivateHook();
 		}
-
-		#endregion
-
 	}
 }

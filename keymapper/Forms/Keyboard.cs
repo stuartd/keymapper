@@ -537,9 +537,7 @@ namespace KeyMapper.Forms
             userSettings.Save();
         }
 
-        #region Keyboard methods
-
-        private void GetKeyboardData()
+	    private void GetKeyboardData()
         {
 
             // InstalledKeyboards contains the list of keyboard names and locales
@@ -644,11 +642,7 @@ namespace KeyMapper.Forms
             AppController.AddCustomLayout();
         }
 
-        #endregion
-
-        #region Menu Buttons
-
-        // Called by FormsManager when a form closes.
+	    // Called by FormsManager when a form closes.
         public void RegenerateMenuExternal()
         {
             SetWindowMenuButtonStates();
@@ -748,12 +742,7 @@ namespace KeyMapper.Forms
         //{
         //}
 
-
-        #endregion
-
-        #region Event Methods
-
-        private void KeyboardListSelectedIndexChanged(object sender, EventArgs e)
+	    private void KeyboardListSelectedIndexChanged(object sender, EventArgs e)
         {
             this.ChangeKeyboard(KeyboardListCombo.Text, true);
         }
@@ -857,11 +846,7 @@ namespace KeyMapper.Forms
         //    }
         //}
 
-        #endregion
-
-        #region Main Menu click methods
-
-        private void exitMenuItemClick(object sender, EventArgs e)
+	    private void exitMenuItemClick(object sender, EventArgs e)
         {
             Application.Exit();
         }
@@ -1115,9 +1100,7 @@ namespace KeyMapper.Forms
             LogProvider.ClearLogFile();
         }
 
-        #endregion
-
-        private void forceUserMappingsToolStripMenuItem_Click(object sender, EventArgs e)
+	    private void forceUserMappingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MappingsManager.SaveUserMappingsToKeyMapperKey(true);
         }

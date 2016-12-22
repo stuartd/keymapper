@@ -12,9 +12,6 @@ namespace KeyMapper.Forms
 
 	public partial class ColourMap : KMBaseForm
 	{
-
-		#region fields
-
 		int _buttonCount;
 		int _currentButton;
 		int _padding = 2;
@@ -43,8 +40,6 @@ namespace KeyMapper.Forms
 		ToolTip _toolTip = new ToolTip();
 
 		string _toolTipText;
-
-		#endregion
 
 		public ColourMap()
 		{
