@@ -1,4 +1,4 @@
-# **To use KeyMapper in modern versions of Windows (i.e. 7 or later) from the downloads, you will have to initially switch to 'Boot' mappings from the Mappings menu.**
+# **To use KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.**
 
 ## **If you don't do this, your mappings won't work**
 
