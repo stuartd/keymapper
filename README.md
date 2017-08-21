@@ -2,8 +2,7 @@
 
 ## **If you don't do this, your mappings won't work**
 
-
-## keymapper
+* * *
 
 Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
