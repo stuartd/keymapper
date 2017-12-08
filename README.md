@@ -1,4 +1,8 @@
-# keymapper
+# **To use KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.**
+
+## **If you don't do this, your mappings won't work**
+
+* * *
 
 Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
@@ -14,9 +18,6 @@ Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
 [Downloads still available](https://code.google.com/p/keymapper/downloads/list)
 
-**To use KeyMapper in modern versions of Windows (i.e. 7 or later) from the downloads, you will have to initially switch to 'Boot' mappings from the Mappings menu.**
-
-**f you don't do this, your mappings won't work**
 
 You will also need to have Administrative access to your computer.
 
