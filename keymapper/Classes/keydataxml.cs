@@ -45,12 +45,12 @@ namespace KeyMapper.Classes
                 element.MoveNext();
                 return element.Current.Value;
             }
-            return String.Empty;
+            return string.Empty;
         }
 
         public KeyboardLayoutType GetKeyboardLayoutType(string locale)
         {
-            if (String.IsNullOrEmpty(locale))
+            if (string.IsNullOrEmpty(locale))
                 return KeyboardLayoutType.US;
 
             // Get the layout type - US, European etc. The locale in the XML file must be upper case!
@@ -72,9 +72,9 @@ namespace KeyMapper.Classes
             {
                 iterator.MoveNext();
                 string layout = GetElementValue("layout", iterator.Current);
-                if (String.IsNullOrEmpty(layout) == false)
+                if (string.IsNullOrEmpty(layout) == false)
                 {
-                    value = Int32.Parse(layout, CultureInfo.InvariantCulture.NumberFormat);
+                    value = int.Parse(layout, CultureInfo.InvariantCulture.NumberFormat);
                 }
             }
 
@@ -179,8 +179,8 @@ namespace KeyMapper.Classes
 
             foreach (XPathNavigator node in iterator)
             {
-                scancode = Int32.Parse(GetElementValue("sc", node), CultureInfo.InvariantCulture.NumberFormat);
-                extended = Int32.Parse(GetElementValue("ex", node), CultureInfo.InvariantCulture.NumberFormat);
+                scancode = int.Parse(GetElementValue("sc", node), CultureInfo.InvariantCulture.NumberFormat);
+                extended = int.Parse(GetElementValue("ex", node), CultureInfo.InvariantCulture.NumberFormat);
                 string name = AppController.GetKeyName(scancode, extended);
                 if (dir.ContainsKey(name)) // ArgumentException results when trying to add duplicate key..
                     Console.WriteLine("Duplicate name error: Name {0} Existing Scancode : {1} Scancode: {2}", name, dir[name], scancode);
@@ -218,8 +218,8 @@ namespace KeyMapper.Classes
             for (int i = 0; i < iterator.Count; i++)
             {
                 iterator.MoveNext();
-                int scancode = Int32.Parse(GetElementValue("sc", iterator.Current), CultureInfo.InvariantCulture.NumberFormat);
-                int extended = Int32.Parse(GetElementValue("ex", iterator.Current), CultureInfo.InvariantCulture.NumberFormat);
+                int scancode = int.Parse(GetElementValue("sc", iterator.Current), CultureInfo.InvariantCulture.NumberFormat);
+                int extended = int.Parse(GetElementValue("ex", iterator.Current), CultureInfo.InvariantCulture.NumberFormat);
                 keys.Add(KeyHasher.GetHashFromKeyData(scancode, extended));
             }
 
@@ -236,7 +236,7 @@ namespace KeyMapper.Classes
 
             XPathNodeIterator iterator = (XPathNodeIterator)_navigator.Select(expression);
 
-            string name = String.Empty;
+            string name = string.Empty;
 
             if (iterator.Count == 1)
             {

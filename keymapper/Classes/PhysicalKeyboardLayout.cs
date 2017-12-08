@@ -24,7 +24,7 @@ namespace KeyMapper.Classes
 
         KeyboardLayoutType layout;
 
-        Boolean isMacKeyboard;
+        bool isMacKeyboard;
 
         public IEnumerable<KeyboardRow> FunctionKeys
         { get { return this.functionKeys; } }

@@ -222,7 +222,7 @@ namespace KeyMapper.Classes
                 sw.WriteLine(@"[" + hive + @"\" + key + "]");
                 sw.Write("\"" + valueName + "\"=");
 
-                if (String.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     sw.Write("-");
                 }
@@ -269,7 +269,7 @@ namespace KeyMapper.Classes
                 string[] layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
                 {
-                    if (String.IsNullOrEmpty(nameValuePair))
+                    if (string.IsNullOrEmpty(nameValuePair))
                         continue;
 
                     int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
@@ -278,7 +278,7 @@ namespace KeyMapper.Classes
 
                     string locale = nameValuePair.Substring(0, index);
                     int value;
-                    if (Int32.TryParse(nameValuePair.Substring(index + 1), out value) == false)
+                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false)
                         continue;
 
                     var keyboardType = (KeyboardLayoutType)value;
@@ -565,7 +565,7 @@ namespace KeyMapper.Classes
             // Only want to reset locale temporarily so save current value
             string currentkeyboardlocale = KeyboardHelper.GetCurrentKeyboardLocale();
 
-            if (String.IsNullOrEmpty(locale))
+            if (string.IsNullOrEmpty(locale))
             {
                 // At startup we need to load the current locale.
                 locale = currentkeyboardlocale;

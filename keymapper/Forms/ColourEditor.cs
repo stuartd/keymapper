@@ -90,15 +90,15 @@ namespace KeyMapper.Forms
 
 		}
 
-		Decimal GetValue(string name)
+		decimal GetValue(string name)
 		{
 			// Access the appropriate property of the matrix:
 			object value = this._currentMatrix.GetType().GetProperty(name).GetValue(this._currentMatrix, null);
-			Decimal dvalue;
-			if (Decimal.TryParse(value.ToString(), out dvalue))
+			decimal dvalue;
+			if (decimal.TryParse(value.ToString(), out dvalue))
 				return dvalue;
 			else
-				return Decimal.Zero;
+				return decimal.Zero;
 
 		}
 

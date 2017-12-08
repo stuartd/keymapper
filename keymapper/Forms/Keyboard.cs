@@ -379,7 +379,7 @@ namespace KeyMapper.Forms
 
             string toolTipText = box.Map.MappingDescription;
 
-            if (String.IsNullOrEmpty(toolTipText) == false)
+            if (string.IsNullOrEmpty(toolTipText) == false)
                 FormToolTip.SetToolTip(box, toolTipText);
 
             // left is a ref parameter.
@@ -441,7 +441,7 @@ namespace KeyMapper.Forms
 
                     mapstatustext =
                         bootmaptext +
-                        (String.IsNullOrEmpty(bootmaptext) ? "" : ", ") +
+                        (string.IsNullOrEmpty(bootmaptext) ? "" : ", ") +
                         usermaptext;
                 }
                 else
@@ -473,7 +473,7 @@ namespace KeyMapper.Forms
             }
             else
             {
-                StatusLabelRestartLogoff.Text = String.Empty;
+                StatusLabelRestartLogoff.Text = string.Empty;
                 StatusLabelRestartLogoff.Visible = false;
             }
 
@@ -691,7 +691,7 @@ namespace KeyMapper.Forms
                 (MappingsManager.IsRestartRequired() || MappingsManager.IsLogOnRequired()));
 
             onlyShowBootMappingsToolStripMenuItem.Text = "Boot Mappings" +
-              (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC ? String.Empty : " (Read Only)");
+              (AppController.UserCanWriteBootMappings || operatingSystemCapability.ImplementsUAC ? string.Empty : " (Read Only)");
 
             // Mappings - check current view
             showAllMappingsToolStripMenuItem.Checked = (MappingsManager.Filter == MappingFilter.All);

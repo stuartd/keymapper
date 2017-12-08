@@ -181,9 +181,9 @@ namespace KeyMapper.Forms
 		private void SetCaption(string caption)
 		{
 			if (this._newMapping)
-				this.Text = "Create a mapping" + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
+				this.Text = "Create a mapping" + (string.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 			else
-				this.Text = "Edit mapping" + (String.IsNullOrEmpty(caption) == false ? ": " + caption : "");
+				this.Text = "Edit mapping" + (string.IsNullOrEmpty(caption) == false ? ": " + caption : "");
 		}
 
 		private void SetButtonStates()
@@ -240,7 +240,7 @@ namespace KeyMapper.Forms
 
 		private void SetCaption()
 		{
-			string formCaption = String.Empty;
+			string formCaption = string.Empty;
 
 			if (!this._mapped && !this._disabled)
 			{

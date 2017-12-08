@@ -53,7 +53,7 @@ namespace KeyMapper.Classes
 
                     object value = cm.GetType().GetProperty(name).GetValue(cm, null);
                     // Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
-                    reg.SetValue(name, (float)System.Decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
+                    reg.SetValue(name, (float)decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
                 }
             }
 
@@ -121,8 +121,8 @@ namespace KeyMapper.Classes
                     value = reg.GetValue(name);
                     if (value != null)
                     {
-                        Single svalue;
-                        if (System.Single.TryParse(value.ToString(), out svalue))
+                        float svalue;
+                        if (float.TryParse(value.ToString(), out svalue))
                         {
                             cm.GetType().GetProperty(name).SetValue(cm, svalue, null);
                         }

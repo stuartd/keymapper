@@ -15,7 +15,7 @@ namespace KeyMapper.Classes.Interop
 		internal static extern IntPtr GetDC(IntPtr hwnd);
 
 		[DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
-		internal static extern Int32 GetDeviceCaps(IntPtr hdc, Int32 capindex);
+		internal static extern int GetDeviceCaps(IntPtr hdc, int capindex);
 
 		public const int SW_RESTORE = 9;
 
@@ -120,7 +120,7 @@ namespace KeyMapper.Classes.Interop
 			IntPtr lpcbMaxValueNameLen,
 			IntPtr lpcbMaxValueLen,
 			IntPtr lpcbSecurityDescriptor,
-			out Int64 lpftLastWriteTime);
+			out long lpftLastWriteTime);
 
 		[DllImport("Advapi32.dll")]
 		public static extern uint RegCloseKey(UIntPtr hKey);
@@ -130,7 +130,7 @@ namespace KeyMapper.Classes.Interop
 		public static extern bool DestroyIcon(IntPtr hIcon);
 
 		[DllImport("comctl32.dll", CharSet = CharSet.Unicode, EntryPoint = "ImplementsTaskDialog")]
-		public static extern int TaskDialog(IntPtr hWndParent, IntPtr hInstance, String pszWindowTitle, String pszMainInstruction, String pszContent, int dwCommonButtons, IntPtr pszIcon, out int pnButton);
+		public static extern int TaskDialog(IntPtr hWndParent, IntPtr hInstance, string pszWindowTitle, string pszMainInstruction, string pszContent, int dwCommonButtons, IntPtr pszIcon, out int pnButton);
 
 
 	}

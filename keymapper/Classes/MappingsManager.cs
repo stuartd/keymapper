@@ -600,7 +600,7 @@ namespace KeyMapper.Classes
 
                 if (dr != DialogResult.OK)
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
 
                 filename = fd.FileName;

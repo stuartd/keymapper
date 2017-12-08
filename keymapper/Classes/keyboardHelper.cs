@@ -182,7 +182,7 @@ namespace KeyMapper.Classes
 
             // If this shifted state the same as the unshifted.ToUpper
             // (e.g. e and E) then don't add it.
-            if (rc > 0 & (String.Compare(sbShifted.ToString(), sbUnshifted.ToString(), true, AppController.CurrentCultureInfo) != 0))
+            if (rc > 0 & (string.Compare(sbShifted.ToString(), sbUnshifted.ToString(), true, AppController.CurrentCultureInfo) != 0))
             {
                 // Not wanting to do this for letters and the like..
                 result.Append(" " + sbShifted);
@@ -320,7 +320,7 @@ namespace KeyMapper.Classes
                 string keyboardShellName = key.GetValue("Layout Display Name", "").ToString();
                 string localName = string.Empty;
 
-                if (String.IsNullOrEmpty(keyboardShellName) == false)
+                if (string.IsNullOrEmpty(keyboardShellName) == false)
                 {
                     StringBuilder sbName = new StringBuilder(260);
 
@@ -331,7 +331,7 @@ namespace KeyMapper.Classes
                     }
                 }
 
-                if (String.IsNullOrEmpty(localName) == false)
+                if (string.IsNullOrEmpty(localName) == false)
                 {
                     keyboardname = localName;
                 }

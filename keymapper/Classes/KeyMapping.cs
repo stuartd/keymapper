@@ -59,7 +59,7 @@ namespace KeyMapper.Classes
                 bool pending; // Current or pending
                 bool disabled; // Is the mapping disabled or to a key?
                 bool usermapping = (this.type == MappingType.User); // User or Boot mapping? 
-                string description = String.Empty;
+                string description = string.Empty;
 
                 if (MappingsManager.IsMapped(this, MappingFilter.All) == false)
                 {
