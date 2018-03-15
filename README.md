@@ -2,11 +2,13 @@
 
 ## **If you don't do this, your mappings won't work**
 
+![Capture image](https://github.com/stuartd/keymapper/blob/develop/Capture.PNG)
+
 * * *
 
 Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
-![](http://justkeepswimming.net/keymapper/images/kmheader.png)
+![header](http://justkeepswimming.net/keymapper/images/kmheader.png)
 
 # Key Mapper
 
