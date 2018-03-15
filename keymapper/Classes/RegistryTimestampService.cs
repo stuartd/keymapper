@@ -6,14 +6,14 @@ namespace KeyMapper.Classes
 {
     public class RegistryTimestampService : IRegistryTimestampService
     {
-        const int KEY_QUERY_VALUE = 0x0001;
-        const int KEY_SET_VALUE = 0x0002;
+		private const int KEY_QUERY_VALUE = 0x0001;
+		private const int KEY_SET_VALUE = 0x0002;
 
         public DateTime GetRegistryKeyTimestamp(RegistryHive hive, string keyName)
         {
             long ts = GetRawRegistryKeyTimestamp(hive, keyName);
 
-            DateTime dt = (ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue);
+            var dt = ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue;
 
             return dt.ToLocalTime();
         }
@@ -25,22 +25,20 @@ namespace KeyMapper.Classes
                 return 0; // Otherwise the function opens HKLM (or HKCU) again.
             }
 
-            UIntPtr hkey = OpenKey(hive, keyname, KEY_QUERY_VALUE);
+            var hkey = OpenKey(hive, keyname, KEY_QUERY_VALUE);
 
             if (hkey == UIntPtr.Zero)
             {
                 return 0; // Didn't open key
             }
 
-            long timestamp;
-
-            uint result2 = NativeMethods.RegQueryInfoKey(
+			uint result2 = NativeMethods.RegQueryInfoKey(
                 hkey, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
-                IntPtr.Zero, out timestamp);
+                IntPtr.Zero, out long timestamp);
 
             if (result2 != 0)
             {
@@ -54,7 +52,7 @@ namespace KeyMapper.Classes
 
         public bool CanUserWriteToKey(RegistryHive hive, string keyName)
         {
-            UIntPtr hkey = OpenKey(hive, keyName, KEY_SET_VALUE);
+            var hkey = OpenKey(hive, keyName, KEY_SET_VALUE);
             if (hkey == UIntPtr.Zero)
             {
                 return false;
@@ -67,9 +65,8 @@ namespace KeyMapper.Classes
         private UIntPtr OpenKey(RegistryHive hive, string keyname, int requiredAccess)
         {
             UIntPtr hiveptr;
-            UIntPtr hkey;
 
-            switch (hive)
+			switch (hive)
             {
                 case RegistryHive.ClassesRoot:
                     hiveptr = (UIntPtr)0x80000000;
@@ -90,12 +87,13 @@ namespace KeyMapper.Classes
                     return UIntPtr.Zero;
             }
 
-            int result = NativeMethods.RegOpenKeyEx(hiveptr, keyname, 0, requiredAccess, out hkey);
+            int result = NativeMethods.RegOpenKeyEx(hiveptr, keyname, 0, requiredAccess, out var hkey);
 
-            if (result == 0)
-                return hkey;
+            if (result == 0) {
+				return hkey;
+			}
 
-            return UIntPtr.Zero;
+			return UIntPtr.Zero;
         }
     }
 

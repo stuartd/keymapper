@@ -9,14 +9,14 @@ using KeyMapper.Providers;
 
 namespace KeyMapper.Classes
 {
-	class main
+	internal class main
 	{
 
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		private static void Main()
 		{
 			if (AppController.IsOnlyAppInstance() == false)
 			{
@@ -40,7 +40,7 @@ namespace KeyMapper.Classes
 
             ConfigFileProvider.ValidateUserConfigFile();
 
-			Properties.Settings userSettings = new Properties.Settings();
+			var userSettings = new Properties.Settings();
 			if (userSettings.UpgradeRequired)
 			{
                 Console.WriteLine("Upgrading settings to new version");
@@ -60,19 +60,17 @@ namespace KeyMapper.Classes
 
 		}
 
-		static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+		private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
 		{
-			Exception ex = e.ExceptionObject as Exception;
-			if (ex != null)
+			if (e.ExceptionObject is Exception ex)
 			{
 				Console.WriteLine("Unhandled exception (1): {0}", ex);
 			}
 		}
 
-		static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+		private static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
 		{
-			ArgumentException aex = e.Exception as ArgumentException;
-			if (aex != null)
+			if (e.Exception is ArgumentException aex)
 			{
 				if (aex.ParamName != null && aex.ParamName.ToUpperInvariant() == "CULTURE")
 				{

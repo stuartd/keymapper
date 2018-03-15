@@ -14,6 +14,6 @@ namespace KeyMapper.Classes
             Dpi = NativeMethods.GetDeviceCaps(NativeMethods.GetDC(IntPtr.Zero), 90);
         }
 
-        public static int Dpi { get; set; }
+        public static int Dpi { get; }
     }
 }

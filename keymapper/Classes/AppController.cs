@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Security;
 using System.Text;
 using System.Windows.Forms;
@@ -22,11 +21,11 @@ namespace KeyMapper.Classes
     {
         // Always use the provided method to get this
         // as substitutions must be made for some cultures unless Arial Unicode MS in installed
-        private static string _defaultKeyFont = "Lucida Sans Unicode";
+        private static string defaultKeyFont = "Lucida Sans Unicode";
 
         // Keyboard layout and keys
 
-        private static LocalizedKeySet _currentLayout;
+        private static LocalizedKeySet currentLayout;
 
         // Single instance handle
         private static AppMutex appMutex;
@@ -41,46 +40,28 @@ namespace KeyMapper.Classes
 
         private static readonly IRegistryTimestampService registryTimestampService = new RegistryTimestampService();
 
-        private static Hashtable customKeyboardLayouts { get; set; }
+        private static Hashtable customKeyboardLayouts { get; }
 
         private static string currentLocale { get; set; }
 
         public static bool UserCannotWriteToApplicationRegistryKey { get; private set; }
 
-        public static bool UserCannotWriteMappings
-        {
-            get
-            {
-                // Can't write mappings if *all* of these are true:
-                // a) Currently looking at Boot Mappings
-                // b) Earlier than Vista (ie doesn't implement UAC)
-                // c) User can't write boot mappings.
+        public static bool UserCannotWriteMappings => MappingsManager.Filter == MappingFilter.Boot
+													  && !UserCanWriteBootMappings
+													  && !operatingSystemCapability.ImplementsUAC;
 
-                // (XP doesn't allow process elevation, so if you can't then you can't)
-                return (MappingsManager.Filter == MappingFilter.Boot
-                        && !UserCanWriteBootMappings
-                        && !operatingSystemCapability.ImplementsUAC);
-            }
-        }
+		public static bool UserCanWriteBootMappings { get; private set; }
 
-        public static bool UserCanWriteBootMappings { get; private set; }
-
-        public static string ApplicationRegistryKeyName { get; private set; }
+        public static string ApplicationRegistryKeyName { get; }
 
         public static KeyboardLayoutType KeyboardLayout { get; private set; }
 
         public static CultureInfo CurrentCultureInfo { get; private set; }
 
-        public static string KeyMapperFilePath
-        {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath
-                                        (Environment.SpecialFolder.LocalApplicationData), "KeyMapper");
-            }
-        }
+        public static string KeyMapperFilePath => Path.Combine(Environment.GetFolderPath
+			(Environment.SpecialFolder.LocalApplicationData), "KeyMapper");
 
-        static AppController()
+		static AppController()
         {
             customKeyboardLayouts = new Hashtable();
             ApplicationRegistryKeyName = @"Software\KeyMapper";
@@ -129,9 +110,9 @@ namespace KeyMapper.Classes
             }
 
             int hash = KeyHasher.GetHashFromKeyData(scancode, extended);
-            if (_currentLayout.ContainsKey(hash))
+            if (currentLayout.ContainsKey(hash))
             {
-                return _currentLayout.GetKeyName(hash);
+                return currentLayout.GetKeyName(hash);
             }
 
             Console.WriteLine("Unknown key: sc {0} ex {1}", scancode, extended);
@@ -140,19 +121,22 @@ namespace KeyMapper.Classes
 
        public static bool IsOverlongKey(int hash)
         {
-            return _currentLayout.IsKeyNameOverlong(hash);
+            return currentLayout.IsKeyNameOverlong(hash);
         }
 
         public static bool IsLocalizableKey(int hash)
         {
-            return _currentLayout.IsKeyLocalizable(hash);
+            return currentLayout.IsKeyLocalizable(hash);
         }
 
         public static int GetHighestCommonDenominator(int value1, int value2)
         {
             // Euclidean algorithm
-            if (value2 == 0) return value1;
-            return GetHighestCommonDenominator(value2, value1 % value2);
+            if (value2 == 0) {
+				return value1;
+			}
+
+			return GetHighestCommonDenominator(value2, value1 % value2);
         }
 
         public static bool ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater(string innerText)
@@ -161,7 +145,7 @@ namespace KeyMapper.Classes
                           "the protected section of your computer's registry. You may need to approve this action " +
                           "which will be performed by your Registry Editor.";
 
-            TaskDialogResult result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
+            var result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
                                                                   TaskDialogButtons.Yes | TaskDialogButtons.No,
                                                                   TaskDialogIcon.SecurityShield);
 
@@ -266,28 +250,31 @@ namespace KeyMapper.Classes
             {
                 var terminators = new[] { "\r\n" };
 
-                string[] layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
+                var layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
                 {
-                    if (string.IsNullOrEmpty(nameValuePair))
-                        continue;
+                    if (string.IsNullOrEmpty(nameValuePair)) {
+						continue;
+					}
 
-                    int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
-                    if (index < 0)
-                        continue;
+					int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
+                    if (index < 0) {
+						continue;
+					}
 
-                    string locale = nameValuePair.Substring(0, index);
-                    int value;
-                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false)
-                        continue;
+					string locale = nameValuePair.Substring(0, index);
+					if (int.TryParse(nameValuePair.Substring(index + 1), out int value) == false) {
+						continue;
+					}
 
-                    var keyboardType = (KeyboardLayoutType)value;
+					var keyboardType = (KeyboardLayoutType)value;
 
                     customKeyboardLayouts.Add(locale, keyboardType);
                 }
             }
-            catch
+            catch (Exception e)
             {
+				Console.Write("Bad data in customlayouts.txt: " + e);
             }
         }
 
@@ -314,10 +301,12 @@ namespace KeyMapper.Classes
 
             using (var sw = new StreamWriter(path, false))
             {
-                foreach (DictionaryEntry de in customKeyboardLayouts)
-                    if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
-                        sw.WriteLine(de.Key + "=" + (int)de.Value);
-            }
+                foreach (DictionaryEntry de in customKeyboardLayouts) {
+					if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString())) {
+						sw.WriteLine(de.Key + "=" + (int)de.Value);
+					}
+				}
+			}
         }
 
         public static void Close()
@@ -326,12 +315,13 @@ namespace KeyMapper.Classes
 
             KeyboardHelper.UnloadLayout();
 
-            if ((operatingSystemCapability.ImplementsUAC)
+            if (operatingSystemCapability.ImplementsUAC
                 && UserCanWriteBootMappings == false
-                && (MappingsManager.VistaMappingsNeedSaving()))
-                MappingsManager.SaveBootMappingsVista();
+                && MappingsManager.VistaMappingsNeedSaving()) {
+				MappingsManager.SaveBootMappingsVista();
+			}
 
-            LogProvider.CloseConsoleOutput();
+			LogProvider.CloseConsoleOutput();
 
             foreach (string filepath in tempfiles)
             {
@@ -341,33 +331,35 @@ namespace KeyMapper.Classes
                 }
                 catch
                 {
+					// oh well.
                 }
             }
         }
 
-        public static string GetKeyFontName(bool localizable)
+		private static string GetKeyFontName(bool localizable)
         {
             if (arialUnicodeMSInstalled == null)
             {
                 arialUnicodeMSInstalled = false;
                 var installedFonts = new InstalledFontCollection();
-                FontFamily[] fonts = installedFonts.Families;
-                foreach (FontFamily ff in fonts)
+                var fonts = installedFonts.Families;
+                foreach (var ff in fonts)
                 {
                     if (ff.Name == "Arial Unicode MS")
                     {
                         arialUnicodeMSInstalled = true;
-                        _defaultKeyFont = "Arial Unicode MS";
+                        defaultKeyFont = "Arial Unicode MS";
                         break;
                     }
                 }
             }
 
 
-            if (localizable == false || (bool)arialUnicodeMSInstalled)
-                return _defaultKeyFont; // Don't want the static keys to change font.
+            if (localizable == false || (bool)arialUnicodeMSInstalled) {
+				return defaultKeyFont; // Don't want the static keys to change font.
+			}
 
-            // Default font for keys is Lucida Sans Unicode as it's on every version of Windows
+			// Default font for keys is Lucida Sans Unicode as it's on every version of Windows
 
             // Lucida Sans Unicode simply doesn't contain the characters for Bengali & Malayalam
             // Different versions of Windows have differernt cultures installed 
@@ -406,7 +398,7 @@ namespace KeyMapper.Classes
                 case 1054: // Thai - for some reason all the Thai fonts come out far too small ..??
 
                 default:
-                    return _defaultKeyFont;
+                    return defaultKeyFont;
             }
         }
 
@@ -450,15 +442,10 @@ namespace KeyMapper.Classes
 
             if (kmregkey != null)
             {
-                string[] values = kmregkey.GetValueNames();
-                for (int i = 0; i < values.Length; i++)
-                {
-                    if (values[i] == "UserMaps" || values[i] == "BootMaps")
-                    {
-                        savedMappingsExist = true;
-                        break;
-                    }
-                }
+                var values = kmregkey.GetValueNames();
+                if (values.Any(value => value == "UserMaps" || value == "BootMaps")) {
+					savedMappingsExist = true;
+				}
 
                 kmregkey.Close();
                 // Really should have access to this key as it's in the user hive. 
@@ -478,11 +465,11 @@ namespace KeyMapper.Classes
 
 
             // When was the system booted? (Milliseconds vs Ticks is correct..)
-            DateTime boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
+            var boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
 
             // When did the current user log in?
 
-            DateTime logontime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
+            var logontime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
 
             // Now, the "Volatile Environment" key in RegistryHive.CurrentUser
             // >isn't< always unloaded on logoff.
@@ -515,11 +502,11 @@ namespace KeyMapper.Classes
             }
 
             // When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
-            DateTime HKLMWrite = registryTimestampService.GetRegistryKeyTimestamp
+            var HKLMWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
             // When was HKEY_CURRENT_USER\Keyboard Layout written?
-            DateTime HKCUWrite = registryTimestampService.GetRegistryKeyTimestamp
+            var HKCUWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.CurrentUser, @"Keyboard Layout");
 
             // Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", 
@@ -571,11 +558,12 @@ namespace KeyMapper.Classes
                 locale = currentkeyboardlocale;
             }
 
-            if ((locale != currentLocale))
+            if (locale != currentLocale)
             {
-                if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale))
-                    KeyboardLayout = (KeyboardLayoutType)customKeyboardLayouts[locale];
-                else
+                if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale)) {
+					KeyboardLayout = (KeyboardLayoutType)customKeyboardLayouts[locale];
+				}
+				else
                 {
                     // Ask the keydata interface what kind of layout this locale has - US, Euro etc.
                     KeyboardLayout = new KeyDataXml().GetKeyboardLayoutType(locale);
@@ -591,7 +579,7 @@ namespace KeyMapper.Classes
                     int culture = KeyboardHelper.SetLocale(locale);
                     CurrentCultureInfo = new CultureInfo(culture);
 
-                    _currentLayout = new LocalizedKeySet();
+                    currentLayout = new LocalizedKeySet();
                     currentLocale = locale;
                 }
 
@@ -603,9 +591,10 @@ namespace KeyMapper.Classes
                 finally
                 {
                     // Set it back (if different)
-                    if (currentLocale != currentkeyboardlocale)
-                        KeyboardHelper.SetLocale(currentkeyboardlocale);
-                }
+                    if (currentLocale != currentkeyboardlocale) {
+						KeyboardHelper.SetLocale(currentkeyboardlocale);
+					}
+				}
             }
         }
 
@@ -618,29 +607,30 @@ namespace KeyMapper.Classes
         {
             appMutex = new AppMutex();
             bool gotMutex = appMutex.GetMutex();
-            if (gotMutex == false)
-                SwitchToExistingInstance();
+            if (gotMutex == false) {
+				SwitchToExistingInstance();
+			}
 
-            return gotMutex;
+			return gotMutex;
         }
 
         private static void SwitchToExistingInstance()
         {
-            IntPtr hWnd = IntPtr.Zero;
-            Process process = Process.GetCurrentProcess();
-            Process[] processes = Process.GetProcessesByName(process.ProcessName);
-            foreach (Process _process in processes)
+            var hWnd = IntPtr.Zero;
+            var currentProcess = Process.GetCurrentProcess();
+            var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+            foreach (var process in processes)
             {
                 // Get the first instance that is not this instance, has the
                 // same process name and was started from the same file name
                 // and location. Also check that the process has a valid
                 // window handle in this session to filter out other user's
                 // processes.
-                if (_process.Id != process.Id &&
-                    _process.MainModule.FileName == process.MainModule.FileName &&
-                    _process.MainWindowHandle != IntPtr.Zero)
+                if (process.Id != currentProcess.Id &&
+                    process.MainModule.FileName == currentProcess.MainModule.FileName &&
+                    process.MainWindowHandle != IntPtr.Zero)
                 {
-                    hWnd = _process.MainWindowHandle;
+                    hWnd = process.MainWindowHandle;
                     break;
                 }
             }

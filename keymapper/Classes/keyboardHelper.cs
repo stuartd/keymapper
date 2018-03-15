@@ -10,18 +10,18 @@ using KeyMapper.Classes.Interop;
 
 namespace KeyMapper.Classes
 {
-    /// <summary>
+	/// <summary>
     ///  Static class providing Keyboard helper methods
     /// </summary>
-    static class KeyboardHelper
+	internal static class KeyboardHelper
     {
         // The don't need to be IntPtrs as they aren't actually system resources 
-        static List<int> _systemInputLocaleIdentifiers;
+		private static List<int> systemInputLocaleIdentifiers;
 
         // It's just easier to have this as in IntPtr
-        static IntPtr _currentInputLocaleIdentifier;
+		private static IntPtr currentInputLocaleIdentifier;
 
-        public static Hashtable InstalledKeyboards { get; private set; }
+        public static Hashtable InstalledKeyboards { get; }
 
         private static readonly IOperatingSystemCapability operatingSystemCapability = new OperatingSystemCapabilityProvider();
 
@@ -34,24 +34,24 @@ namespace KeyMapper.Classes
         {
             get
             {
-                if (_systemInputLocaleIdentifiers == null)
+                if (systemInputLocaleIdentifiers == null)
                 {
                     int keyboards = NativeMethods.GetKeyboardLayoutList(0, null);
-                    int[] temp = new int[keyboards];
+                    var temp = new int[keyboards];
                     NativeMethods.GetKeyboardLayoutList(keyboards, temp);
 
-                    _systemInputLocaleIdentifiers = new List<int>(keyboards);
-                    _systemInputLocaleIdentifiers.AddRange(temp);
+                    systemInputLocaleIdentifiers = new List<int>(keyboards);
+                    systemInputLocaleIdentifiers.AddRange(temp);
                 }
 
-                return _systemInputLocaleIdentifiers;
+                return systemInputLocaleIdentifiers;
             }
         }
         
         public static int SetLocale(string locale)
         {
             UnloadLayout();
-            _currentInputLocaleIdentifier = NativeMethods.LoadKeyboardLayout(
+            currentInputLocaleIdentifier = NativeMethods.LoadKeyboardLayout(
                 locale, NativeMethods.KLF_ACTIVATE | NativeMethods.KLF_SUBSTITUTE_OK);
 
             // While we have it, get it's HKL and return the low word of it:
@@ -65,23 +65,23 @@ namespace KeyMapper.Classes
             // If the current layout isn't in the list of system layouts, unload it.
             foreach (int i in SystemInputLocaleIdentifiers)
             {
-                if (_currentInputLocaleIdentifier == (IntPtr)i)
+                if (currentInputLocaleIdentifier == (IntPtr)i)
                 {
-                    _currentInputLocaleIdentifier = IntPtr.Zero;
+                    currentInputLocaleIdentifier = IntPtr.Zero;
                     break;
                 }
             }
 
-            if (_currentInputLocaleIdentifier != IntPtr.Zero)
+            if (currentInputLocaleIdentifier != IntPtr.Zero)
             {
-                NativeMethods.UnloadKeyboardLayout(_currentInputLocaleIdentifier);
+                NativeMethods.UnloadKeyboardLayout(currentInputLocaleIdentifier);
                 // Console.WriteLine("Unloading {0}", CurrentLayout);
             }
         }
 
         public static string GetKeyName(int scancode, ref bool overlong)
         {
-            byte[] keyState = new byte[256];
+            var keyState = new byte[256];
 
             // Set all the IME bits on (only works for Japanese = Korean & Chinese still don't work..?)
             keyState[(int)Keys.KanaMode] = 0x80;
@@ -91,17 +91,17 @@ namespace KeyMapper.Classes
             keyState[(int)Keys.HanjaMode] = 0x80;
             keyState[(int)Keys.KanjiMode] = 0x80;
 
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
             const int bufferLength = 10;
 
             // Get the key itself:
-            StringBuilder sbUnshifted = new StringBuilder(bufferLength);
+            var sbUnshifted = new StringBuilder(bufferLength);
 
-            uint vk = NativeMethods.MapVirtualKeyEx((uint)scancode, 1, _currentInputLocaleIdentifier);
+            uint vk = NativeMethods.MapVirtualKeyEx((uint)scancode, 1, currentInputLocaleIdentifier);
             // 	Console.WriteLine((Keys)vk + " - " + vk.ToString() + " - " + "Scancode: " + scancode.ToString());
 
-            int rc = NativeMethods.ToUnicodeEx(vk, (uint)scancode, keyState, sbUnshifted, sbUnshifted.Capacity, 0, _currentInputLocaleIdentifier);
+            int rc = NativeMethods.ToUnicodeEx(vk, (uint)scancode, keyState, sbUnshifted, sbUnshifted.Capacity, 0, currentInputLocaleIdentifier);
 
             if (rc > 1)
             {
@@ -118,12 +118,12 @@ namespace KeyMapper.Classes
 
                 NativeMethods.ToUnicodeEx(
                     (uint)Keys.Space,
-                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, _currentInputLocaleIdentifier),
+                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, currentInputLocaleIdentifier),
                     keyState,
                     sbUnshifted,
                     sbUnshifted.Capacity,
                     0,
-                    _currentInputLocaleIdentifier);
+                    currentInputLocaleIdentifier);
 
                 // There is one character stored in our buffer though:
                 rc = 1;
@@ -142,7 +142,7 @@ namespace KeyMapper.Classes
             // Set SHIFT on..
             keyState[(int)Keys.ShiftKey] = 0x80;
 
-            StringBuilder sbShifted = new StringBuilder(bufferLength);
+            var sbShifted = new StringBuilder(bufferLength);
 
             rc = NativeMethods.ToUnicodeEx(
                 vk,
@@ -151,19 +151,19 @@ namespace KeyMapper.Classes
                 sbShifted,
                 sbShifted.Capacity,
                 0,
-                _currentInputLocaleIdentifier);
+                currentInputLocaleIdentifier);
 
             // If unshifter was a dead key, so will be shifted.
             if (rc < 0)
             {
                 int dummy = NativeMethods.ToUnicodeEx(
                     (uint)Keys.Space,
-                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, _currentInputLocaleIdentifier),
+                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, currentInputLocaleIdentifier),
                     keyState,
                     sbUnshifted,
                     sbUnshifted.Capacity,
                     0,
-                    _currentInputLocaleIdentifier);
+                    currentInputLocaleIdentifier);
 
                 // There will be one character stored in our buffer though:
                 // (well, at least one, but we have no way of knowing if more)
@@ -182,7 +182,7 @@ namespace KeyMapper.Classes
 
             // If this shifted state the same as the unshifted.ToUpper
             // (e.g. e and E) then don't add it.
-            if (rc > 0 & (string.Compare(sbShifted.ToString(), sbUnshifted.ToString(), true, AppController.CurrentCultureInfo) != 0))
+            if ((rc > 0) & (string.Compare(sbShifted.ToString(), sbUnshifted.ToString(), true, AppController.CurrentCultureInfo) != 0))
             {
                 // Not wanting to do this for letters and the like..
                 result.Append(" " + sbShifted);
@@ -218,12 +218,14 @@ namespace KeyMapper.Classes
 
         public static string GetCurrentKeyboardLocale()
         {
-            StringBuilder buffer = new StringBuilder(new string(' ', NativeMethods.KL_NAMELENGTH));
+            var buffer = new StringBuilder(new string(' ', NativeMethods.KL_NAMELENGTH));
             // GetKeyboardLayoutName puts the current locale into the passed buffer
             int result = NativeMethods.GetKeyboardLayoutName(buffer);
-            if (result == 0)
-                return null;
-            return buffer.ToString();
+            if (result == 0) {
+				return null;
+			}
+
+			return buffer.ToString();
         }
 
         public static string GetKeyboardName()
@@ -238,7 +240,7 @@ namespace KeyMapper.Classes
         {
             InstalledKeyboards.Clear();
 
-            RegistryKey registry =
+            var registry =
                 Registry.LocalMachine.OpenSubKey
                 (@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts");
 
@@ -261,7 +263,7 @@ namespace KeyMapper.Classes
                 GetInstalledKeyboardList();
             }
 
-            string[] results = new string[InstalledKeyboards.Count];
+            var results = new string[InstalledKeyboards.Count];
             InstalledKeyboards.Keys.CopyTo(results, 0);
 
             Array.Sort(results);
@@ -270,8 +272,8 @@ namespace KeyMapper.Classes
 
         public static void ShowKeyboardList()
         {
-            IEnumerable<string> kblist = GetInstalledKeyboardListInNameOrder();
-            StringBuilder keyboards = new StringBuilder();
+            var kblist = GetInstalledKeyboardListInNameOrder();
+            var keyboards = new StringBuilder();
             foreach (string keyboard in kblist)
             {
                 keyboards.Append(keyboard + (char) 13 + (char) 10);
@@ -280,8 +282,8 @@ namespace KeyMapper.Classes
             string keyboardListFile = Path.Combine(Path.GetTempPath(), "installed keyboards.txt");
             AppController.RegisterTempFile(keyboardListFile); // Reluctantly register for deletion
 
-            using (FileStream fs = new FileStream(keyboardListFile, FileMode.Create))
-            using (StreamWriter sw = new StreamWriter(fs))
+            using (var fs = new FileStream(keyboardListFile, FileMode.Create))
+            using (var sw = new StreamWriter(fs))
             {
                 sw.Write(keyboards.ToString());
                 sw.Flush();
@@ -290,12 +292,12 @@ namespace KeyMapper.Classes
         }
 
 
-        public static string GetKeyboardName(string locale)
+		private static string GetKeyboardName(string locale)
         {
 
             string keyboardname = "Unknown";
 
-            RegistryKey key =
+            var key =
                 Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts\" + locale);
 
             // This is the result for Windows 2000 and earlier and a fallback for later
@@ -322,7 +324,7 @@ namespace KeyMapper.Classes
 
                 if (string.IsNullOrEmpty(keyboardShellName) == false)
                 {
-                    StringBuilder sbName = new StringBuilder(260);
+                    var sbName = new StringBuilder(260);
 
                     if (NativeMethods.SHLoadIndirectString
                         (keyboardShellName, sbName, (uint)sbName.Capacity, IntPtr.Zero) == 0)

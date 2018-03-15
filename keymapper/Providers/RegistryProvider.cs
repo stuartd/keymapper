@@ -43,7 +43,7 @@ namespace KeyMapper.Providers
         public static byte[] GetScancodeMapFromRegistry(MapLocation which)
         {
             RegistryKey registry = null;
-            RegistryHive hive = RegistryHive.CurrentUser;
+            var hive = RegistryHive.CurrentUser;
             string keyname = string.Empty;
             string valuename = string.Empty;
 
@@ -60,10 +60,11 @@ namespace KeyMapper.Providers
                 }
             }
 
-            if (registry == null)
-                return null;
+            if (registry == null) {
+				return null;
+			}
 
-            object keyvalue = registry.GetValue(valuename, null);
+			var keyvalue = registry.GetValue(valuename, null);
 
             if (keyvalue == null ||
                 registry.GetValueKind(valuename) != RegistryValueKind.Binary ||
@@ -74,7 +75,7 @@ namespace KeyMapper.Providers
             }
 
             // Can't see how this cast can fail, shrug, will return null anyway.
-            byte[] bytecodes = keyvalue as byte[];
+            var bytecodes = keyvalue as byte[];
 
             return bytecodes;
         }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace KeyMapper.Classes
 {
@@ -13,9 +11,9 @@ namespace KeyMapper.Classes
             UserStack = new Stack<Collection<KeyMapping>>();
         }
 
-        public Stack<Collection<KeyMapping>> UserStack { get; private set; }
+        public Stack<Collection<KeyMapping>> UserStack { get; }
 
-        public Stack<Collection<KeyMapping>> BootStack { get; private set; }
+        public Stack<Collection<KeyMapping>> BootStack { get; }
 
         public void Push(Collection<KeyMapping> usermaps, Collection<KeyMapping> bootmaps)
         {
@@ -23,15 +21,9 @@ namespace KeyMapper.Classes
             BootStack.Push(bootmaps);
         }
 
-        public int Count
-        {
-            get
-            {
-                return UserStack.Count;
-            }
-        }
+        public int Count => UserStack.Count;
 
-        public void Clear()
+		public void Clear()
         {
             UserStack.Clear();
             BootStack.Clear();

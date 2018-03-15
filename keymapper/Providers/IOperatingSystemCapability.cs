@@ -1,5 +1,4 @@
-﻿using System;
-namespace KeyMapper.Providers
+﻿namespace KeyMapper.Providers
 {
     public interface IOperatingSystemCapability
     {

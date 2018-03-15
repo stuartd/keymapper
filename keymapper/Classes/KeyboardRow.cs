@@ -4,11 +4,11 @@ namespace KeyMapper.Classes
 {
     public class KeyboardRow
     {
-        public List<KeyboardLayoutElement> Keys { get; private set; }
+        public List<KeyboardLayoutElement> Keys { get; }
 
         public KeyboardRow(List<KeyboardLayoutElement> keys)
         {
-            this.Keys = keys;
+            Keys = keys;
         }
 
     }

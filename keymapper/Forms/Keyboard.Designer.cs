@@ -18,8 +18,8 @@ namespace KeyMapper.Forms
 			if (disposing && (components != null))
 			{
 				components.Dispose();
-				if (_sniffer != null)
-					_sniffer.Dispose();
+				if (sniffer != null)
+					sniffer.Dispose();
 			}
 			base.Dispose(disposing);
 		}

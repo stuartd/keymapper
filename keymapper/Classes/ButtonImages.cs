@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using System.IO;
 using System.Reflection;
 
 namespace KeyMapper.Classes
@@ -27,7 +26,7 @@ namespace KeyMapper.Classes
 		// Custom ColorMatrix and font colour
 		public static Bitmap GetButtonImage(BlankButton button, float scale, string caption, ColorMatrix cm, Color fontColour)
 		{
-			Bitmap bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None, false);
+			var bmp = GetBitmap(button, 0, 0, scale, ButtonEffect.None, false);
 			bmp = Transform(bmp, cm);
 			return WriteCaption(bmp, caption, false, false, fontColour);
 		}
@@ -45,9 +44,9 @@ namespace KeyMapper.Classes
 		private static Bitmap GetButtonImage(int scancode, int extended, BlankButton button, int horizontalStretch,
 															int verticalStretch, float scale, ButtonEffect effect, string caption)
 		{
-            Bitmap bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect, true);
+            var bmp = GetBitmap(button, horizontalStretch, verticalStretch, scale, effect, true);
 
-			Color fontColour = GetFontColour(effect);
+			var fontColour = GetFontColour(effect);
 
 			Bitmap bmpWithCaption;
             if (string.IsNullOrEmpty(caption))
@@ -76,14 +75,14 @@ namespace KeyMapper.Classes
             }
 
 		    // Even numbers only in case we want to stretch.
-			int newWidth = (int)Math.Round((bmp.Width * scale), 0);
+			int newWidth = (int)Math.Round(bmp.Width * scale, 0);
 
             if (forceEven && newWidth % 2 == 1)
             {
                 newWidth += 1;
             }
 
-		    int newHeight = (int)Math.Round((bmp.Height * scale), 0);
+		    int newHeight = (int)Math.Round(bmp.Height * scale, 0);
 
             if (forceEven && newHeight % 2 == 1)
             {
@@ -93,18 +92,14 @@ namespace KeyMapper.Classes
 		    return ScaleBitmap(bmp, newWidth, newHeight);
 		}
 
-		public static Color GetFontColour(ButtonEffect effect)
-		{
-			return GetFontColour(effect, false);
-		}
-
-		public static Color GetFontColour(ButtonEffect effect, bool ignoreUserSettings)
+		public static Color GetFontColour(ButtonEffect effect, bool ignoreUserSettings = false)
 		{
             if (ignoreUserSettings == false)
 			{
-				UserColourSetting setting = UserColourSettingManager.GetColourSettings(effect);
-				if (setting != null)
+				var setting = UserColourSettingManager.GetColourSettings(effect);
+				if (setting != null) {
 					return setting.FontColour;
+				}
 			}
 
             return Color.Black;
@@ -117,7 +112,7 @@ namespace KeyMapper.Classes
 
 			if ((horizontalStretch != 0) & (verticalStretch != 0))
 			{
-			    Bitmap tempbitmap = StretchButtonHorizontal(bmp, horizontalStretch);
+			    var tempbitmap = StretchButtonHorizontal(bmp, horizontalStretch);
 			    newbitmap = StretchButtonVertical(tempbitmap, verticalStretch);
 			}
 			else
@@ -143,7 +138,7 @@ namespace KeyMapper.Classes
 		{
 			Bitmap bmp = null;
 
-			using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name))
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name))
 			{
 				if (stream != null)
 				{
@@ -178,7 +173,7 @@ namespace KeyMapper.Classes
 			{
 				// IF this image needs to be stretched, force the height and width to even numbers
 				// (This only seems to affect height?)
-				bool forceEvenNumber = (verticalStretch != 0);
+				bool forceEvenNumber = verticalStretch != 0;
 				bmp = ResizeBitmap(GetBitmap(button), scale, forceEvenNumber);
 				bmp = StretchBitmap(bmp, horizontalStretch, verticalStretch);
 				// _lastButton = BlankButton.None;
@@ -212,8 +207,8 @@ namespace KeyMapper.Classes
 			int halfwidth = bmp.Width / 2;
 			int slicewidth = AppController.GetHighestCommonDenominator(horizontalstretch, halfwidth);
 
-			Bitmap newbitmap = new Bitmap(bmp.Width + horizontalstretch, bmp.Height);
-			using (Graphics g = Graphics.FromImage(newbitmap))
+			var newbitmap = new Bitmap(bmp.Width + horizontalstretch, bmp.Height);
+			using (var g = Graphics.FromImage(newbitmap))
 			{
 				g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, halfwidth, bmp.Height), GraphicsUnit.Pixel);
 				for (int i = 0; i < horizontalstretch; i += slicewidth)
@@ -237,9 +232,9 @@ namespace KeyMapper.Classes
 			int halfheight = bmp.Height / 2;
 			int sliceheight = AppController.GetHighestCommonDenominator(verticalstretch, halfheight);
 
-			Bitmap newbitmap = new Bitmap(bmp.Width, bmp.Height + verticalstretch);
+			var newbitmap = new Bitmap(bmp.Width, bmp.Height + verticalstretch);
 
-			using (Graphics g = Graphics.FromImage(newbitmap))
+			using (var g = Graphics.FromImage(newbitmap))
 			{
 				g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, bmp.Width, halfheight), GraphicsUnit.Pixel);
 				for (int i = 0; i < verticalstretch; i += sliceheight)
@@ -264,8 +259,8 @@ namespace KeyMapper.Classes
 				return bmp;
 			}
 
-			Bitmap newbitmap = new Bitmap(newWidth, newHeight);
-			using (Graphics g = Graphics.FromImage(newbitmap))
+			var newbitmap = new Bitmap(newWidth, newHeight);
+			using (var g = Graphics.FromImage(newbitmap))
 			{
 				g.DrawImage(bmp, 0, 0, newWidth, newHeight);
 			}
@@ -277,11 +272,13 @@ namespace KeyMapper.Classes
 		private static Bitmap Transform(Bitmap bmp, ColorMatrix cm)
 		{
 			if (bmp == null)
+			{
 				return null;
+			}
 
-			Bitmap copy = new Bitmap(bmp.Width, bmp.Height);
-			using (ImageAttributes ia = new ImageAttributes())
-			using (Graphics g = Graphics.FromImage(copy))
+			var copy = new Bitmap(bmp.Width, bmp.Height);
+			using (var ia = new ImageAttributes())
+			using (var g = Graphics.FromImage(copy))
 			{
 				ia.SetColorMatrix(cm);
 				g.DrawImage(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, bmp.Width, bmp.Height, GraphicsUnit.Pixel, ia);
@@ -293,7 +290,7 @@ namespace KeyMapper.Classes
 
         private static float GetMultiLineFontSize(Bitmap bmp, string caption, bool localizable, float fontsize)
 		{
-			string[] words = caption.Split();
+			var words = caption.Split();
 
 			// Ignore words in brackets as they won't be displayed.
 			string longestWord = words[0];
@@ -301,24 +298,25 @@ namespace KeyMapper.Classes
 			for (int i = 1; i < words.GetLength(0); i++)
 			{
 				string word = words[i];
-                if (word.StartsWith("(", StringComparison.Ordinal) && word.EndsWith(")", StringComparison.Ordinal))
+                if (word.StartsWith("(", StringComparison.Ordinal) && word.EndsWith(")", StringComparison.Ordinal)) {
 					continue;
+				}
 
-				if (word.Length > longestWord.Length)
+				if (word.Length > longestWord.Length) {
 					longestWord = word;
+				}
 			}
 
-			using (Graphics g = Graphics.FromImage(bmp))
-			using (Font font = AppController.GetButtonFont(fontsize, localizable))
+			using (var g = Graphics.FromImage(bmp))
+			using (var font = AppController.GetButtonFont(fontsize, localizable))
 			{
 				g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-				
-				SizeF stringSize;
-				stringSize = g.MeasureString(longestWord, font);
 
-				if (stringSize.Width > (bmp.Width * 0.8F))
+				var stringSize = g.MeasureString(longestWord, font);
+
+				if (stringSize.Width > bmp.Width * 0.8F)
 				{
-					fontsize *= ((bmp.Width * 0.8F) / stringSize.Width);
+					fontsize *= bmp.Width * 0.8F / stringSize.Width;
 				}
 			}
 
@@ -330,15 +328,16 @@ namespace KeyMapper.Classes
 		private static Bitmap WriteCaption(Bitmap bmp, string caption, bool overlong, bool localizable, Color fontColour)
 		{
             // Set the sizes for 2 and 3 or more letters.
-			float fontSizeDouble = (FontSize.BaseFontSize * 0.75F);
-			float fontSizeMulti = (FontSize.BaseFontSize * 0.575F);
+			float fontSizeDouble = FontSize.BaseFontSize * 0.75F;
+			float fontSizeMulti = FontSize.BaseFontSize * 0.575F;
 
 			int namelength = caption.Length;
 
 			// Pretend overlong keys have a length of three:
 
-			if (overlong)
+			if (overlong) {
 				namelength = 3;
+			}
 
 			switch (namelength)
 			{
@@ -347,10 +346,12 @@ namespace KeyMapper.Classes
 					break;
 
 				case 2: // Two letters - mostly F keys, which need a constant font whether they are 2 or 3 chars long
-					if (caption.Substring(0, 1) == "F" && char.IsDigit(caption, 1))
+					if (caption.Substring(0, 1) == "F" && char.IsDigit(caption, 1)) {
 						bmp = DrawCaptionLine(bmp, caption, fontSizeDouble, localizable, fontColour);
-					else
+					}
+					else {
 						bmp = DrawCaptionLine(bmp, caption, fontSizeMulti, localizable, fontColour);
+					}
 
 					break;
 
@@ -381,7 +382,7 @@ namespace KeyMapper.Classes
 
 				default:
 					// More than 3 letters long
-					string[] words = caption.Split(' ');
+					var words = caption.Split(' ');
 
 					fontSizeMulti = GetMultiLineFontSize(bmp, caption, localizable, fontSizeMulti); 
 
@@ -395,7 +396,7 @@ namespace KeyMapper.Classes
 						case 1:
 							DrawCaptionLine(bmp, words[0], fontSizeMulti, localizable, fontColour);
 							break;
-                        case 2: if ((words[1].StartsWith("(", StringComparison.Ordinal) && words[1].EndsWith(")", StringComparison.Ordinal)))
+                        case 2: if (words[1].StartsWith("(", StringComparison.Ordinal) && words[1].EndsWith(")", StringComparison.Ordinal))
 							{
 								DrawCaptionLine(bmp, words[0], fontSizeMulti, TextPosition.Middle, localizable, fontColour);
 							}
@@ -415,7 +416,7 @@ namespace KeyMapper.Classes
 
 		private static Bitmap WriteCaption(Bitmap bmp, int scancode, int extended, Color fontColour)
 		{
-            string caption = AppController.GetKeyName(scancode, extended) ?? string.Format("SC: {0} EX: {1}", scancode, extended);
+            string caption = AppController.GetKeyName(scancode, extended) ?? $"SC: {scancode} EX: {extended}";
 
 		    // Blank keys.
             if (string.IsNullOrEmpty(caption))
@@ -428,11 +429,13 @@ namespace KeyMapper.Classes
 
 			int hash = KeyHasher.GetHashFromKeyData(scancode, extended);
 
-			if (AppController.IsOverlongKey(hash))
+			if (AppController.IsOverlongKey(hash)) {
 				overlong = true;
+			}
 
-			if (AppController.IsLocalizableKey(hash))
+			if (AppController.IsLocalizableKey(hash)) {
 				localizable = true;
+			}
 
 			return WriteCaption(bmp, caption, overlong, localizable, fontColour);
 		}
@@ -448,16 +451,16 @@ namespace KeyMapper.Classes
 			// The upper 10/64 and lower 14/64 of the button are not considered drawing area 
 			// so discount them when calculating the row position. This also knocks the centre down by 4/64.
 
-			using (Font font = AppController.GetButtonFont(fontsize, localizable))
-			using (Graphics g = Graphics.FromImage(bmp))
+			using (var font = AppController.GetButtonFont(fontsize, localizable))
+			using (var g = Graphics.FromImage(bmp))
 			{
 				g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
 				// Use width of actual string for left placement:
 			    // This only takes tiny amount of time - 14ms for 10000 iterations..
-				SizeF stringSize = g.MeasureString(caption, font);
+				var stringSize = g.MeasureString(caption, font);
 
-				int left = (bmp.Width / 2) - (int)(stringSize.Width / 2);
+				int left = bmp.Width / 2 - (int)(stringSize.Width / 2);
 				int top = 0;
 
 				// Vertical centre justify within button and row:
@@ -465,7 +468,7 @@ namespace KeyMapper.Classes
 				{
 					case TextPosition.Middle:
                         // Remove cast to int, get 'possible loss of fraction'. Oh well..
-						top = (int)(((bmp.Height - stringSize.Height) / 2) + (int)(bmp.Height / 28));
+						top = (int)((bmp.Height - stringSize.Height) / 2 + (int)(bmp.Height / 28));
 						break;
 					case TextPosition.TextTop:
 						top = (int)(bmp.Height * 14F / 64F);
@@ -478,7 +481,7 @@ namespace KeyMapper.Classes
 						break;
 				}
 
-				using (SolidBrush b = new SolidBrush(fontColour))
+				using (var b = new SolidBrush(fontColour))
 				{
 					g.DrawString(caption, font, b, new Point(left, top));
 				}
@@ -491,7 +494,7 @@ namespace KeyMapper.Classes
 		{
 			if (ignoreUserSettings == false)
 			{
-				UserColourSetting setting = UserColourSettingManager.GetColourSettings(effect);
+				var setting = UserColourSettingManager.GetColourSettings(effect);
                 if (setting != null)
                 {
                     return setting.Matrix;
@@ -536,7 +539,7 @@ namespace KeyMapper.Classes
 
 		private static Bitmap ApplyEffect(Bitmap bmp, ButtonEffect effect)
 		{
-			ColorMatrix cm = GetMatrix(effect);
+			var cm = GetMatrix(effect);
 
             if (cm == null)
             {
@@ -635,7 +638,6 @@ namespace KeyMapper.Classes
 
 	public enum BlankButton
 	{
-		None = -1,
 		Blank = 0,
 		TallBlank = 1,
 		MediumWideBlank = 2,

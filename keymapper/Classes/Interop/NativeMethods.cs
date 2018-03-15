@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace KeyMapper.Classes.Interop
 {
-	class NativeMethods
+	internal class NativeMethods
 	{
 		private NativeMethods() { }
 
@@ -44,7 +44,7 @@ namespace KeyMapper.Classes.Interop
 		internal static extern int GetKeyboardLayoutList(int nBuff, [Out, MarshalAs(UnmanagedType.LPArray)] int[] lpList);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "LoadKeyboardLayoutW", ExactSpelling = true)]
-		internal static extern IntPtr LoadKeyboardLayout(string pwszKLID, uint Flags);
+		internal static extern IntPtr LoadKeyboardLayout(string pwszKLID, uint flags);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
 		[return: MarshalAs(UnmanagedType.Bool)]

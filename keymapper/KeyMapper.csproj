@@ -319,7 +319,6 @@
     <Compile Include="Providers\LogProvider.cs" />
     <Compile Include="Providers\OperatingSystemCapabilityProvider.cs" />
     <Compile Include="Providers\RegistryProvider.cs" />
-    <Compile Include="Providers\UndoRedoStackProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\fader.resx">

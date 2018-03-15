@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
 using System.IO;
-using System.Text;
 using KeyMapper.Properties;
 
 namespace KeyMapper.Providers
@@ -22,9 +19,7 @@ namespace KeyMapper.Providers
             }
             else
             {
-                var innerException =
-                    ex.InnerException as ConfigurationErrorsException;
-                if (innerException != null && !string.IsNullOrEmpty(innerException.Filename))
+				if (ex.InnerException is ConfigurationErrorsException innerException && !string.IsNullOrEmpty(innerException.Filename))
                 {
                     fileName = innerException.Filename;
                 }
@@ -42,8 +37,7 @@ namespace KeyMapper.Providers
             try
             {
                 // If file is corrupt this will trigger an exception
-                Configuration config = ConfigurationManager.OpenExeConfiguration
-                    (ConfigurationUserLevel.PerUserRoamingAndLocal);
+                ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -54,7 +48,7 @@ namespace KeyMapper.Providers
             {
                 // Access a property to find any other error types - invalid XML etc.
                 var userSettings = new Settings();
-                Point p = userSettings.ColourEditorLocation;
+                var p = userSettings.ColourEditorLocation;
             }
             catch (ConfigurationErrorsException ex)
             {

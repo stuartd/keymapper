@@ -22,8 +22,8 @@ namespace KeyMapper.Providers
 
         private OperatingSystemCapabilityProvider(int mockMajorVersion, int mockMinorVersion)
         {
-            this.majorVersion = mockMajorVersion;
-            this.minorVersion = mockMinorVersion;
+            majorVersion = mockMajorVersion;
+            minorVersion = mockMinorVersion;
         }
 
         public IOperatingSystemCapability CreateMockInstance(int mockMajorVersion, int mockMinorVersion)
@@ -37,89 +37,32 @@ namespace KeyMapper.Providers
             minorVersion = Environment.OSVersion.Version.Minor;
         }
 
-        public string OperatingSystem
-        {
-            get
-            {
-                return "Windows " + (isVista ? "Vista" : isWindows2000 ? "2000" : this.isXp ? "XP" : isWindows7 ? "7" : isWindows8 ? "8" : "Mystery Edition");
-            }
-        }
+        public string OperatingSystem => "Windows " + (isVista ? "Vista" : isWindows2000 ? "2000" : isXp ? "XP" : isWindows7 ? "7" : isWindows8 ? "8" : "Mystery Edition");
 
-        /// <remarks>Only supported by XP and Vista</remarks>
-        public bool SupportsUserMappings
-        {
-            get { return this.isXp || isVista; }
-        }
+		/// <remarks>Only supported by XP and Vista</remarks>
+        public bool SupportsUserMappings => isXp || isVista;
 
-        /// <remarks>XP and later</remarks>
-        public bool SupportsLocalizedKeyboardNames
-        {
-            get { return isXpOrLater; }
-        }
+		/// <remarks>XP and later</remarks>
+        public bool SupportsLocalizedKeyboardNames => isXpOrLater;
 
-        /// <remarks>Vista and later</remarks>
-        public bool ImplementsUAC
-        {
-            get { return isVistaOrLater ; }
-        }
+		/// <remarks>Vista and later</remarks>
+        public bool ImplementsUAC => isVistaOrLater;
 
-        /// <remarks>Vista and later</remarks>
-        public bool ImplementsTaskDialog
-        {
-            get { return isVistaOrLater; }
-        }
+		/// <remarks>Vista and later</remarks>
+        public bool ImplementsTaskDialog => isVistaOrLater;
 
-        private bool isWindows2000
-        {
-            get
-            {
-                return (majorVersion == 5 && minorVersion == 0);
-            }
-        }
+		private bool isWindows2000 => majorVersion == 5 && minorVersion == 0;
 
-        private bool isXp
-        {
-            get
-            {
-                return majorVersion == 5 && minorVersion == 1;
-            }
-        }
+		private bool isXp => majorVersion == 5 && minorVersion == 1;
 
-        private bool isVista
-        {
-            get
-            {
-                return majorVersion == 6 && minorVersion == 0;
-            }
-        }
+		private bool isVista => majorVersion == 6 && minorVersion == 0;
 
-        private bool isWindows7
-        {
-            get
-            {
-                return majorVersion == 6 && minorVersion == 1;
-            }
-        }
+		private bool isWindows7 => majorVersion == 6 && minorVersion == 1;
 
-        private bool isWindows8
-        {
-            get
-            {
-                return majorVersion == 6 && minorVersion == 2;
-            }
-        }
+		private bool isWindows8 => majorVersion == 6 && minorVersion == 2;
 
-        private bool isXpOrLater
-        {
-            get
-            {
-                return majorVersion > 5 || isXp;
-            }
-        }
+		private bool isXpOrLater => majorVersion > 5 || isXp;
 
-        private bool isVistaOrLater
-        {
-            get { return majorVersion > 5; }
-        }
-    }
+		private bool isVistaOrLater => majorVersion > 5;
+	}
 }

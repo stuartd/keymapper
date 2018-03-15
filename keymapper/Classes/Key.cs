@@ -2,11 +2,11 @@ namespace KeyMapper.Classes
 {
     public class Key
     {
-        public string Name { get; private set; }
+        public string Name { get; }
 
-        public int Scancode { get; private set; }
+        public int Scancode { get; }
 
-        public int Extended { get; private set; }
+        public int Extended { get; }
 
         public Key()
         {
@@ -33,24 +33,22 @@ namespace KeyMapper.Classes
         public static bool operator ==(Key key1, Key key2)
         {
             // If Scancode and Extended are the same, it's the same key.
-            return (key1.Scancode == key2.Scancode && key1.Extended == key2.Extended);
+            return key1.Scancode == key2.Scancode && key1.Extended == key2.Extended;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
-                return false;
+            if (obj.GetType() != GetType()) {
+				return false;
+			}
 
-            return this == (Key)obj;
+			return this == (Key)obj;
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+		public override int GetHashCode() => base.GetHashCode();
 
-        // The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
-        public static bool operator !=(Key key1, Key key2)
+		// The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
+		public static bool operator !=(Key key1, Key key2)
         {
             return !(key1 == key2);
         }

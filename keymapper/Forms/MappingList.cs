@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.ObjectModel;
 using KeyMapper.Classes;
 
 namespace KeyMapper.Forms
 {
 	public partial class MappingListForm : KMBaseForm
 	{
-        private readonly List<int> _clearedKeys = new List<int>();
-		private readonly List<Key> _keylist = new List<Key>();
-	    private const int _minimumWidth = 300;
+        private readonly List<int> clearedKeys = new List<int>();
+		private readonly List<Key> keylist = new List<Key>();
+	    private const int MinimumWidth = 300;
 
         /// <remarks>Leaving the Type column in even though there are only Boot mappings now, </remarks>
 	    public MappingListForm()
@@ -25,12 +24,13 @@ namespace KeyMapper.Forms
 
 		public void LoadUserSettings()
 		{
-            Properties.Settings userSettings = new Properties.Settings();
+            var userSettings = new Properties.Settings();
 
 			int savedWidth = userSettings.MappingListFormWidth;
 
-			if (savedWidth > _minimumWidth)
-				this.Width = savedWidth;
+			if (savedWidth > MinimumWidth) {
+				Width = savedWidth;
+			}
 		}
 
 		private void MappingListFormClosing(object sender, FormClosingEventArgs e)
@@ -40,13 +40,13 @@ namespace KeyMapper.Forms
 
 		private void SaveUserSettings()
 		{
-			Properties.Settings userSettings = new Properties.Settings();
-			userSettings.MappingListFormLocation = this.Location;
-			userSettings.MappingListFormWidth = this.Width;
+			var userSettings = new Properties.Settings();
+			userSettings.MappingListFormLocation = Location;
+			userSettings.MappingListFormWidth = Width;
 			userSettings.Save();
 		}
 
-		void HandleMappingsChanged(object sender, EventArgs e)
+		private void HandleMappingsChanged(object sender, EventArgs e)
 		{
 			Populate();
 		}
@@ -54,19 +54,19 @@ namespace KeyMapper.Forms
 		private void Populate()
 		{
             // Form grabs focus from main form when repopulating. Check if we have focus now..
-			bool hasFocus = this.grdMappings.ContainsFocus;
+			bool hasFocus = grdMappings.ContainsFocus;
 		
 			// Using grdMappings.Rows.Clear() sometimes results in 
 			// "Can't add rows where there are no columns" error,
 			// resulting in an InvalidOperationException.
 
-			for (int i = this.grdMappings.Rows.Count - 1; i >= 0 ; i--)
+			for (int i = grdMappings.Rows.Count - 1; i >= 0 ; i--)
 			{
-				this.grdMappings.Rows.Remove(this.grdMappings.Rows[i]) ;
+				grdMappings.Rows.Remove(grdMappings.Rows[i]) ;
 			}
 			
-			this._clearedKeys.Clear();
-			this._keylist.Clear();
+			clearedKeys.Clear();
+			keylist.Clear();
 			
 			try
 			{
@@ -79,19 +79,18 @@ namespace KeyMapper.Forms
 			}
 
 			// Resize according to number of mappings
-			int height = this.grdMappings.ColumnHeadersHeight 
-                + this.grdMappings.Rows.Cast<DataGridViewRow>().Sum(row => row.Height + row.DividerHeight);
+			int height = grdMappings.ColumnHeadersHeight 
+                + grdMappings.Rows.Cast<DataGridViewRow>().Sum(row => row.Height + row.DividerHeight);
 
-		    this.MinimumSize = new Size(0, 0);
-			this.MaximumSize = new Size(0, 0);
-			this.SetClientSizeCore(this.ClientSize.Width, height);
-			this.MinimumSize = new Size(_minimumWidth, this.Size.Height);
+		    MinimumSize = new Size(0, 0);
+			MaximumSize = new Size(0, 0);
+			SetClientSizeCore(ClientSize.Width, height);
+			MinimumSize = new Size(MinimumWidth, Size.Height);
 
 			// If we didn't have form to start with, set focus back to main form.
-			if (hasFocus == false)
+			if (hasFocus == false) {
 				FormsManager.ActivateMainForm();
-			
-
+			}
 		}
 
 		private void AddRowsToGrid()
@@ -101,24 +100,24 @@ namespace KeyMapper.Forms
 			AddRowsToGrid(MappingFilter.ClearedUser);
 			AddRowsToGrid(MappingFilter.ClearedBoot);
 
-			if (this.grdMappings.RowCount == 0)
+			if (grdMappings.RowCount == 0)
 			{
 				// No mappings.
-				int index = this.grdMappings.Rows.Add("You haven't created any mappings yet");
-				this._clearedKeys.Add(index); // Stops Delete key being shown. 
+				int index = grdMappings.Rows.Add("You haven't created any mappings yet");
+				clearedKeys.Add(index); // Stops Delete key being shown. 
 			}
 
 		}
 
 		private void AddRowsToGrid(MappingFilter filter)
 		{
-			Collection<KeyMapping> maps = MappingsManager.GetMappings(filter);
+			var maps = MappingsManager.GetMappings(filter);
 
-			foreach (KeyMapping map in maps)
+			foreach (var map in maps)
 			{
 				if (filter == MappingFilter.ClearedUser || filter == MappingFilter.ClearedBoot)
 				{
-					if (this._keylist.Contains(map.From))
+					if (keylist.Contains(map.From))
 					{
 						// Don't add an entry for a cleared key which has been remapped.
 						break;
@@ -127,11 +126,11 @@ namespace KeyMapper.Forms
 				}
 				else
 				{
-					this._keylist.Add(map.From);
+					keylist.Add(map.From);
 				}
 
-				int index = this.grdMappings.Rows.Add(map.ToString());
-				this.grdMappings.Rows[index].Tag = map;
+				int index = grdMappings.Rows.Add(map.ToString());
+				grdMappings.Rows[index].Tag = map;
 
 				string cellvalue = string.Empty;
 
@@ -152,17 +151,19 @@ namespace KeyMapper.Forms
 						// Need to store the row to a little array as
 						// don't want to have to access each cell to decide whether 
 						// to show the delete button for it or not.
-						this._clearedKeys.Add(index);
+						clearedKeys.Add(index);
 
 						break;
 				}
 
-				this.grdMappings.Rows[index].Cells[1].Value = cellvalue;
+				grdMappings.Rows[index].Cells[1].Value = cellvalue;
 
-				if (MappingsManager.IsMappingPending(map, filter))
-					this.grdMappings.Rows[index].Cells[2].Value = "Pending";
-				else
-					this.grdMappings.Rows[index].Cells[2].Value = "Mapped";
+				if (MappingsManager.IsMappingPending(map, filter)) {
+					grdMappings.Rows[index].Cells[2].Value = "Pending";
+				}
+				else {
+					grdMappings.Rows[index].Cells[2].Value = "Mapped";
+				}
 			}
 
 		}
@@ -170,27 +171,32 @@ namespace KeyMapper.Forms
 
 		private void grdMappingsCellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex != 3)
+			if (e.ColumnIndex != 3) {
 				return;
+			}
 
 			int row = e.RowIndex;
 
-			if (this._clearedKeys.Contains(row))
+			if (clearedKeys.Contains(row)) {
 				return; // Shouldn't happen anyway
+			}
 
 			if (row >= 0)
 			{
-				DataGridViewRow currentRow = this.grdMappings.Rows[row];
+				var currentRow = grdMappings.Rows[row];
 
 				if (currentRow.Tag != null)
 				{
 					MappingFilter filter;
-					if (currentRow.Cells[1].Value.ToString() == "User")
+					if (currentRow.Cells[1].Value.ToString() == "User") {
 						filter = MappingFilter.User;
-					else if (currentRow.Cells[1].Value.ToString() == "Boot")
+					}
+					else if (currentRow.Cells[1].Value.ToString() == "Boot") {
 						filter = MappingFilter.Boot;
-					else
+					}
+					else {
 						return;
+					}
 
 					MappingsManager.DeleteMapping((KeyMapping)currentRow.Tag, filter);
 				}
@@ -208,7 +214,7 @@ namespace KeyMapper.Forms
 
 			if (e.ColumnIndex == 3 && e.RowIndex >= 0)
 			{
-				if (this._clearedKeys.Contains(e.RowIndex))
+				if (clearedKeys.Contains(e.RowIndex))
 				{
 					e.PaintBackground(e.CellBounds, true);
 					e.Handled = true;

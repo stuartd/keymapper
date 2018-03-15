@@ -9,7 +9,7 @@ namespace KeyMapper.UnitTests
         [Test]
         public static void OS_Windows_2000_Is_Correct()
         {
-            IOperatingSystemCapability provider = new OperatingSystemCapabilityProvider().CreateMockInstance(5, 0);
+            var provider = new OperatingSystemCapabilityProvider().CreateMockInstance(5, 0);
 
             Assert.AreEqual("Windows 2000", provider.OperatingSystem);
             Assert.IsFalse(provider.ImplementsTaskDialog);

@@ -14,24 +14,24 @@ namespace KeyMapper.Classes
 	        SeparatorHeight = 3;
 	    }
 
-	    public static int SeparatorHeight { get; private set; }
+		private static int SeparatorHeight { get; }
 
-	    public static int VerticalItemPadding { get; private set; }
+		private static int VerticalItemPadding { get; }
 
 	    internal class SeparatorItem
 		{
-			private readonly string _name;
+			private readonly string name;
 			
             public SeparatorItem(string name)
 			{
-			    this._name = name;
+			    this.name = name;
 			}
 
 			public override string ToString()
 			{
-				if (this._name != null)
+				if (name != null)
 				{
-					return this._name;
+					return name;
 				}
 				return base.ToString();
 			}
@@ -45,12 +45,11 @@ namespace KeyMapper.Classes
 			    return;
 			}
 
-			ComboBox combo = sender as ComboBox;
-			if (combo != null)
+			if (sender is ComboBox combo)
 			{
-				object comboBoxItem = combo.Items[e.Index];
+				var comboBoxItem = combo.Items[e.Index];
 
-				Size textSize = TextRenderer.MeasureText(comboBoxItem.ToString(), combo.Font);
+				var textSize = TextRenderer.MeasureText(comboBoxItem.ToString(), combo.Font);
 
 				e.ItemHeight = textSize.Height + VerticalItemPadding;
 				e.ItemWidth = textSize.Width;
@@ -68,17 +67,16 @@ namespace KeyMapper.Classes
 			if (e.Index == -1)
 			{ return; }
 
-			ComboBox combo = sender as ComboBox;
-			if (combo != null)
+			if (sender is ComboBox combo)
 			{
-				object comboBoxItem = combo.Items[e.Index];
+				var comboBoxItem = combo.Items[e.Index];
 
 				e.DrawBackground();
 				e.DrawFocusRectangle();
 
-				bool isSeparatorItem = (comboBoxItem is SeparatorItem);
+				bool isSeparatorItem = comboBoxItem is SeparatorItem;
 
-				Rectangle bounds = e.Bounds;
+				var bounds = e.Bounds;
 				// adjust the bounds so that the text is centered properly.
 				// if we're a separator, remove the separator height
 
@@ -91,9 +89,9 @@ namespace KeyMapper.Classes
 					bounds, e.ForeColor, TextFormatFlags.Left & TextFormatFlags.VerticalCenter);
 
 				// draw the separator line
-				if (isSeparatorItem && ((e.State & DrawItemState.ComboBoxEdit) != DrawItemState.ComboBoxEdit))
+				if (isSeparatorItem && (e.State & DrawItemState.ComboBoxEdit) != DrawItemState.ComboBoxEdit)
 				{
-					Rectangle separatorRect = new Rectangle(e.Bounds.Left, e.Bounds.Bottom - SeparatorHeight, e.Bounds.Width, SeparatorHeight);
+					var separatorRect = new Rectangle(e.Bounds.Left, e.Bounds.Bottom - SeparatorHeight, e.Bounds.Width, SeparatorHeight);
 
 					// fill the background behind the separator
 					using (Brush br = new SolidBrush(combo.BackColor))

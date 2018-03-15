@@ -7,7 +7,7 @@ namespace KeyMapper.Forms
 		public AboutForm()
 		{
 			InitializeComponent();
-			this.lblAppTitle.Text = "KeyMapper " + Application.ProductVersion.ToString();
+			lblAppTitle.Text = "KeyMapper " + Application.ProductVersion;
 		}
 
 	}

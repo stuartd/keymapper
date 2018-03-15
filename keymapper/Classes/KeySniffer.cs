@@ -9,29 +9,29 @@ namespace KeyMapper.Classes
 	
 	public delegate IntPtr LowLevelKeyboardProc(int code, IntPtr wParam, IntPtr lParam);
 
-	class KeySniffer : IDisposable
+	internal sealed class KeySniffer : IDisposable
 	{
 		private const int WH_KEYBOARD_LL = 13;
 		private const int WM_KEYDOWN = 0x100;
 		private const int WM_SYSKEYDOWN = 0x104;
 
-		internal LowLevelKeyboardProc _proc;
+		private LowLevelKeyboardProc proc;
 
 		// Implemented a subclass of CriticalHandleZeroOrMinusOneIsInvalid
 		// to make sure handle is released, but it meant giving up too much control
 		// of when the hook is deactivated.
 		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-		private IntPtr _hookID;
+		private IntPtr hookId;
 
-		private bool _suppress;
+		private readonly bool suppress;
 		private bool disposed = false;
 
 		public event EventHandler<KeyMapperKeyPressedEventArgs> KeyPressed;
 
 		public KeySniffer(bool suppress)
 		{
-			this._suppress = suppress;
+			this.suppress = suppress;
 		}
 
 		// Default to not suppressing keypresses
@@ -50,34 +50,34 @@ namespace KeyMapper.Classes
 			GC.SuppressFinalize(this);
 		}
 
-		protected virtual void Dispose(bool disposing)
+		private void Dispose(bool disposing)
 		{
-			if (!this.disposed)
+			if (!disposed)
 			{
 				if (disposing)
 				{
-					if (this._hookID != IntPtr.Zero)
+					if (hookId != IntPtr.Zero)
 					{
 						Unhook();
 					}
 				}
-				this.disposed = true;
+				disposed = true;
 			}
 		}
 
 
 		public void ActivateHook()
 		{
-			if (this._hookID != IntPtr.Zero)
+			if (hookId != IntPtr.Zero)
 			{
 				// Already hooked..
 				return;
 			}
 
-			if (this._proc == null)
+			if (proc == null)
 			{
-				this._proc = HookCallback;
-				GC.KeepAlive(this._proc);
+				proc = HookCallback;
+				GC.KeepAlive(proc);
 			}
 
 			Hook();
@@ -87,7 +87,7 @@ namespace KeyMapper.Classes
 		public void DeactivateHook()
 		{
 
-			if (this._hookID == IntPtr.Zero)
+			if (hookId == IntPtr.Zero)
 			{
 				//  there is no hook..
 				return;
@@ -100,13 +100,13 @@ namespace KeyMapper.Classes
 		private void Hook()
 		{
 
-			using (Process curProcess = Process.GetCurrentProcess())
-			using (ProcessModule curModule = curProcess.MainModule)
+			using (var curProcess = Process.GetCurrentProcess())
+			using (var curModule = curProcess.MainModule)
 			{
-				this._hookID = NativeMethods.SetWindowsHookEx(WH_KEYBOARD_LL, this._proc,
+				hookId = NativeMethods.SetWindowsHookEx(WH_KEYBOARD_LL, proc,
 													NativeMethods.GetModuleHandle(curModule.ModuleName), 0);
 
-				if (this._hookID == IntPtr.Zero)
+				if (hookId == IntPtr.Zero)
 				{
 					int errorCode = Marshal.GetLastWin32Error();
 					throw new System.ComponentModel.Win32Exception(errorCode);
@@ -129,10 +129,11 @@ namespace KeyMapper.Classes
 			// Sure looks to me like that's wrong, probable because the method is in a different class, which
 			// fxcop told me to do in the first place. 
 
-			if (this._hookID == IntPtr.Zero)
+			if (hookId == IntPtr.Zero) {
 				return;
+			}
 
-			int result = (int)NativeMethods.UnhookWindowsHookEx(this._hookID);
+			int result = (int)NativeMethods.UnhookWindowsHookEx(hookId);
 			int error = Marshal.GetLastWin32Error();
 
 			if (result == 0)
@@ -145,8 +146,8 @@ namespace KeyMapper.Classes
 				}
 			}
 	
-			this._hookID = IntPtr.Zero;
-			this._proc = null;
+			hookId = IntPtr.Zero;
+			proc = null;
 
 		}
 
@@ -155,7 +156,7 @@ namespace KeyMapper.Classes
 			if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
 			{
 				// Cast lParam into our structure
-				KBHookStruct keypress = (KBHookStruct)Marshal.PtrToStructure(lParam, typeof(KBHookStruct));
+				var keypress = (KbHookStruct)Marshal.PtrToStructure(lParam, typeof(KbHookStruct));
                 
 				//  Console.WriteLine("ScanCode: {0}, Extended: {1}, KeyCode: {2}, Name: {3}",
 				 //  keypress.Scancode, keypress.Extended, keypress.VirtualKeyCode, AppController.GetKeyName(keypress.Scancode, keypress.Extended));
@@ -189,56 +190,45 @@ namespace KeyMapper.Classes
                 }
 
 				// Raise the event:
-				if (this.KeyPressed != null)
+				if (KeyPressed != null)
 				{
-					KeyMapperKeyPressedEventArgs e = new KeyMapperKeyPressedEventArgs(keypress);
-					this.KeyPressed(new object(), e);
+					var e = new KeyMapperKeyPressedEventArgs(keypress);
+					KeyPressed(new object(), e);
 				}
 
-				if (this._suppress)
+				if (suppress)
 				{
 					// Return 1 to suppress the keypress.
 					return (IntPtr)1;
 				}
 			}
-			return NativeMethods.CallNextHookEx(this._hookID, nCode, wParam, lParam);
+			return NativeMethods.CallNextHookEx(hookId, nCode, wParam, lParam);
 		}
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct KBHookStruct
+	public struct KbHookStruct
 	{
-		private int _vkcode;
-		private int _scancode;
-		private int _flags;
-		private int _time;
-		private int _extrainfo;
+		private readonly int _time;
+		private readonly int _extrainfo;
 
 		private const int LLKHF_EXTENDED = 0x1;
 		private const int LLKHF_EXTENDED_PAUSE = 0x2;
 
+		public int VirtualKeyCode { get; set; }
 
-		public int VirtualKeyCode
-		{
-			get { return this._vkcode; }
-		}
-
-		public int Scancode
-		{
-			get { return this._scancode; }
-			set { this._scancode = value; }
-		}
+		public int Scancode { get; set; }
 
 		public int Extended
 		{
 			get
 			{
 
-				if ((LLKHF_EXTENDED & this._flags) == LLKHF_EXTENDED)
+				if ((LLKHF_EXTENDED & KeyFlags) == LLKHF_EXTENDED)
 				{
 					return 224;
 				}
-				else if ((LLKHF_EXTENDED_PAUSE & this._flags) == LLKHF_EXTENDED_PAUSE)
+				else if ((LLKHF_EXTENDED_PAUSE & KeyFlags) == LLKHF_EXTENDED_PAUSE)
 				{
 					return 225;
 				}
@@ -247,43 +237,32 @@ namespace KeyMapper.Classes
 					return 0;
 				}
 			}
-            set
-            {
-                if (value == 224)
-                    this._flags = LLKHF_EXTENDED;
-                else
-                    this._flags = 0;
-
-            }
+            set => KeyFlags = value == 224 ? LLKHF_EXTENDED : 0;
 		}
 
 		// They *are* flags.
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags")]
-		public int KeyFlags
-		{
-			get { return this._flags; }
-			set { this._flags = value; }
-		}
+		public int KeyFlags { get; set; }
 
-		public static bool operator ==(KBHookStruct key1, KBHookStruct key2)
+		public static bool operator ==(KbHookStruct key1, KbHookStruct key2)
 		{
 			// If Scancode and Extended are the same, it's the same key.
-			return (key1.Scancode == key2.Scancode && key1.Extended == key2.Extended);
+			return key1.Scancode == key2.Scancode && key1.Extended == key2.Extended;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return (obj is KBHookStruct && this == (KBHookStruct)obj);
+			return obj is KbHookStruct && this == (KbHookStruct)obj;
 		}
 
 		// override object.GetHashCode
 		public override int GetHashCode()
 		{
-			return KeyHasher.GetHashFromKeyData(this.Scancode, this.Extended);
+			return KeyHasher.GetHashFromKeyData(Scancode, Extended);
 		}
 
 		// The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
-		public static bool operator !=(KBHookStruct key1, KBHookStruct key2)
+		public static bool operator !=(KbHookStruct key1, KbHookStruct key2)
 		{
 			return !(key1 == key2);
 		}
@@ -292,17 +271,12 @@ namespace KeyMapper.Classes
 
 	public class KeyMapperKeyPressedEventArgs : EventArgs
 	{
-		KBHookStruct _key;
-
-		public KBHookStruct Key
-		{
-			get { return this._key; }
-		}
+		public KbHookStruct Key { get; }
 
 		// Constructor 
-		public KeyMapperKeyPressedEventArgs(KBHookStruct key)
+		public KeyMapperKeyPressedEventArgs(KbHookStruct key)
 		{
-			this._key = key;
+			Key = key;
 		}
 
 	}
