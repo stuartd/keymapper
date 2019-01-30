@@ -473,7 +473,7 @@ namespace KeyMapper.Classes
 				{
 					case TextPosition.Middle:
                         // Remove cast to int, get 'possible loss of fraction'. Oh well..
-						top = (int)(((bmp.Height - stringSize.Height) / 2) + (int)(bmp.Height / 28));
+						top = (int)((bmp.Height - stringSize.Height) / 2 + Convert.ToInt32(bmp.Height / 28));
 						break;
 					case TextPosition.TextTop:
 						top = (int)(bmp.Height * 14F / 64F);

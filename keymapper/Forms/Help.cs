@@ -15,7 +15,7 @@ namespace KeyMapper.Forms
 
         private void LoadUserSettings()
         {
-            var userSettings = new KeyMapper.Properties.Settings();
+            var userSettings = new Properties.Settings();
             chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtStartup;
         }
 
@@ -29,7 +29,7 @@ namespace KeyMapper.Forms
 
         private void SaveUserSettings()
         {
-            var userSettings = new KeyMapper.Properties.Settings();
+            var userSettings = new Properties.Settings();
             userSettings.ShowHelpFormAtStartup = chkShowHelpAtStartup.Checked;
             userSettings.HelpFormLocation = Location;
             userSettings.Save();

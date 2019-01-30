@@ -94,7 +94,7 @@ namespace KeyMapper.Classes
                     // Get all the group names: add an extra one at the top with all the keys in.
                     groups.Add(AllKeysGroupName);
                     expression = "/KeycodeData/keycodes/group[not(.=preceding::*/group)] ";
-                    iterator = (XPathNodeIterator)_navigator.Select(expression);
+                    iterator = _navigator.Select(expression);
 
                     foreach (XPathNavigator node in iterator)
                     {
@@ -107,7 +107,7 @@ namespace KeyMapper.Classes
 
                     // Get all the groups which have a working member:
                     expression = @"/KeycodeData/keycodes[useful='0']";
-                    iterator = (XPathNodeIterator)_navigator.Select(expression);
+                    iterator = _navigator.Select(expression);
 
                     foreach (XPathNavigator node in iterator)
                     {
@@ -129,7 +129,7 @@ namespace KeyMapper.Classes
                     groups.Add(_commonlyUsedKeysGroupName);
 
                     expression = @"/KeycodeData/keycodes[useful='1']";
-                    iterator = (XPathNodeIterator)_navigator.Select(expression);
+                    iterator = _navigator.Select(expression);
 
                     foreach (XPathNavigator node in iterator)
                     {
@@ -170,24 +170,22 @@ namespace KeyMapper.Classes
 				queryExpression = @"/KeycodeData/keycodes[useful>='2'" + "]";
 			}
 			else {
-				queryExpression = @"/KeycodeData/keycodes[group='" + groupname + "' and useful>='" + threshold.ToString(System.Globalization.CultureInfo.InvariantCulture.NumberFormat) + "']";
+				queryExpression = @"/KeycodeData/keycodes[group='" + groupname + "' and useful>='" + threshold.ToString(CultureInfo.InvariantCulture.NumberFormat) + "']";
 			}
 
-			XPathNodeIterator iterator;
-
-            iterator = (XPathNodeIterator)_navigator.Select(queryExpression);
+            var iterator = _navigator.Select(queryExpression);
 
             // Gives us a bunch of keycode nodes.
             // Given the scanCode / extended from each node, ask for the name from the current layout.
-            int scanCode, extended;
 
             var dir = new Dictionary<string, int>(iterator.Count);
 
             foreach (XPathNavigator node in iterator)
             {
-                scanCode = int.Parse(GetElementValue("sc", node), CultureInfo.InvariantCulture.NumberFormat);
-                extended = int.Parse(GetElementValue("ex", node), CultureInfo.InvariantCulture.NumberFormat);
+                int scanCode = int.Parse(GetElementValue("sc", node), CultureInfo.InvariantCulture.NumberFormat);
+                int extended = int.Parse(GetElementValue("ex", node), CultureInfo.InvariantCulture.NumberFormat);
                 string name = AppController.GetKeyName(scanCode, extended);
+
                 if (dir.ContainsKey(name)) // ArgumentException results when trying to add duplicate key..
 				{
 					Console.WriteLine("Duplicate name error: Name {0} Existing ScanCode : {1} ScanCode: {2}", name, dir[name], scanCode);
@@ -200,27 +198,15 @@ namespace KeyMapper.Classes
             return dir;
         }
 
-        public IList<int> LocalizableKeys
-        {
-            get
-            {
-                return GetKeys(true);
-            }
-        }
+        public IList<int> LocalizableKeys => GetKeys(true);
 
-        public IList<int> NonLocalizableKeys
-        {
-            get
-            {
-                return GetKeys(false);
-            }
-        }
+        public IList<int> NonLocalizableKeys => GetKeys(false);
 
         private List<int> GetKeys(bool localizable)
         {
             string expression = @"/KeycodeData/keycodes[localize = '" + (localizable ? "true" : "false") + "']";
 
-            var iterator = (XPathNodeIterator)_navigator.Select(expression);
+            var iterator = _navigator.Select(expression);
 
             var keys = new List<int>(iterator.Count);
 
@@ -233,7 +219,6 @@ namespace KeyMapper.Classes
             }
 
             return keys;
-
         }
 
         public string GetKeyNameFromCode(int code)
@@ -243,7 +228,7 @@ namespace KeyMapper.Classes
 
             string expression = @"/KeycodeData/keycodes[sc = '" + scanCode.ToString(CultureInfo.InvariantCulture.NumberFormat) + "' and ex = '" + extended.ToString(CultureInfo.InvariantCulture.NumberFormat) + "'] ";
 
-            var iterator = (XPathNodeIterator)_navigator.Select(expression);
+            var iterator = _navigator.Select(expression);
 
             string name = string.Empty;
 

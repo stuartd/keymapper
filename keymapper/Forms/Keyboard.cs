@@ -247,9 +247,9 @@ namespace KeyMapper.Forms
 
             // Need to establish what the keys really are.. should know but it doesn't hurt to check,
             // especially as it went out of kilter at least once in development. 
-            isCapsLockOn = Form.IsKeyLocked(Keys.CapsLock); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.CapsLock);
-            isNumLockOn = Form.IsKeyLocked(Keys.NumLock); // .IsKKeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.NumLock);
-            isScrollLockOn = Form.IsKeyLocked(Keys.Scroll); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.ScrollLock);
+            isCapsLockOn = IsKeyLocked(Keys.CapsLock); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.CapsLock);
+            isNumLockOn = IsKeyLocked(Keys.NumLock); // .IsKKeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.NumLock);
+            isScrollLockOn = IsKeyLocked(Keys.Scroll); //  KeyboardHelper.IsKeySet(KeyboardHelper.ToggleKey.ScrollLock);
 
             SetStatusLabelsText();
             SetMenuButtonStates();
@@ -294,7 +294,7 @@ namespace KeyMapper.Forms
 
                             // Ok. How much space is left to fill?
                             // left is where we are to start drawing, width is the line width.
-                            int keywidth = (int)((width - left));
+                            int keywidth = width - left;
 
                             // Calculate the horizontal stretch value based on the sizes:
 
@@ -700,7 +700,7 @@ namespace KeyMapper.Forms
                         break;
                     case (int)KeyboardHelper.ToggleKey.ScrollLock:
                         isScrollLockOn = !isScrollLockOn;
-                        if (isScrollLockOn != Form.IsKeyLocked(Keys.Scroll)) {
+                        if (isScrollLockOn != IsKeyLocked(Keys.Scroll)) {
 							SetToggleMenuButtonStates();
 						}
 
@@ -833,7 +833,7 @@ namespace KeyMapper.Forms
             FormsManager.ArrangeAllOpenForms();
             // Also, delete the saved position for the Add/Edit mapping form so it's in it's default location
             // next time it's shown.
-            var userSettings = new KeyMapper.Properties.Settings();
+            var userSettings = new Properties.Settings();
             userSettings.EditMappingFormLocation = Point.Empty;
             userSettings.Save();
         }

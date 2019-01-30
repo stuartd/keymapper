@@ -151,20 +151,14 @@ namespace KeyMapper.Classes
 
         public Color FontColour
         {
-            get
-            {
-                return Color.FromArgb(_fontColour);
-            }
-            set
-            {
-                _fontColour = value.ToArgb();
-            }
+            get => Color.FromArgb(_fontColour);
+            set => _fontColour = value.ToArgb();
         }
 
         public ColorMatrix Matrix
         {
-            get { return _matrix; }
-            set { _matrix = value; }
+            get => _matrix;
+            set => _matrix = value;
         }
     }
 }

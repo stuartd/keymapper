@@ -9,35 +9,17 @@ namespace KeyMapper.Classes
         private int _verticalstretch;
         private int _rightpadding;
 
-        public int ScanCode
-        {
-            get { return _scanCode; }
-        }
+        public int ScanCode => _scanCode;
 
-        public int Extended
-        {
-            get { return _extended; }
-        }
+        public int Extended => _extended;
 
-        public BlankButton Button
-        {
-            get { return _button; }
-        }
+        public BlankButton Button => _button;
 
-        public int HorizontalStretch
-        {
-            get { return _horizontalstretch; }
-        }
+        public int HorizontalStretch => _horizontalstretch;
 
-        public int VerticalStretch
-        {
-            get { return _verticalstretch; }
-        }
+        public int VerticalStretch => _verticalstretch;
 
-        public int RightPadding
-        {
-            get { return _rightpadding; }
-        }
+        public int RightPadding => _rightpadding;
 
 
         public KeyboardLayoutElement(int scanCode, int extended, BlankButton button,

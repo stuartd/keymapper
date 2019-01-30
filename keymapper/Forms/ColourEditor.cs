@@ -22,9 +22,9 @@ namespace KeyMapper.Forms
 
 		public ButtonEffect Effect
 		{
-			get { return _effect; }
-			set { _effect = value; }
-		}
+			get => _effect;
+            set => _effect = value;
+        }
 
 	    private Color _fontColour = Color.Black;
 

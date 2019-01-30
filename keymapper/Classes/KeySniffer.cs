@@ -219,16 +219,13 @@ namespace KeyMapper.Classes
 		private const int LLKHF_EXTENDED_PAUSE = 0x2;
 
 
-		public int VirtualKeyCode
-		{
-			get { return _vkcode; }
-		}
+		public int VirtualKeyCode => _vkcode;
 
-		public int ScanCode
+        public int ScanCode
 		{
-			get { return _scanCode; }
-			set { _scanCode = value; }
-		}
+			get => _scanCode;
+            set => _scanCode = value;
+        }
 
 		public int Extended
 		{
@@ -263,9 +260,9 @@ namespace KeyMapper.Classes
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags")]
 		public int KeyFlags
 		{
-			get { return _flags; }
-			set { _flags = value; }
-		}
+			get => _flags;
+            set => _flags = value;
+        }
 
 		public static bool operator ==(KBHookStruct key1, KBHookStruct key2)
 		{
@@ -295,12 +292,9 @@ namespace KeyMapper.Classes
 	{
         private KBHookStruct _key;
 
-		public KBHookStruct Key
-		{
-			get { return _key; }
-		}
+		public KBHookStruct Key => _key;
 
-		// Constructor 
+        // Constructor 
 		public KeyMapperKeyPressedEventArgs(KBHookStruct key)
 		{
             _key = key;

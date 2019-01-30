@@ -26,23 +26,17 @@ namespace KeyMapper.Classes
 
         private bool isMacKeyboard;
 
-        public IEnumerable<KeyboardRow> FunctionKeys
-        { get { return functionKeys; } }
+        public IEnumerable<KeyboardRow> FunctionKeys => functionKeys;
 
-        public IEnumerable<KeyboardRow> TypewriterKeys
-        { get { return typewriterKeys; } }
+        public IEnumerable<KeyboardRow> TypewriterKeys => typewriterKeys;
 
-        public IEnumerable<KeyboardRow> NumberPadKeys
-        { get { return numberpadKeys; } }
+        public IEnumerable<KeyboardRow> NumberPadKeys => numberpadKeys;
 
-        public IEnumerable<KeyboardRow> UtilityKeys
-        { get { return utilityKeys; } }
+        public IEnumerable<KeyboardRow> UtilityKeys => utilityKeys;
 
-        public IEnumerable<KeyboardRow> NavigationKeys
-        { get { return navigationKeys; } }
+        public IEnumerable<KeyboardRow> NavigationKeys => navigationKeys;
 
-        public IEnumerable<KeyboardRow> ArrowKeys
-        { get { return arrowKeys; } }
+        public IEnumerable<KeyboardRow> ArrowKeys => arrowKeys;
 
         private PhysicalKeyboardLayout() { }
 

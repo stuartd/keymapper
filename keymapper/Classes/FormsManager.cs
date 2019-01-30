@@ -200,7 +200,7 @@ namespace KeyMapper.Classes
             if (i == 0)
             {
                 // There were no open forms: reset the default position instead.
-                var userSettings = new KeyMapper.Properties.Settings();
+                var userSettings = new Properties.Settings();
                 userSettings.ColourEditorLocation = Point.Empty;
                 userSettings.Save();
             }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace KeyMapper.Classes
 {
     /// <summary>
-    ///  This represents all the keyboard keys in the vurrent keyboard layout.
+    ///  This represents all the keyboard keys in the current keyboard layout.
     /// </summary>
     public class LocalizedKeySet
     {
@@ -56,7 +56,7 @@ namespace KeyMapper.Classes
         private void GetNonLocalizableKeyNames()
         {
             // These have to be extracted from the keycode XML
-            // as thay aren't available otherwise (they don't change)
+            // as they aren't available otherwise (they don't change)
 
             var kd = new KeyDataXml();
 

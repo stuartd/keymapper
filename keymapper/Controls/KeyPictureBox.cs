@@ -35,12 +35,12 @@ namespace KeyMapper.Controls
             this.scale = scale;
             this.horizontalStretch = horizontalStretch;
             this.verticalStretch = verticalStretch;
-            this.dragIconScale = 0.75F;
-            this.dragbox = Rectangle.Empty;
+            dragIconScale = 0.75F;
+            dragbox = Rectangle.Empty;
 
             Map = MappingsManager.GetKeyMapping(scanCode, extended);
 
-            this.mapped = (Map.To.ScanCode != -1);
+            mapped = (Map.To.ScanCode != -1);
 
             AllowDrop = true;
 

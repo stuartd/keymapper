@@ -50,14 +50,7 @@ namespace KeyMapper.Classes
 
         public static CultureInfo CurrentCultureInfo { get; private set; }
 
-        public static string KeyMapperFilePath
-        {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath
-                                        (Environment.SpecialFolder.LocalApplicationData), "KeyMapper");
-            }
-        }
+        public static string KeyMapperFilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "KeyMapper");
 
         static AppController()
         {
