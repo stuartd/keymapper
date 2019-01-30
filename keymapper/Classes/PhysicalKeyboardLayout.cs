@@ -56,7 +56,7 @@ namespace KeyMapper.Classes
                 return existingInstance;
             }
 
-            PhysicalKeyboardLayout nl = new PhysicalKeyboardLayout
+            var nl = new PhysicalKeyboardLayout
                 {
                     layout = layout, isMacKeyboard = isMacKeyboard
                 };
@@ -112,7 +112,7 @@ namespace KeyMapper.Classes
         private void PopulateFunctionKeys()
         {
             // Structure: 
-            // KeyboardLayoutElement(scancode, extended, button, horizontalstretch, verticalstretch, rightpadding)
+            // KeyboardLayoutElement(scanCode, extended, button, horizontalstretch, verticalstretch, rightpadding)
 
             if (isMacKeyboard)
             {
@@ -159,9 +159,10 @@ namespace KeyMapper.Classes
         private void PopulateUtilityKeys()
         {
 
-            if (isMacKeyboard)
-                utilityKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(new KeyboardLayoutElement[] { null })));
-            else
+            if (isMacKeyboard) {
+				utilityKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(new KeyboardLayoutElement[] { null })));
+			}
+			else
             {
                 // PrtSc, Scroll Lock, Pause/Break
                 utilityKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(

@@ -53,17 +53,18 @@ namespace KeyMapper.Classes
             currentFilteredMappings.Clear();
             clearedBootMappings.Clear();
 
-            foreach (KeyMapping bootmap in mappings)
+            foreach (var bootmap in mappings)
             {
                 currentFilteredMappings.Add(bootmap);
             }
 
             // Finally, skip through the user and boot mappings so we can populate the cleared mappings lists
-            foreach (KeyMapping map in savedBootMappings)
+            foreach (var map in savedBootMappings)
             {
-                if (mappings.Contains(map) == false)
-                    clearedBootMappings.Add(map);
-            }
+                if (mappings.Contains(map) == false) {
+					clearedBootMappings.Add(map);
+				}
+			}
         }
 
 
@@ -71,7 +72,7 @@ namespace KeyMapper.Classes
         {
             var copy = new Collection<KeyMapping>();
 
-            foreach (KeyMapping map in keyMappings.Where(map => map.IsValid()))
+            foreach (var map in keyMappings.Where(map => map.IsValid()))
             {
                 copy.Add(map);
             }
@@ -117,16 +118,18 @@ namespace KeyMapper.Classes
 
         public static bool IsRestartRequired()
         {
-            if (clearedBootMappings.Count != 0)
-                return true;
+            if (clearedBootMappings.Count != 0) {
+				return true;
+			}
 
-            // Need to iterate through to see if any have changed.
+			// Need to iterate through to see if any have changed.
 
-            foreach (KeyMapping km in mappings)
+            foreach (var km in mappings)
             {
-                if (savedBootMappings.Contains(km) == false && unsavedMappings.Contains(km) == false)
-                    return true;
-            }
+                if (savedBootMappings.Contains(km) == false && unsavedMappings.Contains(km) == false) {
+					return true;
+				}
+			}
 
             return false;
         }
@@ -136,21 +139,24 @@ namespace KeyMapper.Classes
             // Check whether the current boot mappings and the proposed boot mappings 
             // are the same: if not, they need saving
 
-            byte[] map = RegistryProvider.GetScancodeMapFromRegistry(MapLocation.KeyMapperVistaMappingsCache);
+            var map = RegistryProvider.GetScanCodeMapFromRegistry(MapLocation.KeyMapperVistaMappingsCache);
 
-            if (map == null)
-                return false;
+            if (map == null) {
+				return false;
+			}
 
-            Collection<KeyMapping> maps = GetMappingsFromScancodeMap(map);
+			var maps = GetMappingsFromScanCodeMap(map);
 
-            if (maps.Count != mappings.Count)
-                return true;
+            if (maps.Count != mappings.Count) {
+				return true;
+			}
 
-            foreach (KeyMapping km in maps)
+			foreach (var km in maps)
             {
-                if (mappings.Contains(km) == false)
-                    return true;
-            }
+                if (mappings.Contains(km) == false) {
+					return true;
+				}
+			}
 
             return false;
         }
@@ -162,10 +168,11 @@ namespace KeyMapper.Classes
 
         public static bool IsMappingPending(KeyMapping map, MappingFilter filter = MappingFilter.Boot)
         {
-            if (unsavedMappings.Contains(map))
-                return false;
+            if (unsavedMappings.Contains(map)) {
+				return false;
+			}
 
-            // Did this mapping exist at boot or logon time?
+			// Did this mapping exist at boot or logon time?
             switch (filter)
             {
                 case MappingFilter.ClearedBoot:
@@ -177,28 +184,29 @@ namespace KeyMapper.Classes
             return true;
         }
 
-        public static KeyMapping GetKeyMapping(int scancode, int extended)
+        public static KeyMapping GetKeyMapping(int scanCode, int extended)
         {
-            foreach (KeyMapping mapping in currentFilteredMappings)
+            foreach (var mapping in currentFilteredMappings)
             {
-                if (mapping.From.Scancode == scancode && mapping.From.Extended == extended)
-                    return mapping;
-            }
+                if (mapping.From.ScanCode == scanCode && mapping.From.Extended == extended) {
+					return mapping;
+				}
+			}
 
-            return GetEmptyMapping(new Key(scancode, extended));
+            return GetEmptyMapping(new Key(scanCode, extended));
         }
 
-        public static KeyMapping GetClearedMapping(int scancode, int extended)
+        public static KeyMapping GetClearedMapping(int scanCode, int extended)
         {
-            foreach (KeyMapping mapping in clearedBootMappings)
+            foreach (var mapping in clearedBootMappings)
             {
-                if (mapping.From.Scancode == scancode && mapping.From.Extended == extended)
+                if (mapping.From.ScanCode == scanCode && mapping.From.Extended == extended)
                 {
                     return mapping;
                 }
             }
 
-            return GetEmptyMapping(new Key(scancode, extended));
+            return GetEmptyMapping(new Key(scanCode, extended));
         }
 
         public static KeyMapping GetEmptyMapping(Key from)
@@ -208,12 +216,12 @@ namespace KeyMapper.Classes
 
         public static bool IsEmptyMapping(KeyMapping map)
         {
-            return (map.To.Scancode == -1 && map.To.Extended == -1);
+            return (map.To.ScanCode == -1 && map.To.Extended == -1);
         }
 
         public static bool IsDisabledMapping(KeyMapping map)
         {
-            return (map.To.Scancode == 0 && map.To.Extended == 0);
+            return (map.To.ScanCode == 0 && map.To.Extended == 0);
         }
 
         public static void SaveBootMappingsVista()
@@ -327,14 +335,14 @@ namespace KeyMapper.Classes
                     break;
                 }
 
-                KeyMapping map = maps[i];
+                var map = maps[i];
 
                 // First pair is the action - what the mapped key does.
-                bytemappings[start + (i * 4)] = (byte)map.To.Scancode;
+                bytemappings[start + (i * 4)] = (byte)map.To.ScanCode;
                 bytemappings[start + (i * 4) + 1] = (byte)map.To.Extended;
 
                 // Second pair is the physical key which performs the new action
-                bytemappings[start + (i * 4) + 2] = (byte)map.From.Scancode;
+                bytemappings[start + (i * 4) + 2] = (byte)map.From.ScanCode;
                 bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
             }
 
@@ -348,19 +356,20 @@ namespace KeyMapper.Classes
             // Windows Registry Editor Version 5.00
 
             // [HKEYLOCALMACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
-            // "Scancode Map"=hex:00,00,00,00,00,00,00,00,02,00,00,00,2a,00,3a,00,00,00,00,00
+            // "ScanCode Map"=hex:00,00,00,00,00,00,00,00,02,00,00,00,2a,00,3a,00,00,00,00,00
 
             // [HKEYCURRENTUSER\Keyboard Layout]
-            // "Scancode Map"=hex:00,00,00,00,00,00,00,00,04,00,00,00,5d,e0,1c,e0,1d,00,5b,e0,2a,00,3a,00,00,00,00,00
+            // "ScanCode Map"=hex:00,00,00,00,00,00,00,00,04,00,00,00,5d,e0,1c,e0,1d,00,5b,e0,2a,00,3a,00,00,00,00,00
 
             // Where there are no mappings, delete the value:
-            // "Scancode Map"=-
+            // "ScanCode Map"=-
 
             string filename;
 
-            if (useTempFile)
-                filename = Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
-            else
+            if (useTempFile) {
+				filename = Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
+			}
+			else
             {
                 var fd = new SaveFileDialog
                 {
@@ -374,7 +383,7 @@ namespace KeyMapper.Classes
                     AutoUpgradeEnabled = true
                 };
 
-                DialogResult dr = fd.ShowDialog();
+                var dr = fd.ShowDialog();
 
                 if (dr != DialogResult.OK)
                 {
@@ -391,7 +400,7 @@ namespace KeyMapper.Classes
                 sw.WriteLine("Windows Registry Editor Version 5.00");
                 sw.WriteLine();
                 sw.WriteLine(@"[HKEYLOCALMACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
-                sw.Write("\"Scancode Map\"=");
+                sw.Write("\"ScanCode Map\"=");
                 if (bootMappingCount > 0)
                 {
                     sw.Write("hex:");
@@ -404,9 +413,10 @@ namespace KeyMapper.Classes
 
                 sw.WriteLine();
 
-                if (bootMappingCount > 0)
-                    sw.WriteLine();
-            }
+                if (bootMappingCount > 0) {
+					sw.WriteLine();
+				}
+			}
 
             return filename;
         }
@@ -416,9 +426,10 @@ namespace KeyMapper.Classes
             for (int i = 0; i < bytemappings.GetLength(0); i++)
             {
                 sw.Write(bytemappings[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char)48));
-                if (i < bytemappings.GetLength(0) - 1)
-                    sw.Write(",");
-            }
+                if (i < bytemappings.GetLength(0) - 1) {
+					sw.Write(",");
+				}
+			}
         }
 
         private static void RaiseMappingsChangedEvent()
@@ -440,14 +451,14 @@ namespace KeyMapper.Classes
                 return false;
             }
 
-            int scancode = map.From.Scancode;
+            int scanCode = map.From.ScanCode;
             int extended = map.From.Extended;
 
             // If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
             // that it could be goodbye to CTRL-ALT-DEL
 
-            if ((scancode == 29 && extended == 0) || (scancode == 56 && extended == 0) ||
-                (scancode == 83 && extended == 224))
+            if ((scanCode == 29 && extended == 0) || (scanCode == 56 && extended == 0) ||
+                (scanCode == 83 && extended == 224))
             {
                 string action = IsDisabledMapping(map) ? "disable " : "remap ";
 
@@ -459,34 +470,37 @@ namespace KeyMapper.Classes
                 string question = "Are you really sure you want to " + action + "this key?";
 
 
-                TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
+                var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
                                                                   TaskDialogButtons.Yes | TaskDialogButtons.No,
                                                                   TaskDialogIcon.Question);
-                if (dr != TaskDialogResult.Yes)
-                    return false;
-
-            }
+                if (dr != TaskDialogResult.Yes) {
+					return false;
+				}
+			}
 
             // If user is remapping Pause, then suggest they will want to disable Num Lock as well.
 
             bool disableNumLock = false;
 
-            if (scancode == 29 && extended == 225 && IsDisabledMapping(map) == false)
+            if (scanCode == 29 && extended == 225 && IsDisabledMapping(map) == false)
             {
                 // Is Num Lock already disabled or remapped?
                 bool numLockIsDisabled = false;
                 bool numLockIsMapped = false;
 
-                foreach (KeyMapping km in mappings)
-                    if (km.From.Scancode == 69)
-                    {
-                        if (IsDisabledMapping(km))
-                            numLockIsDisabled = true;
-                        else
-                            numLockIsMapped = true;
-                    }
+                foreach (var km in mappings) {
+					if (km.From.ScanCode == 69)
+					{
+						if (IsDisabledMapping(km)) {
+							numLockIsDisabled = true;
+						}
+						else {
+							numLockIsMapped = true;
+						}
+					}
+				}
 
-                if (numLockIsDisabled == false)
+				if (numLockIsDisabled == false)
                 {
                     string warning = "If you remap Pause, the Num Lock key will be disabled" +
                                      (numLockIsMapped
@@ -496,28 +510,31 @@ namespace KeyMapper.Classes
                     const string question = "Do you still want to remap Pause?";
 
 
-                    TaskDialogResult dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
+                    var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
                                                                       TaskDialogButtons.Yes | TaskDialogButtons.No,
                                                                       TaskDialogIcon.Question);
-                    if (dr != TaskDialogResult.Yes)
-                        return false;
+                    if (dr != TaskDialogResult.Yes) {
+						return false;
+					}
 
-                    disableNumLock = true;
+					disableNumLock = true;
                 }
             }
 
-            if (noStackNoEventRaised == false)
-                PushMappingsOntoUndoStack();
+            if (noStackNoEventRaised == false) {
+				PushMappingsOntoUndoStack();
+			}
 
-            // Check for any existing mappings for this key
+			// Check for any existing mappings for this key
             // if they exist, this mapping needs to replace them.
 
-            KeyMapping existingMap = GetKeyMapping(map.From.Scancode, map.From.Extended);
+            var existingMap = GetKeyMapping(map.From.ScanCode, map.From.Extended);
 
-            if (existingMap.IsEmpty() == false)
-                mappings.Remove(existingMap);
+            if (existingMap.IsEmpty() == false) {
+				mappings.Remove(existingMap);
+			}
 
-            mappings.Add(map);
+			mappings.Add(map);
 
             if (disableNumLock)
             {
@@ -525,17 +542,20 @@ namespace KeyMapper.Classes
                 AddMapping(nl, true);
             }
 
-            if (noStackNoEventRaised == false)
-                RaiseMappingsChangedEvent();
+            if (noStackNoEventRaised == false) {
+				RaiseMappingsChangedEvent();
+			}
 
-            return true;
+			return true;
         }
 
         public static void DeleteMapping(KeyMapping map)
         {
-            if (!map.IsValid())
-                throw new ArgumentException("Can't delete an invalid map");
-            PushMappingsOntoUndoStack();
+            if (!map.IsValid()) {
+				throw new ArgumentException("Can't delete an invalid map");
+			}
+
+			PushMappingsOntoUndoStack();
 
             if (mappings.Contains(map))
             {
@@ -563,27 +583,29 @@ namespace KeyMapper.Classes
 
         public static void UndoMappingChange()
         {
-            if (undostack.Count < 1)
-                return;
+            if (undostack.Count < 1) {
+				return;
+			}
 
-            PushMappingsOntoRedoStack();
+			PushMappingsOntoRedoStack();
             PopMappingsOffUndoStack();
             RaiseMappingsChangedEvent();
         }
 
         public static void RedoMappingChange()
         {
-            if (redostack.Count < 1)
-                return;
+            if (redostack.Count < 1) {
+				return;
+			}
 
-            // To 'redo', the latest entry on the redo stack is popped into current members
+			// To 'redo', the latest entry on the redo stack is popped into current members
             // which is itself popped onto the undo stack.
             PushMappingsOntoUndoStack();
             PopMappingsOffRedoStack();
             RaiseMappingsChangedEvent();
         }
 
-        private static Collection<KeyMapping> GetMappingsFromScancodeMap(byte[] map)
+        private static Collection<KeyMapping> GetMappingsFromScanCodeMap(byte[] map)
         {
             // Transform the byte array into keymappings
             var maps = new Collection<KeyMapping>();
@@ -594,10 +616,11 @@ namespace KeyMapper.Classes
             // How many mappings are there?
             // (Make sure there are at least 8 bytes in the array)
 
-            if (length > 8)
-                count = map[8] - 1;
+            if (length > 8) {
+				count = map[8] - 1;
+			}
 
-            if (count == 0)
+			if (count == 0)
             {
                 return maps;
             }
@@ -649,12 +672,13 @@ namespace KeyMapper.Classes
         {
             var mappings = new Collection<KeyMapping>();
 
-            byte[] map = RegistryProvider.GetScancodeMapFromRegistry(location);
+            var map = RegistryProvider.GetScanCodeMapFromRegistry(location);
 
-            if (map != null)
-                mappings = GetMappingsFromScancodeMap(map);
+            if (map != null) {
+				mappings = GetMappingsFromScanCodeMap(map);
+			}
 
-            switch (location)
+			switch (location)
             {
                 case MapLocation.LocalMachineKeyboardLayout:
                     MappingsManager.mappings = mappings;

@@ -43,14 +43,16 @@ namespace KeyMapper.Forms
 
 	    public ColourMap()
 		{
-			if (AppController.UserCannotWriteToApplicationRegistryKey)
-                _toolTipText = "Right-click to change which buttons are shown";
-			else
-                _toolTipText = "Double-click a button to edit the colour: right click for more options";
+			if (AppController.UserCannotWriteToApplicationRegistryKey) {
+				_toolTipText = "Right-click to change which buttons are shown";
+			}
+			else {
+				_toolTipText = "Double-click a button to edit the colour: right click for more options";
+			}
 
 			InitializeComponent();
 
-			Properties.Settings userSettings = new Properties.Settings();
+			var userSettings = new Properties.Settings();
             _showAllButtons = userSettings.ColourMapShowAllButtons;
 
 			CreateContextMenu();
@@ -67,12 +69,14 @@ namespace KeyMapper.Forms
 			int newItemIndex;
 
 			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show All Buttons", ShowAllButtons));
-			if (_showAllButtons)
-                _contextMenu.MenuItems[newItemIndex].Checked = true;
+			if (_showAllButtons) {
+				_contextMenu.MenuItems[newItemIndex].Checked = true;
+			}
 
 			newItemIndex = _contextMenu.MenuItems.Add(new MenuItem("Show Currently Active Buttons Only", ShowCurrentButtons));
-			if (_showAllButtons == false)
-                _contextMenu.MenuItems[newItemIndex].Checked = true;
+			if (_showAllButtons == false) {
+				_contextMenu.MenuItems[newItemIndex].Checked = true;
+			}
 
 			if (AppController.UserCannotWriteToApplicationRegistryKey == false)
 			{
@@ -101,7 +105,7 @@ namespace KeyMapper.Forms
 			// Or, 2) - delete the UserColours registry subkey!
 
 			string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\";
-			RegistryKey k = Registry.CurrentUser.OpenSubKey(subkey, true);
+			var k = Registry.CurrentUser.OpenSubKey(subkey, true);
 			if (k != null)
 			{
 				k.Close();
@@ -177,16 +181,20 @@ namespace KeyMapper.Forms
 
 			int screenWidth = SystemInformation.PrimaryMonitorSize.Width;
 
-			if (screenWidth < 801)
-                _buttonScaleFactor = 0.35F;
-			else if (screenWidth < 1025)
-                _buttonScaleFactor = 0.4F;
-			else if (screenWidth < 1281)
-                _buttonScaleFactor = 0.5F;
-			else
-                _buttonScaleFactor = 0.5F;
+			if (screenWidth < 801) {
+				_buttonScaleFactor = 0.35F;
+			}
+			else if (screenWidth < 1025) {
+				_buttonScaleFactor = 0.4F;
+			}
+			else if (screenWidth < 1281) {
+				_buttonScaleFactor = 0.5F;
+			}
+			else {
+				_buttonScaleFactor = 0.5F;
+			}
 
-            _buttonWidth = (int)(192 * _buttonScaleFactor);
+			_buttonWidth = (int)(192 * _buttonScaleFactor);
             _buttonHeight = (int)(128 * _buttonScaleFactor);
 
 			// Now work out how big the form should be.
@@ -217,8 +225,9 @@ namespace KeyMapper.Forms
 				GetButtons();
 			}
 
-			for (int i = Controls.Count - 1; i >= 0; i--)
-                Controls[i].Dispose();
+			for (int i = Controls.Count - 1; i >= 0; i--) {
+				Controls[i].Dispose();
+			}
 
 			// In order to fix a problem where the form is resized to smaller then the enforced minimum
 			// size where the bits of the form which aren then still visible aren't repainted, if the button count is one then
@@ -236,12 +245,14 @@ namespace KeyMapper.Forms
 
 			AddButtons();
 
-			if (_buttonCount > 1)
-                Text = "KeyMapper Colour Map";
-			else
-                Text = "Colour Map";
+			if (_buttonCount > 1) {
+				Text = "KeyMapper Colour Map";
+			}
+			else {
+				Text = "Colour Map";
+			}
 
-            ResumeLayout();
+			ResumeLayout();
 		}
 
 		private void AddButtons()
@@ -251,24 +262,29 @@ namespace KeyMapper.Forms
 
 			AddButton("Normal", ButtonEffect.None);
 
-			if (_showAllButtons || _mappedkeys)
+			if (_showAllButtons || _mappedkeys) {
 				AddButton("Mapped", ButtonEffect.Mapped);
+			}
 
-			if (_showAllButtons || _pendingmapped)
+			if (_showAllButtons || _pendingmapped) {
 				AddButton("Pending Mapped", ButtonEffect.MappedPending);
+			}
 
-			if (_showAllButtons || _pendingunmapped)
+			if (_showAllButtons || _pendingunmapped) {
 				AddButton("Pending Unmapped", ButtonEffect.UnmappedPending);
+			}
 
-			if (_showAllButtons || _disabledkeys)
+			if (_showAllButtons || _disabledkeys) {
 				AddButton("Disabled", ButtonEffect.Disabled);
+			}
 
-			if (_showAllButtons || _pendingdisabled)
+			if (_showAllButtons || _pendingdisabled) {
 				AddButton("Pending Disabled", ButtonEffect.DisabledPending);
+			}
 
-			if (_showAllButtons || _pendingenabled)
+			if (_showAllButtons || _pendingenabled) {
 				AddButton("Pending Enabled", ButtonEffect.EnabledPending);
-
+			}
 		}
 
 		private void GetButtons()
@@ -284,9 +300,9 @@ namespace KeyMapper.Forms
             _buttonCount = 1;
 
 			// See what's currently mapped by looking at the current mapping list
-			Collection<KeyMapping> currentMaps = MappingsManager.GetMappings(MappingFilter.Current);
+			var currentMaps = MappingsManager.GetMappings(MappingFilter.Current);
 
-			foreach (KeyMapping map in currentMaps)
+			foreach (var map in currentMaps)
 			{
 
 				if (MappingsManager.IsMappingPending(map, MappingFilter.Boot))
@@ -333,13 +349,13 @@ namespace KeyMapper.Forms
 
 			// Now look at the cleared keys.
 
-			IEnumerable<KeyMapping> maps = MappingsManager.ClearedMappings;
+			var maps = MappingsManager.ClearedMappings;
 
-			foreach (KeyMapping map in maps)
+			foreach (var map in maps)
 			{
 				// Has this cleared key been remapped (in which case we ignore it)
 				bool remapped = false;
-				foreach (KeyMapping currentmap in MappingsManager.GetMappings(MappingFilter.Current))
+				foreach (var currentmap in MappingsManager.GetMappings(MappingFilter.Current))
 				{
 					if (currentmap.From == map.From)
 					{
@@ -348,8 +364,9 @@ namespace KeyMapper.Forms
 					}
 				}
 
-				if (remapped)
+				if (remapped) {
 					continue;
+				}
 
 				if (MappingsManager.IsDisabledMapping(map))
 				{
@@ -373,7 +390,7 @@ namespace KeyMapper.Forms
 
 	    private void AddButton(string text, ButtonEffect effect)
 		{
-            PictureBox pb = new PictureBox
+            var pb = new PictureBox
                                 {
                                     Image = ButtonImages.GetButtonImage
                                     (BlankButton.MediumWideBlank, _buttonScaleFactor, text, effect)
@@ -415,10 +432,11 @@ namespace KeyMapper.Forms
 
 			pb.Tag = effect.ToString() + " " + text;
 
-			if (AppController.UserCannotWriteToApplicationRegistryKey == false)
+			if (AppController.UserCannotWriteToApplicationRegistryKey == false) {
 				pb.DoubleClick += PictureBoxDoubleClick;
+			}
 
-            Controls.Add(pb);
+			Controls.Add(pb);
             _toolTip.SetToolTip(pb, _toolTipText);
 
             _currentButton++;
@@ -429,9 +447,10 @@ namespace KeyMapper.Forms
 
 	    private void PictureBoxDoubleClick(object sender, EventArgs e)
 		{
-			PictureBox pb = sender as PictureBox;
-			if (pb != null && pb.Tag != null)
+			var pb = sender as PictureBox;
+			if (pb != null && pb.Tag != null) {
 				FormsManager.ShowColourEditorForm(pb.Tag.ToString());
+			}
 		}
 
 		private void ColourMapFormClosing(object sender, FormClosingEventArgs e)
@@ -441,7 +460,7 @@ namespace KeyMapper.Forms
 
 		private void SaveSettings()
 		{
-			Properties.Settings userSettings = new Properties.Settings();
+			var userSettings = new Properties.Settings();
 			userSettings.ColourListFormLocation = Location;
 			userSettings.ColourMapShowAllButtons = _showAllButtons;
 			userSettings.Save();

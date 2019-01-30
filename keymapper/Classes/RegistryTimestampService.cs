@@ -13,7 +13,7 @@ namespace KeyMapper.Classes
         {
             long ts = GetRawRegistryKeyTimestamp(hive, keyName);
 
-            DateTime dt = (ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue);
+            var dt = (ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue);
 
             return dt.ToLocalTime();
         }
@@ -25,7 +25,7 @@ namespace KeyMapper.Classes
                 return 0; // Otherwise the function opens HKLM (or HKCU) again.
             }
 
-            UIntPtr hkey = OpenKey(hive, keyname, KEY_QUERY_VALUE);
+            var hkey = OpenKey(hive, keyname, KEY_QUERY_VALUE);
 
             if (hkey == UIntPtr.Zero)
             {
@@ -54,7 +54,7 @@ namespace KeyMapper.Classes
 
         public bool CanUserWriteToKey(RegistryHive hive, string keyName)
         {
-            UIntPtr hkey = OpenKey(hive, keyName, KEY_SET_VALUE);
+            var hkey = OpenKey(hive, keyName, KEY_SET_VALUE);
             if (hkey == UIntPtr.Zero)
             {
                 return false;
@@ -92,10 +92,11 @@ namespace KeyMapper.Classes
 
             int result = NativeMethods.RegOpenKeyEx(hiveptr, keyname, 0, requiredAccess, out hkey);
 
-            if (result == 0)
-                return hkey;
+            if (result == 0) {
+				return hkey;
+			}
 
-            return UIntPtr.Zero;
+			return UIntPtr.Zero;
         }
     }
 

@@ -97,7 +97,7 @@ namespace KeyMapper.Forms
         }
         private void LoadUserSettings()
         {
-            Properties.Settings userSettings = new Properties.Settings();
+            var userSettings = new Properties.Settings();
 
             // As user.config is writeable (if you can find it!)
             // don't want to trust the settings.
@@ -198,9 +198,9 @@ namespace KeyMapper.Forms
                 navleft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 3.2)), 0);
             }
 
-            KeyboardLayoutType desiredlayout = AppController.KeyboardLayout;
+            var desiredlayout = AppController.KeyboardLayout;
 
-            PhysicalKeyboardLayout kl = PhysicalKeyboardLayout.GetPhysicalLayout(desiredlayout, isMacKeyboard);
+            var kl = PhysicalKeyboardLayout.GetPhysicalLayout(desiredlayout, isMacKeyboard);
 
             rowTerminators = PhysicalKeyboardLayout.GetRowTerminators(desiredlayout);
 
@@ -264,12 +264,13 @@ namespace KeyMapper.Forms
 
             // Need to set the exact width of the row.
             int width = (int)(14.7F * (keySize + paddingWidth));
-            if (width % 2 != 0)
-                width += 1;
+            if (width % 2 != 0) {
+				width += 1;
+			}
 
-            foreach (KeyboardRow row in Rows)
+			foreach (var row in Rows)
             {
-                foreach (KeyboardLayoutElement key in row.Keys)
+                foreach (var key in row.Keys)
                 {
                     if (key == null)
                     {
@@ -281,11 +282,11 @@ namespace KeyMapper.Forms
                         // The last key in the row must be stretched appropriately.
                         // Which one's that, then?
 
-                        int index = Array.IndexOf(rowTerminators, KeyHasher.GetHashFromKeyData(key.Scancode, key.Extended));
+                        int index = Array.IndexOf(rowTerminators, KeyHasher.GetHashFromKeyData(key.ScanCode, key.Extended));
 
                         if (index < 0)
                         {
-                            DrawKey(key.Scancode, key.Extended, ref left, top, key.Button,
+                            DrawKey(key.ScanCode, key.Extended, ref left, top, key.Button,
                                 key.HorizontalStretch * paddingWidth, key.VerticalStretch * paddingWidth);
                         }
                         else
@@ -323,7 +324,7 @@ namespace KeyMapper.Forms
 
                             int stretch = (int)(keywidth - (buttonwidth * buttonScale));
 
-                            DrawKey(key.Scancode, key.Extended, ref left, top, key.Button,
+                            DrawKey(key.ScanCode, key.Extended, ref left, top, key.Button,
                                stretch, key.VerticalStretch * paddingWidth);
                         }
 
@@ -338,10 +339,10 @@ namespace KeyMapper.Forms
 
         }
 
-        private void DrawKey(int scancode, int extended, ref int left, int top, BlankButton button, int horizontalStretch, int verticalStretch)
+        private void DrawKey(int scanCode, int extended, ref int left, int top, BlankButton button, int horizontalStretch, int verticalStretch)
         {
 
-            KeyPictureBox box = new KeyPictureBox(scancode, extended, button, buttonScale, horizontalStretch, verticalStretch);
+            var box = new KeyPictureBox(scanCode, extended, button, buttonScale, horizontalStretch, verticalStretch);
 
             box.Left = left;
             box.Top = top;
@@ -352,10 +353,11 @@ namespace KeyMapper.Forms
 
             string toolTipText = box.Map.MappingDescription;
 
-            if (string.IsNullOrEmpty(toolTipText) == false)
-                FormToolTip.SetToolTip(box, toolTipText);
+            if (string.IsNullOrEmpty(toolTipText) == false) {
+				FormToolTip.SetToolTip(box, toolTipText);
+			}
 
-            // left is a ref parameter.
+			// left is a ref parameter.
             left += box.Image.Width + paddingWidth; // Width varies eg for double-width blanks
         }
 
@@ -363,16 +365,19 @@ namespace KeyMapper.Forms
         {
             // Need to keep the aspect ratio in the shape of a keyboard. 
 
-            if (WindowState == FormWindowState.Minimized)
-                return;
+            if (WindowState == FormWindowState.Minimized) {
+				return;
+			}
 
-            float factor;
-            if (keysOnly)
-                factor = 34.5F;
-            else
-                factor = hasNumberPad ? 43F : 36F;
+			float factor;
+            if (keysOnly) {
+				factor = 34.5F;
+			}
+			else {
+				factor = hasNumberPad ? 43F : 36F;
+			}
 
-            SetClientSizeCore(ClientSize.Width, StatusBar.Height + menu.Height +
+			SetClientSizeCore(ClientSize.Width, StatusBar.Height + menu.Height +
                 (int)(ClientSize.Width * (12F / (factor))));
 
             menu.Width = ClientSize.Width;
@@ -434,7 +439,7 @@ namespace KeyMapper.Forms
 
         private void SaveUserSettings()
         {
-            Properties.Settings userSettings = new Properties.Settings
+            var userSettings = new Properties.Settings
             {
                 KeyboardFormLocation = Location,
                 KeyboardFormWidth = Width,
@@ -458,7 +463,7 @@ namespace KeyMapper.Forms
             ArrayList keyboardComboData;
             ToolStripItem[] keyboardMenuData;
 
-            ArrayList tempArr = new ArrayList(KeyboardHelper.InstalledKeyboards.Keys);
+            var tempArr = new ArrayList(KeyboardHelper.InstalledKeyboards.Keys);
             tempArr.Sort();
             keyboardComboData = new ArrayList(KeyboardHelper.InstalledKeyboards.Count + 1);
             // Add the current keyboard and a separator:
@@ -617,10 +622,12 @@ namespace KeyMapper.Forms
 
         private void KeyDoubleClick(object sender, EventArgs e)
         {
-            KeyPictureBox box = sender as KeyPictureBox;
-            if (box == null)
-                return;
-            FormsManager.ShowEditMappingForm(box.Map, false);
+            var box = sender as KeyPictureBox;
+            if (box == null) {
+				return;
+			}
+
+			FormsManager.ShowEditMappingForm(box.Map, false);
         }
 
         private void KeyboardFormClosed(object sender, FormClosedEventArgs e)
@@ -642,10 +649,10 @@ namespace KeyMapper.Forms
 
         private void KeyboardFormKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Escape)
-                cancelSlideshow = true;
-
-        }
+            if (e.KeyChar == (char)Keys.Escape) {
+				cancelSlideshow = true;
+			}
+		}
 
         private void OnMappingsChanged(object sender, EventArgs e)
         {
@@ -672,7 +679,7 @@ namespace KeyMapper.Forms
         {
             if (e != null)
             {
-                KBHookStruct key = e.Key;
+                var key = e.Key;
 
                 // Because we are intercepting a keypress before it is processed, can't ask
                 // what state the keyboard is in using Form.IsKeySet or WIN32API funcs like
@@ -693,9 +700,11 @@ namespace KeyMapper.Forms
                         break;
                     case (int)KeyboardHelper.ToggleKey.ScrollLock:
                         isScrollLockOn = !isScrollLockOn;
-                        if (isScrollLockOn != Form.IsKeyLocked(Keys.Scroll))
-                            SetToggleMenuButtonStates();
-                        break;
+                        if (isScrollLockOn != Form.IsKeyLocked(Keys.Scroll)) {
+							SetToggleMenuButtonStates();
+						}
+
+						break;
                 }
 
             }
@@ -824,7 +833,7 @@ namespace KeyMapper.Forms
             FormsManager.ArrangeAllOpenForms();
             // Also, delete the saved position for the Add/Edit mapping form so it's in it's default location
             // next time it's shown.
-            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+            var userSettings = new KeyMapper.Properties.Settings();
             userSettings.EditMappingFormLocation = Point.Empty;
             userSettings.Save();
         }
@@ -859,21 +868,22 @@ namespace KeyMapper.Forms
 
             if (AppController.UserCanWriteBootMappings == false)
             {
-                if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the default toggle keys") == false)
-                    return;
+                if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the default toggle keys") == false) {
+					return;
+				}
 
-                AppController.WriteRegistryEntryVista(
+				AppController.WriteRegistryEntryVista(
                     RegistryHive.Users, @".DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", value);
             }
             else
             {
                 try
                 {
-                    RegistryKey regkey = Registry.Users.OpenSubKey(@".DEFAULT\Control Panel\Keyboard", true);
-                    if (regkey != null)
-                        regkey.SetValue("InitialKeyboardIndicators", value);
-
-                }
+                    var regkey = Registry.Users.OpenSubKey(@".DEFAULT\Control Panel\Keyboard", true);
+                    if (regkey != null) {
+						regkey.SetValue("InitialKeyboardIndicators", value);
+					}
+				}
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error trying to set default toggle keys: {0}", ex.ToString());
@@ -889,20 +899,20 @@ namespace KeyMapper.Forms
 
         private void SaveKeyboardImageAsFile(bool autoSave)
         {
-            using (Bitmap bmp = new Bitmap(Width, Height))
+            using (var bmp = new Bitmap(Width, Height))
             {
                 DrawToBitmap(bmp, new Rectangle(Point.Empty, Size));
 
-                Size actualSize = new Size(ClientSize.Width, ClientSize.Height - menu.Height - StatusBar.Height);
+                var actualSize = new Size(ClientSize.Width, ClientSize.Height - menu.Height - StatusBar.Height);
 
-                using (Bitmap bmp2 = new Bitmap(actualSize.Width, actualSize.Height))
+                using (var bmp2 = new Bitmap(actualSize.Width, actualSize.Height))
                 {
-                    Point p = PointToScreen(Point.Empty);
+                    var p = PointToScreen(Point.Empty);
 
                     int x = p.X - Left;
                     int y = p.Y - Top + menu.Height;
 
-                    using (Graphics g = Graphics.FromImage(bmp2))
+                    using (var g = Graphics.FromImage(bmp2))
                     {
                         g.DrawImage(bmp, 0, 0, new Rectangle(x, y, actualSize.Width, actualSize.Height), GraphicsUnit.Pixel);
                     }
@@ -915,7 +925,7 @@ namespace KeyMapper.Forms
                     }
                     else
                     {
-                        SaveFileDialog fd = new SaveFileDialog
+                        var fd = new SaveFileDialog
                         {
                             InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
                             OverwritePrompt = false,

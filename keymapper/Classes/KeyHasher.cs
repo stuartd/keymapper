@@ -4,16 +4,19 @@ namespace KeyMapper.Classes
 {
     public class KeyHasher
     {
-        [SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", 
-            MessageId = "Overflow doesn't matter for this method - http://stackoverflow.com/a/892640")]
-        public static int GetHashFromKeyData(int scancode, int extended)
+		public static int GetHashFromKey(Key key)
+		{
+			return GetHashFromKeyData(key.ScanCode, key.Extended);
+		}
+
+        public static int GetHashFromKeyData(int scanCode, int extended)
         {
             // Need to preserve the actual extended value as they are all 224 except Pause
             // which is 225.
-            return (scancode * 1000) + extended;
+            return (scanCode * 1000) + extended;
         }
 
-        public static int GetScancodeFromHash(int hash)
+        public static int GetScanCodeFromHash(int hash)
         {
             return (hash / 1000);
         }

@@ -18,9 +18,9 @@ namespace KeyMapper.Classes
             float basefontsize = 36F;
 
             // Not using ButtonImages.GetButtonImage as that is where we were called from..
-            using (Font font = AppController.GetButtonFont(basefontsize, false))
-            using (Bitmap bmp = ButtonImages.ResizeBitmap(ButtonImages.GetBitmap(BlankButton.Blank), scale, false))
-            using (Graphics g = Graphics.FromImage(bmp))
+            using (var font = AppController.GetButtonFont(basefontsize, false))
+            using (var bmp = ButtonImages.ResizeBitmap(ButtonImages.GetBitmap(BlankButton.Blank), scale, false))
+            using (var g = Graphics.FromImage(bmp))
             {
                 // Helps MeasureString. Can also pass StringFormat.GenericTypographic apparently ??
 

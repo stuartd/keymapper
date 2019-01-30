@@ -15,7 +15,7 @@ namespace KeyMapper.Providers
                 case MapLocation.LocalMachineKeyboardLayout:
                     hive = RegistryHive.LocalMachine;
                     keyname = @"SYSTEM\CurrentControlSet\Control\Keyboard Layout";
-                    valuename = "Scancode Map";
+                    valuename = "ScanCode Map";
                     break;
               case MapLocation.KeyMapperLocalMachineKeyboardLayout:
                     keyname = AppController.ApplicationRegistryKeyName;
@@ -32,10 +32,10 @@ namespace KeyMapper.Providers
             return true;
         }
 
-        public static byte[] GetScancodeMapFromRegistry(MapLocation which)
+        public static byte[] GetScanCodeMapFromRegistry(MapLocation which)
         {
             RegistryKey registry = null;
-            RegistryHive hive = RegistryHive.CurrentUser;
+            var hive = RegistryHive.CurrentUser;
             string keyname = string.Empty;
             string valuename = string.Empty;
 
@@ -52,10 +52,11 @@ namespace KeyMapper.Providers
                 }
             }
 
-            if (registry == null)
-                return null;
+            if (registry == null) {
+				return null;
+			}
 
-            object keyvalue = registry.GetValue(valuename, null);
+			var keyvalue = registry.GetValue(valuename, null);
 
             if (keyvalue == null ||
                 registry.GetValueKind(valuename) != RegistryValueKind.Binary ||
@@ -66,7 +67,7 @@ namespace KeyMapper.Providers
             }
 
             // Can't see how this cast can fail, shrug, will return null anyway.
-            byte[] bytecodes = keyvalue as byte[];
+            var bytecodes = keyvalue as byte[];
 
             return bytecodes;
         }

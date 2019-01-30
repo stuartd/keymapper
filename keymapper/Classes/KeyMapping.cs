@@ -39,7 +39,7 @@ namespace KeyMapper.Classes
                 if (MappingsManager.IsMapped(this) == false)
                 {
                     // This 'mapping' is not currently mapped, so it must have been mapped previously and cleared.
-                    KeyMapping km = MappingsManager.GetClearedMapping(From.Scancode, From.Extended);
+                    var km = MappingsManager.GetClearedMapping(From.ScanCode, From.Extended);
                     if (MappingsManager.IsEmptyMapping(km) == false)
                     {
                         disabled = MappingsManager.IsDisabledMapping(km);
@@ -72,19 +72,19 @@ namespace KeyMapper.Classes
         // This will match anything created by New KeyMapping() with no parameters
         public bool IsEmpty()
         {
-            return (From.Scancode == 0 && To.Scancode == 0 && From.Extended == 0 && To.Extended == 0);
+            return (From.ScanCode == 0 && To.ScanCode == 0 && From.Extended == 0 && To.Extended == 0);
         }
 
         public bool IsValid()
         {
-            // To be a valid mapping, From.Scancode must be greater than zero (to be a key)
-            // and To.Scancode must be at least zero (either disabled or a key)
+            // To be a valid mapping, From.ScanCode must be greater than zero (to be a key)
+            // and To.ScanCode must be at least zero (either disabled or a key)
 
             // (Key has to able to be mapped to itself so user mappings can override boot mappings)
 
             return (!IsEmpty()
-                  && From.Scancode > 0
-                  && To.Scancode > -1
+                  && From.ScanCode > 0
+                  && To.ScanCode > -1
             );
 
         }
@@ -96,22 +96,22 @@ namespace KeyMapper.Classes
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
-                return false;
+            if (obj.GetType() != GetType()) {
+				return false;
+			}
 
-            return this == (KeyMapping)obj;
+			return this == (KeyMapping)obj;
         }
 
-        // The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
         public static bool operator !=(KeyMapping map1, KeyMapping map2)
         {
             return !(map1 == map2);
         }
 
         public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+		{
+			return KeyHasher.GetHashFromKey(From) * 31 + KeyHasher.GetHashFromKey(To);
+		}
     }
 }
 

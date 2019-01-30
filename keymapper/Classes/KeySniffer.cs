@@ -100,8 +100,8 @@ namespace KeyMapper.Classes
 		private void Hook()
 		{
 
-			using (Process curProcess = Process.GetCurrentProcess())
-			using (ProcessModule curModule = curProcess.MainModule)
+			using (var curProcess = Process.GetCurrentProcess())
+			using (var curModule = curProcess.MainModule)
 			{
                 _hookID = NativeMethods.SetWindowsHookEx(WH_KEYBOARD_LL, _proc,
 													NativeMethods.GetModuleHandle(curModule.ModuleName), 0);
@@ -129,8 +129,9 @@ namespace KeyMapper.Classes
 			// Sure looks to me like that's wrong, probable because the method is in a different class, which
 			// fxcop told me to do in the first place. 
 
-			if (_hookID == IntPtr.Zero)
+			if (_hookID == IntPtr.Zero) {
 				return;
+			}
 
 			int result = (int)NativeMethods.UnhookWindowsHookEx(_hookID);
 			int error = Marshal.GetLastWin32Error();
@@ -155,17 +156,17 @@ namespace KeyMapper.Classes
 			if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
 			{
 				// Cast lParam into our structure
-				KBHookStruct keypress = (KBHookStruct)Marshal.PtrToStructure(lParam, typeof(KBHookStruct));
+				var keypress = (KBHookStruct)Marshal.PtrToStructure(lParam, typeof(KBHookStruct));
                 
 				//  Console.WriteLine("ScanCode: {0}, Extended: {1}, KeyCode: {2}, Name: {3}",
-				 //  keypress.Scancode, keypress.Extended, keypress.VirtualKeyCode, AppController.GetKeyName(keypress.Scancode, keypress.Extended));
+				 //  keypress.ScanCode, keypress.Extended, keypress.VirtualKeyCode, AppController.GetKeyName(keypress.ScanCode, keypress.Extended));
 
-				if (keypress.Scancode == 541)
+				if (keypress.ScanCode == 541)
 				{
 					// Right Alt, at least on my Dell SK-8115 keyboard
 					// Console.WriteLine("Fixing Dell's Right Alt keyboard bug");
 
-					keypress.Scancode = 56;
+					keypress.ScanCode = 56;
 					keypress.KeyFlags = 1;
 
 				}
@@ -175,14 +176,14 @@ namespace KeyMapper.Classes
 					// Pause. This doesn't capture well - it's extended value is 225
 					// rather than 224, so 
 	
-					keypress.Scancode = 29;
+					keypress.ScanCode = 29;
 					keypress.KeyFlags = 2;
 
 				}
 
                 // Some keyboards report Num Lock as having the extended bit set
                 // on keypress, but that doesn't work in a mapping.
-                if (keypress.Scancode == 69 && keypress.Extended == 224)
+                if (keypress.ScanCode == 69 && keypress.Extended == 224)
                 {
                     // The Keyboard lies.
                     keypress.Extended = 0;
@@ -191,7 +192,7 @@ namespace KeyMapper.Classes
 				// Raise the event:
 				if (KeyPressed != null)
 				{
-					KeyMapperKeyPressedEventArgs e = new KeyMapperKeyPressedEventArgs(keypress);
+					var e = new KeyMapperKeyPressedEventArgs(keypress);
                     KeyPressed(new object(), e);
 				}
 
@@ -209,7 +210,7 @@ namespace KeyMapper.Classes
 	public struct KBHookStruct
 	{
 		private int _vkcode;
-		private int _scancode;
+		private int _scanCode;
 		private int _flags;
 		private int _time;
 		private int _extrainfo;
@@ -223,10 +224,10 @@ namespace KeyMapper.Classes
 			get { return _vkcode; }
 		}
 
-		public int Scancode
+		public int ScanCode
 		{
-			get { return _scancode; }
-			set { _scancode = value; }
+			get { return _scanCode; }
+			set { _scanCode = value; }
 		}
 
 		public int Extended
@@ -249,12 +250,13 @@ namespace KeyMapper.Classes
 			}
             set
             {
-                if (value == 224)
-                    _flags = LLKHF_EXTENDED;
-                else
-                    _flags = 0;
-
-            }
+                if (value == 224) {
+					_flags = LLKHF_EXTENDED;
+				}
+				else {
+					_flags = 0;
+				}
+			}
 		}
 
 		// They *are* flags.
@@ -267,22 +269,21 @@ namespace KeyMapper.Classes
 
 		public static bool operator ==(KBHookStruct key1, KBHookStruct key2)
 		{
-			// If Scancode and Extended are the same, it's the same key.
-			return (key1.Scancode == key2.Scancode && key1.Extended == key2.Extended);
+			// If ScanCode and Extended are the same, it's the same key.
+			return (key1.ScanCode == key2.ScanCode && key1.Extended == key2.Extended);
 		}
 
 		public override bool Equals(object obj)
 		{
-			return (obj is KBHookStruct && this == (KBHookStruct)obj);
+			return (obj is KBHookStruct @struct && this == @struct);
 		}
 
 		// override object.GetHashCode
 		public override int GetHashCode()
 		{
-			return KeyHasher.GetHashFromKeyData(Scancode, Extended);
+			return KeyHasher.GetHashFromKeyData(ScanCode, Extended);
 		}
 
-		// The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
 		public static bool operator !=(KBHookStruct key1, KBHookStruct key2)
 		{
 			return !(key1 == key2);

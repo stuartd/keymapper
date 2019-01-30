@@ -27,9 +27,10 @@ if (m.HWnd != Handle)
 
             if (m.Msg == 0x020A) // WM_MOUSEWHEEL  
             {
-                if (MouseIsOutsideControl())
-                   return;
-            }
+                if (MouseIsOutsideControl()) {
+					return;
+				}
+			}
 			
 			base.WndProc(ref m);
         }
@@ -37,7 +38,7 @@ if (m.HWnd != Handle)
 		private bool MouseIsOutsideControl()
 		{
 			// Where is Mouse right now?
-			System.Drawing.Point localPosition = PointToClient(MousePosition);
+			var localPosition = PointToClient(MousePosition);
 
 			if (localPosition.X < 0 || localPosition.Y < 0)
 			{

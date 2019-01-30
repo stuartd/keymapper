@@ -18,7 +18,7 @@ namespace KeyMapper.Classes.Deployment
 			string runtimeStr = RuntimeEnvironment.GetRuntimeDirectory();
 			string ngenStr = Path.Combine(runtimeStr, "ngen.exe");
 
-			Process process = new Process
+			var process = new Process
 			                      {
 			                          StartInfo =
 			                              {

@@ -4,7 +4,7 @@ namespace KeyMapper.Classes
     {
         public string Name { get; private set; }
 
-        public int Scancode { get; }
+        public int ScanCode { get; }
 
         public int Extended { get; }
 
@@ -13,43 +13,43 @@ namespace KeyMapper.Classes
             Name = string.Empty;
         }
 
-        public Key(int scancode, int extended, string name)
+        public Key(int scanCode, int extended, string name)
         {
             Name = name;
-            Scancode = scancode;
+            ScanCode = scanCode;
             Extended = extended;
         }
 
-        public Key(int scancode, int extended)
-            : this(scancode, extended, AppController.GetKeyName(scancode, extended))
+        public Key(int scanCode, int extended)
+            : this(scanCode, extended, AppController.GetKeyName(scanCode, extended))
         { }
 
 
         public override string ToString()
         {
-            return AppController.GetKeyName(Scancode, Extended);
+            return AppController.GetKeyName(ScanCode, Extended);
         }
 
         public static bool operator ==(Key key1, Key key2)
         {
-            // If Scancode and Extended are the same, it's the same key.
-            return (key1.Scancode == key2.Scancode && key1.Extended == key2.Extended);
+            // If ScanCode and Extended are the same, it's the same key.
+            return (key1.ScanCode == key2.ScanCode && key1.Extended == key2.Extended);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
-                return false;
+            if (obj.GetType() != GetType()) {
+				return false;
+			}
 
-            return this == (Key)obj;
+			return this == (Key)obj;
         }
 
         public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+		{
+			return KeyHasher.GetHashFromKey(this);
+		}
 
-        // The C# compiler and rule OperatorsShouldHaveSymmetricalOverloads require this.
         public static bool operator !=(Key key1, Key key2)
         {
             return !(key1 == key2);

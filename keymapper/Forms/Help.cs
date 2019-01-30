@@ -15,7 +15,7 @@ namespace KeyMapper.Forms
 
         private void LoadUserSettings()
         {
-            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+            var userSettings = new KeyMapper.Properties.Settings();
             chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtStartup;
         }
 
@@ -29,7 +29,7 @@ namespace KeyMapper.Forms
 
         private void SaveUserSettings()
         {
-            Properties.Settings userSettings = new KeyMapper.Properties.Settings();
+            var userSettings = new KeyMapper.Properties.Settings();
             userSettings.ShowHelpFormAtStartup = chkShowHelpAtStartup.Checked;
             userSettings.HelpFormLocation = Location;
             userSettings.Save();
@@ -38,9 +38,10 @@ namespace KeyMapper.Forms
         private void labelFAQClick(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string url = e.Link.LinkData as string;
-            if (string.IsNullOrEmpty(url) == false)
-                System.Diagnostics.Process.Start(url);
-        }
+            if (string.IsNullOrEmpty(url) == false) {
+				System.Diagnostics.Process.Start(url);
+			}
+		}
 
 
 

@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Rose Hill Solutions")]
 [assembly: AssemblyProduct("Key Mapper")]
-[assembly: AssemblyCopyright("Copyright © Stuart Dunkeld 2007-2008")]
+[assembly: AssemblyCopyright("Copyright © Stuart Dunkeld 2007-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

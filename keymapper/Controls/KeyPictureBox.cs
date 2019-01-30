@@ -22,14 +22,14 @@ namespace KeyMapper.Controls
         private bool escapePressed;
 
         // These are always the physical values not any mapped ones.
-        private readonly int scancode;
+        private readonly int scanCode;
         private readonly int extended;
 
         public KeyMapping Map { get; }
 
-        public KeyPictureBox(int scancode, int extended, BlankButton button, float scale, int horizontalStretch, int verticalStretch)
+        public KeyPictureBox(int scanCode, int extended, BlankButton button, float scale, int horizontalStretch, int verticalStretch)
         {
-            this.scancode = scancode;
+            this.scanCode = scanCode;
             this.extended = extended;
             this.button = button;
             this.scale = scale;
@@ -38,9 +38,9 @@ namespace KeyMapper.Controls
             this.dragIconScale = 0.75F;
             this.dragbox = Rectangle.Empty;
 
-            Map = MappingsManager.GetKeyMapping(scancode, extended);
+            Map = MappingsManager.GetKeyMapping(scanCode, extended);
 
-            this.mapped = (Map.To.Scancode != -1);
+            this.mapped = (Map.To.ScanCode != -1);
 
             AllowDrop = true;
 
@@ -61,7 +61,7 @@ namespace KeyMapper.Controls
 
         private void DrawKey()
         {
-            int scancode = this.scancode;
+            int scanCode = this.scanCode;
             int extended = this.extended;
 
             ButtonEffect effect;
@@ -72,11 +72,13 @@ namespace KeyMapper.Controls
                 if (MappingsManager.IsDisabledMapping(Map))
                 {
                     // Disabled
-                    if (MappingsManager.IsMappingPending(Map))
-                        effect = ButtonEffect.DisabledPending;
-                    else
-                        effect = ButtonEffect.Disabled;
-                }
+                    if (MappingsManager.IsMappingPending(Map)) {
+						effect = ButtonEffect.DisabledPending;
+					}
+					else {
+						effect = ButtonEffect.Disabled;
+					}
+				}
                 else
                 {
                     // Is this key mapped under the current filter?
@@ -90,14 +92,14 @@ namespace KeyMapper.Controls
                     }
 
                     // Either way, we want the button to show what it is (will be) mapped to:
-                    scancode = Map.To.Scancode;
+                    scanCode = Map.To.ScanCode;
                     extended = Map.To.Extended;
                 }
             }
             else
             {
                 // Not mapped now, but was this key mapped before under the current filter??
-                KeyMapping km = MappingsManager.GetClearedMapping(scancode, extended);
+                var km = MappingsManager.GetClearedMapping(scanCode, extended);
                 if (MappingsManager.IsEmptyMapping(km))
                 {
                     effect = ButtonEffect.None;
@@ -112,8 +114,8 @@ namespace KeyMapper.Controls
                 }
             }
 
-            Bitmap keybmp = ButtonImages.GetButtonImage(
-                scancode, extended, button, horizontalStretch, verticalStretch, scale, effect);
+            var keybmp = ButtonImages.GetButtonImage(
+                scanCode, extended, button, horizontalStretch, verticalStretch, scale, effect);
 
             SetImage(keybmp);
         }
@@ -133,7 +135,7 @@ namespace KeyMapper.Controls
                 // Have reentered form
                 SetDragCursor(
                     ButtonImages.GetButtonImage(
-                        scancode, extended, button, horizontalStretch, verticalStretch, scale, ButtonEffect.None));
+                        scanCode, extended, button, horizontalStretch, verticalStretch, scale, ButtonEffect.None));
             }
 
             if (outsideForm)
@@ -143,14 +145,14 @@ namespace KeyMapper.Controls
                     // Change icon to be original.
                     SetDragCursor(
                         ButtonImages.GetButtonImage(
-                            scancode, extended, button, horizontalStretch, verticalStretch, scale, ButtonEffect.None));
+                            scanCode, extended, button, horizontalStretch, verticalStretch, scale, ButtonEffect.None));
                 }
                 else
                 {
                     // Show disabled
                     SetDragCursor(
                         ButtonImages.GetButtonImage(
-                            scancode, extended, button, horizontalStretch, verticalStretch, scale, ButtonEffect.Disabled));
+                            scanCode, extended, button, horizontalStretch, verticalStretch, scale, ButtonEffect.Disabled));
                 }
             }
 
@@ -159,9 +161,10 @@ namespace KeyMapper.Controls
                 e.Action = DragAction.Cancel;
                 escapePressed = true;
             }
-            else
-                escapePressed = false;
-        }
+            else {
+				escapePressed = false;
+			}
+		}
 
         private void SetDragCursor(Bitmap bmp)
         {
@@ -191,7 +194,7 @@ namespace KeyMapper.Controls
             {
 
                 // Create a dragbox so we can tell if the mouse moves far enough while down to trigger a drag event
-                Size dragSize = SystemInformation.DragSize;
+                var dragSize = SystemInformation.DragSize;
                 dragbox = new Rectangle(new Point(e.X - (dragSize.Width / 2), e.Y - (dragSize.Height / 2)), dragSize);
             }
         }
@@ -204,20 +207,21 @@ namespace KeyMapper.Controls
 
         private void KeyPictureBoxMouseMove(object sender, MouseEventArgs e)
         {
-            if (dragbox == Rectangle.Empty || dragbox.Contains(e.X, e.Y) == false)
-                return;
+            if (dragbox == Rectangle.Empty || dragbox.Contains(e.X, e.Y) == false) {
+				return;
+			}
 
-            dragbox = Rectangle.Empty;
+			dragbox = Rectangle.Empty;
 
             // Draw self to bitmap, then convert to an icon via a handle
             // both of shich which we must release
 
-            Bitmap bmp = new Bitmap(Width, Height);
+            var bmp = new Bitmap(Width, Height);
             DrawToBitmap(bmp, new Rectangle(0, 0, Size.Width, Size.Height));
 
             SetDragCursor(bmp);
 
-            DragDropEffects de = DoDragDrop(Map, DragDropEffects.Copy);
+            var de = DoDragDrop(Map, DragDropEffects.Copy);
 
             if (escapePressed == false)
             {
@@ -272,13 +276,13 @@ namespace KeyMapper.Controls
 
         private void IsControlOutsideForm(object originator)
         {
-            Control ctrl = originator as Control;
+            var ctrl = originator as Control;
             if (ctrl != null)
             {
-                Form frm = ctrl.FindForm();
+                var frm = ctrl.FindForm();
                 if (frm != null)
                 {
-                    Point loc = SystemInformation.WorkingArea.Location;
+                    var loc = SystemInformation.WorkingArea.Location;
 
                     outsideForm =
                         ((MousePosition.X - loc.X) < frm.DesktopBounds.Left) ||
@@ -300,7 +304,7 @@ namespace KeyMapper.Controls
 
             if (e.Data.GetDataPresent("KeyMapper.KeyMapping"))
             {
-                KeyMapping draggedmap = (KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
+                var draggedmap = (KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
 
                 if (MappingsManager.AddMapping(new KeyMapping(Map.From, draggedmap.From)) == false)
                 {
@@ -319,22 +323,23 @@ namespace KeyMapper.Controls
                 return;
             }
 
-            KeyMapping draggedmap = (KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
+            var draggedmap = (KeyMapping)e.Data.GetData("KeyMapper.KeyMapping");
 
-            if (draggedmap.To.Scancode >= 0)
+            if (draggedmap.To.ScanCode >= 0)
             {
                 // Can't drop a mapped key onto another key
                 e.Effect = DragDropEffects.None;
                 return;
             }
 
-            if (draggedmap.From == Map.From)
-                return; // No need to redraw self
+            if (draggedmap.From == Map.From) {
+				return; // No need to redraw self
+			}
 
-            // Console.WriteLine("Dragover: " + scancode)
+			// Console.WriteLine("Dragover: " + scanCode)
 
             SetImage(ButtonImages.GetButtonImage
-                (draggedmap.From.Scancode, draggedmap.From.Extended,
+                (draggedmap.From.ScanCode, draggedmap.From.Extended,
                 button, horizontalStretch, verticalStretch, scale, ButtonEffect.MappedPending));
 
             e.Effect = DragDropEffects.Copy;

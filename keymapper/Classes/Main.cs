@@ -34,7 +34,7 @@ namespace KeyMapper.Classes
 
             ConfigFileProvider.ValidateUserConfigFile();
 
-			Properties.Settings userSettings = new Properties.Settings();
+			var userSettings = new Properties.Settings();
 			if (userSettings.UpgradeRequired)
 			{
                 Console.WriteLine("Upgrading settings to new version");
@@ -55,7 +55,7 @@ namespace KeyMapper.Classes
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
 		{
-			Exception ex = e.ExceptionObject as Exception;
+			var ex = e.ExceptionObject as Exception;
 			if (ex != null)
 			{
 				Console.WriteLine("Unhandled exception (1): {0}", ex);
@@ -64,7 +64,7 @@ namespace KeyMapper.Classes
 
         private static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
 		{
-			ArgumentException aex = e.Exception as ArgumentException;
+			var aex = e.Exception as ArgumentException;
 			if (aex != null)
 			{
 				if (aex.ParamName != null && aex.ParamName.ToUpperInvariant() == "CULTURE")

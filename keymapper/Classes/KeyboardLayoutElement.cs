@@ -2,16 +2,16 @@ namespace KeyMapper.Classes
 {
     public class KeyboardLayoutElement
     {
-        private int _scancode;
+        private int _scanCode;
         private int _extended;
         private BlankButton _button;
         private int _horizontalstretch;
         private int _verticalstretch;
         private int _rightpadding;
 
-        public int Scancode
+        public int ScanCode
         {
-            get { return _scancode; }
+            get { return _scanCode; }
         }
 
         public int Extended
@@ -40,10 +40,10 @@ namespace KeyMapper.Classes
         }
 
 
-        public KeyboardLayoutElement(int scancode, int extended, BlankButton button,
+        public KeyboardLayoutElement(int scanCode, int extended, BlankButton button,
                                      int horizontalStretch, int verticalStretch, int rightPadding)
         {
-            _scancode = scancode;
+            _scanCode = scanCode;
             _extended = extended;
             _button = button;
             _horizontalstretch = horizontalStretch;

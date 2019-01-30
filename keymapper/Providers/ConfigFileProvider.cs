@@ -42,7 +42,7 @@ namespace KeyMapper.Providers
             try
             {
                 // If file is corrupt this will trigger an exception
-                Configuration config = ConfigurationManager.OpenExeConfiguration
+                var config = ConfigurationManager.OpenExeConfiguration
                     (ConfigurationUserLevel.PerUserRoamingAndLocal);
             }
             catch (ConfigurationErrorsException ex)
@@ -54,7 +54,7 @@ namespace KeyMapper.Providers
             {
                 // Access a property to find any other error types - invalid XML etc.
                 var userSettings = new Settings();
-                Point p = userSettings.ColourEditorLocation;
+                var p = userSettings.ColourEditorLocation;
             }
             catch (ConfigurationErrorsException ex)
             {

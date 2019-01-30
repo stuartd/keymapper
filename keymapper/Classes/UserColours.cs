@@ -24,7 +24,7 @@ namespace KeyMapper.Classes
             settings.Clear();
             foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
             {
-                UserColourSetting setting = GetColourSettingFromRegistry(effect);
+                var setting = GetColourSettingFromRegistry(effect);
                 if (setting != null)
                 {
                     settings.Add(effect, setting);
@@ -37,12 +37,13 @@ namespace KeyMapper.Classes
             string key = AppController.ApplicationRegistryKeyName;
             string subkey = effect.ToString();
 
-            RegistryKey reg = Registry.CurrentUser.CreateSubKey(key + @"\UserColours\" + subkey);
+            var reg = Registry.CurrentUser.CreateSubKey(key + @"\UserColours\" + subkey);
 
-            if (reg == null)
-                return;
+            if (reg == null) {
+				return;
+			}
 
-            reg.SetValue("FontColour", FontColour);
+			reg.SetValue("FontColour", FontColour);
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
@@ -51,7 +52,7 @@ namespace KeyMapper.Classes
                         + i.ToString(System.Globalization.CultureInfo.InvariantCulture)
                         + j.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-                    object value = cm.GetType().GetProperty(name).GetValue(cm, null);
+                    var value = cm.GetType().GetProperty(name).GetValue(cm, null);
                     // Console.WriteLine("i: {0}, j: {1}, value: {2}", i, j, value);
                     reg.SetValue(name, (float)decimal.Parse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture));
                 }
@@ -62,9 +63,10 @@ namespace KeyMapper.Classes
 
         public static void RaiseColoursChangedEvent()
         {
-            if (ColoursChanged != null)
-                ColoursChanged(null, null);
-        }
+            if (ColoursChanged != null) {
+				ColoursChanged(null, null);
+			}
+		}
 
         public static UserColourSetting GetColourSettings(ButtonEffect effect)
         {
@@ -74,10 +76,11 @@ namespace KeyMapper.Classes
                 _loaded = true;
             }
 
-            if (settings.ContainsKey(effect))
-                return settings[effect];
-            
-            return null;
+            if (settings.ContainsKey(effect)) {
+				return settings[effect];
+			}
+
+			return null;
         }
 
 
@@ -88,11 +91,13 @@ namespace KeyMapper.Classes
 
             string subkey = AppController.ApplicationRegistryKeyName + @"\UserColours\" + effect.ToString();
 
-            RegistryKey reg = Registry.CurrentUser.OpenSubKey(subkey);
+            var reg = Registry.CurrentUser.OpenSubKey(subkey);
             if (reg == null) // No settings have been defined for this effect
-                return null;
+			{
+				return null;
+			}
 
-            UserColourSetting setting = new UserColourSetting();
+			var setting = new UserColourSetting();
 
             // User may have changed type of FontColour
             // Using nullable int as any possible integer value could be a valid 
@@ -100,15 +105,17 @@ namespace KeyMapper.Classes
 
             int? fontColourArgb;
 
-            object value = reg.GetValue("FontColour");
-            if (value == null || reg.GetValueKind("FontColour") != RegistryValueKind.DWord)
-                fontColourArgb = Color.Black.ToArgb();
-            else
-                fontColourArgb = (int?)value;
+            var value = reg.GetValue("FontColour");
+            if (value == null || reg.GetValueKind("FontColour") != RegistryValueKind.DWord) {
+				fontColourArgb = Color.Black.ToArgb();
+			}
+			else {
+				fontColourArgb = (int?)value;
+			}
 
-            setting.FontColour = Color.FromArgb((int)fontColourArgb);
+			setting.FontColour = Color.FromArgb((int)fontColourArgb);
 
-            ColorMatrix cm = new ColorMatrix();
+            var cm = new ColorMatrix();
 
             for (int i = 0; i < 5; i++)
             {

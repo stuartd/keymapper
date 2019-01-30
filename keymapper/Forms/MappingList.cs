@@ -25,13 +25,14 @@ namespace KeyMapper.Forms
 
         public void LoadUserSettings()
         {
-            Properties.Settings userSettings = new Properties.Settings();
+            var userSettings = new Properties.Settings();
 
             int savedWidth = userSettings.MappingListFormWidth;
 
-            if (savedWidth > _minimumWidth)
-                Width = savedWidth;
-        }
+            if (savedWidth > _minimumWidth) {
+				Width = savedWidth;
+			}
+		}
 
         private void MappingListFormClosing(object sender, FormClosingEventArgs e)
         {
@@ -40,7 +41,7 @@ namespace KeyMapper.Forms
 
         private void SaveUserSettings()
         {
-            Properties.Settings userSettings = new Properties.Settings();
+            var userSettings = new Properties.Settings();
             userSettings.MappingListFormLocation = Location;
             userSettings.MappingListFormWidth = Width;
             userSettings.Save();
@@ -88,11 +89,10 @@ namespace KeyMapper.Forms
             MinimumSize = new Size(_minimumWidth, Size.Height);
 
             // If we didn't have form to start with, set focus back to main form.
-            if (hasFocus == false)
-                FormsManager.ActivateMainForm();
-
-
-        }
+            if (hasFocus == false) {
+				FormsManager.ActivateMainForm();
+			}
+		}
 
         private void AddRowsToGrid()
         {
@@ -110,9 +110,9 @@ namespace KeyMapper.Forms
 
         private void AddRowsToGrid(MappingFilter filter)
         {
-            Collection<KeyMapping> maps = MappingsManager.GetMappings(filter);
+            var maps = MappingsManager.GetMappings(filter);
 
-            foreach (KeyMapping map in maps)
+            foreach (var map in maps)
             {
                 if (filter == MappingFilter.ClearedBoot)
                 {
@@ -152,28 +152,32 @@ namespace KeyMapper.Forms
 
                 grdMappings.Rows[index].Cells[1].Value = cellvalue;
 
-                if (MappingsManager.IsMappingPending(map, filter))
-                    grdMappings.Rows[index].Cells[2].Value = "Pending";
-                else
-                    grdMappings.Rows[index].Cells[2].Value = "Mapped";
-            }
+                if (MappingsManager.IsMappingPending(map, filter)) {
+					grdMappings.Rows[index].Cells[2].Value = "Pending";
+				}
+				else {
+					grdMappings.Rows[index].Cells[2].Value = "Mapped";
+				}
+			}
 
         }
 
 
         private void grdMappingsCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex != 3)
-                return;
+            if (e.ColumnIndex != 3) {
+				return;
+			}
 
-            int row = e.RowIndex;
+			int row = e.RowIndex;
 
-            if (_clearedKeys.Contains(row))
-                return; // Shouldn't happen anyway
+            if (_clearedKeys.Contains(row)) {
+				return; // Shouldn't happen anyway
+			}
 
-            if (row >= 0)
+			if (row >= 0)
             {
-                DataGridViewRow currentRow = grdMappings.Rows[row];
+                var currentRow = grdMappings.Rows[row];
 
                 if (currentRow.Tag != null)
                 {

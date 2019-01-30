@@ -24,12 +24,14 @@ namespace KeyMapper.Classes
             GetLocalizableKeyNames();
             GetNonLocalizableKeyNames();
 
-            foreach (DictionaryEntry de in _localizableKeyNames)
-                _keys.Add(de.Key, de.Value);
+            foreach (DictionaryEntry de in _localizableKeyNames) {
+				_keys.Add(de.Key, de.Value);
+			}
 
-            foreach (DictionaryEntry de in _nonLocalizableKeyNames)
-                _keys.Add(de.Key, de.Value);
-        }
+			foreach (DictionaryEntry de in _nonLocalizableKeyNames) {
+				_keys.Add(de.Key, de.Value);
+			}
+		}
 
         public bool ContainsKey(int hash)
         {
@@ -71,14 +73,14 @@ namespace KeyMapper.Classes
             foreach (int hash in _localizableKeys)
             {
                 // None of the localizable names need the extended bit.
-                int scancode = KeyHasher.GetScancodeFromHash(hash);
+                int scanCode = KeyHasher.GetScanCodeFromHash(hash);
 
                 // Need to track if a localizable key is a symbol - shifter-symbol
                 // combination but it's length is not 3 - i.e. instead of 1 and ! 
                 // it is Qaf and RehYehAlefLam (as on the Farsi keyboard)
 
                 bool overlong = false;
-                string name = KeyboardHelper.GetKeyName(scancode, ref overlong);
+                string name = KeyboardHelper.GetKeyName(scanCode, ref overlong);
 
                 _nonLocalizableKeyNames.Add(hash, name);
                 if (overlong)

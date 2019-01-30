@@ -94,26 +94,26 @@ namespace KeyMapper.Classes
             return font;
         }
 
-        public static string GetKeyName(int scancode, int extended)
+        public static string GetKeyName(int scanCode, int extended)
         {
             // Look up the values in the current localized layout.
-            if (scancode == 0 && extended == 0)
+            if (scanCode == 0 && extended == 0)
             {
                 return "Disabled";
             }
 
-            if (scancode == -1 && extended == -1)
+            if (scanCode == -1 && extended == -1)
             {
                 return "";
             }
 
-            int hash = KeyHasher.GetHashFromKeyData(scancode, extended);
+            int hash = KeyHasher.GetHashFromKeyData(scanCode, extended);
             if (_currentLayout.ContainsKey(hash))
             {
                 return _currentLayout.GetKeyName(hash);
             }
 
-            Console.WriteLine("Unknown key: sc {0} ex {1}", scancode, extended);
+            Console.WriteLine("Unknown key: sc {0} ex {1}", scanCode, extended);
             return "Unknown";
         }
 
@@ -132,8 +132,11 @@ namespace KeyMapper.Classes
             while (true)
             {
                 // Euclidean algorithm
-                if (value2 == 0) return value1;
-                var value3 = value1;
+                if (value2 == 0) {
+					return value1;
+				}
+
+				var value3 = value1;
                 value1 = value2;
                 value2 = value3 % value2;
             }
@@ -145,7 +148,7 @@ namespace KeyMapper.Classes
                           "the protected section of your computer's registry. You may need to approve this action " +
                           "which will be performed by your Registry Editor.";
 
-            TaskDialogResult result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
+            var result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
                                                                   TaskDialogButtons.Yes | TaskDialogButtons.No,
                                                                   TaskDialogIcon.SecurityShield);
 
@@ -250,22 +253,25 @@ namespace KeyMapper.Classes
             {
                 var terminators = new[] { "\r\n" };
 
-                string[] layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
+                var layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
                 {
-                    if (string.IsNullOrEmpty(nameValuePair))
-                        continue;
+                    if (string.IsNullOrEmpty(nameValuePair)) {
+						continue;
+					}
 
-                    int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
-                    if (index < 0)
-                        continue;
+					int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
+                    if (index < 0) {
+						continue;
+					}
 
-                    string locale = nameValuePair.Substring(0, index);
+					string locale = nameValuePair.Substring(0, index);
                     int value;
-                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false)
-                        continue;
+                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false) {
+						continue;
+					}
 
-                    var keyboardType = (KeyboardLayoutType)value;
+					var keyboardType = (KeyboardLayoutType)value;
 
                     customKeyboardLayouts.Add(locale, keyboardType);
                 }
@@ -298,10 +304,12 @@ namespace KeyMapper.Classes
 
             using (var sw = new StreamWriter(path, false))
             {
-                foreach (DictionaryEntry de in customKeyboardLayouts)
-                    if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
-                        sw.WriteLine(de.Key + "=" + (int)de.Value);
-            }
+                foreach (DictionaryEntry de in customKeyboardLayouts) {
+					if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString())) {
+						sw.WriteLine(de.Key + "=" + (int)de.Value);
+					}
+				}
+			}
         }
 
         public static void Close()
@@ -311,10 +319,11 @@ namespace KeyMapper.Classes
             KeyboardHelper.UnloadLayout();
 
             if (UserCanWriteBootMappings == false
-                && (MappingsManager.VistaMappingsNeedSaving()))
-                MappingsManager.SaveBootMappingsVista();
+                && (MappingsManager.VistaMappingsNeedSaving())) {
+				MappingsManager.SaveBootMappingsVista();
+			}
 
-            LogProvider.CloseConsoleOutput();
+			LogProvider.CloseConsoleOutput();
 
             foreach (string filepath in tempfiles)
             {
@@ -334,7 +343,7 @@ namespace KeyMapper.Classes
             {
                 arialUnicodeMSInstalled = false;
                 var installedFonts = new InstalledFontCollection();
-                FontFamily[] fonts = installedFonts.Families;
+                var fonts = installedFonts.Families;
 
                 if (fonts.Any(ff => ff.Name == "Arial Unicode MS"))
                 {
@@ -343,10 +352,11 @@ namespace KeyMapper.Classes
                 }
             }
 
-            if (localizable == false || (bool)arialUnicodeMSInstalled)
-                return _defaultKeyFont; // Don't want the static keys to change font.
+            if (localizable == false || (bool)arialUnicodeMSInstalled) {
+				return _defaultKeyFont; // Don't want the static keys to change font.
+			}
 
-            // Default font for keys is Lucida Sans Unicode as it's on every version of Windows
+			// Default font for keys is Lucida Sans Unicode as it's on every version of Windows
 
             // Lucida Sans Unicode simply doesn't contain the characters for Bengali & Malayalam
             // Different versions of Windows have differernt cultures installed 
@@ -429,7 +439,7 @@ namespace KeyMapper.Classes
 
             if (kmregkey != null)
             {
-                string[] values = kmregkey.GetValueNames();
+                var values = kmregkey.GetValueNames();
                 for (int i = 0; i < values.Length; i++)
                 {
                     if (values[i] == "UserMaps" || values[i] == "BootMaps")
@@ -457,11 +467,11 @@ namespace KeyMapper.Classes
 
 
             // When was the system booted? (Milliseconds vs Ticks is correct..)
-            DateTime boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
+            var boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
 
             // When did the current user log in?
 
-            DateTime logontime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
+            var logontime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
 
             // Now, the "Volatile Environment" key in RegistryHive.CurrentUser
             // >isn't< always unloaded on logoff.
@@ -494,17 +504,17 @@ namespace KeyMapper.Classes
             }
 
             // When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
-            DateTime HKLMWrite = registryTimestampService.GetRegistryKeyTimestamp
+            var HKLMWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
             // When was HKEY_CURRENT_USER\Keyboard Layout written?
-            DateTime HKCUWrite = registryTimestampService.GetRegistryKeyTimestamp
+            var HKCUWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.CurrentUser, @"Keyboard Layout");
 
             // Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", 
             // boottime, logontime, HKLMWrite, HKCUWrite);
 
-            // Get the current scancode maps
+            // Get the current scanCode maps
             MappingsManager.GetMappingsFromRegistry();
 
             // If HLKM or HKCU Mappings have not been changed since boot/login 
@@ -538,9 +548,10 @@ namespace KeyMapper.Classes
 
             if ((locale != currentLocale))
             {
-                if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale))
-                    KeyboardLayout = (KeyboardLayoutType)customKeyboardLayouts[locale];
-                else
+                if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale)) {
+					KeyboardLayout = (KeyboardLayoutType)customKeyboardLayouts[locale];
+				}
+				else
                 {
                     // Ask the keydata interface what kind of layout this locale has - US, Euro etc.
                     KeyboardLayout = new KeyDataXml().GetKeyboardLayoutType(locale);
@@ -568,9 +579,10 @@ namespace KeyMapper.Classes
                 finally
                 {
                     // Set it back (if different)
-                    if (currentLocale != currentkeyboardlocale)
-                        KeyboardHelper.SetLocale(currentkeyboardlocale);
-                }
+                    if (currentLocale != currentkeyboardlocale) {
+						KeyboardHelper.SetLocale(currentkeyboardlocale);
+					}
+				}
             }
         }
 
@@ -583,18 +595,19 @@ namespace KeyMapper.Classes
         {
             appMutex = new AppMutex();
             bool gotMutex = appMutex.GetMutex();
-            if (gotMutex == false)
-                SwitchToExistingInstance();
+            if (gotMutex == false) {
+				SwitchToExistingInstance();
+			}
 
-            return gotMutex;
+			return gotMutex;
         }
 
         private static void SwitchToExistingInstance()
         {
-            IntPtr hWnd = IntPtr.Zero;
-            Process process = Process.GetCurrentProcess();
-            Process[] processes = Process.GetProcessesByName(process.ProcessName);
-            foreach (Process _process in processes)
+            var hWnd = IntPtr.Zero;
+            var process = Process.GetCurrentProcess();
+            var processes = Process.GetProcessesByName(process.ProcessName);
+            foreach (var _process in processes)
             {
                 // Get the first instance that is not this instance, has the
                 // same process name and was started from the same file name

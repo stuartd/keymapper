@@ -67,7 +67,7 @@ namespace KeyMapper.Forms
 
 			foreach (Control con in Controls)
 			{
-				NumericUpDown updown = (con as NumericUpDown);
+				var updown = (con as NumericUpDown);
 				if (updown != null)
 				{
 					if (!_initialised)
@@ -93,13 +93,14 @@ namespace KeyMapper.Forms
 	    private decimal GetValue(string name)
 		{
 			// Access the appropriate property of the matrix:
-			object value = _currentMatrix.GetType().GetProperty(name).GetValue(_currentMatrix, null);
+			var value = _currentMatrix.GetType().GetProperty(name).GetValue(_currentMatrix, null);
 			decimal dvalue;
-			if (decimal.TryParse(value.ToString(), out dvalue))
+			if (decimal.TryParse(value.ToString(), out dvalue)) {
 				return dvalue;
-			else
+			}
+			else {
 				return decimal.Zero;
-
+			}
 		}
 
 
@@ -128,12 +129,13 @@ namespace KeyMapper.Forms
 		private void DrawKey()
 		{
 
-			Bitmap bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _fontColour);
+			var bmp = ButtonImages.GetButtonImage(BlankButton.MediumWideBlank, 0.75F, _caption, _currentMatrix, _fontColour);
 
-			if (KeyBox.Image != null)
-                KeyBox.Image.Dispose();
+			if (KeyBox.Image != null) {
+				KeyBox.Image.Dispose();
+			}
 
-            KeyBox.Image = bmp;
+			KeyBox.Image = bmp;
 
 		}
 
@@ -162,7 +164,7 @@ namespace KeyMapper.Forms
 
 		private void SaveUserSettings()
 		{
-			Properties.Settings userSettings = new Properties.Settings();
+			var userSettings = new Properties.Settings();
 			userSettings.ColourEditorLocation = Location;
 			userSettings.Save();
 		}
@@ -174,7 +176,7 @@ namespace KeyMapper.Forms
 
 		private void TextButtonClick(object sender, EventArgs e)
 		{
-			ColorDialog colourPicker = new ColorDialog();
+			var colourPicker = new ColorDialog();
 
 			// Sets the initial color select to the current text color.
 			colourPicker.Color = _fontColour;
@@ -190,11 +192,11 @@ namespace KeyMapper.Forms
 
 		private void RandomizeButtonClick(object sender, EventArgs e)
 		{
-			ColorMatrix cm = new ColorMatrix();
+			var cm = new ColorMatrix();
 
 			int numberOfChanges = 5;
 
-			Random r = new Random();
+			var r = new Random();
 
 			for (int i = 0; i < numberOfChanges; i++)
 			{
