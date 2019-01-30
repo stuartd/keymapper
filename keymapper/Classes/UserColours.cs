@@ -9,17 +9,17 @@ namespace KeyMapper.Classes
     internal static class UserColourSettingManager
     {
         public static event EventHandler<EventArgs> ColoursChanged;
-        private static bool _loaded;
+        private static bool loaded;
 
         private static readonly Dictionary<ButtonEffect, UserColourSetting> settings 
             = new Dictionary<ButtonEffect, UserColourSetting>();
 
         static UserColourSettingManager()
         {
-            ColoursChanged += delegate { LoadColours(); };
+            ColoursChanged += LoadColours;
         }
 
-        private static void LoadColours()
+        private static void LoadColours(object sender, EventArgs e)
         {
             settings.Clear();
             foreach (ButtonEffect effect in Enum.GetValues(typeof(ButtonEffect)))
@@ -63,17 +63,15 @@ namespace KeyMapper.Classes
 
         public static void RaiseColoursChangedEvent()
         {
-            if (ColoursChanged != null) {
-				ColoursChanged(null, null);
-			}
-		}
+            ColoursChanged?.Invoke(null, null);
+        }
 
         public static UserColourSetting GetColourSettings(ButtonEffect effect)
         {
-            if (_loaded == false)
+            if (loaded == false)
             {
-                LoadColours();
-                _loaded = true;
+                LoadColours(null, EventArgs.Empty);
+                loaded = true;
             }
 
             if (settings.ContainsKey(effect)) {
@@ -146,7 +144,6 @@ namespace KeyMapper.Classes
     public class UserColourSetting
     {
         // This is the class that will be stored in the user settings for custom colours
-        private ColorMatrix _matrix = new ColorMatrix();
         private int _fontColour = Color.Black.ToArgb();
 
         public Color FontColour
@@ -155,10 +152,6 @@ namespace KeyMapper.Classes
             set => _fontColour = value.ToArgb();
         }
 
-        public ColorMatrix Matrix
-        {
-            get => _matrix;
-            set => _matrix = value;
-        }
+        public ColorMatrix Matrix { get; set; } = new ColorMatrix();
     }
 }
