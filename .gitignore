@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/keymapper/.vs/KeyMapper/v15
+/keymapper/.vs/KeyMapper/v14
+/keymapper/bin/Debug
+/keymapper/obj/Debug
+/keymapper/UnitTests/bin/Debug
+/keymapper/UnitTests/obj/Debug
+/keymapper/KeyMapper.sln.DotSettings.user
