@@ -18,14 +18,14 @@ namespace KeyMapper.Classes
             return dt.ToLocalTime();
         }
 
-        private long GetRawRegistryKeyTimestamp(RegistryHive hive, string keyname)
+        private long GetRawRegistryKeyTimestamp(RegistryHive hive, string keyName)
         {
-            if (string.IsNullOrEmpty(keyname))
+            if (string.IsNullOrEmpty(keyName))
             {
                 return 0; // Otherwise the function opens HKLM (or HKCU) again.
             }
 
-            var hkey = OpenKey(hive, keyname, KEY_QUERY_VALUE);
+            var hkey = OpenKey(hive, keyName, KEY_QUERY_VALUE);
 
             if (hkey == UIntPtr.Zero)
             {
@@ -64,7 +64,7 @@ namespace KeyMapper.Classes
             return true;
         }
 
-        private UIntPtr OpenKey(RegistryHive hive, string keyname, int requiredAccess)
+        private UIntPtr OpenKey(RegistryHive hive, string keyName, int requiredAccess)
         {
             UIntPtr hiveptr;
             UIntPtr hkey;
@@ -90,7 +90,7 @@ namespace KeyMapper.Classes
                     return UIntPtr.Zero;
             }
 
-            int result = NativeMethods.RegOpenKeyEx(hiveptr, keyname, 0, requiredAccess, out hkey);
+            int result = NativeMethods.RegOpenKeyEx(hiveptr, keyName, 0, requiredAccess, out hkey);
 
             if (result == 0) {
 				return hkey;

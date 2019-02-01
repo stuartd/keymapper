@@ -16,10 +16,10 @@ namespace KeyMapper.Classes
     internal static class KeyboardHelper
     {
         // The don't need to be IntPtrs as they aren't actually system resources 
-        private static List<int> _systemInputLocaleIdentifiers;
+        private static List<int> systemInputLocaleIdentifiers;
 
         // It's just easier to have this as an IntPtr
-        private static IntPtr _currentInputLocaleIdentifier;
+        private static IntPtr currentInputLocaleIdentifier;
 
         public static Hashtable InstalledKeyboards { get; }
 
@@ -32,24 +32,26 @@ namespace KeyMapper.Classes
         {
             get
             {
-                if (_systemInputLocaleIdentifiers == null)
+                if (systemInputLocaleIdentifiers != null)
                 {
-                    int keyboards = NativeMethods.GetKeyboardLayoutList(0, null);
-                    var temp = new int[keyboards];
-                    NativeMethods.GetKeyboardLayoutList(keyboards, temp);
-
-                    _systemInputLocaleIdentifiers = new List<int>(keyboards);
-                    _systemInputLocaleIdentifiers.AddRange(temp);
+                    return systemInputLocaleIdentifiers;
                 }
 
-                return _systemInputLocaleIdentifiers;
+                int keyboards = NativeMethods.GetKeyboardLayoutList(0, null);
+                var temp = new int[keyboards];
+                NativeMethods.GetKeyboardLayoutList(keyboards, temp);
+
+                systemInputLocaleIdentifiers = new List<int>(keyboards);
+                systemInputLocaleIdentifiers.AddRange(temp);
+
+                return systemInputLocaleIdentifiers;
             }
         }
 
         public static int SetLocale(string locale)
         {
             UnloadLayout();
-            _currentInputLocaleIdentifier = NativeMethods.LoadKeyboardLayout(
+            currentInputLocaleIdentifier = NativeMethods.LoadKeyboardLayout(
                 locale, NativeMethods.KLF_ACTIVATE | NativeMethods.KLF_SUBSTITUTE_OK);
 
             // While we have it, get it's HKL and return the low word of it:
@@ -63,16 +65,16 @@ namespace KeyMapper.Classes
             // If the current layout isn't in the list of system layouts, unload it.
             foreach (int i in SystemInputLocaleIdentifiers)
             {
-                if (_currentInputLocaleIdentifier == (IntPtr)i)
+                if (currentInputLocaleIdentifier == (IntPtr)i)
                 {
-                    _currentInputLocaleIdentifier = IntPtr.Zero;
+                    currentInputLocaleIdentifier = IntPtr.Zero;
                     break;
                 }
             }
 
-            if (_currentInputLocaleIdentifier != IntPtr.Zero)
+            if (currentInputLocaleIdentifier != IntPtr.Zero)
             {
-                NativeMethods.UnloadKeyboardLayout(_currentInputLocaleIdentifier);
+                NativeMethods.UnloadKeyboardLayout(currentInputLocaleIdentifier);
                 // Console.WriteLine("Unloading {0}", CurrentLayout);
             }
         }
@@ -96,10 +98,10 @@ namespace KeyMapper.Classes
             // Get the key itself:
             var sbUnshifted = new StringBuilder(bufferLength);
 
-            uint vk = NativeMethods.MapVirtualKeyEx((uint)scanCode, 1, _currentInputLocaleIdentifier);
+            uint vk = NativeMethods.MapVirtualKeyEx((uint)scanCode, 1, currentInputLocaleIdentifier);
             // 	Console.WriteLine((Keys)vk + " - " + vk.ToString() + " - " + "ScanCode: " + scanCode.ToString());
 
-            int rc = NativeMethods.ToUnicodeEx(vk, (uint)scanCode, keyState, sbUnshifted, sbUnshifted.Capacity, 0, _currentInputLocaleIdentifier);
+            int rc = NativeMethods.ToUnicodeEx(vk, (uint)scanCode, keyState, sbUnshifted, sbUnshifted.Capacity, 0, currentInputLocaleIdentifier);
 
             if (rc > 1)
             {
@@ -116,12 +118,12 @@ namespace KeyMapper.Classes
 
                 NativeMethods.ToUnicodeEx(
                     (uint)Keys.Space,
-                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, _currentInputLocaleIdentifier),
+                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, currentInputLocaleIdentifier),
                     keyState,
                     sbUnshifted,
                     sbUnshifted.Capacity,
                     0,
-                    _currentInputLocaleIdentifier);
+                    currentInputLocaleIdentifier);
 
                 // There is one character stored in our buffer though:
                 rc = 1;
@@ -149,19 +151,19 @@ namespace KeyMapper.Classes
                 sbShifted,
                 sbShifted.Capacity,
                 0,
-                _currentInputLocaleIdentifier);
+                currentInputLocaleIdentifier);
 
             // If unshifter was a dead key, so will be shifted.
             if (rc < 0)
             {
                 int dummy = NativeMethods.ToUnicodeEx(
                     (uint)Keys.Space,
-                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, _currentInputLocaleIdentifier),
+                    NativeMethods.MapVirtualKeyEx((uint)Keys.Space, 0, currentInputLocaleIdentifier),
                     keyState,
                     sbUnshifted,
                     sbUnshifted.Capacity,
                     0,
-                    _currentInputLocaleIdentifier);
+                    currentInputLocaleIdentifier);
 
                 // There will be one character stored in our buffer though:
                 // (well, at least one, but we have no way of knowing if more)

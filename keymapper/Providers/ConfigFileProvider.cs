@@ -22,9 +22,7 @@ namespace KeyMapper.Providers
             }
             else
             {
-                var innerException =
-                    ex.InnerException as ConfigurationErrorsException;
-                if (innerException != null && !string.IsNullOrEmpty(innerException.Filename))
+                if (ex.InnerException is ConfigurationErrorsException innerException && !string.IsNullOrEmpty(innerException.Filename))
                 {
                     fileName = innerException.Filename;
                 }

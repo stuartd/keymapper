@@ -55,8 +55,7 @@ namespace KeyMapper.Classes
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
 		{
-			var ex = e.ExceptionObject as Exception;
-			if (ex != null)
+            if (e.ExceptionObject is Exception ex)
 			{
 				Console.WriteLine("Unhandled exception (1): {0}", ex);
 			}
@@ -64,8 +63,7 @@ namespace KeyMapper.Classes
 
         private static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
 		{
-			var aex = e.Exception as ArgumentException;
-			if (aex != null)
+            if (e.Exception is ArgumentException aex)
 			{
 				if (aex.ParamName != null && aex.ParamName.ToUpperInvariant() == "CULTURE")
 				{

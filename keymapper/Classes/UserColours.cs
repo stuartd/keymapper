@@ -144,12 +144,12 @@ namespace KeyMapper.Classes
     public class UserColourSetting
     {
         // This is the class that will be stored in the user settings for custom colours
-        private int _fontColour = Color.Black.ToArgb();
+        private int fontColour = Color.Black.ToArgb();
 
         public Color FontColour
         {
-            get => Color.FromArgb(_fontColour);
-            set => _fontColour = value.ToArgb();
+            get => Color.FromArgb(fontColour);
+            set => fontColour = value.ToArgb();
         }
 
         public ColorMatrix Matrix { get; set; } = new ColorMatrix();

@@ -622,8 +622,7 @@ namespace KeyMapper.Forms
 
         private void KeyDoubleClick(object sender, EventArgs e)
         {
-            var box = sender as KeyPictureBox;
-            if (box == null) {
+            if (!(sender is KeyPictureBox box)) {
 				return;
 			}
 
@@ -880,10 +879,8 @@ namespace KeyMapper.Forms
                 try
                 {
                     var regkey = Registry.Users.OpenSubKey(@".DEFAULT\Control Panel\Keyboard", true);
-                    if (regkey != null) {
-						regkey.SetValue("InitialKeyboardIndicators", value);
-					}
-				}
+                    regkey?.SetValue("InitialKeyboardIndicators", value);
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error trying to set default toggle keys: {0}", ex.ToString());

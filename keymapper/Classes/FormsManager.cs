@@ -9,16 +9,15 @@ namespace KeyMapper.Classes
 {
     internal static class FormsManager
     {
-        private static KeyboardForm _mainForm;
-        private static ColourMap _colourMapForm;
-        private static MappingListForm _mapListForm;
+        private static KeyboardForm mainForm;
+        private static ColourMap colourMapForm;
+        private static MappingListForm mappingListForm;
         private static readonly Dictionary<ButtonEffect, ColourEditor> editorForms = new Dictionary<ButtonEffect, ColourEditor>();
-        private static HelpForm _helpForm;
+        private static HelpForm helpForm;
 
         public static TaskDialogResult ShowTaskDialog(string text, string instruction, string caption, TaskDialogButtons buttons, TaskDialogIcon icon)
         {
-            int p;
-            if (NativeMethods.TaskDialog(IntPtr.Zero, IntPtr.Zero, caption, instruction, text, (int)buttons, new IntPtr((int)icon), out p) != 0) {
+            if (NativeMethods.TaskDialog(IntPtr.Zero, IntPtr.Zero, caption, instruction, text, (int)buttons, new IntPtr((int)icon), out int p) != 0) {
 				throw new InvalidOperationException("Error occurred calling TaskDialog.");
 			}
 
@@ -36,19 +35,19 @@ namespace KeyMapper.Classes
 
         public static void RegisterMainForm(KeyboardForm form)
         {
-            _mainForm = form;
+            mainForm = form;
         }
 
         public static void ChildFormClosed(object sender, FormClosedEventArgs e)
         {
             if (sender is ColourMap) {
-				_colourMapForm = null;
+				colourMapForm = null;
 			}
 			else if (sender is MappingListForm) {
-				_mapListForm = null;
+				mappingListForm = null;
 			}
 			else if (sender is HelpForm) {
-				_helpForm = null;
+				helpForm = null;
 			}
 			else if (sender is ColourEditor)
             {
@@ -57,7 +56,7 @@ namespace KeyMapper.Classes
 					editorForms.Remove(ce.Effect);
 				}
 			}
-            _mainForm.RegenerateMenuExternal();
+            mainForm.RegenerateMenuExternal();
 
         }
 
@@ -84,19 +83,19 @@ namespace KeyMapper.Classes
 
             editorForms.Add(effect, newForm);
             newForm.FormClosed += ChildFormClosed;
-            newForm.Show(_mainForm);
+            newForm.Show(mainForm);
 
         }
 
         private static Point GetColourEditorFormStartingPosition(ColourEditor ce)
         {
-            if (_colourMapForm != null)
+            if (colourMapForm != null)
             {
                 // Start from top right of colour map
-                return GetNewLocation(_colourMapForm, ce, ChildFormPosition.TopRight);
+                return GetNewLocation(colourMapForm, ce, ChildFormPosition.TopRight);
             }
 
-            return GetNewLocation(_mainForm, ChildFormPosition.BottomLeft);  // Risque as isn't a child, but will work.
+            return GetNewLocation(mainForm, ChildFormPosition.BottomLeft);  // Risque as isn't a child, but will work.
         }
 
         private static void PositionColourEditorForm(ColourEditor ce)
@@ -116,7 +115,7 @@ namespace KeyMapper.Classes
                 if (savedLocation == Point.Empty)
                 {
                     // Colour Map form must be open as we must be spawning a new editor (as the count is zero)
-                    formLocation = GetNewLocation(_colourMapForm, ce, ChildFormPosition.TopRight);
+                    formLocation = GetNewLocation(colourMapForm, ce, ChildFormPosition.TopRight);
                 }
                 else
                 {
@@ -159,15 +158,15 @@ namespace KeyMapper.Classes
             // SizeMainForm();
             // _mainForm.KeyboardFormResizeEnd(null, null);
 
-            if (_mapListForm != null) {
+            if (mappingListForm != null) {
 				PositionMappingListForm();
 			}
 
-			if (_helpForm != null) {
+			if (helpForm != null) {
 				PositionHelpForm(true);
 			}
 
-			if (_colourMapForm != null) {
+			if (colourMapForm != null) {
 				PositionColourMapForm();
 			}
 
@@ -214,10 +213,7 @@ namespace KeyMapper.Classes
                 if (editorForms.ContainsKey(effect))
                 {
                     var ce = editorForms[effect];
-                    if (ce != null)
-                    {
-                        ce.Close();
-                    }
+                    ce?.Close();
                 }
             }
         }
@@ -225,19 +221,19 @@ namespace KeyMapper.Classes
 
         public static bool IsColourMapFormOpen()
         {
-            return (_colourMapForm != null);
+            return (colourMapForm != null);
         }
 
         public static bool IsMappingListFormOpen()
         {
-            return (_mapListForm != null);
+            return (mappingListForm != null);
         }
 
         public static void ActivateMainForm()
         {
             // Mapping list form steals focus when DataGridView is refreshed
             // so it needs to call this method.
-            _mainForm.Activate();
+            mainForm.Activate();
         }
 
         public static void OpenChildForms()
@@ -263,14 +259,14 @@ namespace KeyMapper.Classes
         {
             if (resetting)
             {
-                if (_colourMapForm == null)
+                if (colourMapForm == null)
                 {
-                    PositionChildForm(_helpForm, ChildFormPosition.BottomLeft);
+                    PositionChildForm(helpForm, ChildFormPosition.BottomLeft);
                     return;
                 }
-                if (_mapListForm == null)
+                if (mappingListForm == null)
                 {
-                    PositionChildForm(_helpForm, ChildFormPosition.BottomRight);
+                    PositionChildForm(helpForm, ChildFormPosition.BottomRight);
                     return;
                 }
 
@@ -285,32 +281,32 @@ namespace KeyMapper.Classes
                 // 4) A combination of 2) and 3)
                 // 4a) Put it next to the colour map form, accept it may overlap the mapping list form.
 
-                PositionChildForm(_colourMapForm, _helpForm, ChildFormPosition.TopRight);
+                PositionChildForm(colourMapForm, helpForm, ChildFormPosition.TopRight);
                 return;
 
             }
 
 
             // First run - put help form in front of keyboard so users notice it.
-            PositionChildForm(_helpForm, ChildFormPosition.MiddleLeft);
+            PositionChildForm(helpForm, ChildFormPosition.MiddleLeft);
         }
 
         private static void PositionColourMapForm()
         {
-            PositionChildForm(_colourMapForm, ChildFormPosition.BottomLeft);
+            PositionChildForm(colourMapForm, ChildFormPosition.BottomLeft);
         }
 
         private static void PositionMappingListForm()
         {
-            PositionChildForm(_mapListForm, ChildFormPosition.BottomRight);
+            PositionChildForm(mappingListForm, ChildFormPosition.BottomRight);
         }
 
 
         public static void ShowHelpForm()
         {
-            if (_helpForm == null)
+            if (helpForm == null)
             {
-                _helpForm = new HelpForm();
+                helpForm = new HelpForm();
                 var userSettings = new Properties.Settings();
                 var formlocation = userSettings.HelpFormLocation;
 
@@ -318,10 +314,10 @@ namespace KeyMapper.Classes
 					PositionHelpForm(false);
 				}
 				else {
-					_helpForm.Location = formlocation;
+					helpForm.Location = formlocation;
 				}
 
-				_helpForm.Show(_mainForm);
+				helpForm.Show(mainForm);
             }
         }
 
@@ -340,7 +336,7 @@ namespace KeyMapper.Classes
 				PositionChildForm(mf, ChildFormPosition.MiddleLeft);
 			}
 
-			mf.ShowDialog(_mainForm);
+			mf.ShowDialog(mainForm);
 
         }
 
@@ -348,52 +344,52 @@ namespace KeyMapper.Classes
         {
             var af = new AboutForm();
             PositionChildForm(af, ChildFormPosition.MiddleCentre);
-            af.ShowDialog(_mainForm);
+            af.ShowDialog(mainForm);
 
         }
 
         public static void ToggleMappingListForm()
         {
 
-            if (_mapListForm == null)
+            if (mappingListForm == null)
             {
 
                 var userSettings = new Properties.Settings();
 
                 var formLocation = userSettings.MappingListFormLocation;
-                _mapListForm = new MappingListForm();
+                mappingListForm = new MappingListForm();
 
                 // Load settings before positioning so we know how wide form is
-                _mapListForm.LoadUserSettings();
+                mappingListForm.LoadUserSettings();
 
                 if (formLocation.IsEmpty)
                 {
                     PositionMappingListForm();
                 }
                 else {
-					_mapListForm.Location = formLocation;
+					mappingListForm.Location = formLocation;
 				}
 
-				_mapListForm.FormClosed += ChildFormClosed;
+				mappingListForm.FormClosed += ChildFormClosed;
 
-                _mapListForm.Show(_mainForm);
+                mappingListForm.Show(mainForm);
             }
             else
             {
-                _mapListForm.Close();
+                mappingListForm.Close();
             }
 
         }
 
         public static void ToggleColourMapForm()
         {
-            if (_colourMapForm != null)
+            if (colourMapForm != null)
             {
-                _colourMapForm.Close();
+                colourMapForm.Close();
                 return;
             }
 
-            _colourMapForm = new ColourMap();
+            colourMapForm = new ColourMap();
 
             var userSettings = new Properties.Settings();
 
@@ -405,22 +401,22 @@ namespace KeyMapper.Classes
             }
             else
             {
-                _colourMapForm.Location = formLocation;
+                colourMapForm.Location = formLocation;
             }
 
-            _colourMapForm.FormClosed += ChildFormClosed;
-            _colourMapForm.Show(_mainForm);
+            colourMapForm.FormClosed += ChildFormClosed;
+            colourMapForm.Show(mainForm);
 
         }
 
         public static void SizeMainForm()
         {
-            _mainForm.Width = (int)(SystemInformation.WorkingArea.Width * 0.95F);
+            mainForm.Width = (int)(SystemInformation.WorkingArea.Width * 0.95F);
         }
 
         public static void PositionMainForm()
         {
-            _mainForm.Location = new Point(
+            mainForm.Location = new Point(
                     (int)(SystemInformation.WorkingArea.Width * 0.025F),
                     (int)(SystemInformation.WorkingArea.Height * 0.025F));
         }
@@ -428,7 +424,7 @@ namespace KeyMapper.Classes
 
         private static void PositionChildForm(Form child, ChildFormPosition position)
         {
-            PositionChildForm(_mainForm, child, position);
+            PositionChildForm(mainForm, child, position);
         }
 
         private static void PositionChildForm(Form parent, Form child, ChildFormPosition position)
@@ -439,7 +435,7 @@ namespace KeyMapper.Classes
 
         private static Point GetNewLocation(Form child, ChildFormPosition position)
         {
-            return GetNewLocation(_mainForm, child, position);
+            return GetNewLocation(mainForm, child, position);
         }
 
         private static Point GetNewLocation(Form parent, Form child, ChildFormPosition position)

@@ -21,18 +21,17 @@ namespace KeyMapper.Classes
     {
         // Always use the provided method to get this
         // as substitutions must be made for some cultures unless Arial Unicode MS in installed
-        private static string _defaultKeyFont = "Lucida Sans Unicode";
+        private static string defaultKeyFont = "Lucida Sans Unicode";
 
         // Keyboard layout and keys
-
-        private static LocalizedKeySet _currentLayout;
+        private static LocalizedKeySet currentLayout;
 
         // Single instance handle
         private static AppMutex appMutex;
 
         private static bool? arialUnicodeMSInstalled;
 
-        private static readonly List<string> tempfiles = new List<string>();
+        private static readonly List<string> tempFiles = new List<string>();
 
         private static readonly IRegistryTimestampService registryTimestampService = new RegistryTimestampService();
 
@@ -101,9 +100,9 @@ namespace KeyMapper.Classes
             }
 
             int hash = KeyHasher.GetHashFromKeyData(scanCode, extended);
-            if (_currentLayout.ContainsKey(hash))
+            if (currentLayout.ContainsKey(hash))
             {
-                return _currentLayout.GetKeyName(hash);
+                return currentLayout.GetKeyName(hash);
             }
 
             Console.WriteLine("Unknown key: sc {0} ex {1}", scanCode, extended);
@@ -112,12 +111,12 @@ namespace KeyMapper.Classes
 
         public static bool IsOverlongKey(int hash)
         {
-            return _currentLayout.IsKeyNameOverlong(hash);
+            return currentLayout.IsKeyNameOverlong(hash);
         }
 
         public static bool IsLocalizableKey(int hash)
         {
-            return _currentLayout.IsKeyLocalizable(hash);
+            return currentLayout.IsKeyLocalizable(hash);
         }
 
         public static int GetHighestCommonDenominator(int value1, int value2)
@@ -150,7 +149,7 @@ namespace KeyMapper.Classes
 
         public static void WriteRegistryFileVista(string filePath)
         {
-            tempfiles.Add(filePath);
+            tempFiles.Add(filePath);
 
             string command = " /s " + (char)34 + filePath + (char)34;
 
@@ -318,7 +317,7 @@ namespace KeyMapper.Classes
 
 			LogProvider.CloseConsoleOutput();
 
-            foreach (string filepath in tempfiles)
+            foreach (string filepath in tempFiles)
             {
                 try
                 {
@@ -341,12 +340,12 @@ namespace KeyMapper.Classes
                 if (fonts.Any(ff => ff.Name == "Arial Unicode MS"))
                 {
                     arialUnicodeMSInstalled = true;
-                    _defaultKeyFont = "Arial Unicode MS";
+                    defaultKeyFont = "Arial Unicode MS";
                 }
             }
 
             if (localizable == false || (bool)arialUnicodeMSInstalled) {
-				return _defaultKeyFont; // Don't want the static keys to change font.
+				return defaultKeyFont; // Don't want the static keys to change font.
 			}
 
 			// Default font for keys is Lucida Sans Unicode as it's on every version of Windows
@@ -388,7 +387,7 @@ namespace KeyMapper.Classes
                 case 1054: // Thai - for some reason all the Thai fonts come out far too small ..??
 
                 default:
-                    return _defaultKeyFont;
+                    return defaultKeyFont;
             }
         }
 
@@ -560,7 +559,7 @@ namespace KeyMapper.Classes
                     int culture = KeyboardHelper.SetLocale(locale);
                     CurrentCultureInfo = new CultureInfo(culture);
 
-                    _currentLayout = new LocalizedKeySet();
+                    currentLayout = new LocalizedKeySet();
                     currentLocale = locale;
                 }
 
@@ -634,7 +633,7 @@ namespace KeyMapper.Classes
 
         public static void RegisterTempFile(string filePath)
         {
-            tempfiles.Add(filePath);
+            tempFiles.Add(filePath);
         }
     }
 }

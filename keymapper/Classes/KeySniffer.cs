@@ -208,61 +208,37 @@ namespace KeyMapper.Classes
     [StructLayout(LayoutKind.Sequential)]
 	public struct KBHookStruct
 	{
-        private int flags;
-		private int _time;
-		private int _extrainfo;
-
 		private const int LLKHF_EXTENDED = 0x1;
 		private const int LLKHF_EXTENDED_PAUSE = 0x2;
 
+        public int VirtualKeyCode { get; set; }
 
-		public int VirtualKeyCode
-        {
-            get;
-        }
-
-        public int ScanCode
-        {
-            get;
-            set;
-        }
+        public int ScanCode { get; set; }
 
         public int Extended
 		{
 			get
             {
 
-                if ((LLKHF_EXTENDED & flags) == LLKHF_EXTENDED)
+                if ((LLKHF_EXTENDED & KeyFlags) == LLKHF_EXTENDED)
 				{
 					return 224;
 				}
 
-                if ((LLKHF_EXTENDED_PAUSE & flags) == LLKHF_EXTENDED_PAUSE)
+                if ((LLKHF_EXTENDED_PAUSE & KeyFlags) == LLKHF_EXTENDED_PAUSE)
                 {
                     return 225;
                 }
 
                 return 0;
             }
-            set
-            {
-                if (value == 224) {
-					flags = LLKHF_EXTENDED;
-				}
-				else {
-					flags = 0;
-				}
-			}
-		}
 
-		// They *are* flags.
-		public int KeyFlags
-		{
-			get => flags;
-            set => flags = value;
+            set => KeyFlags = value == 224 ? LLKHF_EXTENDED : 0;
         }
 
-		public static bool operator ==(KBHookStruct key1, KBHookStruct key2)
+		public int KeyFlags { private get; set; }
+
+        public static bool operator ==(KBHookStruct key1, KBHookStruct key2)
 		{
 			// If ScanCode and Extended are the same, it's the same key.
 			return (key1.ScanCode == key2.ScanCode && key1.Extended == key2.Extended);
@@ -286,15 +262,5 @@ namespace KeyMapper.Classes
 
 	}
 
-    public class KeyMapperKeyPressedEventArgs : EventArgs
-	{
-        public KBHookStruct Key { get;}
-
-        // Constructor 
-		public KeyMapperKeyPressedEventArgs(KBHookStruct key)
-		{
-            Key = key;
-		}
-	}
 }
 

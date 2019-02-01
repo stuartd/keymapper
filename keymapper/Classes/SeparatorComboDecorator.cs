@@ -8,30 +8,24 @@ namespace KeyMapper.Classes
 	/// </summary>
 	public static class ComboItemSeparator
 	{
-	    static ComboItemSeparator()
-	    {
-	        VerticalItemPadding = 4;
-	        SeparatorHeight = 3;
-	    }
+        private const int separatorHeight = 3;
 
-	    public static int SeparatorHeight { get; }
-
-	    public static int VerticalItemPadding { get; }
+        private const int verticalItemPadding = 4;
 
 	    internal class SeparatorItem
 		{
-			private readonly string _name;
+			private readonly string name;
 			
             public SeparatorItem(string name)
 			{
-                _name = name;
+                this.name = name;
 			}
 
 			public override string ToString()
 			{
-				if (_name != null)
+				if (name != null)
 				{
-					return _name;
+					return name;
 				}
 				return base.ToString();
 			}
@@ -45,31 +39,31 @@ namespace KeyMapper.Classes
 			    return;
 			}
 
-			var combo = sender as ComboBox;
-			if (combo != null)
-			{
-				var comboBoxItem = combo.Items[e.Index];
+            if (!(sender is ComboBox combo))
+            {
+                return;
+            }
 
-				var textSize = TextRenderer.MeasureText(comboBoxItem.ToString(), combo.Font);
+            var comboBoxItem = combo.Items[e.Index];
 
-				e.ItemHeight = textSize.Height + VerticalItemPadding;
-				e.ItemWidth = textSize.Width;
+            var textSize = TextRenderer.MeasureText(comboBoxItem.ToString(), combo.Font);
 
-				if (comboBoxItem is SeparatorItem)
-				{
-					// one white line, one dark, one white.
-					e.ItemHeight += SeparatorHeight;
-				}
-			}
-		}
+            e.ItemHeight = textSize.Height + verticalItemPadding;
+            e.ItemWidth = textSize.Width;
+
+            if (comboBoxItem is SeparatorItem)
+            {
+                // one white line, one dark, one white.
+                e.ItemHeight += separatorHeight;
+            }
+        }
 
 		internal static void DrawComboItem(object sender, DrawItemEventArgs e)
 		{
 			if (e.Index == -1)
 			{ return; }
 
-			var combo = sender as ComboBox;
-			if (combo != null)
+            if (sender is ComboBox combo)
 			{
 				var comboBoxItem = combo.Items[e.Index];
 
@@ -84,7 +78,7 @@ namespace KeyMapper.Classes
 
 				if (isSeparatorItem && (e.State & DrawItemState.ComboBoxEdit) != DrawItemState.ComboBoxEdit)
 				{
-					bounds.Height -= SeparatorHeight;
+					bounds.Height -= separatorHeight;
 				}
 
 				TextRenderer.DrawText(e.Graphics, comboBoxItem.ToString(), combo.Font,
@@ -93,7 +87,7 @@ namespace KeyMapper.Classes
 				// draw the separator line
 				if (isSeparatorItem && ((e.State & DrawItemState.ComboBoxEdit) != DrawItemState.ComboBoxEdit))
 				{
-					var separatorRect = new Rectangle(e.Bounds.Left, e.Bounds.Bottom - SeparatorHeight, e.Bounds.Width, SeparatorHeight);
+					var separatorRect = new Rectangle(e.Bounds.Left, e.Bounds.Bottom - separatorHeight, e.Bounds.Width, separatorHeight);
 
 					// fill the background behind the separator
 					using (Brush br = new SolidBrush(combo.BackColor))

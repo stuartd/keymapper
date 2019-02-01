@@ -213,6 +213,7 @@
     <Compile Include="Classes\KeyboardLayoutElement.cs" />
     <Compile Include="Classes\KeyboardLayoutType.cs" />
     <Compile Include="Classes\KeyHasher.cs" />
+    <Compile Include="Classes\KeyMapperKeyPressedEventArgs.cs" />
     <Compile Include="Classes\PhysicalKeyboardLayout.cs" />
     <Compile Include="Classes\UndoRedoMappingStack.cs" />
     <Compile Include="Classes\FormsManager.cs" />

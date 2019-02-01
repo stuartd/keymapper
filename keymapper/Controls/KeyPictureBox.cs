@@ -276,8 +276,7 @@ namespace KeyMapper.Controls
 
         private void IsControlOutsideForm(object originator)
         {
-            var ctrl = originator as Control;
-            if (ctrl != null)
+            if (originator is Control ctrl)
             {
                 var frm = ctrl.FindForm();
                 if (frm != null)

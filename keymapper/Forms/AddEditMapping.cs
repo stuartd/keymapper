@@ -418,8 +418,7 @@ namespace KeyMapper.Forms
 
 	    private void ListOptionsComboSelectedIndexChanged(object sender, EventArgs e)
 		{
-			var cb = sender as ComboBox;
-			if (cb != null)
+            if (sender is ComboBox cb)
 			{
                 keyThreshold = 1 - cb.SelectedIndex; // 0 -> 1, 1 -> 0, 2 -> -1
 				PopulateKeyLists();
@@ -453,13 +452,13 @@ namespace KeyMapper.Forms
 			}
 
 			// Need to know the scanCode and extended of the chosen key.
-			string keyname = KeysByGroupListbox.Text;
+			string keyName = KeysByGroupListbox.Text;
 
 			int hash;
 
-			if (currentgroupmembers.ContainsKey(keyname))
+			if (currentgroupmembers.ContainsKey(keyName))
 			{
-				hash = currentgroupmembers[keyname];
+				hash = currentgroupmembers[keyName];
 			}
 			else
 			{

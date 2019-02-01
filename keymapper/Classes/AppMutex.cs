@@ -4,13 +4,12 @@ namespace KeyMapper.Classes
 {
     internal class AppMutex : IDisposable
 	{
-        private bool _disposed;
-	    private System.Threading.Mutex _appMutex;
+        private bool disposed;
+	    private System.Threading.Mutex appMutex;
 
 		public bool GetMutex()
 		{
-			bool acquired;
-			_appMutex = new System.Threading.Mutex(true, "KeyMapperAppMutex", out acquired);
+            appMutex = new System.Threading.Mutex(true, "KeyMapperAppMutex", out bool acquired);
 			
 			return acquired;
 		}
@@ -28,16 +27,18 @@ namespace KeyMapper.Classes
 
 		private void Dispose(bool disposing)
 		{
-			if (_disposed == false)
-			{
-				if (disposing)
-				{
-					_appMutex.ReleaseMutex();
-					_appMutex.Close();
-				}
+            if (disposed)
+            {
+                return;
+            }
 
-				_disposed = true;
-			}
-		}
+            if (disposing)
+            {
+                appMutex.ReleaseMutex();
+                appMutex.Close();
+            }
+
+            disposed = true;
+        }
 	}
 }

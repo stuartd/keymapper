@@ -177,6 +177,7 @@ namespace KeyMapper.Classes
             {
                 case MappingFilter.ClearedBoot:
                     return true; // A cleared mapping is by definition pending
+
                 case MappingFilter.Boot:
                     return !(savedBootMappings.Contains(map));
             }
@@ -267,9 +268,9 @@ namespace KeyMapper.Classes
             }
 
             RegistryHive hive = 0;
-            string keyname = "", valuename = "";
+            string keyName = "", valueName = "";
 
-            RegistryProvider.GetRegistryLocation(whereToSave, ref hive, ref keyname, ref valuename);
+            RegistryProvider.GetRegistryLocation(whereToSave, ref hive, ref keyName, ref valueName);
 
             RegistryKey registry = null;
 
@@ -278,11 +279,11 @@ namespace KeyMapper.Classes
             {
                 if (hive == RegistryHive.LocalMachine)
                 {
-                    registry = Registry.LocalMachine.OpenSubKey(keyname, true);
+                    registry = Registry.LocalMachine.OpenSubKey(keyName, true);
                 }
                 else if (hive == RegistryHive.CurrentUser)
                 {
-                    registry = Registry.CurrentUser.OpenSubKey(keyname, true);
+                    registry = Registry.CurrentUser.OpenSubKey(keyName, true);
                 }
             }
             catch (SecurityException ex)
@@ -290,7 +291,7 @@ namespace KeyMapper.Classes
                 if (hive == RegistryHive.CurrentUser)
                 {
                     // Would expect to be able to write to HKCU
-                    Console.WriteLine("Unexpected failure {2} opening {0} on {1} for write access", keyname, Enum.GetNames(typeof(Mappings))[(int)whichMappings], ex.Message);
+                    Console.WriteLine("Unexpected failure {2} opening {0} on {1} for write access", keyName, Enum.GetNames(typeof(Mappings))[(int)whichMappings], ex.Message);
                 }
 
                 return;
@@ -304,11 +305,11 @@ namespace KeyMapper.Classes
 
             if (maps.Count == 0)
             {
-                registry.SetValue(valuename, new byte[0]);
+                registry.SetValue(valueName, new byte[0]);
             }
             else
             {
-                registry.SetValue(valuename, GetMappingsAsByteArray(maps));
+                registry.SetValue(valueName, GetMappingsAsByteArray(maps));
             }
         }
 

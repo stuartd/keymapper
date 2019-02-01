@@ -10,7 +10,6 @@ namespace KeyMapper.Forms
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		/// <param _name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (this.components != null))

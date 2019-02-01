@@ -6,7 +6,7 @@ namespace KeyMapper.Providers
 {
     public static class RegistryProvider
     {
-        public static bool GetRegistryLocation(MapLocation which, ref RegistryHive hive, ref string keyname, ref string valuename)
+        public static bool GetRegistryLocation(MapLocation which, ref RegistryHive hive, ref string keyName, ref string valueName)
         {
             hive = RegistryHive.CurrentUser;
 
@@ -14,17 +14,20 @@ namespace KeyMapper.Providers
             {
                 case MapLocation.LocalMachineKeyboardLayout:
                     hive = RegistryHive.LocalMachine;
-                    keyname = @"SYSTEM\CurrentControlSet\Control\Keyboard Layout";
-                    valuename = "ScanCode Map";
+                    keyName = @"SYSTEM\CurrentControlSet\Control\Keyboard Layout";
+                    valueName = "ScanCode Map";
                     break;
+
               case MapLocation.KeyMapperLocalMachineKeyboardLayout:
-                    keyname = AppController.ApplicationRegistryKeyName;
-                    valuename = "BootMaps";
+                    keyName = AppController.ApplicationRegistryKeyName;
+                    valueName = "BootMaps";
                     break;
+
               case MapLocation.KeyMapperVistaMappingsCache:
-                    keyname = AppController.ApplicationRegistryKeyName;
-                    valuename = "VistaBootCache";
+                    keyName = AppController.ApplicationRegistryKeyName;
+                    valueName = "VistaBootCache";
                     break;
+
                 default:
                     return false;
             }
@@ -36,38 +39,34 @@ namespace KeyMapper.Providers
         {
             RegistryKey registry = null;
             var hive = RegistryHive.CurrentUser;
-            string keyname = string.Empty;
-            string valuename = string.Empty;
+            string keyName = string.Empty;
+            string valueName = string.Empty;
 
-            if (GetRegistryLocation(which, ref hive, ref keyname, ref valuename))
+            if (GetRegistryLocation(which, ref hive, ref keyName, ref valueName))
             {
                 switch (hive)
                 {
                     case RegistryHive.LocalMachine:
-                        registry = Registry.LocalMachine.OpenSubKey(keyname);
+                        registry = Registry.LocalMachine.OpenSubKey(keyName);
                         break;
                     case RegistryHive.CurrentUser:
-                        registry = Registry.CurrentUser.OpenSubKey(keyname);
+                        registry = Registry.CurrentUser.OpenSubKey(keyName);
                         break;
                 }
             }
 
-            if (registry == null) {
-				return null;
-			}
+            var keyValue = registry?.GetValue(valueName, null);
 
-			var keyvalue = registry.GetValue(valuename, null);
-
-            if (keyvalue == null ||
-                registry.GetValueKind(valuename) != RegistryValueKind.Binary ||
-                keyvalue.GetType() != Type.GetType("System.Byte[]"))
+            if (keyValue == null ||
+                registry.GetValueKind(valueName) != RegistryValueKind.Binary ||
+                keyValue.GetType() != Type.GetType("System.Byte[]"))
             {
                 // Not there, or not the right type.
                 return null;
             }
 
             // Can't see how this cast can fail, shrug, will return null anyway.
-            var bytecodes = keyvalue as byte[];
+            var bytecodes = keyValue as byte[];
 
             return bytecodes;
         }

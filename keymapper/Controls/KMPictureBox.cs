@@ -15,10 +15,7 @@ namespace KeyMapper.Controls
         internal void ReleaseImage()
         {
             IDisposable cleaner = Image;
-            if (cleaner != null)
-            {
-                cleaner.Dispose();
-            }
+            cleaner?.Dispose();
             Image = null;
         }
     }

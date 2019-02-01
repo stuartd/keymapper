@@ -12,20 +12,20 @@ namespace KeyMapper.Providers
     {
         static LogProvider()
         {
-            _logFileName = Path.Combine(AppController.KeyMapperFilePath, ConsoleOutputFilename);
+            logFileName = Path.Combine(AppController.KeyMapperFilePath, ConsoleOutputFilename);
         }
 
         private const string ConsoleOutputFilename = "keymapper.log";
 
         // Redirect console output
-        private static StreamWriter _consoleWriterStream;
-        private static readonly string _logFileName;
+        private static StreamWriter consoleWriterStream;
+        private static readonly string logFileName;
 
         public static void ClearLogFile()
         {
-            if (_consoleWriterStream != null)
+            if (consoleWriterStream != null)
             {
-                _consoleWriterStream.BaseStream.SetLength(0);
+                consoleWriterStream.BaseStream.SetLength(0);
                 Console.WriteLine("Log file cleared: {0}", DateTime.Now);
             }
             else
@@ -36,7 +36,7 @@ namespace KeyMapper.Providers
 
         public static void RedirectConsoleOutput()
         {
-            string path = _logFileName;
+            string path = logFileName;
             string existingLogEntries = string.Empty;
 
             if (string.IsNullOrEmpty(path)) {
@@ -45,7 +45,7 @@ namespace KeyMapper.Providers
 
 			if (File.Exists(path))
             {
-                // In order to be able to clear the log, the streamwriter must be opened in create mode.
+                // In order to be able to clear the log, the StreamWriter must be opened in create mode.
                 // so read the contents of the log first.
 
                 using (var sr = new StreamReader(path))
@@ -54,33 +54,29 @@ namespace KeyMapper.Providers
                 }
             }
 
-            _consoleWriterStream = new StreamWriter(path, false, Encoding.UTF8);
-            _consoleWriterStream.AutoFlush = true;
-            _consoleWriterStream.Write(existingLogEntries);
+            consoleWriterStream = new StreamWriter(path, false, Encoding.UTF8);
+            consoleWriterStream.AutoFlush = true;
+            consoleWriterStream.Write(existingLogEntries);
 
             // Direct standard output to the log file.
-            Console.SetOut(_consoleWriterStream);
+            Console.SetOut(consoleWriterStream);
 
             Console.WriteLine("Logging started: {0}", DateTime.Now);
         }
 
         public static void CloseConsoleOutput()
         {
-            if (_consoleWriterStream != null)
-            {
-                _consoleWriterStream.Close();
-            }
+            consoleWriterStream?.Close();
         }
 
         public static void ViewLogFile()
         {
-            string logfile = _logFileName;
+            string logfile = logFileName;
             if (string.IsNullOrEmpty(logfile)) {
 				return;
 			}
 
 			Process.Start(logfile);
         }
-
     }
 }

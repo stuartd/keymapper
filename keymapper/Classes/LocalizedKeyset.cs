@@ -8,49 +8,49 @@ namespace KeyMapper.Classes
     /// </summary>
     public class LocalizedKeySet
     {
-        private readonly Hashtable _keys = new Hashtable();
-        private readonly Hashtable _localizableKeyNames = new Hashtable();
-        private readonly IList<int> _localizableKeys = new KeyDataXml().LocalizableKeys;
-        private readonly Hashtable _nonLocalizableKeyNames = new Hashtable();
-        private readonly IList<int> _nonLocalizableKeys = new KeyDataXml().NonLocalizableKeys;
+        private readonly Hashtable keys = new Hashtable();
+        private readonly Hashtable localizableKeyNames = new Hashtable();
+        private readonly IList<int> localizableKeys = new KeyDataXml().LocalizableKeys;
+        private readonly Hashtable nonLocalizableKeyNames = new Hashtable();
+        private readonly IList<int> nonLocalizableKeys = new KeyDataXml().NonLocalizableKeys;
 
-        private readonly List<int> _overlongkeys = new List<int>(0);
+        private readonly List<int> overLongKeys = new List<int>(0);
 
         public LocalizedKeySet()
         {
-            _keys.Clear();
-            _overlongkeys.Clear();
+            keys.Clear();
+            overLongKeys.Clear();
 
             GetLocalizableKeyNames();
             GetNonLocalizableKeyNames();
 
-            foreach (DictionaryEntry de in _localizableKeyNames) {
-				_keys.Add(de.Key, de.Value);
+            foreach (DictionaryEntry de in localizableKeyNames) {
+				keys.Add(de.Key, de.Value);
 			}
 
-			foreach (DictionaryEntry de in _nonLocalizableKeyNames) {
-				_keys.Add(de.Key, de.Value);
+			foreach (DictionaryEntry de in nonLocalizableKeyNames) {
+				keys.Add(de.Key, de.Value);
 			}
 		}
 
         public bool ContainsKey(int hash)
         {
-            return _keys.Contains(hash);
+            return keys.Contains(hash);
         }
 
         public string GetKeyName(int hash)
         {
-            return (string) _keys[hash];
+            return (string) keys[hash];
         }
 
         public bool IsKeyNameOverlong(int hash)
         {
-            return _overlongkeys.Contains(hash);
+            return overLongKeys.Contains(hash);
         }
 
         public bool IsKeyLocalizable(int hash)
         {
-            return _localizableKeys.Contains(hash);
+            return localizableKeys.Contains(hash);
         }
 
         private void GetNonLocalizableKeyNames()
@@ -60,17 +60,17 @@ namespace KeyMapper.Classes
 
             var kd = new KeyDataXml();
 
-            foreach (int code in _nonLocalizableKeys)
+            foreach (int code in nonLocalizableKeys)
             {
-                _nonLocalizableKeyNames.Add(code, kd.GetKeyNameFromCode(code));
+                nonLocalizableKeyNames.Add(code, kd.GetKeyNameFromCode(code));
             }
         }
 
         private void GetLocalizableKeyNames()
         {
-            _localizableKeyNames.Clear();
+            localizableKeyNames.Clear();
 
-            foreach (int hash in _localizableKeys)
+            foreach (int hash in localizableKeys)
             {
                 // None of the localizable names need the extended bit.
                 int scanCode = KeyHasher.GetScanCodeFromHash(hash);
@@ -82,11 +82,11 @@ namespace KeyMapper.Classes
                 bool overlong = false;
                 string name = KeyboardHelper.GetKeyName(scanCode, ref overlong);
 
-                _nonLocalizableKeyNames.Add(hash, name);
+                nonLocalizableKeyNames.Add(hash, name);
                 if (overlong)
                 {
                     // Console.WriteLine("Adding overlong key: code {0} name length: {1} name: {2}", hash, name.Length, name);
-                    _overlongkeys.Add(hash);
+                    overLongKeys.Add(hash);
                 }
             }
         }

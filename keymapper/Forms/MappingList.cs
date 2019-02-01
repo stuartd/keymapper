@@ -10,9 +10,9 @@ namespace KeyMapper.Forms
 {
     public partial class MappingListForm : KMBaseForm
     {
-        private readonly List<int> _clearedKeys = new List<int>();
-        private readonly List<Key> _keylist = new List<Key>();
-        private const int _minimumWidth = 300;
+        private readonly List<int> clearedKeys = new List<int>();
+        private readonly List<Key> keyList = new List<Key>();
+        private const int minimumWidth = 300;
 
         /// <remarks>Leaving the Type column in even though there are only Boot mappings now, </remarks>
 	    public MappingListForm()
@@ -29,7 +29,7 @@ namespace KeyMapper.Forms
 
             int savedWidth = userSettings.MappingListFormWidth;
 
-            if (savedWidth > _minimumWidth) {
+            if (savedWidth > minimumWidth) {
 				Width = savedWidth;
 			}
 		}
@@ -66,8 +66,8 @@ namespace KeyMapper.Forms
                 grdMappings.Rows.Remove(grdMappings.Rows[i]);
             }
 
-            _clearedKeys.Clear();
-            _keylist.Clear();
+            clearedKeys.Clear();
+            keyList.Clear();
 
             try
             {
@@ -86,7 +86,7 @@ namespace KeyMapper.Forms
             MinimumSize = new Size(0, 0);
             MaximumSize = new Size(0, 0);
             SetClientSizeCore(ClientSize.Width, height);
-            MinimumSize = new Size(_minimumWidth, Size.Height);
+            MinimumSize = new Size(minimumWidth, Size.Height);
 
             // If we didn't have form to start with, set focus back to main form.
             if (hasFocus == false) {
@@ -103,7 +103,7 @@ namespace KeyMapper.Forms
             {
                 // No mappings.
                 int index = grdMappings.Rows.Add("You haven't created any mappings yet");
-                _clearedKeys.Add(index); // Stops Delete key being shown. 
+                clearedKeys.Add(index); // Stops Delete key being shown. 
             }
 
         }
@@ -116,7 +116,7 @@ namespace KeyMapper.Forms
             {
                 if (filter == MappingFilter.ClearedBoot)
                 {
-                    if (_keylist.Contains(map.From))
+                    if (keyList.Contains(map.From))
                     {
                         // Don't add an entry for a cleared key which has been remapped.
                         break;
@@ -125,7 +125,7 @@ namespace KeyMapper.Forms
                 }
                 else
                 {
-                    _keylist.Add(map.From);
+                    keyList.Add(map.From);
                 }
 
                 int index = grdMappings.Rows.Add(map.ToString());
@@ -145,7 +145,7 @@ namespace KeyMapper.Forms
                         // Need to store the row to a little array as
                         // don't want to have to access each cell to decide whether 
                         // to show the delete button for it or not.
-                        _clearedKeys.Add(index);
+                        clearedKeys.Add(index);
 
                         break;
                 }
@@ -171,7 +171,7 @@ namespace KeyMapper.Forms
 
 			int row = e.RowIndex;
 
-            if (_clearedKeys.Contains(row)) {
+            if (clearedKeys.Contains(row)) {
 				return; // Shouldn't happen anyway
 			}
 
@@ -195,7 +195,7 @@ namespace KeyMapper.Forms
 
             if (e.ColumnIndex == 3 && e.RowIndex >= 0)
             {
-                if (_clearedKeys.Contains(e.RowIndex))
+                if (clearedKeys.Contains(e.RowIndex))
                 {
                     e.PaintBackground(e.CellBounds, true);
                     e.Handled = true;

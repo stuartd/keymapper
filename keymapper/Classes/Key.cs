@@ -2,7 +2,7 @@ namespace KeyMapper.Classes
 {
     public class Key
     {
-        public string Name { get; private set; }
+        public string Name { get; }
 
         public int ScanCode { get; }
 
