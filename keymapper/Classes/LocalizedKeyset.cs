@@ -24,14 +24,16 @@ namespace KeyMapper.Classes
             GetLocalizableKeyNames();
             GetNonLocalizableKeyNames();
 
-            foreach (DictionaryEntry de in localizableKeyNames) {
-				keys.Add(de.Key, de.Value);
-			}
+            foreach (DictionaryEntry de in localizableKeyNames)
+            {
+                keys.Add(de.Key, de.Value);
+            }
 
-			foreach (DictionaryEntry de in nonLocalizableKeyNames) {
-				keys.Add(de.Key, de.Value);
-			}
-		}
+            foreach (DictionaryEntry de in nonLocalizableKeyNames)
+            {
+                keys.Add(de.Key, de.Value);
+            }
+        }
 
         public bool ContainsKey(int hash)
         {
@@ -40,7 +42,7 @@ namespace KeyMapper.Classes
 
         public string GetKeyName(int hash)
         {
-            return (string) keys[hash];
+            return (string)keys[hash];
         }
 
         public bool IsKeyNameOverlong(int hash)

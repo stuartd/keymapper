@@ -39,11 +39,12 @@ namespace KeyMapper.Providers
             string path = logFileName;
             string existingLogEntries = string.Empty;
 
-            if (string.IsNullOrEmpty(path)) {
-				return;
-			}
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
 
-			if (File.Exists(path))
+            if (File.Exists(path))
             {
                 // In order to be able to clear the log, the StreamWriter must be opened in create mode.
                 // so read the contents of the log first.
@@ -72,11 +73,12 @@ namespace KeyMapper.Providers
         public static void ViewLogFile()
         {
             string logfile = logFileName;
-            if (string.IsNullOrEmpty(logfile)) {
-				return;
-			}
+            if (string.IsNullOrEmpty(logfile))
+            {
+                return;
+            }
 
-			Process.Start(logfile);
+            Process.Start(logfile);
         }
     }
 }

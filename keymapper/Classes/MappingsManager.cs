@@ -61,10 +61,11 @@ namespace KeyMapper.Classes
             // Finally, skip through the user and boot mappings so we can populate the cleared mappings lists
             foreach (var map in savedBootMappings)
             {
-                if (mappings.Contains(map) == false) {
-					clearedBootMappings.Add(map);
-				}
-			}
+                if (mappings.Contains(map) == false)
+                {
+                    clearedBootMappings.Add(map);
+                }
+            }
         }
 
 
@@ -118,18 +119,20 @@ namespace KeyMapper.Classes
 
         public static bool IsRestartRequired()
         {
-            if (clearedBootMappings.Count != 0) {
-				return true;
-			}
+            if (clearedBootMappings.Count != 0)
+            {
+                return true;
+            }
 
-			// Need to iterate through to see if any have changed.
+            // Need to iterate through to see if any have changed.
 
             foreach (var km in mappings)
             {
-                if (savedBootMappings.Contains(km) == false && unsavedMappings.Contains(km) == false) {
-					return true;
-				}
-			}
+                if (savedBootMappings.Contains(km) == false && unsavedMappings.Contains(km) == false)
+                {
+                    return true;
+                }
+            }
 
             return false;
         }
@@ -141,22 +144,25 @@ namespace KeyMapper.Classes
 
             var map = RegistryProvider.GetScanCodeMapFromRegistry(MapLocation.KeyMapperVistaMappingsCache);
 
-            if (map == null) {
-				return false;
-			}
-
-			var maps = GetMappingsFromScanCodeMap(map);
-
-            if (maps.Count != mappings.Count) {
-				return true;
-			}
-
-			foreach (var km in maps)
+            if (map == null)
             {
-                if (mappings.Contains(km) == false) {
-					return true;
-				}
-			}
+                return false;
+            }
+
+            var maps = GetMappingsFromScanCodeMap(map);
+
+            if (maps.Count != mappings.Count)
+            {
+                return true;
+            }
+
+            foreach (var km in maps)
+            {
+                if (mappings.Contains(km) == false)
+                {
+                    return true;
+                }
+            }
 
             return false;
         }
@@ -168,11 +174,12 @@ namespace KeyMapper.Classes
 
         public static bool IsMappingPending(KeyMapping map, MappingFilter filter = MappingFilter.Boot)
         {
-            if (unsavedMappings.Contains(map)) {
-				return false;
-			}
+            if (unsavedMappings.Contains(map))
+            {
+                return false;
+            }
 
-			// Did this mapping exist at boot or logon time?
+            // Did this mapping exist at boot or logon time?
             switch (filter)
             {
                 case MappingFilter.ClearedBoot:
@@ -189,10 +196,11 @@ namespace KeyMapper.Classes
         {
             foreach (var mapping in currentFilteredMappings)
             {
-                if (mapping.From.ScanCode == scanCode && mapping.From.Extended == extended) {
-					return mapping;
-				}
-			}
+                if (mapping.From.ScanCode == scanCode && mapping.From.Extended == extended)
+                {
+                    return mapping;
+                }
+            }
 
             return GetEmptyMapping(new Key(scanCode, extended));
         }
@@ -367,10 +375,11 @@ namespace KeyMapper.Classes
 
             string filename;
 
-            if (useTempFile) {
-				filename = Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
-			}
-			else
+            if (useTempFile)
+            {
+                filename = Path.GetTempPath() + Path.GetRandomFileName() + ".reg";
+            }
+            else
             {
                 var fd = new SaveFileDialog
                 {
@@ -378,7 +387,7 @@ namespace KeyMapper.Classes
                     DefaultExt = "reg",
                     Filter = "Registry files (*.reg)|*.reg",
                     InitialDirectory =
-                                     Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                        Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
                     OverwritePrompt = true,
                     FileName = "Key Mappings",
                     AutoUpgradeEnabled = true
@@ -414,10 +423,11 @@ namespace KeyMapper.Classes
 
                 sw.WriteLine();
 
-                if (bootMappingCount > 0) {
-					sw.WriteLine();
-				}
-			}
+                if (bootMappingCount > 0)
+                {
+                    sw.WriteLine();
+                }
+            }
 
             return filename;
         }
@@ -427,10 +437,11 @@ namespace KeyMapper.Classes
             for (int i = 0; i < bytemappings.GetLength(0); i++)
             {
                 sw.Write(bytemappings[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char)48));
-                if (i < bytemappings.GetLength(0) - 1) {
-					sw.Write(",");
-				}
-			}
+                if (i < bytemappings.GetLength(0) - 1)
+                {
+                    sw.Write(",");
+                }
+            }
         }
 
         private static void RaiseMappingsChangedEvent()
@@ -464,20 +475,21 @@ namespace KeyMapper.Classes
                 string action = IsDisabledMapping(map) ? "disable " : "remap ";
 
                 string warning = "You are attempting to " + action + map.From.Name +
-                                 " which is required for CTRL-ALT-DELETE." + (char)13 +
-                                 "If you continue you may not be able to log on" +
-                                 " to your PC.";
+                    " which is required for CTRL-ALT-DELETE." + (char)13 +
+                    "If you continue you may not be able to log on" +
+                    " to your PC.";
 
                 string question = "Are you really sure you want to " + action + "this key?";
 
 
                 var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
-                                                                  TaskDialogButtons.Yes | TaskDialogButtons.No,
-                                                                  TaskDialogIcon.Question);
-                if (dr != TaskDialogResult.Yes) {
-					return false;
-				}
-			}
+                    TaskDialogButtons.Yes | TaskDialogButtons.No,
+                    TaskDialogIcon.Question);
+                if (dr != TaskDialogResult.Yes)
+                {
+                    return false;
+                }
+            }
 
             // If user is remapping Pause, then suggest they will want to disable Num Lock as well.
 
@@ -489,53 +501,59 @@ namespace KeyMapper.Classes
                 bool numLockIsDisabled = false;
                 bool numLockIsMapped = false;
 
-                foreach (var km in mappings) {
-					if (km.From.ScanCode == 69)
-					{
-						if (IsDisabledMapping(km)) {
-							numLockIsDisabled = true;
-						}
-						else {
-							numLockIsMapped = true;
-						}
-					}
-				}
+                foreach (var km in mappings)
+                {
+                    if (km.From.ScanCode == 69)
+                    {
+                        if (IsDisabledMapping(km))
+                        {
+                            numLockIsDisabled = true;
+                        }
+                        else
+                        {
+                            numLockIsMapped = true;
+                        }
+                    }
+                }
 
-				if (numLockIsDisabled == false)
+                if (numLockIsDisabled == false)
                 {
                     string warning = "If you remap Pause, the Num Lock key will be disabled" +
-                                     (numLockIsMapped
-                                          ? ((char)13 + "and your existing Num Lock mapping will be removed.")
-                                          : ".");
+                        (numLockIsMapped
+                            ? ((char)13 + "and your existing Num Lock mapping will be removed.")
+                            : ".");
 
                     const string question = "Do you still want to remap Pause?";
 
 
                     var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
-                                                                      TaskDialogButtons.Yes | TaskDialogButtons.No,
-                                                                      TaskDialogIcon.Question);
-                    if (dr != TaskDialogResult.Yes) {
-						return false;
-					}
+                        TaskDialogButtons.Yes | TaskDialogButtons.No,
+                        TaskDialogIcon.Question);
+                    if (dr != TaskDialogResult.Yes)
+                    {
+                        return false;
+                    }
 
-					disableNumLock = true;
+                    disableNumLock = true;
                 }
             }
 
-            if (noStackNoEventRaised == false) {
-				PushMappingsOntoUndoStack();
-			}
+            if (noStackNoEventRaised == false)
+            {
+                PushMappingsOntoUndoStack();
+            }
 
-			// Check for any existing mappings for this key
+            // Check for any existing mappings for this key
             // if they exist, this mapping needs to replace them.
 
             var existingMap = GetKeyMapping(map.From.ScanCode, map.From.Extended);
 
-            if (existingMap.IsEmpty() == false) {
-				mappings.Remove(existingMap);
-			}
+            if (existingMap.IsEmpty() == false)
+            {
+                mappings.Remove(existingMap);
+            }
 
-			mappings.Add(map);
+            mappings.Add(map);
 
             if (disableNumLock)
             {
@@ -543,20 +561,22 @@ namespace KeyMapper.Classes
                 AddMapping(nl, true);
             }
 
-            if (noStackNoEventRaised == false) {
-				RaiseMappingsChangedEvent();
-			}
+            if (noStackNoEventRaised == false)
+            {
+                RaiseMappingsChangedEvent();
+            }
 
-			return true;
+            return true;
         }
 
         public static void DeleteMapping(KeyMapping map)
         {
-            if (!map.IsValid()) {
-				throw new ArgumentException("Can't delete an invalid map");
-			}
+            if (!map.IsValid())
+            {
+                throw new ArgumentException("Can't delete an invalid map");
+            }
 
-			PushMappingsOntoUndoStack();
+            PushMappingsOntoUndoStack();
 
             if (mappings.Contains(map))
             {
@@ -584,22 +604,24 @@ namespace KeyMapper.Classes
 
         public static void UndoMappingChange()
         {
-            if (undostack.Count < 1) {
-				return;
-			}
+            if (undostack.Count < 1)
+            {
+                return;
+            }
 
-			PushMappingsOntoRedoStack();
+            PushMappingsOntoRedoStack();
             PopMappingsOffUndoStack();
             RaiseMappingsChangedEvent();
         }
 
         public static void RedoMappingChange()
         {
-            if (redostack.Count < 1) {
-				return;
-			}
+            if (redostack.Count < 1)
+            {
+                return;
+            }
 
-			// To 'redo', the latest entry on the redo stack is popped into current members
+            // To 'redo', the latest entry on the redo stack is popped into current members
             // which is itself popped onto the undo stack.
             PushMappingsOntoUndoStack();
             PopMappingsOffRedoStack();
@@ -617,11 +639,12 @@ namespace KeyMapper.Classes
             // How many mappings are there?
             // (Make sure there are at least 8 bytes in the array)
 
-            if (length > 8) {
-				count = map[8] - 1;
-			}
+            if (length > 8)
+            {
+                count = map[8] - 1;
+            }
 
-			if (count == 0)
+            if (count == 0)
             {
                 return maps;
             }
@@ -652,8 +675,8 @@ namespace KeyMapper.Classes
                         maps.Add(mapping);
                     }
                     else
-                    // Just ignore it and hope it goes away.
-                    // A manually added - or garbled - entry could be invalid.
+                        // Just ignore it and hope it goes away.
+                        // A manually added - or garbled - entry could be invalid.
                     {
                     }
                 }
@@ -675,11 +698,12 @@ namespace KeyMapper.Classes
 
             var map = RegistryProvider.GetScanCodeMapFromRegistry(location);
 
-            if (map != null) {
-				mappings = GetMappingsFromScanCodeMap(map);
-			}
+            if (map != null)
+            {
+                mappings = GetMappingsFromScanCodeMap(map);
+            }
 
-			switch (location)
+            switch (location)
             {
                 case MapLocation.LocalMachineKeyboardLayout:
                     MappingsManager.mappings = mappings;

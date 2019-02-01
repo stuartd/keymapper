@@ -11,7 +11,7 @@ namespace KeyMapper.Classes
         public static event EventHandler<EventArgs> ColoursChanged;
         private static bool loaded;
 
-        private static readonly Dictionary<ButtonEffect, UserColourSetting> settings 
+        private static readonly Dictionary<ButtonEffect, UserColourSetting> settings
             = new Dictionary<ButtonEffect, UserColourSetting>();
 
         static UserColourSettingManager()
@@ -39,11 +39,12 @@ namespace KeyMapper.Classes
 
             var reg = Registry.CurrentUser.CreateSubKey(key + @"\UserColours\" + subkey);
 
-            if (reg == null) {
-				return;
-			}
+            if (reg == null)
+            {
+                return;
+            }
 
-			reg.SetValue("FontColour", FontColour);
+            reg.SetValue("FontColour", FontColour);
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
@@ -74,11 +75,12 @@ namespace KeyMapper.Classes
                 loaded = true;
             }
 
-            if (settings.ContainsKey(effect)) {
-				return settings[effect];
-			}
+            if (settings.ContainsKey(effect))
+            {
+                return settings[effect];
+            }
 
-			return null;
+            return null;
         }
 
 
@@ -91,11 +93,11 @@ namespace KeyMapper.Classes
 
             var reg = Registry.CurrentUser.OpenSubKey(subkey);
             if (reg == null) // No settings have been defined for this effect
-			{
-				return null;
-			}
+            {
+                return null;
+            }
 
-			var setting = new UserColourSetting();
+            var setting = new UserColourSetting();
 
             // User may have changed type of FontColour
             // Using nullable int as any possible integer value could be a valid 
@@ -104,14 +106,16 @@ namespace KeyMapper.Classes
             int? fontColourArgb;
 
             var value = reg.GetValue("FontColour");
-            if (value == null || reg.GetValueKind("FontColour") != RegistryValueKind.DWord) {
-				fontColourArgb = Color.Black.ToArgb();
-			}
-			else {
-				fontColourArgb = (int?)value;
-			}
+            if (value == null || reg.GetValueKind("FontColour") != RegistryValueKind.DWord)
+            {
+                fontColourArgb = Color.Black.ToArgb();
+            }
+            else
+            {
+                fontColourArgb = (int?)value;
+            }
 
-			setting.FontColour = Color.FromArgb((int)fontColourArgb);
+            setting.FontColour = Color.FromArgb((int)fontColourArgb);
 
             var cm = new ColorMatrix();
 

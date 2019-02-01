@@ -18,12 +18,12 @@ namespace KeyMapper.Providers
                     valueName = "ScanCode Map";
                     break;
 
-              case MapLocation.KeyMapperLocalMachineKeyboardLayout:
+                case MapLocation.KeyMapperLocalMachineKeyboardLayout:
                     keyName = AppController.ApplicationRegistryKeyName;
                     valueName = "BootMaps";
                     break;
 
-              case MapLocation.KeyMapperVistaMappingsCache:
+                case MapLocation.KeyMapperVistaMappingsCache:
                     keyName = AppController.ApplicationRegistryKeyName;
                     valueName = "VistaBootCache";
                     break;

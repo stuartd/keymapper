@@ -264,11 +264,12 @@ namespace KeyMapper.Forms
 
             // Need to set the exact width of the row.
             int width = (int)(14.7F * (keySize + paddingWidth));
-            if (width % 2 != 0) {
-				width += 1;
-			}
+            if (width % 2 != 0)
+            {
+                width += 1;
+            }
 
-			foreach (var row in Rows)
+            foreach (var row in Rows)
             {
                 foreach (var key in row.Keys)
                 {
@@ -325,7 +326,7 @@ namespace KeyMapper.Forms
                             int stretch = (int)(keywidth - (buttonwidth * buttonScale));
 
                             DrawKey(key.ScanCode, key.Extended, ref left, top, key.Button,
-                               stretch, key.VerticalStretch * paddingWidth);
+                                stretch, key.VerticalStretch * paddingWidth);
                         }
 
                         left += key.RightPadding * paddingWidth;
@@ -353,11 +354,12 @@ namespace KeyMapper.Forms
 
             string toolTipText = box.Map.MappingDescription;
 
-            if (string.IsNullOrEmpty(toolTipText) == false) {
-				FormToolTip.SetToolTip(box, toolTipText);
-			}
+            if (string.IsNullOrEmpty(toolTipText) == false)
+            {
+                FormToolTip.SetToolTip(box, toolTipText);
+            }
 
-			// left is a ref parameter.
+            // left is a ref parameter.
             left += box.Image.Width + paddingWidth; // Width varies eg for double-width blanks
         }
 
@@ -365,19 +367,22 @@ namespace KeyMapper.Forms
         {
             // Need to keep the aspect ratio in the shape of a keyboard. 
 
-            if (WindowState == FormWindowState.Minimized) {
-				return;
-			}
+            if (WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
 
-			float factor;
-            if (keysOnly) {
-				factor = 34.5F;
-			}
-			else {
-				factor = hasNumberPad ? 43F : 36F;
-			}
+            float factor;
+            if (keysOnly)
+            {
+                factor = 34.5F;
+            }
+            else
+            {
+                factor = hasNumberPad ? 43F : 36F;
+            }
 
-			SetClientSizeCore(ClientSize.Width, StatusBar.Height + menu.Height +
+            SetClientSizeCore(ClientSize.Width, StatusBar.Height + menu.Height +
                 (int)(ClientSize.Width * (12F / (factor))));
 
             menu.Width = ClientSize.Width;
@@ -622,11 +627,12 @@ namespace KeyMapper.Forms
 
         private void KeyDoubleClick(object sender, EventArgs e)
         {
-            if (!(sender is KeyPictureBox box)) {
-				return;
-			}
+            if (!(sender is KeyPictureBox box))
+            {
+                return;
+            }
 
-			FormsManager.ShowEditMappingForm(box.Map, false);
+            FormsManager.ShowEditMappingForm(box.Map, false);
         }
 
         private void KeyboardFormClosed(object sender, FormClosedEventArgs e)
@@ -648,10 +654,11 @@ namespace KeyMapper.Forms
 
         private void KeyboardFormKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Escape) {
-				cancelSlideshow = true;
-			}
-		}
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                cancelSlideshow = true;
+            }
+        }
 
         private void OnMappingsChanged(object sender, EventArgs e)
         {
@@ -699,11 +706,12 @@ namespace KeyMapper.Forms
                         break;
                     case (int)KeyboardHelper.ToggleKey.ScrollLock:
                         isScrollLockOn = !isScrollLockOn;
-                        if (isScrollLockOn != IsKeyLocked(Keys.Scroll)) {
-							SetToggleMenuButtonStates();
-						}
+                        if (isScrollLockOn != IsKeyLocked(Keys.Scroll))
+                        {
+                            SetToggleMenuButtonStates();
+                        }
 
-						break;
+                        break;
                 }
 
             }
@@ -863,15 +871,16 @@ namespace KeyMapper.Forms
             // This sets the value which applies before any user has logged on.
 
             string value =
-                    ((isCapsLockOn ? 1 : 0) + (isNumLockOn ? 2 : 0) + (isScrollLockOn ? 4 : 0)).ToString(CultureInfo.InvariantCulture);
+                ((isCapsLockOn ? 1 : 0) + (isNumLockOn ? 2 : 0) + (isScrollLockOn ? 4 : 0)).ToString(CultureInfo.InvariantCulture);
 
             if (AppController.UserCanWriteBootMappings == false)
             {
-                if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the default toggle keys") == false) {
-					return;
-				}
+                if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the default toggle keys") == false)
+                {
+                    return;
+                }
 
-				AppController.WriteRegistryEntryVista(
+                AppController.WriteRegistryEntryVista(
                     RegistryHive.Users, @".DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", value);
             }
             else
@@ -990,4 +999,3 @@ namespace KeyMapper.Forms
     }
 
 }
-

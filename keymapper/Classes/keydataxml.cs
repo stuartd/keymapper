@@ -22,7 +22,7 @@ namespace KeyMapper.Classes
         public KeyDataXml()
         {
             _currentassembly = System.Reflection.Assembly.GetExecutingAssembly();
-         
+
             // Initialise our navigator from the embedded XML keys file.
             using (var xmlstream = GetXMLDocumentAsStream(_keyfilename))
             {
@@ -50,11 +50,12 @@ namespace KeyMapper.Classes
 
         public KeyboardLayoutType GetKeyboardLayoutType(string locale)
         {
-            if (string.IsNullOrEmpty(locale)) {
-				return KeyboardLayoutType.US;
-			}
+            if (string.IsNullOrEmpty(locale))
+            {
+                return KeyboardLayoutType.US;
+            }
 
-			// Get the layout type - US, European etc. The locale in the XML file must be upper case!
+            // Get the layout type - US, European etc. The locale in the XML file must be upper case!
             string expression = @"/keyboards/keyboard[locale='" + locale.ToUpper(CultureInfo.InvariantCulture) + "']";
 
             XPathNodeIterator iterator;
@@ -112,10 +113,11 @@ namespace KeyMapper.Classes
                     foreach (XPathNavigator node in iterator)
                     {
                         string group = GetElementValue("group", node);
-                        if (groups.Contains(group) == false) {
-							groups.Add(@group);
-						}
-					}
+                        if (groups.Contains(group) == false)
+                        {
+                            groups.Add(@group);
+                        }
+                    }
 
                     break;
 
@@ -134,10 +136,11 @@ namespace KeyMapper.Classes
                     foreach (XPathNavigator node in iterator)
                     {
                         string group = GetElementValue("group", node);
-                        if (groups.Contains(group) == false) {
-							groups.Add(@group);
-						}
-					}
+                        if (groups.Contains(group) == false)
+                        {
+                            groups.Add(@group);
+                        }
+                    }
 
                     break;
 
@@ -150,28 +153,31 @@ namespace KeyMapper.Classes
         public List<string> GetSortedGroupList(int threshold)
         {
             var groups = GetGroupList(threshold);
-            
+
             var sortedGroups = new List<string>(groups);
             sortedGroups.Sort();
 
             return sortedGroups;
         }
-        
+
         public Dictionary<string, int> GetGroupMembers(string groupname, int threshold)
         {
 
             // Enumerate group.
             string queryExpression;
 
-            if (groupname == AllKeysGroupName) {
-				queryExpression = @"/KeycodeData/keycodes[group!='Unmappable Keys']";
-			}
-			else if (groupname == _commonlyUsedKeysGroupName) {
-				queryExpression = @"/KeycodeData/keycodes[useful>='2'" + "]";
-			}
-			else {
-				queryExpression = @"/KeycodeData/keycodes[group='" + groupname + "' and useful>='" + threshold.ToString(CultureInfo.InvariantCulture.NumberFormat) + "']";
-			}
+            if (groupname == AllKeysGroupName)
+            {
+                queryExpression = @"/KeycodeData/keycodes[group!='Unmappable Keys']";
+            }
+            else if (groupname == _commonlyUsedKeysGroupName)
+            {
+                queryExpression = @"/KeycodeData/keycodes[useful>='2'" + "]";
+            }
+            else
+            {
+                queryExpression = @"/KeycodeData/keycodes[group='" + groupname + "' and useful>='" + threshold.ToString(CultureInfo.InvariantCulture.NumberFormat) + "']";
+            }
 
             var iterator = _navigator.Select(queryExpression);
 
@@ -187,13 +193,14 @@ namespace KeyMapper.Classes
                 string name = AppController.GetKeyName(scanCode, extended);
 
                 if (dir.ContainsKey(name)) // ArgumentException results when trying to add duplicate key..
-				{
-					Console.WriteLine("Duplicate name error: Name {0} Existing ScanCode : {1} ScanCode: {2}", name, dir[name], scanCode);
-				}
-				else {
-					dir.Add(name, KeyHasher.GetHashFromKeyData(scanCode, extended));
-				}
-			}
+                {
+                    Console.WriteLine("Duplicate name error: Name {0} Existing ScanCode : {1} ScanCode: {2}", name, dir[name], scanCode);
+                }
+                else
+                {
+                    dir.Add(name, KeyHasher.GetHashFromKeyData(scanCode, extended));
+                }
+            }
 
             return dir;
         }

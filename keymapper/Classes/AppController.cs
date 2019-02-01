@@ -124,11 +124,12 @@ namespace KeyMapper.Classes
             while (true)
             {
                 // Euclidean algorithm
-                if (value2 == 0) {
-					return value1;
-				}
+                if (value2 == 0)
+                {
+                    return value1;
+                }
 
-				var value3 = value1;
+                var value3 = value1;
                 value1 = value2;
                 value2 = value3 % value2;
             }
@@ -137,12 +138,12 @@ namespace KeyMapper.Classes
         public static bool ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater(string innerText)
         {
             string text = "In order to write " + innerText + ", Key Mapper needs to add to " +
-                          "the protected section of your computer's registry. You may need to approve this action " +
-                          "which will be performed by your Registry Editor.";
+                "the protected section of your computer's registry. You may need to approve this action " +
+                "which will be performed by your Registry Editor.";
 
             var result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
-                                                                  TaskDialogButtons.Yes | TaskDialogButtons.No,
-                                                                  TaskDialogIcon.SecurityShield);
+                TaskDialogButtons.Yes | TaskDialogButtons.No,
+                TaskDialogIcon.SecurityShield);
 
             return result == TaskDialogResult.Yes;
         }
@@ -158,10 +159,10 @@ namespace KeyMapper.Classes
                 var process = new Process
                 {
                     StartInfo =
-                                          {
-                                              FileName = "regedit.exe",
-                                              Arguments = command
-                                          }
+                    {
+                        FileName = "regedit.exe",
+                        Arguments = command
+                    }
                 };
                 process.Start();
                 process.WaitForExit();
@@ -243,27 +244,30 @@ namespace KeyMapper.Classes
             // Beware bad data..
             try
             {
-                var terminators = new[] { "\r\n" };
+                var terminators = new[] {"\r\n"};
 
                 var layouts = customLayouts.Split(terminators, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string nameValuePair in layouts)
                 {
-                    if (string.IsNullOrEmpty(nameValuePair)) {
-						continue;
-					}
+                    if (string.IsNullOrEmpty(nameValuePair))
+                    {
+                        continue;
+                    }
 
-					int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
-                    if (index < 0) {
-						continue;
-					}
+                    int index = nameValuePair.IndexOf("=", StringComparison.Ordinal);
+                    if (index < 0)
+                    {
+                        continue;
+                    }
 
-					string locale = nameValuePair.Substring(0, index);
+                    string locale = nameValuePair.Substring(0, index);
                     int value;
-                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false) {
-						continue;
-					}
+                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false)
+                    {
+                        continue;
+                    }
 
-					var keyboardType = (KeyboardLayoutType)value;
+                    var keyboardType = (KeyboardLayoutType)value;
 
                     customKeyboardLayouts.Add(locale, keyboardType);
                 }
@@ -296,12 +300,14 @@ namespace KeyMapper.Classes
 
             using (var sw = new StreamWriter(path, false))
             {
-                foreach (DictionaryEntry de in customKeyboardLayouts) {
-					if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString())) {
-						sw.WriteLine(de.Key + "=" + (int)de.Value);
-					}
-				}
-			}
+                foreach (DictionaryEntry de in customKeyboardLayouts)
+                {
+                    if ((int)de.Value != (int)kd.GetKeyboardLayoutType(de.Key.ToString()))
+                    {
+                        sw.WriteLine(de.Key + "=" + (int)de.Value);
+                    }
+                }
+            }
         }
 
         public static void Close()
@@ -311,11 +317,12 @@ namespace KeyMapper.Classes
             KeyboardHelper.UnloadLayout();
 
             if (UserCanWriteBootMappings == false
-                && (MappingsManager.VistaMappingsNeedSaving())) {
-				MappingsManager.SaveBootMappingsVista();
-			}
+                && (MappingsManager.VistaMappingsNeedSaving()))
+            {
+                MappingsManager.SaveBootMappingsVista();
+            }
 
-			LogProvider.CloseConsoleOutput();
+            LogProvider.CloseConsoleOutput();
 
             foreach (string filepath in tempFiles)
             {
@@ -344,11 +351,12 @@ namespace KeyMapper.Classes
                 }
             }
 
-            if (localizable == false || (bool)arialUnicodeMSInstalled) {
-				return defaultKeyFont; // Don't want the static keys to change font.
-			}
+            if (localizable == false || (bool)arialUnicodeMSInstalled)
+            {
+                return defaultKeyFont; // Don't want the static keys to change font.
+            }
 
-			// Default font for keys is Lucida Sans Unicode as it's on every version of Windows
+            // Default font for keys is Lucida Sans Unicode as it's on every version of Windows
 
             // Lucida Sans Unicode simply doesn't contain the characters for Bengali & Malayalam
             // Different versions of Windows have differernt cultures installed 
@@ -540,10 +548,11 @@ namespace KeyMapper.Classes
 
             if ((locale != currentLocale))
             {
-                if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale)) {
-					KeyboardLayout = (KeyboardLayoutType)customKeyboardLayouts[locale];
-				}
-				else
+                if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale))
+                {
+                    KeyboardLayout = (KeyboardLayoutType)customKeyboardLayouts[locale];
+                }
+                else
                 {
                     // Ask the keydata interface what kind of layout this locale has - US, Euro etc.
                     KeyboardLayout = new KeyDataXml().GetKeyboardLayoutType(locale);
@@ -571,10 +580,11 @@ namespace KeyMapper.Classes
                 finally
                 {
                     // Set it back (if different)
-                    if (currentLocale != currentkeyboardlocale) {
-						KeyboardHelper.SetLocale(currentkeyboardlocale);
-					}
-				}
+                    if (currentLocale != currentkeyboardlocale)
+                    {
+                        KeyboardHelper.SetLocale(currentkeyboardlocale);
+                    }
+                }
             }
         }
 
@@ -587,11 +597,12 @@ namespace KeyMapper.Classes
         {
             appMutex = new AppMutex();
             bool gotMutex = appMutex.GetMutex();
-            if (gotMutex == false) {
-				SwitchToExistingInstance();
-			}
+            if (gotMutex == false)
+            {
+                SwitchToExistingInstance();
+            }
 
-			return gotMutex;
+            return gotMutex;
         }
 
         private static void SwitchToExistingInstance()

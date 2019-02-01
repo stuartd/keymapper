@@ -53,7 +53,7 @@ namespace KeyMapper.Classes
                     // Need to also know if it's Current or Pending
 
                     bool pending = MappingsManager.IsMappingPending(this);
-               
+
                     disabled = MappingsManager.IsDisabledMapping(this);
 
                     description = From.Name + (pending ? " will be" : " is");
@@ -83,9 +83,9 @@ namespace KeyMapper.Classes
             // (Key has to able to be mapped to itself so user mappings can override boot mappings)
 
             return (!IsEmpty()
-                  && From.ScanCode > 0
-                  && To.ScanCode > -1
-            );
+                    && From.ScanCode > 0
+                    && To.ScanCode > -1
+                );
 
         }
 
@@ -96,11 +96,12 @@ namespace KeyMapper.Classes
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType()) {
-				return false;
-			}
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
 
-			return this == (KeyMapping)obj;
+            return this == (KeyMapping)obj;
         }
 
         public static bool operator !=(KeyMapping map1, KeyMapping map2)
@@ -109,11 +110,8 @@ namespace KeyMapper.Classes
         }
 
         public override int GetHashCode()
-		{
-			return KeyHasher.GetHashFromKey(From) * 31 + KeyHasher.GetHashFromKey(To);
-		}
+        {
+            return KeyHasher.GetHashFromKey(From) * 31 + KeyHasher.GetHashFromKey(To);
+        }
     }
 }
-
-
-

@@ -4,6 +4,7 @@
     {
         LocalMachineKeyboardLayout,
         KeyMapperLocalMachineKeyboardLayout,
+
         // Err... WTF is this for?
         KeyMapperVistaMappingsCache
     }

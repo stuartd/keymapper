@@ -22,7 +22,8 @@ namespace KeyMapper.Classes
 
         public Key(int scanCode, int extended)
             : this(scanCode, extended, AppController.GetKeyName(scanCode, extended))
-        { }
+        {
+        }
 
 
         public override string ToString()
@@ -38,17 +39,18 @@ namespace KeyMapper.Classes
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType()) {
-				return false;
-			}
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
 
-			return this == (Key)obj;
+            return this == (Key)obj;
         }
 
         public override int GetHashCode()
-		{
-			return KeyHasher.GetHashFromKey(this);
-		}
+        {
+            return KeyHasher.GetHashFromKey(this);
+        }
 
         public static bool operator !=(Key key1, Key key2)
         {
@@ -56,4 +58,3 @@ namespace KeyMapper.Classes
         }
     }
 }
-

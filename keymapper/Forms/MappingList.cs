@@ -15,7 +15,7 @@ namespace KeyMapper.Forms
         private const int minimumWidth = 300;
 
         /// <remarks>Leaving the Type column in even though there are only Boot mappings now, </remarks>
-	    public MappingListForm()
+        public MappingListForm()
         {
             //TODO: Look into changing the column header colours as they are much too dark on XP without themes or w2k
             InitializeComponent();
@@ -29,10 +29,11 @@ namespace KeyMapper.Forms
 
             int savedWidth = userSettings.MappingListFormWidth;
 
-            if (savedWidth > minimumWidth) {
-				Width = savedWidth;
-			}
-		}
+            if (savedWidth > minimumWidth)
+            {
+                Width = savedWidth;
+            }
+        }
 
         private void MappingListFormClosing(object sender, FormClosingEventArgs e)
         {
@@ -89,10 +90,11 @@ namespace KeyMapper.Forms
             MinimumSize = new Size(minimumWidth, Size.Height);
 
             // If we didn't have form to start with, set focus back to main form.
-            if (hasFocus == false) {
-				FormsManager.ActivateMainForm();
-			}
-		}
+            if (hasFocus == false)
+            {
+                FormsManager.ActivateMainForm();
+            }
+        }
 
         private void AddRowsToGrid()
         {
@@ -152,30 +154,34 @@ namespace KeyMapper.Forms
 
                 grdMappings.Rows[index].Cells[1].Value = cellvalue;
 
-                if (MappingsManager.IsMappingPending(map, filter)) {
-					grdMappings.Rows[index].Cells[2].Value = "Pending";
-				}
-				else {
-					grdMappings.Rows[index].Cells[2].Value = "Mapped";
-				}
-			}
+                if (MappingsManager.IsMappingPending(map, filter))
+                {
+                    grdMappings.Rows[index].Cells[2].Value = "Pending";
+                }
+                else
+                {
+                    grdMappings.Rows[index].Cells[2].Value = "Mapped";
+                }
+            }
 
         }
 
 
         private void grdMappingsCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex != 3) {
-				return;
-			}
+            if (e.ColumnIndex != 3)
+            {
+                return;
+            }
 
-			int row = e.RowIndex;
+            int row = e.RowIndex;
 
-            if (clearedKeys.Contains(row)) {
-				return; // Shouldn't happen anyway
-			}
+            if (clearedKeys.Contains(row))
+            {
+                return; // Shouldn't happen anyway
+            }
 
-			if (row >= 0)
+            if (row >= 0)
             {
                 var currentRow = grdMappings.Rows[row];
 

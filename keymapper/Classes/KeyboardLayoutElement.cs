@@ -3,7 +3,7 @@ namespace KeyMapper.Classes
     public class KeyboardLayoutElement
     {
         public int ScanCode { get; }
-        
+
         public int Extended { get; }
 
         public BlankButton Button { get; }

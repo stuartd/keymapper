@@ -19,7 +19,7 @@ namespace KeyMapper.Forms
             chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtStartup;
         }
 
-   
+
 
 
         private void HelpFormFormClosed(object sender, FormClosedEventArgs e)
@@ -38,10 +38,11 @@ namespace KeyMapper.Forms
         private void labelFAQClick(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string url = e.Link.LinkData as string;
-            if (string.IsNullOrEmpty(url) == false) {
-				System.Diagnostics.Process.Start(url);
-			}
-		}
+            if (string.IsNullOrEmpty(url) == false)
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+        }
 
 
 

@@ -25,80 +25,77 @@ namespace KeyMapper.Classes
                 return 0; // Otherwise the function opens HKLM (or HKCU) again.
             }
 
-            var hkey = OpenKey(hive, keyName, KEY_QUERY_VALUE);
+            var hKey = OpenKey(hive, keyName, KEY_QUERY_VALUE);
 
-            if (hkey == UIntPtr.Zero)
+            if (hKey == UIntPtr.Zero)
             {
                 return 0; // Didn't open key
             }
 
-            long timestamp;
-
             uint result2 = NativeMethods.RegQueryInfoKey(
-                hkey, IntPtr.Zero,
+                hKey, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
                 IntPtr.Zero, IntPtr.Zero,
-                IntPtr.Zero, out timestamp);
+                IntPtr.Zero, out long keyTimestamp);
 
             if (result2 != 0)
             {
-                timestamp = 0; // Failed, don't return whatever value was supplied.
+                keyTimestamp = 0; // Failed, don't return whatever value was supplied.
             }
 
-            NativeMethods.RegCloseKey(hkey);
+            NativeMethods.RegCloseKey(hKey);
 
-            return timestamp;
+            return keyTimestamp;
         }
 
         public bool CanUserWriteToKey(RegistryHive hive, string keyName)
         {
-            var hkey = OpenKey(hive, keyName, KEY_SET_VALUE);
-            if (hkey == UIntPtr.Zero)
+            var hKey = OpenKey(hive, keyName, KEY_SET_VALUE);
+            if (hKey == UIntPtr.Zero)
             {
                 return false;
             }
 
-            NativeMethods.RegCloseKey(hkey);
+            NativeMethods.RegCloseKey(hKey);
             return true;
         }
 
         private UIntPtr OpenKey(RegistryHive hive, string keyName, int requiredAccess)
         {
-            UIntPtr hiveptr;
-            UIntPtr hkey;
+            UIntPtr hivePointer;
 
             switch (hive)
             {
                 case RegistryHive.ClassesRoot:
-                    hiveptr = (UIntPtr)0x80000000;
+                    hivePointer = (UIntPtr)0x80000000;
                     break;
                 case RegistryHive.CurrentUser:
-                    hiveptr = (UIntPtr)0x80000001;
+                    hivePointer = (UIntPtr)0x80000001;
                     break;
                 case RegistryHive.LocalMachine:
-                    hiveptr = (UIntPtr)0x80000002;
+                    hivePointer = (UIntPtr)0x80000002;
                     break;
                 case RegistryHive.Users:
-                    hiveptr = (UIntPtr)0x80000003;
+                    hivePointer = (UIntPtr)0x80000003;
                     break;
                 case RegistryHive.CurrentConfig:
-                    hiveptr = (UIntPtr)0x80000005;
+                    hivePointer = (UIntPtr)0x80000005;
                     break;
                 default:
                     return UIntPtr.Zero;
             }
 
-            int result = NativeMethods.RegOpenKeyEx(hiveptr, keyName, 0, requiredAccess, out hkey);
+            int result = NativeMethods.RegOpenKeyEx(hivePointer, keyName, 0, requiredAccess, out var hKey);
 
-            if (result == 0) {
-				return hkey;
-			}
+            if (result == 0)
+            {
+                return hKey;
+            }
 
-			return UIntPtr.Zero;
+            return UIntPtr.Zero;
         }
     }
 
 }
-

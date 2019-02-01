@@ -4,7 +4,7 @@ namespace KeyMapper.Classes
 {
     public class KeyMapperKeyPressedEventArgs : EventArgs
     {
-        public KBHookStruct Key { get;}
+        public KBHookStruct Key { get; }
 
         public KeyMapperKeyPressedEventArgs(KBHookStruct key)
         {

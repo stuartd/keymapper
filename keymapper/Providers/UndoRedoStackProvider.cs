@@ -7,6 +7,6 @@ namespace KeyMapper.Providers
 {
     public class UndoRedoStackProvider
     {
-       
+
     }
 }

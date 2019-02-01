@@ -7,32 +7,32 @@ using System.Diagnostics;
 
 namespace KeyMapper.Classes.Deployment
 {
-	[RunInstaller(true)]
-	public class Ngen : Installer
-	{
-		// From http://dotnetperls.com/Content/Ngen-Installer-Class.aspx
-		public override void Install(IDictionary stateSaver)
-		{
-			base.Install(stateSaver);
-		
-			string runtimeStr = RuntimeEnvironment.GetRuntimeDirectory();
-			string ngenStr = Path.Combine(runtimeStr, "ngen.exe");
+    [RunInstaller(true)]
+    public class Ngen : Installer
+    {
+        // From http://dotnetperls.com/Content/Ngen-Installer-Class.aspx
+        public override void Install(IDictionary stateSaver)
+        {
+            base.Install(stateSaver);
 
-			var process = new Process
-			                      {
-			                          StartInfo =
-			                              {
-			                                  FileName = ngenStr
-			                              }
-			                      };
+            string runtimeStr = RuntimeEnvironment.GetRuntimeDirectory();
+            string ngenStr = Path.Combine(runtimeStr, "ngen.exe");
 
-		    string assemblyPath = Context.Parameters["assemblypath"];
+            var process = new Process
+            {
+                StartInfo =
+                {
+                    FileName = ngenStr
+                }
+            };
 
-			process.StartInfo.Arguments = "install \"" + assemblyPath + "\"";
+            string assemblyPath = Context.Parameters["assemblypath"];
 
-			process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			process.Start();
-			process.WaitForExit();
-		}
-	}
+            process.StartInfo.Arguments = "install \"" + assemblyPath + "\"";
+
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.Start();
+            process.WaitForExit();
+        }
+    }
 }

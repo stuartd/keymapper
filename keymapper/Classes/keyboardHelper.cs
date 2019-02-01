@@ -221,11 +221,12 @@ namespace KeyMapper.Classes
             var buffer = new StringBuilder(new string(' ', NativeMethods.KL_NAMELENGTH));
             // GetKeyboardLayoutName puts the current locale into the passed buffer
             int result = NativeMethods.GetKeyboardLayoutName(buffer);
-            if (result == 0) {
-				return null;
-			}
+            if (result == 0)
+            {
+                return null;
+            }
 
-			return buffer.ToString();
+            return buffer.ToString();
         }
 
         public static string GetKeyboardName()
@@ -242,7 +243,7 @@ namespace KeyMapper.Classes
 
             var registry =
                 Registry.LocalMachine.OpenSubKey
-                (@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts");
+                    (@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts");
 
             if (registry == null)
             {

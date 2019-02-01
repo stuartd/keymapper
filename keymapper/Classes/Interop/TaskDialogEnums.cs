@@ -42,4 +42,3 @@ namespace KeyMapper.Classes.Interop
         Close
     }
 }
-

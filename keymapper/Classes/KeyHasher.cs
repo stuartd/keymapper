@@ -4,10 +4,10 @@ namespace KeyMapper.Classes
 {
     public class KeyHasher
     {
-		public static int GetHashFromKey(Key key)
-		{
-			return GetHashFromKeyData(key.ScanCode, key.Extended);
-		}
+        public static int GetHashFromKey(Key key)
+        {
+            return GetHashFromKeyData(key.ScanCode, key.Extended);
+        }
 
         public static int GetHashFromKeyData(int scanCode, int extended)
         {

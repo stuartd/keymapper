@@ -72,13 +72,15 @@ namespace KeyMapper.Controls
                 if (MappingsManager.IsDisabledMapping(Map))
                 {
                     // Disabled
-                    if (MappingsManager.IsMappingPending(Map)) {
-						effect = ButtonEffect.DisabledPending;
-					}
-					else {
-						effect = ButtonEffect.Disabled;
-					}
-				}
+                    if (MappingsManager.IsMappingPending(Map))
+                    {
+                        effect = ButtonEffect.DisabledPending;
+                    }
+                    else
+                    {
+                        effect = ButtonEffect.Disabled;
+                    }
+                }
                 else
                 {
                     // Is this key mapped under the current filter?
@@ -161,10 +163,11 @@ namespace KeyMapper.Controls
                 e.Action = DragAction.Cancel;
                 escapePressed = true;
             }
-            else {
-				escapePressed = false;
-			}
-		}
+            else
+            {
+                escapePressed = false;
+            }
+        }
 
         private void SetDragCursor(Bitmap bmp)
         {
@@ -207,11 +210,12 @@ namespace KeyMapper.Controls
 
         private void KeyPictureBoxMouseMove(object sender, MouseEventArgs e)
         {
-            if (dragbox == Rectangle.Empty || dragbox.Contains(e.X, e.Y) == false) {
-				return;
-			}
+            if (dragbox == Rectangle.Empty || dragbox.Contains(e.X, e.Y) == false)
+            {
+                return;
+            }
 
-			dragbox = Rectangle.Empty;
+            dragbox = Rectangle.Empty;
 
             // Draw self to bitmap, then convert to an icon via a handle
             // both of shich which we must release
@@ -331,11 +335,12 @@ namespace KeyMapper.Controls
                 return;
             }
 
-            if (draggedmap.From == Map.From) {
-				return; // No need to redraw self
-			}
+            if (draggedmap.From == Map.From)
+            {
+                return; // No need to redraw self
+            }
 
-			// Console.WriteLine("Dragover: " + scanCode)
+            // Console.WriteLine("Dragover: " + scanCode)
 
             SetImage(ButtonImages.GetButtonImage
                 (draggedmap.From.ScanCode, draggedmap.From.Extended,
