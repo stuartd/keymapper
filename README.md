@@ -18,7 +18,7 @@ Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
 * * *
 
-~~~[Downloads still available](https://code.google.com/p/keymapper/downloads/list)~~~
+~~[Downloads still available](https://code.google.com/p/keymapper/downloads/list)~~
 
 [Download .exe file](https://github.com/stuartd/keymapper/blob/develop/KeyMapper.exe)
 
