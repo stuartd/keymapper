@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
 using System.IO;
-using System.Text;
 using KeyMapper.Properties;
 
 namespace KeyMapper.Providers

@@ -40,7 +40,7 @@ namespace KeyMapper.Controls
 
             Map = MappingsManager.GetKeyMapping(scanCode, extended);
 
-            mapped = (Map.To.ScanCode != -1);
+            mapped = Map.To.ScanCode != -1;
 
             AllowDrop = true;
 
@@ -198,7 +198,7 @@ namespace KeyMapper.Controls
 
                 // Create a dragbox so we can tell if the mouse moves far enough while down to trigger a drag event
                 var dragSize = SystemInformation.DragSize;
-                dragBox = new Rectangle(new Point(e.X - (dragSize.Width / 2), e.Y - (dragSize.Height / 2)), dragSize);
+                dragBox = new Rectangle(new Point(e.X - dragSize.Width / 2, e.Y - dragSize.Height / 2), dragSize);
             }
         }
 
@@ -288,10 +288,10 @@ namespace KeyMapper.Controls
                     var loc = SystemInformation.WorkingArea.Location;
 
                     outsideForm =
-                        ((MousePosition.X - loc.X) < frm.DesktopBounds.Left) ||
-                        ((MousePosition.X - loc.X) > frm.DesktopBounds.Right) ||
-                        ((MousePosition.Y - loc.Y) < frm.DesktopBounds.Top) ||
-                        ((MousePosition.Y - loc.Y) > frm.DesktopBounds.Bottom);
+                        MousePosition.X - loc.X < frm.DesktopBounds.Left ||
+                        MousePosition.X - loc.X > frm.DesktopBounds.Right ||
+                        MousePosition.Y - loc.Y < frm.DesktopBounds.Top ||
+                        MousePosition.Y - loc.Y > frm.DesktopBounds.Bottom;
 
                 }
             }

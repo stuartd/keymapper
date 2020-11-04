@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using System.IO;
 using System.Reflection;
 
 namespace KeyMapper.Classes
@@ -76,14 +75,14 @@ namespace KeyMapper.Classes
             }
 
             // Even numbers only in case we want to stretch.
-            int newWidth = (int)Math.Round((bmp.Width * scale), 0);
+            int newWidth = (int)Math.Round(bmp.Width * scale, 0);
 
             if (forceEven && newWidth % 2 == 1)
             {
                 newWidth += 1;
             }
 
-            int newHeight = (int)Math.Round((bmp.Height * scale), 0);
+            int newHeight = (int)Math.Round(bmp.Height * scale, 0);
 
             if (forceEven && newHeight % 2 == 1)
             {
@@ -180,7 +179,7 @@ namespace KeyMapper.Classes
             {
                 // IF this image needs to be stretched, force the height and width to even numbers
                 // (This only seems to affect height?)
-                bool forceEvenNumber = (verticalStretch != 0);
+                bool forceEvenNumber = verticalStretch != 0;
                 bmp = ResizeBitmap(GetBitmap(button), scale, forceEvenNumber);
                 bmp = StretchBitmap(bmp, horizontalStretch, verticalStretch);
                 // _lastButton = BlankButton.None;
@@ -324,9 +323,9 @@ namespace KeyMapper.Classes
                 SizeF stringSize;
                 stringSize = g.MeasureString(longestWord, font);
 
-                if (stringSize.Width > (bmp.Width * 0.8F))
+                if (stringSize.Width > bmp.Width * 0.8F)
                 {
-                    fontSize *= ((bmp.Width * 0.8F) / stringSize.Width);
+                    fontSize *= bmp.Width * 0.8F / stringSize.Width;
                 }
             }
 
@@ -338,8 +337,8 @@ namespace KeyMapper.Classes
         private static Bitmap WriteCaption(Bitmap bmp, string caption, bool overlong, bool localizable, Color fontColour)
         {
             // Set the sizes for 2 and 3 or more letters.
-            float fontSizeDouble = (FontSize.BaseFontSize * 0.75F);
-            float fontSizeMulti = (FontSize.BaseFontSize * 0.575F);
+            float fontSizeDouble = FontSize.BaseFontSize * 0.75F;
+            float fontSizeMulti = FontSize.BaseFontSize * 0.575F;
 
             int nameLength = caption.Length;
 
@@ -410,7 +409,7 @@ namespace KeyMapper.Classes
                             DrawCaptionLine(bmp, words[0], fontSizeMulti, localizable, fontColour);
                             break;
                         case 2:
-                            if ((words[1].StartsWith("(", StringComparison.Ordinal) && words[1].EndsWith(")", StringComparison.Ordinal)))
+                            if (words[1].StartsWith("(", StringComparison.Ordinal) && words[1].EndsWith(")", StringComparison.Ordinal))
                             {
                                 DrawCaptionLine(bmp, words[0], fontSizeMulti, TextPosition.Middle, localizable, fontColour);
                             }
@@ -476,7 +475,7 @@ namespace KeyMapper.Classes
                 // This only takes tiny amount of time - 14ms for 10000 iterations..
                 var stringSize = g.MeasureString(caption, font);
 
-                int left = (bmp.Width / 2) - (int)(stringSize.Width / 2);
+                int left = bmp.Width / 2 - (int)(stringSize.Width / 2);
                 int top = 0;
 
                 // Vertical centre justify within button and row:
@@ -658,7 +657,6 @@ namespace KeyMapper.Classes
 
     public enum BlankButton
     {
-        None = -1,
         Blank = 0,
         TallBlank = 1,
         MediumWideBlank = 2,

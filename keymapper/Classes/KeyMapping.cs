@@ -72,7 +72,7 @@ namespace KeyMapper.Classes
         // This will match anything created by New KeyMapping() with no parameters
         public bool IsEmpty()
         {
-            return (From.ScanCode == 0 && To.ScanCode == 0 && From.Extended == 0 && To.Extended == 0);
+            return From.ScanCode == 0 && To.ScanCode == 0 && From.Extended == 0 && To.Extended == 0;
         }
 
         public bool IsValid()
@@ -80,18 +80,15 @@ namespace KeyMapper.Classes
             // To be a valid mapping, From.ScanCode must be greater than zero (to be a key)
             // and To.ScanCode must be at least zero (either disabled or a key)
 
-            // (Key has to able to be mapped to itself so user mappings can override boot mappings)
-
-            return (!IsEmpty()
-                    && From.ScanCode > 0
-                    && To.ScanCode > -1
-                );
+            return !IsEmpty()
+                && From.ScanCode > 0
+                && To.ScanCode > -1;
 
         }
 
         public static bool operator ==(KeyMapping map1, KeyMapping map2)
         {
-            return (map1.From == map2.From && map1.To == map2.To);
+            return map1.From == map2.From && map1.To == map2.To;
         }
 
         public override bool Equals(object obj)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace KeyMapper.Classes
 {
@@ -20,10 +19,5 @@ namespace KeyMapper.Classes
         }
 
         public int Count => Mappings.Count;
-
-        public void Clear()
-        {
-            Mappings.Clear();
-        }
     }
 }

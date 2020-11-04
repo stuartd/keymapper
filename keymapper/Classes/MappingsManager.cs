@@ -25,7 +25,7 @@ namespace KeyMapper.Classes
         private static readonly Collection<KeyMapping> currentFilteredMappings = new Collection<KeyMapping>();
 
         // Need to maintain a collection of mappings which have been cleared
-        // (ie which existed at boot or logon but don't exist now)
+        // (ie which existed at boot but don't exist now)
         private static readonly Collection<KeyMapping> clearedMappings = new Collection<KeyMapping>();
 
         // If user has existing mappings on first run, store them so 
@@ -139,7 +139,7 @@ namespace KeyMapper.Classes
 
         public static bool MappingsNeedSaving()
         {
-            // Check whether the current boot mappings and the proposed boot mappings 
+            // Check whether the current mappings and the proposed mappings 
             // are the same: if not, they need saving
 
             var map = RegistryProvider.GetScanCodeMapFromRegistry(MapLocation.KeyMapperMappingsCache);
@@ -179,14 +179,14 @@ namespace KeyMapper.Classes
                 return false;
             }
 
-            // Did this mapping exist at boot or logon time?
+            // Did this mapping exist at boot time?
             switch (filter)
             {
                 case MappingFilter.Cleared:
                     return true; // A cleared mapping is by definition pending
 
                 case MappingFilter.Set:
-                    return !(savedMappings.Contains(map));
+                    return !savedMappings.Contains(map);
             }
 
             return true;
@@ -225,15 +225,15 @@ namespace KeyMapper.Classes
 
         public static bool IsEmptyMapping(KeyMapping map)
         {
-            return (map.To.ScanCode == -1 && map.To.Extended == -1);
+            return map.To.ScanCode == -1 && map.To.Extended == -1;
         }
 
         public static bool IsDisabledMapping(KeyMapping map)
         {
-            return (map.To.ScanCode == 0 && map.To.Extended == 0);
+            return map.To.ScanCode == 0 && map.To.Extended == 0;
         }
 
-        public static void SaveBootMappingsVista()
+        public static void SaveMappingsToFile()
         {
             // Well, we need to write to HKLM under Vista or later.
             // Create a registry file and run it, user will have to allow regedit to run.
@@ -325,7 +325,7 @@ namespace KeyMapper.Classes
         {
             // Turn mappings into a byte[] 
             int count = maps.Count;
-            int size = (16 + (count * 4));
+            int size = 16 + count * 4;
 
             // Check they are all zero.
 
@@ -339,7 +339,7 @@ namespace KeyMapper.Classes
             for (int i = 0; i < count; i++)
             {
                 // Make sure we don't extend beyond array bounds
-                if (size <= (start + (i * 4) + 3))
+                if (size <= start + i * 4 + 3)
                 {
                     break;
                 }
@@ -347,12 +347,12 @@ namespace KeyMapper.Classes
                 var map = maps[i];
 
                 // First pair is the action - what the mapped key does.
-                bytes[start + (i * 4)] = (byte)map.To.ScanCode;
-                bytes[start + (i * 4) + 1] = (byte)map.To.Extended;
+                bytes[start + i * 4] = (byte)map.To.ScanCode;
+                bytes[start + i * 4 + 1] = (byte)map.To.Extended;
 
                 // Second pair is the physical key which performs the new action
-                bytes[start + (i * 4) + 2] = (byte)map.From.ScanCode;
-                bytes[start + (i * 4) + 3] = (byte)map.From.Extended;
+                bytes[start + i * 4 + 2] = (byte)map.From.ScanCode;
+                bytes[start + i * 4 + 3] = (byte)map.From.Extended;
             }
 
             return bytes;
@@ -403,7 +403,7 @@ namespace KeyMapper.Classes
                 filename = fd.FileName;
             }
 
-            int bootMappingCount = GetMappingCount(MappingFilter.Set);
+            int mappingCount = GetMappingCount(MappingFilter.Set);
 
             using (var sw = new StreamWriter(filename, false, Encoding.Unicode))
             {
@@ -411,7 +411,7 @@ namespace KeyMapper.Classes
                 sw.WriteLine();
                 sw.WriteLine(@"[HKEYLOCALMACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
                 sw.Write("\"ScanCode Map\"=");
-                if (bootMappingCount > 0)
+                if (mappingCount > 0)
                 {
                     sw.Write("hex:");
                     WriteMappingsToStream(sw, GetMappingsAsByteArray(GetMappings(MappingFilter.Set)));
@@ -423,7 +423,7 @@ namespace KeyMapper.Classes
 
                 sw.WriteLine();
 
-                if (bootMappingCount > 0)
+                if (mappingCount > 0)
                 {
                     sw.WriteLine();
                 }
@@ -469,8 +469,8 @@ namespace KeyMapper.Classes
             // If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
             // that it could be goodbye to CTRL-ALT-DEL
 
-            if ((scanCode == 29 && extended == 0) || (scanCode == 56 && extended == 0) ||
-                (scanCode == 83 && extended == 224))
+            if (scanCode == 29 && extended == 0 || scanCode == 56 && extended == 0 ||
+                scanCode == 83 && extended == 224)
             {
                 string action = IsDisabledMapping(map) ? "disable " : "remap ";
 
@@ -520,7 +520,7 @@ namespace KeyMapper.Classes
                 {
                     string warning = "If you remap Pause, the Num Lock key will be disabled" +
                         (numLockIsMapped
-                            ? ((char)13 + "and your existing Num Lock mapping will be removed.")
+                            ? (char)13 + "and your existing Num Lock mapping will be removed."
                             : ".");
 
                     const string question = "Do you still want to remap Pause?";
@@ -654,17 +654,17 @@ namespace KeyMapper.Classes
             for (int i = 0; i < count; i++)
             {
                 // Make sure we don't extend beyond array bounds
-                if (length >= (start + (i * 4) + 3))
+                if (length >= start + i * 4 + 3)
                 {
                     // First pair is the action - what the mapped key does.
-                    int word1 = map[start + (i * 4)];
-                    int word2 = map[start + (i * 4) + 1];
+                    int word1 = map[start + i * 4];
+                    int word2 = map[start + i * 4 + 1];
 
                     var keyTo = new Key(word1, word2);
 
                     // Second pair is the physical key which performs the new action
-                    word1 = map[start + (i * 4) + 2];
-                    word2 = map[start + (i * 4) + 3];
+                    word1 = map[start + i * 4 + 2];
+                    word2 = map[start + i * 4 + 3];
 
                     var keyFrom = new Key(word1, word2);
 

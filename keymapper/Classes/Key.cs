@@ -34,7 +34,7 @@ namespace KeyMapper.Classes
         public static bool operator ==(Key key1, Key key2)
         {
             // If ScanCode and Extended are the same, it's the same key.
-            return (key1.ScanCode == key2.ScanCode && key1.Extended == key2.Extended);
+            return key1.ScanCode == key2.ScanCode && key1.Extended == key2.Extended;
         }
 
         public override bool Equals(object obj)

@@ -72,7 +72,7 @@ namespace KeyMapper.Classes
                 e.DrawBackground();
                 e.DrawFocusRectangle();
 
-                bool isSeparatorItem = (comboBoxItem is SeparatorItem);
+                bool isSeparatorItem = comboBoxItem is SeparatorItem;
 
                 var bounds = e.Bounds;
                 // adjust the bounds so that the text is centered properly.
@@ -87,7 +87,7 @@ namespace KeyMapper.Classes
                     bounds, e.ForeColor, TextFormatFlags.Left & TextFormatFlags.VerticalCenter);
 
                 // draw the separator line
-                if (isSeparatorItem && ((e.State & DrawItemState.ComboBoxEdit) != DrawItemState.ComboBoxEdit))
+                if (isSeparatorItem && (e.State & DrawItemState.ComboBoxEdit) != DrawItemState.ComboBoxEdit)
                 {
                     var separatorRect = new Rectangle(e.Bounds.Left, e.Bounds.Bottom - separatorHeight, e.Bounds.Width, separatorHeight);
 

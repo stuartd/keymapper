@@ -18,9 +18,7 @@ namespace KeyMapper.Classes.Interop
         [DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
         internal static extern int GetDeviceCaps(IntPtr hdc, int capindex);
 
-        public const int SW_RESTORE = 9;
-
-        [DllImport("user32.dll")]
+       [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool SetForegroundWindow(IntPtr hWnd);
 
@@ -70,7 +68,7 @@ namespace KeyMapper.Classes.Interop
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
-        // Can be used to get loaclised names for modifier keys :: L10N
+        // Can be used to get localised names for modifier keys :: L10N
         // 	[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         // 	public static extern int GetKeyNameText(uint lParam, [Out] StringBuilder lpString, int nSize);
 
@@ -78,7 +76,7 @@ namespace KeyMapper.Classes.Interop
         public const int KEYEVENTF_KEYUP = 0x2;
         public const int KL_NAMELENGTH = 9;
         public const int KLF_ACTIVATE = 0x00000001;
-        public const uint KLF_NOTELLSHELL = 0x00000080;
+        // public const uint KLF_NOTELLSHELL = 0x00000080;
         public const uint KLF_SUBSTITUTE_OK = 0x00000002;
 
 

@@ -13,7 +13,7 @@ namespace KeyMapper.Classes
         {
             long ts = GetRawRegistryKeyTimestamp(hive, keyName);
 
-            var dt = (ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue);
+            var dt = ts != 0 ? DateTime.FromFileTimeUtc(ts) : DateTime.MinValue;
 
             return dt.ToLocalTime();
         }

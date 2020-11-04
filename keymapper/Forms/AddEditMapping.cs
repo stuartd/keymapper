@@ -71,8 +71,8 @@ namespace KeyMapper.Forms
             }
             else
             {
-                mapped = (map.To.ScanCode > 0);
-                disabled = (map.To.ScanCode == 0);
+                mapped = map.To.ScanCode > 0;
+                disabled = map.To.ScanCode == 0;
             }
 
             newMapping = !map.IsValid();
@@ -213,19 +213,19 @@ namespace KeyMapper.Forms
             // Map button (aka UnMap, aka Set (for capture))
 
             MapButton.Enabled =
-                (capturingFromKey && !map.IsEmpty())
+                capturingFromKey && !map.IsEmpty()
                 || mapped
-                || (capturingFromKey && map.IsValid())
-                || (selectingFromKeyFromLists && KeysByGroupListbox.SelectedIndex >= 0)
-                || (capturingToKey && map.IsValid())
-                || (!disabled && !capturingToKey && KeysByGroupListbox.SelectedIndex >= 0);
+                || capturingFromKey && map.IsValid()
+                || selectingFromKeyFromLists && KeysByGroupListbox.SelectedIndex >= 0
+                || capturingToKey && map.IsValid()
+                || !disabled && !capturingToKey && KeysByGroupListbox.SelectedIndex >= 0;
 
             // Capture buttons should only be enabled when form is not in mapped mode and not disabled
             // and not capturing..
-            CaptureAndCancelButton.Enabled = (!mapped && !disabled && !capturingFromKey && !selectingFromKeyFromLists);
+            CaptureAndCancelButton.Enabled = !mapped && !disabled && !capturingFromKey && !selectingFromKeyFromLists;
 
             // Disabled button enabled when not mapped and not capturing.
-            DisableButton.Enabled = (!mapped && !capturingToKey && !capturingFromKey && !selectingFromKeyFromLists);
+            DisableButton.Enabled = !mapped && !capturingToKey && !capturingFromKey && !selectingFromKeyFromLists;
 
         }
 
@@ -309,7 +309,7 @@ namespace KeyMapper.Forms
 
             // From key is straightforward.
 
-            float scale = (DpiInfo.Dpi / 96F);
+            float scale = DpiInfo.Dpi / 96F;
 
             if (FromKeyPictureBox.Image == null && map.IsEmpty())
             {

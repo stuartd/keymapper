@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.ObjectModel;
 using KeyMapper.Classes;
 using Microsoft.Win32;
 
@@ -205,9 +204,9 @@ namespace KeyMapper.Forms
 
             // Now work out how big the form should be.
             // Width: Number of buttons per line * buttonsize + (buttons + 1 * padding)
-            int width = (buttonsPerLine * buttonWidth) + ((buttonsPerLine + 1) * padding);
+            int width = buttonsPerLine * buttonWidth + (buttonsPerLine + 1) * padding;
             // Height: Number of lines * buttonhight + (number of lines +1 * padding)
-            int height = (numberOfLines * buttonHeight) + ((numberOfLines + 1) * padding);
+            int height = numberOfLines * buttonHeight + (numberOfLines + 1) * padding;
 
             ClientSize = new Size(width, height);
 
@@ -421,7 +420,7 @@ namespace KeyMapper.Forms
             if (buttonCount == 1)
             {
                 // Forms have a minimum size of 123. Applying a slight kludge factor too.
-                pb.Left = (((123 - SystemInformation.BorderSize.Width - buttonWidth) / 2) - 5);
+                pb.Left = (123 - SystemInformation.BorderSize.Width - buttonWidth) / 2 - 5;
                 pb.Top = padding;
             }
             else
@@ -441,8 +440,8 @@ namespace KeyMapper.Forms
                     line = 2;
                 }
 
-                pb.Left = ((position - 1) * buttonWidth) + (position * padding);
-                pb.Top = ((line - 1) * buttonHeight) + (line * padding);
+                pb.Left = (position - 1) * buttonWidth + position * padding;
+                pb.Top = (line - 1) * buttonHeight + line * padding;
 
             }
 

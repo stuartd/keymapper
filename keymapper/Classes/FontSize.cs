@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace KeyMapper.Classes
 {
@@ -28,8 +27,8 @@ namespace KeyMapper.Classes
                 var characterWidth = (int)g.MeasureString(((char)77).ToString(CultureInfo.InvariantCulture), font).Width;
 
                 // Only use 90% of the bitmap's size to allow for the edges (especially at small sizes)
-                float ratio = (((0.9F * bmp.Height) / 2)) / characterWidth;
-                baseFontSize = (baseFontSize * ratio);
+                float ratio = 0.9F * bmp.Height / 2 / characterWidth;
+                baseFontSize = baseFontSize * ratio;
             }
 
             BaseFontSize = baseFontSize;

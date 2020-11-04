@@ -189,7 +189,7 @@ namespace KeyMapper.Forms
                 int y = r.Next(0, 3);
 
                 string name = "Matrix" + x.ToString(CultureInfo.InvariantCulture) + y.ToString(CultureInfo.InvariantCulture);
-                float val = (r.Next(-10, 11) / 10F);
+                float val = r.Next(-10, 11) / 10F;
 
                 // Update control...
                 // (this.Controls[name] as NumericUpDown).Value = val;

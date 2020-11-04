@@ -232,12 +232,12 @@ namespace KeyMapper.Classes
 
         public static bool IsColourMapFormOpen()
         {
-            return (colourMapForm != null);
+            return colourMapForm != null;
         }
 
         public static bool IsMappingListFormOpen()
         {
-            return (mappingListForm != null);
+            return mappingListForm != null;
         }
 
         public static void ActivateMainForm()
@@ -473,7 +473,7 @@ namespace KeyMapper.Classes
                     break;
                 case ChildFormPosition.BottomCentre:
                     newLocation = new Point(
-                        parent.Location.X + ((parent.Size.Width - child.Size.Width) / 2),
+                        parent.Location.X + (parent.Size.Width - child.Size.Width) / 2,
                         parent.Location.Y + parent.Size.Height);
                     break;
                 case ChildFormPosition.BottomRight:
@@ -484,12 +484,12 @@ namespace KeyMapper.Classes
                 case ChildFormPosition.MiddleLeft:
                     newLocation = new Point(
                         parent.Location.X + 50,
-                        ((parent.ClientSize.Height - child.ClientSize.Height) / 2) + parent.Location.Y);
+                        (parent.ClientSize.Height - child.ClientSize.Height) / 2 + parent.Location.Y);
                     break;
                 case ChildFormPosition.MiddleCentre:
                     newLocation = new Point(
-                        ((parent.ClientSize.Width - child.ClientSize.Width) / 2) + parent.Location.X,
-                        ((parent.ClientSize.Height - child.ClientSize.Height) / 2) + parent.Location.Y);
+                        (parent.ClientSize.Width - child.ClientSize.Width) / 2 + parent.Location.X,
+                        (parent.ClientSize.Height - child.ClientSize.Height) / 2 + parent.Location.Y);
                     break;
                 default:
                     break;

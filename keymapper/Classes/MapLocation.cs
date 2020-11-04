@@ -4,8 +4,6 @@
     {
         LocalMachineKeyboardLayout,
         KeyMapperLocalMachineKeyboardLayout,
-
-        // Err... WTF is this for?
         KeyMapperMappingsCache
     }
 }

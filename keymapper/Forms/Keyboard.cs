@@ -92,7 +92,7 @@ namespace KeyMapper.Forms
         private void PositionKeyboardCombo()
         {
             // Combo needs to go in the middle of the status bar..
-            KeyboardListCombo.Top = (StatusBar.Top + ((StatusBar.Height - KeyboardListCombo.Height) / 2));
+            KeyboardListCombo.Top = StatusBar.Top + (StatusBar.Height - KeyboardListCombo.Height) / 2;
 
         }
         private void LoadUserSettings()
@@ -102,7 +102,7 @@ namespace KeyMapper.Forms
             // As user.config is writeable (if you can find it!)
             // don't want to trust the settings.
 
-            var firstRun = (userSettings.UserHasSavedSettings == false);
+            var firstRun = userSettings.UserHasSavedSettings == false;
             var savedPosition = userSettings.KeyboardFormLocation;
             var savedWidth = userSettings.KeyboardFormWidth;
 
@@ -146,8 +146,8 @@ namespace KeyMapper.Forms
             // Calculate total width and key size
             const int buttonWidth = 128; // Starting width
 
-            buttonScale = ((float)ClientSize.Width / (int)(buttonWidth * keyWidth)); // How much buttons have to be scaled to fit
-            keySize = (buttonWidth * buttonScale); // Actual size of buttons
+            buttonScale = (float)ClientSize.Width / (int)(buttonWidth * keyWidth); // How much buttons have to be scaled to fit
+            keySize = buttonWidth * buttonScale; // Actual size of buttons
             paddingWidth = (int)(keySize / 16); // Gap between rows and columns.
         }
 
@@ -181,21 +181,21 @@ namespace KeyMapper.Forms
             int numPadLeft = 0;
             int navLeft = 0;
 
-            float mainKeyWidth = (14.5F * (keySize + paddingWidth)) + (paddingWidth * 2);
-            float navWidth = ((keySize + paddingWidth) * 3);
+            float mainKeyWidth = 14.5F * (keySize + paddingWidth) + paddingWidth * 2;
+            float navWidth = (keySize + paddingWidth) * 3;
 
             // Work out how far back the number pad extends 
             if (hasNumberPad)
             {
-                numPadLeft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 4.2)), 0);
+                numPadLeft = (int)Math.Round(ClientSize.Width - (keySize + paddingWidth) * 4.2, 0);
                 // Nav controls are three wide and they have to fit midway in the
                 // gap between the end of the main body and the numberPad.
-                navLeft = (int)Math.Round((mainKeyWidth + ((numPadLeft - mainKeyWidth - navWidth) / 2)), 0);
+                navLeft = (int)Math.Round(mainKeyWidth + (numPadLeft - mainKeyWidth - navWidth) / 2, 0);
             }
             else
             {
                 // Work out how far back the navkeys extend instead:
-                navLeft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 3.2)), 0);
+                navLeft = (int)Math.Round(ClientSize.Width - (keySize + paddingWidth) * 3.2, 0);
             }
 
             var keyboardLayout = AppController.KeyboardLayout;
@@ -221,7 +221,7 @@ namespace KeyMapper.Forms
                 }
 
                 // To get a spacer row between the F keys: add double padding
-                top += (int)Math.Round(keySize + (paddingWidth * 2), 0);
+                top += (int)Math.Round(keySize + paddingWidth * 2, 0);
 
             }
 
@@ -323,7 +323,7 @@ namespace KeyMapper.Forms
                                     break;
                             }
 
-                            int stretch = (int)(keyWidth - (buttonWidth * buttonScale));
+                            int stretch = (int)(keyWidth - buttonWidth * buttonScale);
 
                             DrawKey(key.ScanCode, key.Extended, ref left, top, key.Button,
                                 stretch, key.VerticalStretch * paddingWidth);
@@ -383,7 +383,7 @@ namespace KeyMapper.Forms
             }
 
             SetClientSizeCore(ClientSize.Width, StatusBar.Height + menu.Height +
-                (int)(ClientSize.Width * (12F / (factor))));
+                (int)(ClientSize.Width * (12F / factor)));
 
             menu.Width = ClientSize.Width;
 
@@ -427,14 +427,6 @@ namespace KeyMapper.Forms
                 StatusLabelRestartLogoff.Visible = false;
             }
         }
-
-        private void SetFilterStatusLabelText()
-        {
-            StatusLabelMappingDisplayType.Text =
-                "Editing Boot Mappings";
-            StatusLabelMappingDisplayType.Visible = true;
-        }
-
 
         private void SetStatusLabelsText()
         {
@@ -592,8 +584,8 @@ namespace KeyMapper.Forms
 
         private void SetEditMenuButtonStates()
         {
-            undoToolStripMenuItem.Enabled = (MappingsManager.UndoStackCount > 0);
-            redoToolStripMenuItem.Enabled = (MappingsManager.RedoStackCount > 0);
+            undoToolStripMenuItem.Enabled = MappingsManager.UndoStackCount > 0;
+            redoToolStripMenuItem.Enabled = MappingsManager.RedoStackCount > 0;
         }
 
         private void SetKeyboardLayoutMenuButtonStates()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.ObjectModel;
 using KeyMapper.Classes;
 
 namespace KeyMapper.Forms
@@ -14,7 +13,6 @@ namespace KeyMapper.Forms
         private readonly List<Key> keyList = new List<Key>();
         private const int minimumWidth = 300;
 
-        /// <remarks>Leaving the Type column in even though there are only Boot mappings now, </remarks>
         public MappingListForm()
         {
             //TODO: Look into changing the column header colours as they are much too dark on XP without themes or w2k
@@ -42,9 +40,11 @@ namespace KeyMapper.Forms
 
         private void SaveUserSettings()
         {
-            var userSettings = new Properties.Settings();
-            userSettings.MappingListFormLocation = Location;
-            userSettings.MappingListFormWidth = Width;
+            var userSettings = new Properties.Settings
+            {
+                MappingListFormLocation = Location,
+                MappingListFormWidth = Width
+            };
             userSettings.Save();
         }
 
@@ -138,7 +138,7 @@ namespace KeyMapper.Forms
                 switch (filter)
                 {
                     case MappingFilter.Set:
-                        cellValue = "Boot";
+                        cellValue = "Set";
                         break;
 
                     case MappingFilter.Cleared:

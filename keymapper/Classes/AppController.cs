@@ -35,7 +35,7 @@ namespace KeyMapper.Classes
 
         private static readonly IRegistryTimestampService registryTimestampService = new RegistryTimestampService();
 
-        private static readonly Hashtable customKeyboardLayouts;
+        private static readonly Hashtable customKeyboardLayouts = new Hashtable();
 
         private static string currentLocale;
 
@@ -43,19 +43,13 @@ namespace KeyMapper.Classes
 
         public static bool UserCanWriteMappings { get; private set; }
 
-        public static string ApplicationRegistryKeyName { get; }
+        public static string ApplicationRegistryKeyName => @"Software\KeyMapper";
 
         public static KeyboardLayoutType KeyboardLayout { get; private set; }
 
         public static CultureInfo CurrentCultureInfo { get; private set; }
 
         public static string KeyMapperFilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "KeyMapper");
-
-        static AppController()
-        {
-            customKeyboardLayouts = new Hashtable();
-            ApplicationRegistryKeyName = @"Software\KeyMapper";
-        }
 
         public static void CreateAppDirectory()
         {
@@ -315,10 +309,9 @@ namespace KeyMapper.Classes
 
             KeyboardHelper.UnloadLayout();
 
-            if (UserCanWriteMappings == false
-                && (MappingsManager.MappingsNeedSaving()))
+            if (UserCanWriteMappings == false && MappingsManager.MappingsNeedSaving())
             {
-                MappingsManager.SaveBootMappingsVista();
+                MappingsManager.SaveMappingsToFile();
             }
 
             LogProvider.CloseConsoleOutput();
@@ -400,12 +393,8 @@ namespace KeyMapper.Classes
 
         private static void EstablishSituation()
         {
-            // The current mappings in effect are composed of:
-            // 1) HKLM mappings which aren't overridden in HKCU
-            // 2) Mappings in HKCU
-
             // In order to notify user when a restart or logoff is required, we need to track 
-            // what mappings were in effect the first time the program was run after reboot/logoff.
+            // what mappings were in effect the first time the program was run after reboot.
 
             // To do that we need a registry key of our own.
             RegistryKey key = null;
@@ -439,13 +428,9 @@ namespace KeyMapper.Classes
             if (key != null)
             {
                 var values = key.GetValueNames();
-                for (int i = 0; i < values.Length; i++)
+                if (values.Any(t => t == "Mappings"))
                 {
-                    if (values[i] == "Mappings")
-                    {
-                        savedMappingsExist = true;
-                        break;
-                    }
+                    savedMappingsExist = true;
                 }
 
                 key.Close();
@@ -453,71 +438,60 @@ namespace KeyMapper.Classes
                 // But it isn't a requirement, as such: can't save custom colours without it.
             }
 
-            // Mappings in HKCU override mappings in HKLM
-
-            // If user uses Fast User Switching to switch
-            // to an account which is already logged in, the HKCU mappings disappear.
-
             // Is the current user able to write to the Keyboard Layout key in HKLM??
             // (This key always exists, Windows recreates it if it's deleted)
 
             UserCanWriteMappings = registryTimestampService.CanUserWriteToKey
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
-
-
+            
             // When was the system booted? (Milliseconds vs Ticks is correct..)
             var bootTime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
 
-            // When did the current user log in?
+            // Not looking at login time any more as it's irrelevant
 
-            var logonTime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
+            //// When did the current user log in?
 
-            // Now, the "Volatile Environment" key in RegistryHive.CurrentUser
-            // >isn't< always unloaded on logoff.
+            //var logonTime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
 
-            // Sometimes, as well, logonTime returns the wrong time. I think this is because when 
-            // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
-            // time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
+            //// Now, the "Volatile Environment" key in RegistryHive.CurrentUser
+            //// >isn't< always unloaded on logoff.
 
-            if (logonTime == DateTime.MinValue)
-            {
-                // If using Run As to run KeyMapper, then logonTime will be 01/01/0001 00:00:00
-                // as the Volatile key won't exist.
-                logonTime = bootTime.AddSeconds(1);
-            }
+            //// Sometimes, as well, logonTime returns the wrong time. I think this is because when 
+            //// the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
+            //// time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
 
-            // It can also happen - e.g. when restoring a Virtual Machine - 
-            // that the boottime is later than logonTime.
+            //if (logonTime == DateTime.MinValue)
+            //{
+            //    // If using Run As to run KeyMapper, then logonTime will be 01/01/0001 00:00:00
+            //    // as the Volatile key won't exist.
+            //    logonTime = bootTime.AddSeconds(1);
+            //}
 
-            if (bootTime > logonTime)
-            {
-                //  Console.WriteLine("Boot time greater than logonTime: Boot Time {0} Logon Time {1}", bootTime, logonTime);
-                bootTime = logonTime.AddSeconds(-1);
-            }
+            //// It can also happen - e.g. when restoring a Virtual Machine - 
+            //// that the boottime is later than logonTime.
 
-            // Just in case the timestamp bug ever works in reverse:
-            if (logonTime > DateTime.Now)
-            {
-                Console.WriteLine("logonTime greater than Now: Logon Time {0}, Now: {1}", logonTime, DateTime.Now);
-                logonTime = DateTime.Now;
-            }
+            //if (bootTime > logonTime)
+            //{
+            //    //  Console.WriteLine("Boot time greater than logonTime: Boot Time {0} Logon Time {1}", bootTime, logonTime);
+            //    bootTime = logonTime.AddSeconds(-1);
+            //}
+
+            //// Just in case the timestamp bug ever works in reverse:
+            //if (logonTime > DateTime.Now)
+            //{
+            //    Console.WriteLine("logonTime greater than Now: Logon Time {0}, Now: {1}", logonTime, DateTime.Now);
+            //    logonTime = DateTime.Now;
+            //}
 
             // When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
             var hklmWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
-            // When was HKEY_CURRENT_USER\Keyboard Layout written?
-            var hkcuWrite = registryTimestampService.GetRegistryKeyTimestamp
-                (RegistryHive.CurrentUser, @"Keyboard Layout");
-
-            // Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", 
-            // bootTime, logonTime, HKLMWrite, HKCUWrite);
-
             // Get the current scanCode maps
             MappingsManager.GetMappingsFromRegistry();
 
-            // If HLKM or HKCU Mappings have not been changed since boot/login 
-            // (ie their timestamp is earlier than the boot/login time)
+            // If mappings have not been changed since boot
+            // (ie their timestamp is earlier than the boot time)
             // then save them to our own reg key. This means we can determine whether a 
             // restart or logoff is required because the current mappings are different from the saved mappings.
 
@@ -545,7 +519,7 @@ namespace KeyMapper.Classes
                 locale = currentKeyboardLocale;
             }
 
-            if ((locale != currentLocale))
+            if (locale != currentLocale)
             {
                 if (customKeyboardLayouts != null && customKeyboardLayouts.ContainsKey(locale))
                 {

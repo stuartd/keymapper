@@ -1,6 +1,5 @@
 using System;
 using System.Windows.Forms;
-using System.Security.Permissions;
 using KeyMapper.Forms;
 using KeyMapper.Providers;
 

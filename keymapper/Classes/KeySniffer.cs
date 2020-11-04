@@ -245,12 +245,12 @@ namespace KeyMapper.Classes
         public static bool operator ==(KBHookStruct key1, KBHookStruct key2)
         {
             // If ScanCode and Extended are the same, it's the same key.
-            return (key1.ScanCode == key2.ScanCode && key1.Extended == key2.Extended);
+            return key1.ScanCode == key2.ScanCode && key1.Extended == key2.Extended;
         }
 
         public override bool Equals(object obj)
         {
-            return (obj is KBHookStruct @struct && this == @struct);
+            return obj is KBHookStruct @struct && this == @struct;
         }
 
         // override object.GetHashCode

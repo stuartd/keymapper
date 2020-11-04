@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
 using KeyMapper.Classes;
 
 namespace KeyMapper.Providers
@@ -55,8 +54,10 @@ namespace KeyMapper.Providers
                 }
             }
 
-            consoleWriterStream = new StreamWriter(path, false, Encoding.UTF8);
-            consoleWriterStream.AutoFlush = true;
+            consoleWriterStream = new StreamWriter(path, false, Encoding.UTF8)
+            {
+                AutoFlush = true
+            };
             consoleWriterStream.Write(existingLogEntries);
 
             // Direct standard output to the log file.
