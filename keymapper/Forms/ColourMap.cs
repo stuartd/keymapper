@@ -320,7 +320,7 @@ namespace KeyMapper.Forms
             foreach (var map in currentMaps)
             {
 
-                if (MappingsManager.IsMappingPending(map, MappingFilter.Boot))
+                if (MappingsManager.IsMappingPending(map, MappingFilter.Set))
                 {
                     // Pending
                     if (MappingsManager.IsDisabledMapping(map))
@@ -370,9 +370,9 @@ namespace KeyMapper.Forms
             {
                 // Has this cleared key been remapped (in which case we ignore it)
                 bool remapped = false;
-                foreach (var currentmap in MappingsManager.GetMappings(MappingFilter.Current))
+                foreach (var currentMap in MappingsManager.GetMappings(MappingFilter.Current))
                 {
-                    if (currentmap.From == map.From)
+                    if (currentMap.From == map.From)
                     {
                         remapped = true;
                         break;

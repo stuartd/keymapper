@@ -130,10 +130,9 @@ namespace KeyMapper.Classes
                     value = reg.GetValue(name);
                     if (value != null)
                     {
-                        float svalue;
-                        if (float.TryParse(value.ToString(), out svalue))
+                        if (float.TryParse(value.ToString(), out float whatActuallyIsThisValue))
                         {
-                            cm.GetType().GetProperty(name).SetValue(cm, svalue, null);
+                            cm.GetType().GetProperty(name).SetValue(cm, whatActuallyIsThisValue, null);
                         }
                     }
                 }

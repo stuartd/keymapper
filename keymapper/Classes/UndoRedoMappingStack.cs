@@ -9,21 +9,21 @@ namespace KeyMapper.Classes
     {
         public UndoRedoMappingStack()
         {
-            BootStack = new Stack<Collection<KeyMapping>>();
+            Mappings = new Stack<Collection<KeyMapping>>();
         }
 
-        public Stack<Collection<KeyMapping>> BootStack { get; }
+        public Stack<Collection<KeyMapping>> Mappings { get; }
 
-        public void Push(Collection<KeyMapping> bootmaps)
+        public void Push(Collection<KeyMapping> mappings)
         {
-            BootStack.Push(bootmaps);
+            Mappings.Push(mappings);
         }
 
-        public int Count => BootStack.Count;
+        public int Count => Mappings.Count;
 
         public void Clear()
         {
-            BootStack.Clear();
+            Mappings.Clear();
         }
     }
 }

@@ -115,29 +115,30 @@ namespace KeyMapper.Classes
         private static Bitmap StretchBitmap(Bitmap bmp, int horizontalStretch, int verticalStretch)
         {
 
-            Bitmap newbitmap = null;
+            Bitmap newBitMap = null;
 
             if ((horizontalStretch != 0) & (verticalStretch != 0))
             {
-                var tempbitmap = StretchButtonHorizontal(bmp, horizontalStretch);
-                newbitmap = StretchButtonVertical(tempbitmap, verticalStretch);
+                var tempBitMap = StretchButtonHorizontal(bmp, horizontalStretch);
+                newBitMap = StretchButtonVertical(tempBitMap, verticalStretch);
+                tempBitMap.Dispose();
             }
             else
             {
                 if (horizontalStretch != 0)
                 {
-                    newbitmap = StretchButtonHorizontal(bmp, horizontalStretch);
+                    newBitMap = StretchButtonHorizontal(bmp, horizontalStretch);
                 }
 
                 else if (verticalStretch != 0)
                 {
-                    newbitmap = StretchButtonVertical(bmp, verticalStretch);
+                    newBitMap = StretchButtonVertical(bmp, verticalStretch);
                 }
             }
 
             bmp.Dispose();
 
-            return newbitmap;
+            return newBitMap;
         }
 
         private static Bitmap ExtractImage(string name)
@@ -159,9 +160,9 @@ namespace KeyMapper.Classes
         {
             // Have we already extracted this bmp?
             // Buttons are stored as lower case.
-            string buttonname = button.ToString().ToLowerInvariant();
+            string buttonName = button.ToString().ToLowerInvariant();
 
-            return GetImage(buttonname, "png");
+            return GetImage(buttonName, "png");
         }
 
         private static Bitmap GetBitmap(BlankButton button, int horizontalStretch, int verticalStretch, float scale, ButtonEffect effect, bool transform)
@@ -202,7 +203,7 @@ namespace KeyMapper.Classes
 
         }
 
-        private static Bitmap StretchButtonHorizontal(Bitmap bmp, int horizontalstretch)
+        private static Bitmap StretchButtonHorizontal(Bitmap bmp, int horizontalStretch)
         {
             // snap it in half, pull halves apart, slice off the inner edges and
             // clone them along the gap
@@ -210,49 +211,49 @@ namespace KeyMapper.Classes
             // Get as big a slice in the middle as we can (the highest common factor of the 
             // stretch and half the width) 
 
-            int halfwidth = bmp.Width / 2;
-            int slicewidth = AppController.GetHighestCommonDenominator(horizontalstretch, halfwidth);
+            int halfWidth = bmp.Width / 2;
+            int sliceWidth = AppController.GetHighestCommonDenominator(horizontalStretch, halfWidth);
 
-            var newbitmap = new Bitmap(bmp.Width + horizontalstretch, bmp.Height);
-            using (var g = Graphics.FromImage(newbitmap))
+            var newBitMap = new Bitmap(bmp.Width + horizontalStretch, bmp.Height);
+            using (var g = Graphics.FromImage(newBitMap))
             {
-                g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, halfwidth, bmp.Height), GraphicsUnit.Pixel);
-                for (int i = 0; i < horizontalstretch; i += slicewidth)
+                g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, halfWidth, bmp.Height), GraphicsUnit.Pixel);
+                for (int i = 0; i < horizontalStretch; i += sliceWidth)
                 {
-                    g.DrawImage(bmp, halfwidth + i, 0, new Rectangle(halfwidth, 0, slicewidth, bmp.Height), GraphicsUnit.Pixel);
+                    g.DrawImage(bmp, halfWidth + i, 0, new Rectangle(halfWidth, 0, sliceWidth, bmp.Height), GraphicsUnit.Pixel);
                 }
-                g.DrawImage(bmp, halfwidth + horizontalstretch - 1, 0,
-                    new Rectangle(halfwidth, 0, halfwidth, bmp.Height), GraphicsUnit.Pixel);
+                g.DrawImage(bmp, halfWidth + horizontalStretch - 1, 0,
+                    new Rectangle(halfWidth, 0, halfWidth, bmp.Height), GraphicsUnit.Pixel);
             }
 
             bmp.Dispose();
-            return newbitmap;
+            return newBitMap;
 
         }
 
-        private static Bitmap StretchButtonVertical(Bitmap bmp, int verticalstretch)
+        private static Bitmap StretchButtonVertical(Bitmap bmp, int verticalStretch)
         {
 
             // Same as horizontal more-or-less
 
-            int halfheight = bmp.Height / 2;
-            int sliceheight = AppController.GetHighestCommonDenominator(verticalstretch, halfheight);
+            int halfHeight = bmp.Height / 2;
+            int sliceHeight = AppController.GetHighestCommonDenominator(verticalStretch, halfHeight);
 
-            var newbitmap = new Bitmap(bmp.Width, bmp.Height + verticalstretch);
+            var newBitMap = new Bitmap(bmp.Width, bmp.Height + verticalStretch);
 
-            using (var g = Graphics.FromImage(newbitmap))
+            using (var g = Graphics.FromImage(newBitMap))
             {
-                g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, bmp.Width, halfheight), GraphicsUnit.Pixel);
-                for (int i = 0; i < verticalstretch; i += sliceheight)
+                g.DrawImage(bmp, 0, 0, new Rectangle(0, 0, bmp.Width, halfHeight), GraphicsUnit.Pixel);
+                for (int i = 0; i < verticalStretch; i += sliceHeight)
                 {
-                    g.DrawImage(bmp, 0, halfheight + i, new Rectangle(0, halfheight, bmp.Width, sliceheight), GraphicsUnit.Pixel);
+                    g.DrawImage(bmp, 0, halfHeight + i, new Rectangle(0, halfHeight, bmp.Width, sliceHeight), GraphicsUnit.Pixel);
                 }
-                g.DrawImage(bmp, 0, halfheight + verticalstretch - 1,
-                    new Rectangle(0, halfheight, bmp.Width, halfheight), GraphicsUnit.Pixel);
+                g.DrawImage(bmp, 0, halfHeight + verticalStretch - 1,
+                    new Rectangle(0, halfHeight, bmp.Width, halfHeight), GraphicsUnit.Pixel);
             }
 
             bmp.Dispose();
-            return newbitmap;
+            return newBitMap;
 
         }
 
@@ -265,13 +266,13 @@ namespace KeyMapper.Classes
                 return bmp;
             }
 
-            var newbitmap = new Bitmap(newWidth, newHeight);
-            using (var g = Graphics.FromImage(newbitmap))
+            var newBitMap = new Bitmap(newWidth, newHeight);
+            using (var g = Graphics.FromImage(newBitMap))
             {
                 g.DrawImage(bmp, 0, 0, newWidth, newHeight);
             }
             bmp.Dispose();
-            return newbitmap;
+            return newBitMap;
 
         }
 
@@ -294,7 +295,7 @@ namespace KeyMapper.Classes
 
         }
 
-        private static float GetMultiLineFontSize(Bitmap bmp, string caption, bool localizable, float fontsize)
+        private static float GetMultiLineFontSize(Bitmap bmp, string caption, bool localizable, float fontSize)
         {
             var words = caption.Split();
 
@@ -316,7 +317,7 @@ namespace KeyMapper.Classes
             }
 
             using (var g = Graphics.FromImage(bmp))
-            using (var font = AppController.GetButtonFont(fontsize, localizable))
+            using (var font = AppController.GetButtonFont(fontSize, localizable))
             {
                 g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
@@ -325,11 +326,11 @@ namespace KeyMapper.Classes
 
                 if (stringSize.Width > (bmp.Width * 0.8F))
                 {
-                    fontsize *= ((bmp.Width * 0.8F) / stringSize.Width);
+                    fontSize *= ((bmp.Width * 0.8F) / stringSize.Width);
                 }
             }
 
-            return fontsize;
+            return fontSize;
 
         }
 
@@ -340,16 +341,16 @@ namespace KeyMapper.Classes
             float fontSizeDouble = (FontSize.BaseFontSize * 0.75F);
             float fontSizeMulti = (FontSize.BaseFontSize * 0.575F);
 
-            int namelength = caption.Length;
+            int nameLength = caption.Length;
 
             // Pretend overlong keys have a length of three:
 
             if (overlong)
             {
-                namelength = 3;
+                nameLength = 3;
             }
 
-            switch (namelength)
+            switch (nameLength)
             {
                 case 1: // e.g. single letter - letters and numbers
                     bmp = DrawCaptionLine(bmp, caption, FontSize.BaseFontSize, localizable, fontColour);
@@ -369,14 +370,14 @@ namespace KeyMapper.Classes
 
                 case 3:
 
-                    int spacepos = caption.IndexOf(' ');
+                    int spacePosition = caption.IndexOf(' ');
 
-                    if (spacepos > 0) // eg "7 &" or 5 %"
+                    if (spacePosition > 0) // eg "7 &" or 5 %"
                     {
 
-                        bmp = DrawCaptionLine(bmp, caption.Substring(0, spacepos), fontSizeDouble, TextPosition.Bottom, localizable, fontColour);
+                        bmp = DrawCaptionLine(bmp, caption.Substring(0, spacePosition), fontSizeDouble, TextPosition.Bottom, localizable, fontColour);
                         // May not strictly be three characters so send the rest:
-                        bmp = DrawCaptionLine(bmp, caption.Substring(spacepos + 1), fontSizeDouble, TextPosition.SymbolTop, localizable, fontColour);
+                        bmp = DrawCaptionLine(bmp, caption.Substring(spacePosition + 1), fontSizeDouble, TextPosition.SymbolTop, localizable, fontColour);
                     }
                     else // End, F12 etc...
                     {
@@ -399,7 +400,7 @@ namespace KeyMapper.Classes
                     fontSizeMulti = GetMultiLineFontSize(bmp, caption, localizable, fontSizeMulti);
 
                     // If the last word is a word in brackets, remove it
-                    // E.G. Enter (Numberpad) will just be written on the key as Enter.
+                    // E.G. Enter (NumberPad) will just be written on the key as Enter.
 
                     // Assuming there are only two words.
 
@@ -429,7 +430,7 @@ namespace KeyMapper.Classes
 
         private static Bitmap WriteCaption(Bitmap bmp, int scanCode, int extended, Color fontColour)
         {
-            string caption = AppController.GetKeyName(scanCode, extended) ?? string.Format("SC: {0} EX: {1}", scanCode, extended);
+            string caption = AppController.GetKeyName(scanCode, extended) ?? $"SC: {scanCode} EX: {extended}";
 
             // Blank keys.
             if (string.IsNullOrEmpty(caption))
@@ -455,18 +456,18 @@ namespace KeyMapper.Classes
             return WriteCaption(bmp, caption, overlong, localizable, fontColour);
         }
 
-        private static Bitmap DrawCaptionLine(Bitmap button, string caption, float fontsize, bool localizable, Color fontColour)
+        private static Bitmap DrawCaptionLine(Bitmap button, string caption, float fontSize, bool localizable, Color fontColour)
         {
-            return DrawCaptionLine(button, caption, fontsize, TextPosition.Middle, localizable, fontColour);
+            return DrawCaptionLine(button, caption, fontSize, TextPosition.Middle, localizable, fontColour);
         }
 
-        private static Bitmap DrawCaptionLine(Bitmap bmp, string caption, float fontsize, TextPosition where, bool localizable, Color fontColour)
+        private static Bitmap DrawCaptionLine(Bitmap bmp, string caption, float fontSize, TextPosition where, bool localizable, Color fontColour)
         {
 
             // The upper 10/64 and lower 14/64 of the button are not considered drawing area 
             // so discount them when calculating the row position. This also knocks the centre down by 4/64.
 
-            using (var font = AppController.GetButtonFont(fontsize, localizable))
+            using (var font = AppController.GetButtonFont(fontSize, localizable))
             using (var g = Graphics.FromImage(bmp))
             {
                 g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;

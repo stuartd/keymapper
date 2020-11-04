@@ -2,6 +2,8 @@
 {
     public enum MappingFilter
     {
-        Current, Boot, ClearedBoot
+        Current,
+        Set, 
+        Cleared
     }
 }

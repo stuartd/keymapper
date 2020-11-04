@@ -17,7 +17,7 @@ namespace KeyMapper.Classes
         // As we know the number of rows required, use them for initialisation.
         private readonly List<KeyboardRow> functionKeys = new List<KeyboardRow>(1);
         private readonly List<KeyboardRow> typewriterKeys = new List<KeyboardRow>(5);
-        private readonly List<KeyboardRow> numberpadKeys = new List<KeyboardRow>(5);
+        private readonly List<KeyboardRow> numberPadKeys = new List<KeyboardRow>(5);
         private readonly List<KeyboardRow> utilityKeys = new List<KeyboardRow>(1);
         private readonly List<KeyboardRow> navigationKeys = new List<KeyboardRow>(2);
         private readonly List<KeyboardRow> arrowKeys = new List<KeyboardRow>(2);
@@ -30,7 +30,7 @@ namespace KeyMapper.Classes
 
         public IEnumerable<KeyboardRow> TypewriterKeys => typewriterKeys;
 
-        public IEnumerable<KeyboardRow> NumberPadKeys => numberpadKeys;
+        public IEnumerable<KeyboardRow> NumberPadKeys => numberPadKeys;
 
         public IEnumerable<KeyboardRow> UtilityKeys => utilityKeys;
 
@@ -102,7 +102,7 @@ namespace KeyMapper.Classes
             PopulateFunctionKeys();
             PopulateArrowKeys();
             PopulateNavigationKeys();
-            PopulateNumberpad();
+            PopulateNumberPad();
             PopulateUtilityKeys();
             PopulateTypewriterKeys();
         }
@@ -430,12 +430,12 @@ namespace KeyMapper.Classes
         }
 
 
-        private void PopulateNumberpad()
+        private void PopulateNumberPad()
         {
 
-            // Now for the Numberpad: 
+            // Now for the NumberPad: 
             // First row: NumLock / * and -
-            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberPadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                 new[]
                 {
                     new KeyboardLayoutElement(69, 0, BlankButton.Blank, 0, 0, 0),
@@ -445,7 +445,7 @@ namespace KeyMapper.Classes
                 })));
 
             // Second Row: 7 8 9 +
-            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberPadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                 new[]
                 {
                     new KeyboardLayoutElement(71, 0, BlankButton.Blank, 0, 0, 0),
@@ -455,7 +455,7 @@ namespace KeyMapper.Classes
                 })));
 
             // Third Row: 4 5 6
-            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberPadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                 new[]
                 {
                     new KeyboardLayoutElement(75, 0, BlankButton.Blank, 0, 0, 0),
@@ -464,7 +464,7 @@ namespace KeyMapper.Classes
                 })));
 
             // Fourth Row: 1 2 3 Enter
-            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberPadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                 new[]
                 {
                     new KeyboardLayoutElement(79, 0, BlankButton.Blank, 0, 0, 0),
@@ -474,7 +474,7 @@ namespace KeyMapper.Classes
                 })));
 
             // Finally, 0 .
-            numberpadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
+            numberPadKeys.Add(new KeyboardRow(new List<KeyboardLayoutElement>(
                 new[]
                 {
                     new KeyboardLayoutElement(82, 0, BlankButton.DoubleWideBlank, 0, 0, 0),

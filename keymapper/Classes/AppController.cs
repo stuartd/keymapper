@@ -29,19 +29,19 @@ namespace KeyMapper.Classes
         // Single instance handle
         private static AppMutex appMutex;
 
-        private static bool? arialUnicodeMSInstalled;
+        private static bool? arialUnicodeMsInstalled;
 
         private static readonly List<string> tempFiles = new List<string>();
 
         private static readonly IRegistryTimestampService registryTimestampService = new RegistryTimestampService();
 
-        private static Hashtable customKeyboardLayouts { get; }
+        private static readonly Hashtable customKeyboardLayouts;
 
-        private static string currentLocale { get; set; }
+        private static string currentLocale;
 
         public static bool UserCannotWriteToApplicationRegistryKey { get; private set; }
 
-        public static bool UserCanWriteBootMappings { get; private set; }
+        public static bool UserCanWriteMappings { get; private set; }
 
         public static string ApplicationRegistryKeyName { get; }
 
@@ -148,7 +148,7 @@ namespace KeyMapper.Classes
             return result == TaskDialogResult.Yes;
         }
 
-        public static void WriteRegistryFileVista(string filePath)
+        public static void WriteRegistryFile(string filePath)
         {
             tempFiles.Add(filePath);
 
@@ -212,7 +212,7 @@ namespace KeyMapper.Classes
                 }
             }
 
-            WriteRegistryFileVista(filename);
+            WriteRegistryFile(filename);
         }
 
         public static void Start()
@@ -261,8 +261,7 @@ namespace KeyMapper.Classes
                     }
 
                     string locale = nameValuePair.Substring(0, index);
-                    int value;
-                    if (int.TryParse(nameValuePair.Substring(index + 1), out value) == false)
+                    if (int.TryParse(nameValuePair.Substring(index + 1), out int value) == false)
                     {
                         continue;
                     }
@@ -316,8 +315,8 @@ namespace KeyMapper.Classes
 
             KeyboardHelper.UnloadLayout();
 
-            if (UserCanWriteBootMappings == false
-                && (MappingsManager.VistaMappingsNeedSaving()))
+            if (UserCanWriteMappings == false
+                && (MappingsManager.MappingsNeedSaving()))
             {
                 MappingsManager.SaveBootMappingsVista();
             }
@@ -338,20 +337,20 @@ namespace KeyMapper.Classes
 
         private static string GetKeyFontName(bool localizable)
         {
-            if (arialUnicodeMSInstalled == null)
+            if (arialUnicodeMsInstalled == null)
             {
-                arialUnicodeMSInstalled = false;
+                arialUnicodeMsInstalled = false;
                 var installedFonts = new InstalledFontCollection();
                 var fonts = installedFonts.Families;
 
                 if (fonts.Any(ff => ff.Name == "Arial Unicode MS"))
                 {
-                    arialUnicodeMSInstalled = true;
+                    arialUnicodeMsInstalled = true;
                     defaultKeyFont = "Arial Unicode MS";
                 }
             }
 
-            if (localizable == false || (bool)arialUnicodeMSInstalled)
+            if (localizable == false || (bool)arialUnicodeMsInstalled)
             {
                 return defaultKeyFont; // Don't want the static keys to change font.
             }
@@ -409,10 +408,10 @@ namespace KeyMapper.Classes
             // what mappings were in effect the first time the program was run after reboot/logoff.
 
             // To do that we need a registry key of our own.
-            RegistryKey kmregkey = null;
+            RegistryKey key = null;
             try
             {
-                kmregkey = Registry.CurrentUser.OpenSubKey(ApplicationRegistryKeyName, true);
+                key = Registry.CurrentUser.OpenSubKey(ApplicationRegistryKeyName, true);
             }
             catch (SecurityException e)
             {
@@ -422,13 +421,13 @@ namespace KeyMapper.Classes
 
             bool savedMappingsExist = false;
 
-            if (kmregkey == null && UserCannotWriteToApplicationRegistryKey == false)
+            if (key == null && UserCannotWriteToApplicationRegistryKey == false)
             {
                 // Key does not exist, or no permissions to write:
                 // Create it. Or at least try..
                 try
                 {
-                    kmregkey = Registry.CurrentUser.CreateSubKey(ApplicationRegistryKeyName);
+                    key = Registry.CurrentUser.CreateSubKey(ApplicationRegistryKeyName);
                 }
                 catch (SecurityException e)
                 {
@@ -437,19 +436,19 @@ namespace KeyMapper.Classes
                 }
             }
 
-            if (kmregkey != null)
+            if (key != null)
             {
-                var values = kmregkey.GetValueNames();
+                var values = key.GetValueNames();
                 for (int i = 0; i < values.Length; i++)
                 {
-                    if (values[i] == "UserMaps" || values[i] == "BootMaps")
+                    if (values[i] == "Mappings")
                     {
                         savedMappingsExist = true;
                         break;
                     }
                 }
 
-                kmregkey.Close();
+                key.Close();
                 // Really should have access to this key as it's in the user hive. 
                 // But it isn't a requirement, as such: can't save custom colours without it.
             }
@@ -462,57 +461,57 @@ namespace KeyMapper.Classes
             // Is the current user able to write to the Keyboard Layout key in HKLM??
             // (This key always exists, Windows recreates it if it's deleted)
 
-            UserCanWriteBootMappings = registryTimestampService.CanUserWriteToKey
+            UserCanWriteMappings = registryTimestampService.CanUserWriteToKey
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
 
             // When was the system booted? (Milliseconds vs Ticks is correct..)
-            var boottime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
+            var bootTime = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount);
 
             // When did the current user log in?
 
-            var logontime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
+            var logonTime = registryTimestampService.GetRegistryKeyTimestamp(RegistryHive.CurrentUser, "Volatile Environment");
 
             // Now, the "Volatile Environment" key in RegistryHive.CurrentUser
             // >isn't< always unloaded on logoff.
 
-            // Sometimes, as well, logontime returns the wrong time. I think this is because when 
+            // Sometimes, as well, logonTime returns the wrong time. I think this is because when 
             // the system writes the Volatile Environment subkey, it hasn't yet loaded the correct
             // time zone or isn't respecting Daylight Saving. Sometimes, on some computers..
 
-            if (logontime == DateTime.MinValue)
+            if (logonTime == DateTime.MinValue)
             {
-                // If using Run As to run KeyMapper, then logontime will be 01/01/0001 00:00:00
+                // If using Run As to run KeyMapper, then logonTime will be 01/01/0001 00:00:00
                 // as the Volatile key won't exist.
-                logontime = boottime.AddSeconds(1);
+                logonTime = bootTime.AddSeconds(1);
             }
 
             // It can also happen - e.g. when restoring a Virtual Machine - 
-            // that the boottime is later than logontime.
+            // that the boottime is later than logonTime.
 
-            if (boottime > logontime)
+            if (bootTime > logonTime)
             {
-                //  Console.WriteLine("Boot time greater than logontime: Boot Time {0} Logon Time {1}", boottime, logontime);
-                boottime = logontime.AddSeconds(-1);
+                //  Console.WriteLine("Boot time greater than logonTime: Boot Time {0} Logon Time {1}", bootTime, logonTime);
+                bootTime = logonTime.AddSeconds(-1);
             }
 
             // Just in case the timestamp bug ever works in reverse:
-            if (logontime > DateTime.Now)
+            if (logonTime > DateTime.Now)
             {
-                Console.WriteLine("Logontime greater than Now: Logon Time {0}, Now: {1}", logontime, DateTime.Now);
-                logontime = DateTime.Now;
+                Console.WriteLine("logonTime greater than Now: Logon Time {0}, Now: {1}", logonTime, DateTime.Now);
+                logonTime = DateTime.Now;
             }
 
             // When was HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout written?
-            var HKLMWrite = registryTimestampService.GetRegistryKeyTimestamp
+            var hklmWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Keyboard Layout");
 
             // When was HKEY_CURRENT_USER\Keyboard Layout written?
-            var HKCUWrite = registryTimestampService.GetRegistryKeyTimestamp
+            var hkcuWrite = registryTimestampService.GetRegistryKeyTimestamp
                 (RegistryHive.CurrentUser, @"Keyboard Layout");
 
             // Console.WriteLine("Booted: {0}, Logged On: {1}, HKLM {2}, HKCU {3}", 
-            // boottime, logontime, HKLMWrite, HKCUWrite);
+            // bootTime, logonTime, HKLMWrite, HKCUWrite);
 
             // Get the current scanCode maps
             MappingsManager.GetMappingsFromRegistry();
@@ -522,9 +521,9 @@ namespace KeyMapper.Classes
             // then save them to our own reg key. This means we can determine whether a 
             // restart or logoff is required because the current mappings are different from the saved mappings.
 
-            if (HKLMWrite < boottime || savedMappingsExist == false)
+            if (hklmWrite < bootTime || savedMappingsExist == false)
             {
-                MappingsManager.SaveBootMappingsToKeyMapperKey();
+                MappingsManager.SaveMappingsToKeyMapperKey();
             }
 
             if (savedMappingsExist == false)
@@ -532,18 +531,18 @@ namespace KeyMapper.Classes
                 MappingsManager.StoreUnsavedMappings();
             }
 
-            MappingsManager.SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperVistaMappingsCache);
+            MappingsManager.SaveMappings(Mappings.CurrentMappings, MapLocation.KeyMapperMappingsCache);
         }
 
         public static void SetLocale(string locale = null)
         {
             // Only want to reset locale temporarily so save current value
-            string currentkeyboardlocale = KeyboardHelper.GetCurrentKeyboardLocale();
+            string currentKeyboardLocale = KeyboardHelper.GetCurrentKeyboardLocale();
 
             if (string.IsNullOrEmpty(locale))
             {
                 // At startup we need to load the current locale.
-                locale = currentkeyboardlocale;
+                locale = currentKeyboardLocale;
             }
 
             if ((locale != currentLocale))
@@ -580,9 +579,9 @@ namespace KeyMapper.Classes
                 finally
                 {
                     // Set it back (if different)
-                    if (currentLocale != currentkeyboardlocale)
+                    if (currentLocale != currentKeyboardLocale)
                     {
-                        KeyboardHelper.SetLocale(currentkeyboardlocale);
+                        KeyboardHelper.SetLocale(currentKeyboardLocale);
                     }
                 }
             }
@@ -610,18 +609,18 @@ namespace KeyMapper.Classes
             var hWnd = IntPtr.Zero;
             var process = Process.GetCurrentProcess();
             var processes = Process.GetProcessesByName(process.ProcessName);
-            foreach (var _process in processes)
+            foreach (var instances in processes)
             {
                 // Get the first instance that is not this instance, has the
                 // same process name and was started from the same file name
                 // and location. Also check that the process has a valid
                 // window handle in this session to filter out other user's
                 // processes.
-                if (_process.Id != process.Id &&
-                    _process.MainModule.FileName == process.MainModule.FileName &&
-                    _process.MainWindowHandle != IntPtr.Zero)
+                if (instances.Id != process.Id &&
+                    instances.MainModule.FileName == process.MainModule.FileName &&
+                    instances.MainWindowHandle != IntPtr.Zero)
                 {
-                    hWnd = _process.MainWindowHandle;
+                    hWnd = instances.MainWindowHandle;
                     break;
                 }
             }

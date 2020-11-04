@@ -238,7 +238,7 @@
     <sc>82</sc>
     <ex>0</ex>
     <name>0</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -246,7 +246,7 @@
     <sc>79</sc>
     <ex>0</ex>
     <name>1</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -254,7 +254,7 @@
     <sc>80</sc>
     <ex>0</ex>
     <name>2</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -262,7 +262,7 @@
     <sc>81</sc>
     <ex>0</ex>
     <name>3</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -270,7 +270,7 @@
     <sc>75</sc>
     <ex>0</ex>
     <name>4</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -278,7 +278,7 @@
     <sc>76</sc>
     <ex>0</ex>
     <name>5</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -286,7 +286,7 @@
     <sc>77</sc>
     <ex>0</ex>
     <name>6</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -294,7 +294,7 @@
     <sc>71</sc>
     <ex>0</ex>
     <name>7</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -302,7 +302,7 @@
     <sc>72</sc>
     <ex>0</ex>
     <name>8</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -310,7 +310,7 @@
     <sc>73</sc>
     <ex>0</ex>
     <name>9</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -318,7 +318,7 @@
     <sc>74</sc>
     <ex>0</ex>
     <name>-</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -326,7 +326,7 @@
     <sc>55</sc>
     <ex>0</ex>
     <name>*</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -334,7 +334,7 @@
     <sc>83</sc>
     <ex>0</ex>
     <name>.</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -342,7 +342,7 @@
     <sc>53</sc>
     <ex>224</ex>
     <name>/</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
@@ -350,15 +350,15 @@
     <sc>78</sc>
     <ex>0</ex>
     <name>+</name>
-    <group>Numberpad Keys</group>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>
   <keycodes>
     <sc>28</sc>
     <ex>224</ex>
-    <name>Enter (Numberpad)</name>
-    <group>Numberpad Keys</group>
+    <name>Enter (NumberPad)</name>
+    <group>NumberPad Keys</group>
     <localize>false</localize>
     <useful>0</useful>
   </keycodes>

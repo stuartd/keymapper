@@ -292,9 +292,6 @@
       <DependentUpon>MappingList.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IKeyData.cs" />
-    <Compile Include="Classes\Deployment\ngen.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

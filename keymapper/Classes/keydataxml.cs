@@ -11,34 +11,34 @@ namespace KeyMapper.Classes
     {
         /// This class handles extracting the key data from XML files
         /// via XPath.
-        private readonly System.Reflection.Assembly _currentassembly = null;
+        private readonly System.Reflection.Assembly currentAssembly = null;
 
-        private const string _keyfilename = "keycodes.xml";
-        private const string _keyboardfilename = "keyboards.xml";
-        private readonly XPathNavigator _navigator;
-        private const string _commonlyUsedKeysGroupName = "Commonly Used";
+        private const string keyFilename = "keycodes.xml";
+        private const string keyboardFilename = "keyboards.xml";
+        private readonly XPathNavigator navigator;
+        private const string CommonlyUsedKeysGroupName = "Commonly Used";
         private const string AllKeysGroupName = "All Keys";
 
         public KeyDataXml()
         {
-            _currentassembly = System.Reflection.Assembly.GetExecutingAssembly();
+            currentAssembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             // Initialise our navigator from the embedded XML keys file.
-            using (var xmlstream = GetXMLDocumentAsStream(_keyfilename))
+            using (var xmlStream = GetXmlDocumentAsStream(keyFilename))
             {
-                var document = new XPathDocument(xmlstream);
-                _navigator = document.CreateNavigator();
+                var document = new XPathDocument(xmlStream);
+                navigator = document.CreateNavigator();
             }
         }
 
-        private Stream GetXMLDocumentAsStream(string name)
+        private Stream GetXmlDocumentAsStream(string name)
         {
-            return _currentassembly.GetManifestResourceStream("KeyMapper.XML." + name);
+            return currentAssembly.GetManifestResourceStream("KeyMapper.XML." + name);
         }
 
-        private static string GetElementValue(string elementname, XPathNavigator node)
+        private static string GetElementValue(string elementName, XPathNavigator node)
         {
-            var element = node.SelectChildren(elementname, "");
+            var element = node.SelectChildren(elementName, "");
 
             if (element.Count > 0)
             {
@@ -60,9 +60,9 @@ namespace KeyMapper.Classes
 
             XPathNodeIterator iterator;
 
-            using (var xmlstream = GetXMLDocumentAsStream(_keyboardfilename))
+            using (var xmlStream = GetXmlDocumentAsStream(keyboardFilename))
             {
-                var document = new XPathDocument(xmlstream);
+                var document = new XPathDocument(xmlStream);
                 var nav = document.CreateNavigator();
 
                 iterator = nav.Select(expression);
@@ -95,7 +95,7 @@ namespace KeyMapper.Classes
                     // Get all the group names: add an extra one at the top with all the keys in.
                     groups.Add(AllKeysGroupName);
                     expression = "/KeycodeData/keycodes/group[not(.=preceding::*/group)] ";
-                    iterator = _navigator.Select(expression);
+                    iterator = navigator.Select(expression);
 
                     foreach (XPathNavigator node in iterator)
                     {
@@ -108,7 +108,7 @@ namespace KeyMapper.Classes
 
                     // Get all the groups which have a working member:
                     expression = @"/KeycodeData/keycodes[useful='0']";
-                    iterator = _navigator.Select(expression);
+                    iterator = navigator.Select(expression);
 
                     foreach (XPathNavigator node in iterator)
                     {
@@ -128,10 +128,10 @@ namespace KeyMapper.Classes
 
                     // They have a threshold of 2.
 
-                    groups.Add(_commonlyUsedKeysGroupName);
+                    groups.Add(CommonlyUsedKeysGroupName);
 
                     expression = @"/KeycodeData/keycodes[useful='1']";
-                    iterator = _navigator.Select(expression);
+                    iterator = navigator.Select(expression);
 
                     foreach (XPathNavigator node in iterator)
                     {
@@ -160,26 +160,26 @@ namespace KeyMapper.Classes
             return sortedGroups;
         }
 
-        public Dictionary<string, int> GetGroupMembers(string groupname, int threshold)
+        public Dictionary<string, int> GetGroupMembers(string groupName, int threshold)
         {
 
             // Enumerate group.
             string queryExpression;
 
-            if (groupname == AllKeysGroupName)
+            if (groupName == AllKeysGroupName)
             {
                 queryExpression = @"/KeycodeData/keycodes[group!='Unmappable Keys']";
             }
-            else if (groupname == _commonlyUsedKeysGroupName)
+            else if (groupName == CommonlyUsedKeysGroupName)
             {
                 queryExpression = @"/KeycodeData/keycodes[useful>='2'" + "]";
             }
             else
             {
-                queryExpression = @"/KeycodeData/keycodes[group='" + groupname + "' and useful>='" + threshold.ToString(CultureInfo.InvariantCulture.NumberFormat) + "']";
+                queryExpression = @"/KeycodeData/keycodes[group='" + groupName + "' and useful>='" + threshold.ToString(CultureInfo.InvariantCulture.NumberFormat) + "']";
             }
 
-            var iterator = _navigator.Select(queryExpression);
+            var iterator = navigator.Select(queryExpression);
 
             // Gives us a bunch of keycode nodes.
             // Given the scanCode / extended from each node, ask for the name from the current layout.
@@ -213,7 +213,7 @@ namespace KeyMapper.Classes
         {
             string expression = @"/KeycodeData/keycodes[localize = '" + (localizable ? "true" : "false") + "']";
 
-            var iterator = _navigator.Select(expression);
+            var iterator = navigator.Select(expression);
 
             var keys = new List<int>(iterator.Count);
 
@@ -235,7 +235,7 @@ namespace KeyMapper.Classes
 
             string expression = @"/KeycodeData/keycodes[sc = '" + scanCode.ToString(CultureInfo.InvariantCulture.NumberFormat) + "' and ex = '" + extended.ToString(CultureInfo.InvariantCulture.NumberFormat) + "'] ";
 
-            var iterator = _navigator.Select(expression);
+            var iterator = navigator.Select(expression);
 
             string name = string.Empty;
 

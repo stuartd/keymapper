@@ -38,7 +38,7 @@ namespace KeyMapper.Forms
         private KeyMapping map;
 
         // For looking up the hash from the name
-        private Dictionary<string, int> currentgroupmembers;
+        private Dictionary<string, int> currentGroupMembers;
 
         // For capturing
         private KeySniffer sniffer;
@@ -469,9 +469,9 @@ namespace KeyMapper.Forms
 
             int hash;
 
-            if (currentgroupmembers.ContainsKey(keyName))
+            if (currentGroupMembers.ContainsKey(keyName))
             {
-                hash = currentgroupmembers[keyName];
+                hash = currentGroupMembers[keyName];
             }
             else
             {
@@ -485,11 +485,11 @@ namespace KeyMapper.Forms
 
         private void UpdateGroupMembers()
         {
-            currentgroupmembers = new KeyDataXml().GetGroupMembers(GroupsListbox.Text, keyThreshold);
+            currentGroupMembers = new KeyDataXml().GetGroupMembers(GroupsListbox.Text, keyThreshold);
 
             KeysByGroupListbox.Items.Clear();
 
-            foreach (var entry in currentgroupmembers)
+            foreach (var entry in currentGroupMembers)
             {
                 KeysByGroupListbox.Items.Add(entry.Key);
             }

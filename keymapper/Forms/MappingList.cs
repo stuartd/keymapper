@@ -98,8 +98,8 @@ namespace KeyMapper.Forms
 
         private void AddRowsToGrid()
         {
-            AddRowsToGrid(MappingFilter.Boot);
-            AddRowsToGrid(MappingFilter.ClearedBoot);
+            AddRowsToGrid(MappingFilter.Set);
+            AddRowsToGrid(MappingFilter.Cleared);
 
             if (grdMappings.RowCount == 0)
             {
@@ -116,7 +116,7 @@ namespace KeyMapper.Forms
 
             foreach (var map in maps)
             {
-                if (filter == MappingFilter.ClearedBoot)
+                if (filter == MappingFilter.Cleared)
                 {
                     if (keyList.Contains(map.From))
                     {
@@ -133,16 +133,16 @@ namespace KeyMapper.Forms
                 int index = grdMappings.Rows.Add(map.ToString());
                 grdMappings.Rows[index].Tag = map;
 
-                string cellvalue = string.Empty;
+                string cellValue = string.Empty;
 
                 switch (filter)
                 {
-                    case MappingFilter.Boot:
-                        cellvalue = "Boot";
+                    case MappingFilter.Set:
+                        cellValue = "Boot";
                         break;
 
-                    case MappingFilter.ClearedBoot:
-                        cellvalue = "Cleared";
+                    case MappingFilter.Cleared:
+                        cellValue = "Cleared";
 
                         // Need to store the row to a little array as
                         // don't want to have to access each cell to decide whether 
@@ -152,7 +152,7 @@ namespace KeyMapper.Forms
                         break;
                 }
 
-                grdMappings.Rows[index].Cells[1].Value = cellvalue;
+                grdMappings.Rows[index].Cells[1].Value = cellValue;
 
                 if (MappingsManager.IsMappingPending(map, filter))
                 {

@@ -2,6 +2,7 @@
 {
     public enum Mappings
     {
-        CurrentBootMappings, SavedBootMappings
+        CurrentMappings, 
+        SavedMappings
     }
 }

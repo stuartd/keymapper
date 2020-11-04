@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Runtime.InteropServices;
+// ReSharper disable IdentifierTypo
 
 namespace KeyMapper.Classes.Interop
 {

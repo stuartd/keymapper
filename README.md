@@ -1,8 +1,14 @@
-# keymapper
+# **To use KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.**
+
+## **If you don't do this, your mappings won't work**
+
+![Capture image](https://github.com/stuartd/keymapper/blob/develop/Capture.PNG)
+
+* * *
 
 Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
-![](http://justkeepswimming.net/keymapper/images/kmheader.png)
+![header](http://justkeepswimming.net/keymapper/images/kmheader.png)
 
 # Key Mapper
 
@@ -12,11 +18,10 @@ Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
 * * *
 
-[Downloads still available](https://code.google.com/p/keymapper/downloads/list)
+~~[Downloads still available](https://code.google.com/p/keymapper/downloads/list)~~
 
-**To use KeyMapper in modern versions of Windows (i.e. 7 or later) from the downloads, you will have to initially switch to 'Boot' mappings from the Mappings menu.**
+[Download .exe file](https://github.com/stuartd/keymapper/blob/develop/KeyMapper.exe)
 
-**f you don't do this, your mappings won't work**
 
 You will also need to have Administrative access to your computer.
 
@@ -34,15 +39,13 @@ Key Mapper uses a virtual keyboard to create and show mappings. It will change t
 
 As a convenience for people who have disabled the Caps Lock, Num Lock or Scroll Lock keys, Key Mapper has a facility to toggle the value of these keys, in case - for example - an application sets Caps Lock on but the key is disabled.
 
-### [Available downloads](https://code.google.com/p/keymapper/downloads/list)
+### ~~[Available downloads](https://code.google.com/p/keymapper/downloads/list)~~
 
-Key Mapper is a Windows Form application written in C#, targeting the .NET Framework 2.0\. Most people download the MSI installer, but there's also a Setup package (these use [NGEN](http://msdn.microsoft.com/en-us/library/6t9t5wcf(VS.80).aspx) to optimise the application at install) but there's a plain .exe version as well.
+~~Key Mapper is a Windows Form application written in C#, targeting the .NET Framework 2.0\. Most people download the MSI installer, but there's also a Setup package (these use [NGEN](http://msdn.microsoft.com/en-us/library/6t9t5wcf(VS.80).aspx) to optimise the application at install) but there's a plain .exe version as well.~~
 
 Project home page: [https://github.com/stuartd/keymapper](https://github.com/stuartd/keymapper)
 
 Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
-
-Discussions, Suggestions and Bug Reports: [http://keymapper.uservoice.com](http://keymapper.uservoice.com)
 
 #### Per-User Scancode Mappings [From 2008, Windows 7 was released in 2009]
 

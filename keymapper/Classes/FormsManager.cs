@@ -67,9 +67,9 @@ namespace KeyMapper.Classes
 
         public static void ShowColourEditorForm(string message)
         {
-            string effectname = message.Substring(0, message.IndexOf(" ", StringComparison.Ordinal));
+            string effectName = message.Substring(0, message.IndexOf(" ", StringComparison.Ordinal));
             string text = message.Substring(message.IndexOf(" ", StringComparison.Ordinal) + 1);
-            var effect = (ButtonEffect)Enum.Parse(typeof(ButtonEffect), effectname);
+            var effect = (ButtonEffect)Enum.Parse(typeof(ButtonEffect), effectName);
 
             ColourEditor newForm;
 
@@ -136,16 +136,16 @@ namespace KeyMapper.Classes
 
                 var p = new Point(-5000, -5000);
 
-                foreach (var openform in editorForms.Values)
+                foreach (var openForm in editorForms.Values)
                 {
-                    if (openform == null || openform == ce)
+                    if (openForm == null || openForm == ce)
                     {
                         continue;
                     }
 
-                    if (openform.Location.X > p.X && openform.Location.Y > p.Y)
+                    if (openForm.Location.X > p.X && openForm.Location.Y > p.Y)
                     {
-                        p = openform.Location;
+                        p = openForm.Location;
                     }
                 }
 
@@ -321,15 +321,15 @@ namespace KeyMapper.Classes
             {
                 helpForm = new HelpForm();
                 var userSettings = new Properties.Settings();
-                var formlocation = userSettings.HelpFormLocation;
+                var formLocation = userSettings.HelpFormLocation;
 
-                if (formlocation.IsEmpty)
+                if (formLocation.IsEmpty)
                 {
                     PositionHelpForm(false);
                 }
                 else
                 {
-                    helpForm.Location = formlocation;
+                    helpForm.Location = formLocation;
                 }
 
                 helpForm.Show(mainForm);

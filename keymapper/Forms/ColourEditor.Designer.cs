@@ -1,6 +1,6 @@
 namespace KeyMapper.Forms
 {
-	partial class ColourEditor
+    sealed partial class ColourEditor
 	{
 		/// <summary>
 		/// Required designer variable.

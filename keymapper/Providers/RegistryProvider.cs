@@ -20,12 +20,12 @@ namespace KeyMapper.Providers
 
                 case MapLocation.KeyMapperLocalMachineKeyboardLayout:
                     keyName = AppController.ApplicationRegistryKeyName;
-                    valueName = "BootMaps";
+                    valueName = "Mappings";
                     break;
 
-                case MapLocation.KeyMapperVistaMappingsCache:
+                case MapLocation.KeyMapperMappingsCache:
                     keyName = AppController.ApplicationRegistryKeyName;
-                    valueName = "VistaBootCache";
+                    valueName = "MappingCache";
                     break;
 
                 default:

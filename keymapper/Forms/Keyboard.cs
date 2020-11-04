@@ -21,7 +21,7 @@ namespace KeyMapper.Forms
         private bool hasNumberPad;
         private bool keysOnly;
         private KeySniffer sniffer;
-        private bool cancelSlideshow;
+        private bool cancelSlideShow;
 
         // Because we are intercepting a keypress before it is processed, can't ask
         // what state the keyboard is in using Form.IsKeySet or WIN32API funcs like
@@ -102,14 +102,14 @@ namespace KeyMapper.Forms
             // As user.config is writeable (if you can find it!)
             // don't want to trust the settings.
 
-            var firstrun = (userSettings.UserHasSavedSettings == false);
+            var firstRun = (userSettings.UserHasSavedSettings == false);
             var savedPosition = userSettings.KeyboardFormLocation;
             var savedWidth = userSettings.KeyboardFormWidth;
 
             hasNumberPad = userSettings.KeyboardFormHasNumberPad;
             isMacKeyboard = userSettings.KeyboardFormHasMacKeyboard;
 
-            if (firstrun || savedPosition.IsEmpty || savedPosition.X == -32000)
+            if (firstRun || savedPosition.IsEmpty || savedPosition.X == -32000)
             {
                 FormsManager.PositionMainForm();
             }
@@ -118,7 +118,7 @@ namespace KeyMapper.Forms
                 Location = savedPosition;
             }
 
-            if (firstrun || savedWidth < MinimumSize.Width)
+            if (firstRun || savedWidth < MinimumSize.Width)
             {
                 FormsManager.SizeMainForm();
             }
@@ -130,24 +130,24 @@ namespace KeyMapper.Forms
 
         private void CalculateDimensions()
         {
-            float keywidth;
+            float keyWidth;
 
             if (keysOnly)
             {
-                keywidth = 15.7F;
+                keyWidth = 15.7F;
             }
             else
             {
                 // These two numbers correspond more-or less to the number of keys wide 
                 // a keyboard is, with or without number pad, plus a bit extra for the padding between keys.
-                keywidth = hasNumberPad ? 23.75F : 20F;
+                keyWidth = hasNumberPad ? 23.75F : 20F;
             }
 
             // Calculate total width and key size
-            const int buttonwidth = 128; // Starting width
+            const int buttonWidth = 128; // Starting width
 
-            buttonScale = ((float)ClientSize.Width / (int)(buttonwidth * keywidth)); // How much buttons have to be scaled to fit
-            keySize = (buttonwidth * buttonScale); // Actual size of buttons
+            buttonScale = ((float)ClientSize.Width / (int)(buttonWidth * keyWidth)); // How much buttons have to be scaled to fit
+            keySize = (buttonWidth * buttonScale); // Actual size of buttons
             paddingWidth = (int)(keySize / 16); // Gap between rows and columns.
         }
 
@@ -160,7 +160,7 @@ namespace KeyMapper.Forms
             }
             catch (ObjectDisposedException)
             {
-                cancelSlideshow = true;
+                cancelSlideShow = true;
                 return;
             }
 
@@ -178,31 +178,31 @@ namespace KeyMapper.Forms
             int left = paddingWidth;
             int top = paddingWidth + menu.Height;
 
-            int numpadleft = 0;
-            int navleft = 0;
+            int numPadLeft = 0;
+            int navLeft = 0;
 
-            float mainkeywidth = (14.5F * (keySize + paddingWidth)) + (paddingWidth * 2);
-            float navwidth = ((keySize + paddingWidth) * 3);
+            float mainKeyWidth = (14.5F * (keySize + paddingWidth)) + (paddingWidth * 2);
+            float navWidth = ((keySize + paddingWidth) * 3);
 
             // Work out how far back the number pad extends 
             if (hasNumberPad)
             {
-                numpadleft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 4.2)), 0);
+                numPadLeft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 4.2)), 0);
                 // Nav controls are three wide and they have to fit midway in the
-                // gap between the end of the main body and the numberpad.
-                navleft = (int)Math.Round((mainkeywidth + ((numpadleft - mainkeywidth - navwidth) / 2)), 0);
+                // gap between the end of the main body and the numberPad.
+                navLeft = (int)Math.Round((mainKeyWidth + ((numPadLeft - mainKeyWidth - navWidth) / 2)), 0);
             }
             else
             {
                 // Work out how far back the navkeys extend instead:
-                navleft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 3.2)), 0);
+                navLeft = (int)Math.Round(ClientSize.Width - (((keySize + paddingWidth) * 3.2)), 0);
             }
 
-            var desiredlayout = AppController.KeyboardLayout;
+            var keyboardLayout = AppController.KeyboardLayout;
 
-            var kl = PhysicalKeyboardLayout.GetPhysicalLayout(desiredlayout, isMacKeyboard);
+            var kl = PhysicalKeyboardLayout.GetPhysicalLayout(keyboardLayout, isMacKeyboard);
 
-            rowTerminators = PhysicalKeyboardLayout.GetRowTerminators(desiredlayout);
+            rowTerminators = PhysicalKeyboardLayout.GetRowTerminators(keyboardLayout);
 
             if (keysOnly == false)
             {
@@ -210,14 +210,14 @@ namespace KeyMapper.Forms
                 DrawRow(kl.FunctionKeys, left, top);
 
                 // Utility Keys
-                if (hasNumberPad == false || desiredlayout == KeyboardLayoutType.US)
+                if (hasNumberPad == false || keyboardLayout == KeyboardLayoutType.US)
                 {
-                    DrawRow(kl.UtilityKeys, navleft, top);
+                    DrawRow(kl.UtilityKeys, navLeft, top);
                 }
                 else
                 {
                     // Shunt keys along one key-width (plus padding) for UK layout so they right-justify
-                    DrawRow(kl.UtilityKeys, numpadleft + (int)Math.Round(keySize, 0) + paddingWidth, top);
+                    DrawRow(kl.UtilityKeys, numPadLeft + (int)Math.Round(keySize, 0) + paddingWidth, top);
                 }
 
                 // To get a spacer row between the F keys: add double padding
@@ -231,17 +231,17 @@ namespace KeyMapper.Forms
             if (keysOnly == false)
             {
                 // Navigation - Insert, Home, End etc
-                DrawRow(kl.NavigationKeys, navleft, top);
+                DrawRow(kl.NavigationKeys, navLeft, top);
 
                 // Number pad
                 if (hasNumberPad)
                 {
-                    DrawRow(kl.NumberPadKeys, numpadleft, top);
+                    DrawRow(kl.NumberPadKeys, numPadLeft, top);
                 }
 
                 // Skip down and back for arrow keys
                 top += (int)Math.Round((keySize + paddingWidth) * 3, 0);
-                DrawRow(kl.ArrowKeys, navleft, top);
+                DrawRow(kl.ArrowKeys, navLeft, top);
 
             }
 
@@ -258,9 +258,9 @@ namespace KeyMapper.Forms
 
         }
 
-        private void DrawRow(IEnumerable<KeyboardRow> Rows, int leftstart, int top)
+        private void DrawRow(IEnumerable<KeyboardRow> Rows, int leftStart, int top)
         {
-            int left = leftstart;
+            int left = leftStart;
 
             // Need to set the exact width of the row.
             int width = (int)(14.7F * (keySize + paddingWidth));
@@ -295,35 +295,35 @@ namespace KeyMapper.Forms
 
                             // Ok. How much space is left to fill?
                             // left is where we are to start drawing, width is the line width.
-                            int keywidth = width - left;
+                            int keyWidth = width - left;
 
                             // Calculate the horizontal stretch value based on the sizes:
 
-                            int buttonwidth = 0;
+                            int buttonWidth = 0;
 
                             switch (key.Button)
                             {
                                 case BlankButton.Blank:
                                 case BlankButton.TallBlank:
-                                    buttonwidth = 128;
+                                    buttonWidth = 128;
                                     break;
                                 case BlankButton.MediumWideBlank:
-                                    buttonwidth = 192;
+                                    buttonWidth = 192;
                                     break;
                                 case BlankButton.DoubleWideBlank:
-                                    buttonwidth = 256;
+                                    buttonWidth = 256;
                                     break;
                                 case BlankButton.TripleWideBlank:
-                                    buttonwidth = 384;
+                                    buttonWidth = 384;
                                     break;
                                 case BlankButton.QuadrupleWideBlank:
-                                    buttonwidth = 512;
+                                    buttonWidth = 512;
                                     break;
                                 default:
                                     break;
                             }
 
-                            int stretch = (int)(keywidth - (buttonwidth * buttonScale));
+                            int stretch = (int)(keyWidth - (buttonWidth * buttonScale));
 
                             DrawKey(key.ScanCode, key.Extended, ref left, top, key.Button,
                                 stretch, key.VerticalStretch * paddingWidth);
@@ -335,7 +335,7 @@ namespace KeyMapper.Forms
                 }
 
                 top += paddingWidth + (int)Math.Round((decimal)keySize, 0);
-                left = leftstart;
+                left = leftStart;
             }
 
         }
@@ -396,22 +396,22 @@ namespace KeyMapper.Forms
 
         private void SetMappingStatusLabelText()
         {
-            int bootmaps = MappingsManager.GetMappingCount(MappingFilter.Boot);
+            int keyMappings = MappingsManager.GetMappingCount(MappingFilter.Set);
 
-            string mapstatustext;
+            string mapStatusText;
 
-            if (bootmaps != 0)
+            if (keyMappings != 0)
             {
-                mapstatustext = string.Format("{0} mapping{1}", bootmaps, (bootmaps != 1 ? "s" : ""));
+                mapStatusText = $"{keyMappings} mapping{(keyMappings != 1 ? "s" : "")}";
             }
             else
             {
                 // Need to have *something* on the status bar otherwise it doesn't work
                 // properly in W2K (it doesn't show on startup)
-                mapstatustext = "No mappings";
+                mapStatusText = "No mappings";
             }
 
-            StatusLabelMappings.Text = mapstatustext;
+            StatusLabelMappings.Text = mapStatusText;
         }
 
         private void SetReadonlyStatusLabelText()
@@ -490,7 +490,7 @@ namespace KeyMapper.Forms
         }
 
 
-        private void ToggleNumberpad()
+        private void ToggleNumberPad()
         {
             hasNumberPad = !hasNumberPad;
             ResizeToAspect();
@@ -656,7 +656,7 @@ namespace KeyMapper.Forms
         {
             if (e.KeyChar == (char)Keys.Escape)
             {
-                cancelSlideshow = true;
+                cancelSlideShow = true;
             }
         }
 
@@ -757,7 +757,7 @@ namespace KeyMapper.Forms
 
         private void toggleNumberPadMenuItemClick(object sender, EventArgs e)
         {
-            ToggleNumberpad();
+            ToggleNumberPad();
         }
 
         private void numLockMenuItemClick(object sender, EventArgs e)
@@ -873,7 +873,7 @@ namespace KeyMapper.Forms
             string value =
                 ((isCapsLockOn ? 1 : 0) + (isNumLockOn ? 2 : 0) + (isScrollLockOn ? 4 : 0)).ToString(CultureInfo.InvariantCulture);
 
-            if (AppController.UserCanWriteBootMappings == false)
+            if (AppController.UserCanWriteMappings == false)
             {
                 if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the default toggle keys") == false)
                 {
@@ -887,8 +887,8 @@ namespace KeyMapper.Forms
             {
                 try
                 {
-                    var regkey = Registry.Users.OpenSubKey(@".DEFAULT\Control Panel\Keyboard", true);
-                    regkey?.SetValue("InitialKeyboardIndicators", value);
+                    var key = Registry.Users.OpenSubKey(@".DEFAULT\Control Panel\Keyboard", true);
+                    key?.SetValue("InitialKeyboardIndicators", value);
                 }
                 catch (Exception ex)
                 {
@@ -966,16 +966,16 @@ namespace KeyMapper.Forms
             LogProvider.ClearLogFile();
         }
 
-        private void keyboardSlideshowToolStripMenuItemClick(object sender, EventArgs e)
+        private void KeyboardSlideshowToolStripMenuItemClick(object sender, EventArgs e)
         {
             string caption = Text;
             int currentKeyboard = KeyboardListCombo.SelectedIndex;
             Text += " (press Escape to stop slideshow)";
-            cancelSlideshow = false;
+            cancelSlideShow = false;
             KeyPress += KeyboardFormKeyPress;
             for (int i = 0; i < KeyboardListCombo.Items.Count; i++)
             {
-                if (cancelSlideshow)
+                if (cancelSlideShow)
                 {
                     KeyboardListCombo.SelectedIndex = currentKeyboard;
                     Application.DoEvents();

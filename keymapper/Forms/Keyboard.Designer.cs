@@ -457,7 +457,7 @@ namespace KeyMapper.Forms
             this.keyboardSlideshowToolStripMenuItem.Name = "keyboardSlideshowToolStripMenuItem";
             this.keyboardSlideshowToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.keyboardSlideshowToolStripMenuItem.Text = "Keyboard Slideshow";
-            this.keyboardSlideshowToolStripMenuItem.Click += new System.EventHandler(this.keyboardSlideshowToolStripMenuItemClick);
+            this.keyboardSlideshowToolStripMenuItem.Click += new System.EventHandler(this.KeyboardSlideshowToolStripMenuItemClick);
             // 
             // resetUserSettingsToolStripMenuItem
             // 

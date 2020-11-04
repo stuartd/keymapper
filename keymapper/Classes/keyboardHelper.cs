@@ -273,9 +273,9 @@ namespace KeyMapper.Classes
 
         public static void ShowKeyboardList()
         {
-            var kblist = GetInstalledKeyboardListInNameOrder();
+            var keyboardList = GetInstalledKeyboardListInNameOrder();
             var keyboards = new StringBuilder();
-            foreach (string keyboard in kblist)
+            foreach (string keyboard in keyboardList)
             {
                 keyboards.Append(keyboard + (char)13 + (char)10);
             }
@@ -295,7 +295,7 @@ namespace KeyMapper.Classes
         private static string GetKeyboardName(string locale)
         {
 
-            string keyboardname = "Unknown";
+            string keyboardName = "Unknown";
 
             var key =
                 Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts\" + locale);
@@ -309,10 +309,10 @@ namespace KeyMapper.Classes
 
             if (key == null)
             {
-                return keyboardname;
+                return keyboardName;
             }
 
-            keyboardname = key.GetValue("Layout Text").ToString();
+            keyboardName = key.GetValue("Layout Text").ToString();
 
             // XP or later - can get localised name for keyboard:
             // (if it exists - pass empty string so that's the return if it doesn't)
@@ -333,10 +333,10 @@ namespace KeyMapper.Classes
 
             if (string.IsNullOrEmpty(localName) == false)
             {
-                keyboardname = localName;
+                keyboardName = localName;
             }
 
-            return keyboardname;
+            return keyboardName;
         }
     }
 }

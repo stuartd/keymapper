@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using KeyMapper.Classes.Interop;
+// ReSharper disable InconsistentNaming
+// ReSharper disable IdentifierTypo
 
 namespace KeyMapper.Classes
 {

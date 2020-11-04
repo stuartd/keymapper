@@ -7,7 +7,7 @@ using KeyMapper.Classes;
 
 namespace KeyMapper.Forms
 {
-    public partial class ColourEditor : KMBaseForm
+    public sealed partial class ColourEditor : KMBaseForm
     {
         private const decimal lowBound = -1M;
         private const decimal highBound = 1M;
@@ -71,9 +71,9 @@ namespace KeyMapper.Forms
                         upDown.Increment = step;
                     }
 
-                    upDown.ValueChanged -= UpdownValueChanged;
+                    upDown.ValueChanged -= UpDownValueChanged;
                     upDown.Value = GetValue(upDown.Name);
-                    upDown.ValueChanged += UpdownValueChanged;
+                    upDown.ValueChanged += UpDownValueChanged;
                 }
 
             }
@@ -86,19 +86,11 @@ namespace KeyMapper.Forms
         {
             // Access the appropriate property of the matrix:
             var value = currentMatrix.GetType().GetProperty(name).GetValue(currentMatrix, null);
-            decimal dvalue;
-            if (decimal.TryParse(value.ToString(), out dvalue))
-            {
-                return dvalue;
-            }
-            else
-            {
-                return decimal.Zero;
-            }
+            return decimal.TryParse(value.ToString(), out decimal result) ? result : decimal.Zero;
         }
 
 
-        private void UpdownValueChanged(object sender, EventArgs e)
+        private void UpDownValueChanged(object sender, EventArgs e)
         {
             if (drawing)
             {
@@ -110,13 +102,13 @@ namespace KeyMapper.Forms
         private void UpdateMatrixFromControls()
         {
             currentMatrix = new ColorMatrix(
-                new float[][]
+                new[]
                 {
-                    new float[] {(float)Matrix00.Value, (float)Matrix01.Value, (float)Matrix02.Value, (float)Matrix03.Value, (float)Matrix04.Value},
-                    new float[] {(float)Matrix10.Value, (float)Matrix11.Value, (float)Matrix12.Value, (float)Matrix13.Value, (float)Matrix14.Value},
-                    new float[] {(float)Matrix20.Value, (float)Matrix21.Value, (float)Matrix22.Value, (float)Matrix23.Value, (float)Matrix24.Value},
-                    new float[] {(float)Matrix30.Value, (float)Matrix31.Value, (float)Matrix32.Value, (float)Matrix33.Value, (float)Matrix34.Value},
-                    new float[] {(float)Matrix40.Value, (float)Matrix41.Value, (float)Matrix42.Value, (float)Matrix43.Value, (float)Matrix44.Value}
+                    new[] {(float)Matrix00.Value, (float)Matrix01.Value, (float)Matrix02.Value, (float)Matrix03.Value, (float)Matrix04.Value},
+                    new[] {(float)Matrix10.Value, (float)Matrix11.Value, (float)Matrix12.Value, (float)Matrix13.Value, (float)Matrix14.Value},
+                    new[] {(float)Matrix20.Value, (float)Matrix21.Value, (float)Matrix22.Value, (float)Matrix23.Value, (float)Matrix24.Value},
+                    new[] {(float)Matrix30.Value, (float)Matrix31.Value, (float)Matrix32.Value, (float)Matrix33.Value, (float)Matrix34.Value},
+                    new[] {(float)Matrix40.Value, (float)Matrix41.Value, (float)Matrix42.Value, (float)Matrix43.Value, (float)Matrix44.Value}
                 });
 
         }

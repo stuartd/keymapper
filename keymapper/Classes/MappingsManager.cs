@@ -16,7 +16,7 @@ namespace KeyMapper.Classes
     public static class MappingsManager
     {
         // Saved mapping data
-        private static Collection<KeyMapping> savedBootMappings = new Collection<KeyMapping>();
+        private static Collection<KeyMapping> savedMappings = new Collection<KeyMapping>();
 
         // Mapping data
         private static Collection<KeyMapping> mappings = new Collection<KeyMapping>();
@@ -26,21 +26,21 @@ namespace KeyMapper.Classes
 
         // Need to maintain a collection of mappings which have been cleared
         // (ie which existed at boot or logon but don't exist now)
-        private static readonly Collection<KeyMapping> clearedBootMappings = new Collection<KeyMapping>();
+        private static readonly Collection<KeyMapping> clearedMappings = new Collection<KeyMapping>();
 
         // If user has existing mappings on first run, store them so 
         // new mappings can be distinguished from them.
         private static Collection<KeyMapping> unsavedMappings = new Collection<KeyMapping>();
 
         // Undo/Redo stacks are implemented as pairs.
-        private static readonly UndoRedoMappingStack undostack = new UndoRedoMappingStack();
-        private static readonly UndoRedoMappingStack redostack = new UndoRedoMappingStack();
+        private static readonly UndoRedoMappingStack undoStack = new UndoRedoMappingStack();
+        private static readonly UndoRedoMappingStack redoStack = new UndoRedoMappingStack();
 
-        public static int UndoStackCount => undostack.Count;
+        public static int UndoStackCount => undoStack.Count;
 
-        public static int RedoStackCount => redostack.Count;
+        public static int RedoStackCount => redoStack.Count;
 
-        public static IEnumerable<KeyMapping> ClearedMappings => clearedBootMappings;
+        public static IEnumerable<KeyMapping> ClearedMappings => clearedMappings;
 
         public static void StoreUnsavedMappings()
         {
@@ -51,19 +51,19 @@ namespace KeyMapper.Classes
         {
             // Populate the internal mapping lists at startup and when mappings change.
             currentFilteredMappings.Clear();
-            clearedBootMappings.Clear();
+            clearedMappings.Clear();
 
-            foreach (var bootmap in mappings)
+            foreach (var mapping in mappings)
             {
-                currentFilteredMappings.Add(bootmap);
+                currentFilteredMappings.Add(mapping);
             }
 
-            // Finally, skip through the user and boot mappings so we can populate the cleared mappings lists
-            foreach (var map in savedBootMappings)
+            // Finally, skip through set mappings so we can populate the cleared mappings lists
+            foreach (var map in savedMappings)
             {
                 if (mappings.Contains(map) == false)
                 {
-                    clearedBootMappings.Add(map);
+                    clearedMappings.Add(map);
                 }
             }
         }
@@ -88,11 +88,11 @@ namespace KeyMapper.Classes
                 case MappingFilter.Current:
                     return currentFilteredMappings;
 
-                case MappingFilter.Boot:
+                case MappingFilter.Set:
                     return mappings;
 
-                case MappingFilter.ClearedBoot:
-                    return clearedBootMappings;
+                case MappingFilter.Cleared:
+                    return clearedMappings;
 
                 default:
                     throw new NotImplementedException();
@@ -106,11 +106,11 @@ namespace KeyMapper.Classes
                 case MappingFilter.Current:
                     return currentFilteredMappings.Count;
 
-                case MappingFilter.Boot:
+                case MappingFilter.Set:
                     return mappings.Count;
 
-                case MappingFilter.ClearedBoot:
-                    return clearedBootMappings.Count;
+                case MappingFilter.Cleared:
+                    return clearedMappings.Count;
 
                 default:
                     return 0;
@@ -119,7 +119,7 @@ namespace KeyMapper.Classes
 
         public static bool IsRestartRequired()
         {
-            if (clearedBootMappings.Count != 0)
+            if (clearedMappings.Count != 0)
             {
                 return true;
             }
@@ -128,7 +128,7 @@ namespace KeyMapper.Classes
 
             foreach (var km in mappings)
             {
-                if (savedBootMappings.Contains(km) == false && unsavedMappings.Contains(km) == false)
+                if (savedMappings.Contains(km) == false && unsavedMappings.Contains(km) == false)
                 {
                     return true;
                 }
@@ -137,12 +137,12 @@ namespace KeyMapper.Classes
             return false;
         }
 
-        public static bool VistaMappingsNeedSaving()
+        public static bool MappingsNeedSaving()
         {
             // Check whether the current boot mappings and the proposed boot mappings 
             // are the same: if not, they need saving
 
-            var map = RegistryProvider.GetScanCodeMapFromRegistry(MapLocation.KeyMapperVistaMappingsCache);
+            var map = RegistryProvider.GetScanCodeMapFromRegistry(MapLocation.KeyMapperMappingsCache);
 
             if (map == null)
             {
@@ -172,7 +172,7 @@ namespace KeyMapper.Classes
             return mappings.Contains(map);
         }
 
-        public static bool IsMappingPending(KeyMapping map, MappingFilter filter = MappingFilter.Boot)
+        public static bool IsMappingPending(KeyMapping map, MappingFilter filter = MappingFilter.Set)
         {
             if (unsavedMappings.Contains(map))
             {
@@ -182,11 +182,11 @@ namespace KeyMapper.Classes
             // Did this mapping exist at boot or logon time?
             switch (filter)
             {
-                case MappingFilter.ClearedBoot:
+                case MappingFilter.Cleared:
                     return true; // A cleared mapping is by definition pending
 
-                case MappingFilter.Boot:
-                    return !(savedBootMappings.Contains(map));
+                case MappingFilter.Set:
+                    return !(savedMappings.Contains(map));
             }
 
             return true;
@@ -207,7 +207,7 @@ namespace KeyMapper.Classes
 
         public static KeyMapping GetClearedMapping(int scanCode, int extended)
         {
-            foreach (var mapping in clearedBootMappings)
+            foreach (var mapping in clearedMappings)
             {
                 if (mapping.From.ScanCode == scanCode && mapping.From.Extended == extended)
                 {
@@ -238,19 +238,19 @@ namespace KeyMapper.Classes
             // Well, we need to write to HKLM under Vista or later.
             // Create a registry file and run it, user will have to allow regedit to run.
 
-            if (!AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the changes to your boot mappings"))
+            if (!AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the changes to your key mappings"))
             {
                 return;
             }
 
-            string tempfile = ExportMappingsAsRegistryFile(true);
+            string filePath = ExportMappingsAsRegistryFile(true);
 
-            AppController.WriteRegistryFileVista(tempfile);
+            AppController.WriteRegistryFile(filePath);
         }
 
-        public static void SaveBootMappingsToKeyMapperKey()
+        public static void SaveMappingsToKeyMapperKey()
         {
-            SaveMappings(Mappings.CurrentBootMappings, MapLocation.KeyMapperLocalMachineKeyboardLayout);
+            SaveMappings(Mappings.CurrentMappings, MapLocation.KeyMapperLocalMachineKeyboardLayout);
 
             // As have overwritten our stored value with a new one, reload it ...
             GetMappingsFromRegistry(MapLocation.KeyMapperLocalMachineKeyboardLayout);
@@ -259,17 +259,17 @@ namespace KeyMapper.Classes
             PopulateMappingLists();
         }
 
-        public static void SaveMappings(Mappings whichMappings = Mappings.CurrentBootMappings, MapLocation whereToSave = MapLocation.LocalMachineKeyboardLayout)
+        public static void SaveMappings(Mappings whichMappings = Mappings.CurrentMappings, MapLocation whereToSave = MapLocation.LocalMachineKeyboardLayout)
         {
             Collection<KeyMapping> maps;
 
             switch (whichMappings)
             {
-                case Mappings.CurrentBootMappings:
+                case Mappings.CurrentMappings:
                     maps = mappings;
                     break;
-                case Mappings.SavedBootMappings:
-                    maps = savedBootMappings;
+                case Mappings.SavedMappings:
+                    maps = savedMappings;
                     break;
                 default:
                     return;
@@ -329,10 +329,10 @@ namespace KeyMapper.Classes
 
             // Check they are all zero.
 
-            var bytemappings = new byte[size];
+            var bytes = new byte[size];
 
             // Allow for the null mapping at the end
-            bytemappings[8] = (byte)(count + 1);
+            bytes[8] = (byte)(count + 1);
 
             const int start = 12;
 
@@ -347,15 +347,15 @@ namespace KeyMapper.Classes
                 var map = maps[i];
 
                 // First pair is the action - what the mapped key does.
-                bytemappings[start + (i * 4)] = (byte)map.To.ScanCode;
-                bytemappings[start + (i * 4) + 1] = (byte)map.To.Extended;
+                bytes[start + (i * 4)] = (byte)map.To.ScanCode;
+                bytes[start + (i * 4) + 1] = (byte)map.To.Extended;
 
                 // Second pair is the physical key which performs the new action
-                bytemappings[start + (i * 4) + 2] = (byte)map.From.ScanCode;
-                bytemappings[start + (i * 4) + 3] = (byte)map.From.Extended;
+                bytes[start + (i * 4) + 2] = (byte)map.From.ScanCode;
+                bytes[start + (i * 4) + 3] = (byte)map.From.Extended;
             }
 
-            return bytemappings;
+            return bytes;
         }
 
         public static string ExportMappingsAsRegistryFile(bool useTempFile)
@@ -403,7 +403,7 @@ namespace KeyMapper.Classes
                 filename = fd.FileName;
             }
 
-            int bootMappingCount = GetMappingCount(MappingFilter.Boot);
+            int bootMappingCount = GetMappingCount(MappingFilter.Set);
 
             using (var sw = new StreamWriter(filename, false, Encoding.Unicode))
             {
@@ -414,7 +414,7 @@ namespace KeyMapper.Classes
                 if (bootMappingCount > 0)
                 {
                     sw.Write("hex:");
-                    WriteMappingsToStream(sw, GetMappingsAsByteArray(GetMappings(MappingFilter.Boot)));
+                    WriteMappingsToStream(sw, GetMappingsAsByteArray(GetMappings(MappingFilter.Set)));
                 }
                 else
                 {
@@ -432,12 +432,12 @@ namespace KeyMapper.Classes
             return filename;
         }
 
-        private static void WriteMappingsToStream(StreamWriter sw, byte[] bytemappings)
+        private static void WriteMappingsToStream(StreamWriter sw, byte[] bytes)
         {
-            for (int i = 0; i < bytemappings.GetLength(0); i++)
+            for (int i = 0; i < bytes.GetLength(0); i++)
             {
-                sw.Write(bytemappings[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char)48));
-                if (i < bytemappings.GetLength(0) - 1)
+                sw.Write(bytes[i].ToString("X", CultureInfo.InvariantCulture).PadLeft(2, (char)48));
+                if (i < bytes.GetLength(0) - 1)
                 {
                     sw.Write(",");
                 }
@@ -598,13 +598,13 @@ namespace KeyMapper.Classes
         public static void RevertToStartupMappings()
         {
             PushMappingsOntoUndoStack();
-            mappings = CopyMappings(savedBootMappings);
+            mappings = CopyMappings(savedMappings);
             RaiseMappingsChangedEvent();
         }
 
         public static void UndoMappingChange()
         {
-            if (undostack.Count < 1)
+            if (undoStack.Count < 1)
             {
                 return;
             }
@@ -616,7 +616,7 @@ namespace KeyMapper.Classes
 
         public static void RedoMappingChange()
         {
-            if (redostack.Count < 1)
+            if (redoStack.Count < 1)
             {
                 return;
             }
@@ -660,15 +660,15 @@ namespace KeyMapper.Classes
                     int word1 = map[start + (i * 4)];
                     int word2 = map[start + (i * 4) + 1];
 
-                    var tokey = new Key(word1, word2);
+                    var keyTo = new Key(word1, word2);
 
                     // Second pair is the physical key which performs the new action
                     word1 = map[start + (i * 4) + 2];
                     word2 = map[start + (i * 4) + 3];
 
-                    var fromkey = new Key(word1, word2);
+                    var keyFrom = new Key(word1, word2);
 
-                    var mapping = new KeyMapping(fromkey, tokey);
+                    var mapping = new KeyMapping(keyFrom, keyTo);
 
                     if (mapping.IsValid())
                     {
@@ -709,7 +709,7 @@ namespace KeyMapper.Classes
                     MappingsManager.mappings = mappings;
                     break;
                 case MapLocation.KeyMapperLocalMachineKeyboardLayout:
-                    savedBootMappings = mappings;
+                    savedMappings = mappings;
                     break;
                 default:
                     throw new InvalidOperationException("Unknown value for MapLocation: " + location);
@@ -720,22 +720,22 @@ namespace KeyMapper.Classes
 
         private static void PushMappingsOntoUndoStack()
         {
-            undostack.Push(CopyMappings(mappings));
+            undoStack.Push(CopyMappings(mappings));
         }
 
         private static void PushMappingsOntoRedoStack()
         {
-            redostack.Push(CopyMappings(mappings));
+            redoStack.Push(CopyMappings(mappings));
         }
 
         private static void PopMappingsOffUndoStack()
         {
-            mappings = undostack.BootStack.Pop();
+            mappings = undoStack.Mappings.Pop();
         }
 
         private static void PopMappingsOffRedoStack()
         {
-            mappings = redostack.BootStack.Pop();
+            mappings = redoStack.Mappings.Pop();
         }
     }
 }
