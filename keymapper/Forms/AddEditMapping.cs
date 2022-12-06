@@ -213,12 +213,12 @@ namespace KeyMapper.Forms
             // Map button (aka UnMap, aka Set (for capture))
 
             MapButton.Enabled =
-                capturingFromKey && !map.IsEmpty()
+                (capturingFromKey && !map.IsEmpty())
                 || mapped
-                || capturingFromKey && map.IsValid()
-                || selectingFromKeyFromLists && KeysByGroupListbox.SelectedIndex >= 0
-                || capturingToKey && map.IsValid()
-                || !disabled && !capturingToKey && KeysByGroupListbox.SelectedIndex >= 0;
+                || (capturingFromKey && map.IsValid())
+                || (selectingFromKeyFromLists && KeysByGroupListbox.SelectedIndex >= 0)
+                || (capturingToKey && map.IsValid())
+                || (!disabled && !capturingToKey && KeysByGroupListbox.SelectedIndex >= 0);
 
             // Capture buttons should only be enabled when form is not in mapped mode and not disabled
             // and not capturing..

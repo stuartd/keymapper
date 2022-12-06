@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
-using KeyMapper.Classes.Interop;
 using KeyMapper.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace KeyMapper.Classes
 {
@@ -15,24 +15,35 @@ namespace KeyMapper.Classes
         private static readonly Dictionary<ButtonEffect, ColourEditor> editorForms = new Dictionary<ButtonEffect, ColourEditor>();
         private static HelpForm helpForm;
 
-        public static TaskDialogResult ShowTaskDialog(string text, string instruction, string caption, TaskDialogButtons buttons, TaskDialogIcon icon)
-        {
-            if (NativeMethods.TaskDialog(IntPtr.Zero, IntPtr.Zero, caption, instruction, text, (int)buttons, new IntPtr((int)icon), out int p) != 0)
-            {
-                throw new InvalidOperationException("Error occurred calling TaskDialog.");
-            }
+        public static TaskDialogResult ShowTaskDialog(string text, string instruction, string caption, TaskDialogStandardButtons buttons, TaskDialogStandardIcon icon) {
+			var os = Environment.OSVersion.Version.Major;
 
-            switch (p)
-            {
-                case 1: return TaskDialogResult.Ok;
-                case 2: return TaskDialogResult.Cancel;
-                case 4: return TaskDialogResult.Retry;
-                case 6: return TaskDialogResult.Yes;
-                case 7: return TaskDialogResult.No;
-                case 8: return TaskDialogResult.Close;
-                default: return TaskDialogResult.None;
-            }
-        }
+            if (os < 6)
+			{
+                // Right now all the calls are yes/no anyway
+				var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo);
+				return result switch {
+					DialogResult.None => TaskDialogResult.None,
+					DialogResult.OK => TaskDialogResult.Ok,
+					DialogResult.Cancel => TaskDialogResult.Cancel,
+					DialogResult.Abort => TaskDialogResult.No,
+					DialogResult.Retry => TaskDialogResult.Retry,
+					DialogResult.Ignore => TaskDialogResult.No,
+					DialogResult.Yes => TaskDialogResult.Yes,
+					DialogResult.No => TaskDialogResult.No,
+					_ => throw new ArgumentOutOfRangeException()
+				};
+			}
+
+			var td = new TaskDialog();
+			td.Icon = icon;
+			td.StandardButtons = buttons;
+			td.Text = text;
+			td.InstructionText = instruction;
+			td.Caption = caption;
+
+			return td.Show();
+		}
 
         public static void RegisterMainForm(KeyboardForm form)
         {

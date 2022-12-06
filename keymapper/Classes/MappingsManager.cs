@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using KeyMapper.Classes.Interop;
 using KeyMapper.Providers;
 using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace KeyMapper.Classes
 {
@@ -469,8 +470,8 @@ namespace KeyMapper.Classes
             // If user is remapping Left Ctrl, Left Alt, or Delete then s/he must confirm
             // that it could be goodbye to CTRL-ALT-DEL
 
-            if (scanCode == 29 && extended == 0 || scanCode == 56 && extended == 0 ||
-                scanCode == 83 && extended == 224)
+            if ((scanCode == 29 && extended == 0) || (scanCode == 56 && extended == 0) ||
+                (scanCode == 83 && extended == 224))
             {
                 string action = IsDisabledMapping(map) ? "disable " : "remap ";
 
@@ -483,8 +484,9 @@ namespace KeyMapper.Classes
 
 
                 var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
-                    TaskDialogButtons.Yes | TaskDialogButtons.No,
-                    TaskDialogIcon.Question);
+                    TaskDialogStandardButtons.Yes | TaskDialogStandardButtons.No,
+                    TaskDialogStandardIcon.Warning);
+
                 if (dr != TaskDialogResult.Yes)
                 {
                     return false;
@@ -527,8 +529,9 @@ namespace KeyMapper.Classes
 
 
                     var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
-                        TaskDialogButtons.Yes | TaskDialogButtons.No,
-                        TaskDialogIcon.Question);
+                        TaskDialogStandardButtons.Yes | TaskDialogStandardButtons.No,
+                        TaskDialogStandardIcon.Warning);
+
                     if (dr != TaskDialogResult.Yes)
                     {
                         return false;

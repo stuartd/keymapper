@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using KeyMapper.Classes.Interop;
 using KeyMapper.Providers;
 using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace KeyMapper.Classes
 {
@@ -136,8 +137,8 @@ namespace KeyMapper.Classes
                 "which will be performed by your Registry Editor.";
 
             var result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
-                TaskDialogButtons.Yes | TaskDialogButtons.No,
-                TaskDialogIcon.SecurityShield);
+                TaskDialogStandardButtons.Yes | TaskDialogStandardButtons.No,
+                TaskDialogStandardIcon.Shield);
 
             return result == TaskDialogResult.Yes;
         }

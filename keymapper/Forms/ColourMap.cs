@@ -11,7 +11,7 @@ namespace KeyMapper.Forms
     {
         private int buttonCount;
         private int currentButton;
-        private int padding = 2;
+        private readonly int padding = 2;
         private int buttonHeight;
         private int buttonWidth;
         private int buttonsPerLine;
