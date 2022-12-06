@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using KeyMapper.Classes;
+using static System.Net.WebRequestMethods;
 
 namespace KeyMapper.Forms
 {
@@ -10,7 +11,7 @@ namespace KeyMapper.Forms
             InitializeComponent();
             LoadUserSettings();
             FormClosed += FormsManager.ChildFormClosed;
-            labelFAQ.Links[0].LinkData = "http://justkeepswimming.net/keymapper/faq.aspx";
+            labelFAQ.Links[0].LinkData = https://github.com/stuartd/keymapper/blob/main/README.md";
         }
 
         private void LoadUserSettings()
