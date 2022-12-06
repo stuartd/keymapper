@@ -607,19 +607,14 @@ namespace KeyMapper.Forms
             // SetAdvancedMenuButtonStates();
         }
 
-
-        //private void SetAdvancedMenuButtonStates()
-        //{
-        //}
-
-        private void KeyboardListSelectedIndexChanged(object sender, EventArgs e)
+		private void KeyboardListSelectedIndexChanged(object sender, EventArgs e)
         {
             ChangeKeyboard(KeyboardListCombo.Text, true);
         }
 
         private void KeyDoubleClick(object sender, EventArgs e)
         {
-            if (!(sender is KeyPictureBox box))
+            if (sender is not KeyPictureBox box)
             {
                 return;
             }

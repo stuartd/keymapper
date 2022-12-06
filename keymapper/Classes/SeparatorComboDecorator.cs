@@ -39,7 +39,7 @@ namespace KeyMapper.Classes
                 return;
             }
 
-            if (!(sender is ComboBox combo))
+            if (sender is not ComboBox combo)
             {
                 return;
             }

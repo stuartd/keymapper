@@ -11,7 +11,7 @@ namespace KeyMapper.Forms
             InitializeComponent();
             LoadUserSettings();
             FormClosed += FormsManager.ChildFormClosed;
-            labelFAQ.Links[0].LinkData = https://github.com/stuartd/keymapper/blob/main/README.md";
+            labelFAQ.Links[0].LinkData = "https://github.com/stuartd/keymapper/blob/main/README.md";
         }
 
         private void LoadUserSettings()
@@ -20,10 +20,7 @@ namespace KeyMapper.Forms
             chkShowHelpAtStartup.Checked = userSettings.ShowHelpFormAtStartup;
         }
 
-
-
-
-        private void HelpFormFormClosed(object sender, FormClosedEventArgs e)
+		private void HelpFormFormClosed(object sender, FormClosedEventArgs e)
         {
             SaveUserSettings();
         }
