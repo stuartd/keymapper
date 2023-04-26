@@ -20,7 +20,7 @@ Exported from [code.google.com/p/keymapper](http://code.google.com/p/keymapper)
 
 ~~[Downloads still available](https://code.google.com/p/keymapper/downloads/list)~~
 
-[Download .exe file (Windows 10/11 or .Net 4.8)](https://github.com/stuartd/keymapper/releases/download/1.2/KeyMapper.exe)
+[Download .exe file (Windows 10/11 or .Net 4.8)](https://github.com/stuartd/keymapper/releases/download/keymapper/KeyMapper.exe)
 
 You will also need to have Administrative access to your computer.
 
