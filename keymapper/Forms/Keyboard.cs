@@ -418,7 +418,7 @@ namespace KeyMapper.Forms
         {
             if (MappingsManager.IsRestartRequired())
             {
-                StatusLabelRestartLogoff.Text = "Restart to complete the mappings";
+                StatusLabelRestartLogoff.Text = "Restart Windows to complete the mappings";
                 StatusLabelRestartLogoff.Visible = true;
             }
             else
@@ -862,11 +862,6 @@ namespace KeyMapper.Forms
 
             if (AppController.UserCanWriteMappings == false)
             {
-                if (AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the default toggle keys") == false)
-                {
-                    return;
-                }
-
                 AppController.WriteRegistryEntryVista(
                     RegistryHive.Users, @".DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", value);
             }

@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using KeyMapper.Classes.Interop;
 using KeyMapper.Providers;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace KeyMapper.Classes
 {
@@ -236,15 +235,7 @@ namespace KeyMapper.Classes
 
         public static void SaveMappingsToFile()
         {
-            // Well, we need to write to HKLM under Vista or later.
-            // Create a registry file and run it, user will have to allow regedit to run.
-
-            if (!AppController.ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater("the changes to your key mappings"))
-            {
-                return;
-            }
-
-            string filePath = ExportMappingsAsRegistryFile(true);
+             string filePath = ExportMappingsAsRegistryFile(true);
 
             AppController.WriteRegistryFile(filePath);
         }
@@ -410,7 +401,7 @@ namespace KeyMapper.Classes
             {
                 sw.WriteLine("Windows Registry Editor Version 5.00");
                 sw.WriteLine();
-                sw.WriteLine(@"[HKEYLOCALMACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
+                sw.WriteLine(@"[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]");
                 sw.Write("\"ScanCode Map\"=");
                 if (mappingCount > 0)
                 {
@@ -483,11 +474,9 @@ namespace KeyMapper.Classes
                 string question = "Are you really sure you want to " + action + "this key?";
 
 
-                var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
-                    TaskDialogStandardButtons.Yes | TaskDialogStandardButtons.No,
-                    TaskDialogStandardIcon.Warning);
+                var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper");
 
-                if (dr != TaskDialogResult.Yes)
+                if (dr != DialogResult.Yes)
                 {
                     return false;
                 }
@@ -528,11 +517,9 @@ namespace KeyMapper.Classes
                     const string question = "Do you still want to remap Pause?";
 
 
-                    var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper",
-                        TaskDialogStandardButtons.Yes | TaskDialogStandardButtons.No,
-                        TaskDialogStandardIcon.Warning);
+                    var dr = FormsManager.ShowTaskDialog(question, warning, "Key Mapper");
 
-                    if (dr != TaskDialogResult.Yes)
+                    if (dr != DialogResult.Yes)
                     {
                         return false;
                     }

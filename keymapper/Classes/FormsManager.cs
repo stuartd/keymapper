@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using KeyMapper.Forms;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace KeyMapper.Classes
 {
@@ -15,24 +14,13 @@ namespace KeyMapper.Classes
         private static readonly Dictionary<ButtonEffect, ColourEditor> editorForms = new Dictionary<ButtonEffect, ColourEditor>();
         private static HelpForm helpForm;
 
-        public static TaskDialogResult ShowTaskDialog(string text, string instruction, string caption, TaskDialogStandardButtons buttons, TaskDialogStandardIcon icon) {
+        public static DialogResult ShowTaskDialog(string text, string instruction, string caption) {
 			var os = Environment.OSVersion.Version.Major;
 
             // TaskDialog not working on win 10 Pro - TaskDialog feature needs to load version 6 of comctl32.dll but a different version is current loaded in memory
 
 			// Right now all the calls are yes/no anyway
-				var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo);
-				return result switch {
-					DialogResult.None => TaskDialogResult.None,
-					DialogResult.OK => TaskDialogResult.Ok,
-					DialogResult.Cancel => TaskDialogResult.Cancel,
-					DialogResult.Abort => TaskDialogResult.No,
-					DialogResult.Retry => TaskDialogResult.Retry,
-					DialogResult.Ignore => TaskDialogResult.No,
-					DialogResult.Yes => TaskDialogResult.Yes,
-					DialogResult.No => TaskDialogResult.No,
-					_ => throw new ArgumentOutOfRangeException()
-				};
+			return MessageBox.Show(text, caption, MessageBoxButtons.YesNo);
 		}
 
         public static void RegisterMainForm(KeyboardForm form)

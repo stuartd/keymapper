@@ -14,7 +14,6 @@ using System.Windows.Forms;
 using KeyMapper.Classes.Interop;
 using KeyMapper.Providers;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace KeyMapper.Classes
 {
@@ -128,19 +127,6 @@ namespace KeyMapper.Classes
                 value1 = value2;
                 value2 = value3 % value2;
             }
-        }
-
-        public static bool ConfirmWriteToProtectedSectionOfRegistryOnVistaOrLater(string innerText)
-        {
-            string text = "In order to write " + innerText + ", Key Mapper needs to add to " +
-                "the protected section of your computer's registry. You may need to approve this action " +
-                "which will be performed by your Registry Editor.";
-
-            var result = FormsManager.ShowTaskDialog("Do you want to proceed?", text, "Key Mapper",
-                TaskDialogStandardButtons.Yes | TaskDialogStandardButtons.No,
-                TaskDialogStandardIcon.Shield);
-
-            return result == TaskDialogResult.Yes;
         }
 
         public static void WriteRegistryFile(string filePath)
