@@ -959,7 +959,6 @@ namespace KeyMapper.Forms
             {
                 if (cancelSlideShow)
                 {
-                    KeyboardListCombo.SelectedIndex = currentKeyboard;
                     Application.DoEvents();
                     break;
                 }
@@ -970,6 +969,7 @@ namespace KeyMapper.Forms
             }
             KeyPress -= KeyboardFormKeyPress;
             Text = caption;
+			KeyboardListCombo.SelectedIndex = currentKeyboard;
 
         }
 

@@ -208,7 +208,7 @@ namespace KeyMapper.Forms
             // Height: Number of lines * buttonhight + (number of lines +1 * padding)
             int height = numberOfLines * buttonHeight + (numberOfLines + 1) * padding;
 
-            ClientSize = new Size(width, height);
+            ClientSize = new Size(width + 100, height);
 
         }
 
@@ -253,11 +253,11 @@ namespace KeyMapper.Forms
 
             if (buttonCount > 1)
             {
-                Text = "KeyMapper Colour Map";
+                Text = "KeyMapper Colour Map - double click to edit";
             }
             else
             {
-                Text = "Colour Map";
+                Text = "Colour Map - double click to edit";
             }
 
             ResumeLayout();
