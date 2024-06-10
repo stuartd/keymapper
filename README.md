@@ -55,7 +55,7 @@ There are some other advantages to user mappings:
 
 Originally developed at http://code.google.com/p/keymapper where it was popular with the shareware sites of the time
 
-![numbers](km numbers 2008.png)
+![numbers](km_numbers_2008.png)
 
 #### Trivia
 There is [was?] yet another place scancode mappings can be set - in the `HKEY_USERS\.DEFAULT\Keyboard Layout` key. These apply at the login prompt, but are then removed when logged in.
