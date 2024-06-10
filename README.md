@@ -1,9 +1,5 @@
 ![header](kmheader800w.png)
 
-### **If you're using a really old version of KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.**
-
-#### **If you don't do this, your mappings won't work. If you don't see this menu item or it's empty, then you don't have to do anything!**
-
 # Key Mapper
 
 ## Make your keyboard work the way you want it to
@@ -14,7 +10,11 @@
 
 [Download .exe file (Windows 10/11 or .Net 4.8)](https://github.com/stuartd/keymapper/releases/download/keymapper/KeyMapper.exe)
 
-You will also need to have Administrative access to your computer.
+You will need to have Administrative access to your computer.
+
+### **If you're using a really old version of KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.**
+
+#### **If you don't do this, your mappings won't work. If you don't see this menu item or it's empty, then you don't have to do anything!**
 
 This is because both Windows XP and Vista supported per-user key mappings written to `HKEY_CURRENT_USER\Keyboard Layout` and when KeyMapper was released, those were the latest versions.
 
