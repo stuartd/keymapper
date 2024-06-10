@@ -30,10 +30,6 @@ Then Windows 7 came along and dropped the unofficial or accidental support, and 
 
 If you're interested, my original blog post from 2008 on per-user scancode mappings is reproduced below.
 
-I did the work required to port it in 2012 and that's what the current master branch represents.
-
-
-
 Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
 
 ### Per-User Scancode Mappings [From 2008, Windows 7 was released in 2009]
