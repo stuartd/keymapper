@@ -10,6 +10,10 @@ Key Mapper uses a virtual keyboard to create and show mappings. It will change t
 
 As a convenience for people who have disabled the Caps Lock, Num Lock or Scroll Lock keys, Key Mapper has a facility to toggle the value of these keys, in case - for example - an application sets Caps Lock on but the key is disabled.
 
+There's a (very weird?) form that lets you change the colour of mapped buttons
+
+You can view a 'slideshow' of all installed keyboards - it's in the 'Advanced' menu 
+
 * * *
 
 [Download .exe file (Windows 10/11 or .Net 4.8)](https://github.com/stuartd/keymapper/releases/download/keymapper/KeyMapper.exe)
