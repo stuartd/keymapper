@@ -33,9 +33,9 @@ As a convenience for people who have disabled the Caps Lock, Num Lock or Scroll 
 
 Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
 
-#### Per-User Scancode Mappings [From 2008, Windows 7 was released in 2009]
+### Per-User Scancode Mappings [From 2008, Windows 7 was released in 2009]
 
-One thing that distinguishes [The old version of!] Key Mapper from other scancode mapping programs is that it lets you map or disable keys on a per-user basis: when Microsoft [originally implemented scancode mappings in Windows 2000](http://www.microsoft.com/whdc/archive/w2kscan-map.mspx), they stated in the "disadvantages" section:
+One thing that distinguishes [the old version of!] Key Mapper from other scancode mapping programs is that it lets you map or disable keys on a per-user basis: when Microsoft [originally implemented scancode mappings in Windows 2000](http://www.microsoft.com/whdc/archive/w2kscan-map.mspx), they stated in the "disadvantages" section:
 
 > The mappings stored in the registry work at system level and apply to all users. These mappings cannot be set to work differently depending on the current user.
 
@@ -57,5 +57,5 @@ Originally developed at http://code.google.com/p/keymapper where it was popular 
 
 ![numbers](km_numbers_2008.png)
 
-#### Trivia
+### Trivia
 There is [was?] yet another place scancode mappings can be set - in the `HKEY_USERS\.DEFAULT\Keyboard Layout` key. These apply at the login prompt, but are then removed when logged in.
