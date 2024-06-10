@@ -1,14 +1,8 @@
 ![header](kmheader800w.png)
 
-# **If you're using a really old version of KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.**
+### **If you're using a really old version of KeyMapper in modern versions of Windows (i.e. 7 or later), you will have to initially switch to 'Boot' mappings from the Mappings menu.**
 
-## **If you don't do this, your mappings won't work. If you don't see this menu item or it's empty, then you don't have to do anything!**
-
-Originally developed at http://code.google.com/p/keymapper where it was popular with the shareware sites of the time
-
-p(km numbers 2008.png)
-
-![header](http://justkeepswimming.net/keymapper/images/kmheader.png)
+#### **If you don't do this, your mappings won't work. If you don't see this menu item or it's empty, then you don't have to do anything!**
 
 # Key Mapper
 
@@ -58,6 +52,10 @@ There are some other advantages to user mappings:
 *   They don''t require Administrative rights to be set or removed.
 *   Different users can have different mappings - one can have Caps Lock disabled but Num Lock enabled, another can have them the other way round
 *   Keys can be mapped on shared computers without affecting all users
+
+Originally developed at http://code.google.com/p/keymapper where it was popular with the shareware sites of the time
+
+![numbers](km numbers 2008.png)
 
 #### Trivia
 There is [was?] yet another place scancode mappings can be set - in the `HKEY_USERS\.DEFAULT\Keyboard Layout` key. These apply at the login prompt, but are then removed when logged in.
