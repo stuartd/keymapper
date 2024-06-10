@@ -4,7 +4,11 @@
 
 ## Make your keyboard work the way you want it to
 
-### Remap and disable keyboard keys using a virtual keyboard
+### Features
+
+Key Mapper uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard you have active. You can browse the keyboards installed on your PC if you like.
+
+As a convenience for people who have disabled the Caps Lock, Num Lock or Scroll Lock keys, Key Mapper has a facility to toggle the value of these keys, in case - for example - an application sets Caps Lock on but the key is disabled.
 
 * * *
 
@@ -24,11 +28,6 @@ If you're interested, my original blog post from 2008 on per-user scancode mappi
 
 I did the work required to port it in 2012 and that's what the current master branch represents.
 
-### Features
-
-Key Mapper uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard the user currently has active. You can browse the keyboards installed on your PC if you like.
-
-As a convenience for people who have disabled the Caps Lock, Num Lock or Scroll Lock keys, Key Mapper has a facility to toggle the value of these keys, in case - for example - an application sets Caps Lock on but the key is disabled.
 
 
 Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
