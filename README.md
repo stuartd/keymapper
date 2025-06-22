@@ -6,16 +6,13 @@
 
 ### Features
 
-Key Mapper uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard you have active. You can browse the keyboards installed on your PC if you like.
-
-You can view a 'slideshow' of all installed keyboards - it's in the 'Advanced' menu 
+Key Mapper uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard you have active. You can browse the keyboards installed on your PC if you wish or view a 'slideshow' of all installed keyboards - it's in the 'Advanced' menu [^1]
 
 * * *
 
-[Download .exe file (Windows 10/11 or .Net 4.8)](https://github.com/stuartd/keymapper/releases/download/1.4/KeyMapper.exe)
-)
+[Download the .exe file (Windows 10/11 or .Net 4.8) from here](https://github.com/stuartd/keymapper/releases/download/1.4/KeyMapper.exe)
 
-You will need to have Administrative access to your computer.
+**You will need to have Administrative access to your computer.**
 
 Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
 
@@ -73,15 +70,14 @@ There are some other advantages to user mappings:
 *   Keys can be mapped on shared computers without affecting all users
 
 Originally developed [on `code.google.com`](https://code.google.com/archive/redirect/a/code.google.com/p/keymapper?movedTo=https:%2F%2Fgithub.com%2Fstuartd%2Fkeymapper
-) [^1] where it was popular with the shareware sites of the time (2008!)
+) [^2] where it was popular with the shareware sites of the time (2008!)
 
 ![numbers](km_numbers_2008.png)
-
-[^1]: The link of course redirects back to this repo
 
 * * *
 
 ### Trivia
 There was (is?) another place scancode mappings could be set - in the `HKEY_USERS\.DEFAULT\Keyboard Layout` key. These apply at the login prompt, but are then removed when logged in.
 
-
+[^1]: I spent a lot of time seeing whast was possible once the basic functionality was finished
+[^2]: The link of course redirects back to this repo
