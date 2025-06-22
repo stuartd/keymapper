@@ -39,7 +39,7 @@ Because this was never documented, it was an opportunity to build something that
 
 But then Windows 7 came along and dropped the unofficial or accidental support, and it doesn't look like it's ever coming back: I took out all the code that used user mappings, but other than that the code is essentially as it was in 2008: I am happy with the code, but needless to say this is not how I would write it now..
 
-If you're interested, my original blog post from 2008 on per-user scancode mappings is reproduced below.
+If you're interested, my original blog post from 2008 on per-user scancode mappings is reproduced below (the blog itself is of course [on the Internet Archive](https://web.archive.org/web/20150306040530/http://justkeepswimming.net/keymapper/blog/default.aspx))
 
 * * *
 
@@ -54,7 +54,7 @@ The late Michael Kaplan's [blog](https://web.archive.org/web/20250000000000*/%20
 
 ### Per-User Scancode Mappings [From 2008, Windows 7 was released in 2009]
 
-One thing that distinguishes Key Mapper from other scancode mapping programs is that it lets you map or disable keys on a per-user basis: when Microsoft [originally implemented scancode mappings in Windows 2000](http://www.microsoft.com/whdc/archive/w2kscan-map.mspx), they stated in the "disadvantages" section:
+One thing that distinguishes Key Mapper from other scancode mapping programs is that it lets you map or disable keys on a per-user basis: when Microsoft [originally implemented scancode mappings in Windows 2000](https://web.archive.org/web/20090208232046/https://www.microsoft.com/whdc/archive/w2kscan-map.mspx), they stated in the "disadvantages" section:
 
 > The mappings stored in the registry work at system level and apply to all users. These mappings cannot be set to work differently depending on the current user.
 
@@ -72,9 +72,12 @@ There are some other advantages to user mappings:
 *   Different users can have different mappings - one can have Caps Lock disabled but Num Lock enabled, another can have them the other way round
 *   Keys can be mapped on shared computers without affecting all users
 
-Originally developed at http://code.google.com/p/keymapper where it was popular with the shareware sites of the time (2008!)
+Originally developed [on `code.google.com`](https://code.google.com/archive/redirect/a/code.google.com/p/keymapper?movedTo=https:%2F%2Fgithub.com%2Fstuartd%2Fkeymapper
+) [^1] where it was popular with the shareware sites of the time (2008!)
 
 ![numbers](km_numbers_2008.png)
+
+[^1]: The link of course redirects back to this repo
 
 * * *
 
