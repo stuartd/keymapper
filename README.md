@@ -10,7 +10,7 @@ Key Mapper uses a virtual keyboard to create and show mappings. It will change t
 
 * * *
 
-[Download the .exe file (Windows 10/11 or .Net 4.8) from here](https://github.com/stuartd/keymapper/releases/download/1.4/KeyMapper.exe)
+[Download the current release .exe file (Windows 10/11 or .Net 4.8) from here](https://github.com/stuartd/keymapper/releases/download/1.4/KeyMapper.exe)
 
 **You will need to have Administrative access to your computer.**
 
@@ -36,9 +36,15 @@ Because this was never documented, it was an opportunity to build something that
 
 But then Windows 7 came along and dropped the unofficial or accidental support, and it doesn't look like it's ever coming back: I took out all the code that used user mappings, but other than that the code is essentially as it was in 2008: I am happy with the code, but needless to say this is not how I would write it now..
 
-If you're interested, my original blog post from 2008 on per-user scancode mappings is reproduced below (the blog itself is of course [on the Internet Archive](https://web.archive.org/web/20150306040530/http://justkeepswimming.net/keymapper/blog/default.aspx))
+If you're interested, my original blog post from 2008 on per-user scancode mappings is reproduced below (the blog itself is available [on the Internet Archive](https://web.archive.org/web/20150306040530/http://justkeepswimming.net/keymapper/blog/default.aspx))
 
 * * *
+
+### Documentation
+
+I have hosted the (extremely detailed!) Scan Code Specification (Revision 1.3a — March 16, 2000) [here](scancode.doc) - it's commonly available as a PDF but this is the original `.doc`
+
+* * * 
 
 ### Credits
 
@@ -69,6 +75,10 @@ There are some other advantages to user mappings:
 *   Different users can have different mappings - one can have Caps Lock disabled but Num Lock enabled, another can have them the other way round
 *   Keys can be mapped on shared computers without affecting all users
 
+*** 
+
+### Origin
+
 Originally developed [on `code.google.com`](https://code.google.com/archive/redirect/a/code.google.com/p/keymapper?movedTo=https:%2F%2Fgithub.com%2Fstuartd%2Fkeymapper
 ) [^2] where it was popular with the shareware sites of the time (2008!)
 
@@ -79,5 +89,5 @@ Originally developed [on `code.google.com`](https://code.google.com/archive/redi
 ### Trivia
 There was (is?) another place scancode mappings could be set - in the `HKEY_USERS\.DEFAULT\Keyboard Layout` key. These apply at the login prompt, but are then removed when logged in.
 
-[^1]: I spent a lot of time seeing whast was possible once the basic functionality was finished
+[^1]: I spent a _lot_ of time seeing what was possible once the basic functionality was finished
 [^2]: The link of course redirects back to this repo
