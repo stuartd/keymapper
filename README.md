@@ -6,7 +6,7 @@
 
 ### Features
 
-Key Mapper uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard you have active. You can browse the keyboards installed on your PC if you wish or view a 'slideshow' of all installed keyboards - it's in the 'Advanced' menu [^1]
+Key Mapper is a Windows Forms app that uses a virtual keyboard to create and show mappings. It will change the keyboard to reflect whatever keyboard you have active. You can browse the keyboards installed on your PC if you wish or view a 'slideshow' of all installed keyboards - it's in the 'Advanced' menu [^1]
 
 * * *
 
