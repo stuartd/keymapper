@@ -18,6 +18,17 @@ Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
 
 * * *
 
+### UI
+
+<p align="center">
+  <a href="https://raw.githubusercontent.com/stuartd/keymapper/main/km_ui.png" target="_blank">
+    <img src="km_ui.png" alt="Keymapper UI Screenshot" width="700">
+  </a>
+  <br>
+  <em>Click the image to view full size</em>
+</p>
+
+
 ### History
 
 I created KeyMapper in 2007 when my employer decided to replace the in-house finance systems we had built with off-the shelf systems, but retained us for support only, so I had time on my hands. 
