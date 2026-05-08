@@ -39,9 +39,9 @@ Support: [mailto:keymappersupport@gmail.com](mailto:keymappersupport@gmail.com)
 
 ### History
 
-I created KeyMapper in 2007 when my employer decided to replace the in-house financial accounting systems we had built with off-the shelf systems, but retained us for support only, so I had time on my hands. 
+I created KeyMapper in 2007 when my employer decided to replace the in-house financial accounting systems we had built with off-the-shelf systems, but retained us for support only, so I had time on my hands. 
 
-My intention was to deep dive into the (then) new language C# and also to solve a problem I had - **I never wanted caps lock on or num lock off!** - using scancode mappings. I ended out taking a deep dive into keyboard layouts, localization, internationalization, and distributed source control, as well as C#, the Win32API and Windows Forms.
+My intention was to really get to grips with the (then) new language C# and also to solve a problem I had - **I never wanted caps lock on or num lock off!** - using scancode mappings: I ended up taking a deep dive into keyboard layouts, localization, internationalization, and distributed source control, as well as C#, the Win32API and Windows Forms.
 
 The documentation for scancode mappings stated:
 
