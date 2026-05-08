@@ -55,7 +55,7 @@ But then Windows 7 came along and [dropped the unofficial support](https://web.a
 
 If you're interested, my original blog post from 2008 on per-user scancode mappings is reproduced [below](#per-user-scancode) (the blog itself is available [on the Internet Archive](https://web.archive.org/web/20150306040530/http://justkeepswimming.net/keymapper/blog/default.aspx)).
 
-Another blog article that may be of interest: the strange quirks of remapping [The Pause and Num Lock keys](https://web.archive.org/web/20140530115024/http://justkeepswimming.net/keymapper/blog/default.aspx?p=2), where (at lest at the time of writing) the Pause key could be coerced into activating keyboard command which normally require two keys, for example `Windows-L`
+Another blog article that may be of interest: the strange quirks of remapping [The Pause and Num Lock keys](https://web.archive.org/web/20140530115024/http://justkeepswimming.net/keymapper/blog/default.aspx?p=2), where (at least at the time of writing) the Pause key could be coerced into activating keyboard command which normally require two keys, for example `Windows-L`
 
 * * *  
 
