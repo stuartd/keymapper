@@ -63,6 +63,8 @@ Another blog article that may be of interest: the strange quirks of remapping [T
 
 I have hosted the (extremely detailed!) Scan Code Specification (Revision 1.3a — March 16, 2000) [here](scancode.doc) - it's commonly available as a PDF but this is the original `.doc` file.
 
+There is also a comprehensive reference on scancode remapping in the [Keyboard ScanCodes For Remapping](https://github.com/Lamer87/Keyboard_ScanCodes_for_remapping?utm_source=chatgpt.com) repo.
+
 * * * 
 
 ### Credits
