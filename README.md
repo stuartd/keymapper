@@ -117,4 +117,81 @@ Originally developed [on `code.google.com`](https://code.google.com/archive/redi
 
 - You can browse the keyboards installed on your PC if you wish or view a 'slideshow' of all currently installed keyboards - that's in the 'Advanced' menu.
 
+- You used to be able to just use a [Clickonce Deployment Manifest](https://learn.microsoft.com/visualstudio/deployment/clickonce-deployment-manifest) to deploy an app from your website and have automatic updates:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly
+  xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd"
+  manifestVersion="1.0"
+  xmlns:asmv3="urn:schemas-microsoft-com:asm.v3"
+  xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"
+  xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1"
+  xmlns="urn:schemas-microsoft-com:asm.v2"
+  xmlns:asmv1="urn:schemas-microsoft-com:asm.v1"
+  xmlns:asmv2="urn:schemas-microsoft-com:asm.v2"
+  xmlns:xrml="urn:mpeg:mpeg21:2003:01-REL-R-NS"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <assemblyIdentity
+    name="KeyMapper.application"
+    version="1.0.0.140"
+    publicKeyToken="9d7aa04fc2cf53d0"
+    language="en-GB"
+    processorArchitecture="msil"
+    xmlns="urn:schemas-microsoft-com:asm.v1" />
+
+  <description
+    asmv2:publisher="Key Mapper"
+    asmv2:product="Key Mapper"
+    asmv2:supportUrl="http://justkeepswimming.net/KeyMapper/support.aspx"
+    xmlns="urn:schemas-microsoft-com:asm.v1" />
+
+  <deployment install="true" mapFileExtensions="true">
+    <subscription>
+      <update>
+        <expiration maximumAge="0" unit="days" />
+      </update>
+    </subscription>
+
+    <deploymentProvider
+      codebase="http://justkeepswimming.net/keymapper/KeyMapper.application" />
+  </deployment>
+
+  <dependency>
+    <dependentAssembly
+      dependencyType="install"
+      codebase="Application Files\KeyMapper_1_0_0_140\KeyMapper.exe.manifest"
+      size="7789">
+
+      <assemblyIdentity
+        name="KeyMapper.exe"
+        version="1.0.0.140"
+        publicKeyToken="9d7aa04fc2cf53d0"
+        language="en-GB"
+        processorArchitecture="msil"
+        type="win32" />
+
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform
+            Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+
+        <dsig:DigestMethod
+          Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+
+        <dsig:DigestValue>Lm63CAi7rBI13SLFPDdQzAVg10U=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+
+  <publisherIdentity
+    name="CN={FF1ED07E-9250-4442-9842-B44BC25F0853}"
+    issuerKeyHash="37ca018fdff522130d7af65eda4748259f1cffeb" />
+
+  <Signature Id="StrongNameSignature"...</Signature>
+</asmv1:assembly>
+```
+
 [^1]: The link of course redirects back to this repo
