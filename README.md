@@ -190,7 +190,7 @@ Originally developed [on `code.google.com`](https://code.google.com/archive/redi
     name="CN={FF1ED07E-9250-4442-9842-B44BC25F0853}"
     issuerKeyHash="37ca018fdff522130d7af65eda4748259f1cffeb" />
 
-  <Signature Id="StrongNameSignature"...</Signature>
+  <Signature Id="StrongNameSignature">...</Signature>
 </asmv1:assembly>
 ```
 
